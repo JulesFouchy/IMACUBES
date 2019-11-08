@@ -136,7 +136,6 @@ void App::initSDL() {
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-	SDL_GL_SetSwapInterval(1);
 
 	m_window = SDL_CreateWindow(
 		"IMACUBES",
@@ -154,6 +153,8 @@ void App::initSDL() {
 		spdlog::critical("[SDL2] OpenGL context is null: {}", SDL_GetError());
 		debug_break();
 	}
+
+	SDL_GL_SetSwapInterval(1);
 
 	if (!gladLoadGLES2Loader(SDL_GL_GetProcAddress)) {
 		spdlog::critical("[Glad] Glad not init");
