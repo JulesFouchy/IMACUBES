@@ -1,3 +1,7 @@
+# IMACUBES
+
+Many thanks to Guillaume Haerinck for his amazing build system ! https://github.com/guillaume-haerinck/opengl-playground
+
 ### Prerequisites
 
 You need to install [Cmake](https://cmake.org/) to build the project, and [Conan](https://conan.io/) to download dependencies.
