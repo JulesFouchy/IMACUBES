@@ -69,7 +69,7 @@ void App::ImGUI_DebugWindow() {
 	ImGui::Begin("Debug");
 
 	ImGui::Checkbox("Show Demo Window", &m_bShowImGUIDemoWindow);
-	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	ImGui::Text("Application average %.1f FPS", ImGui::GetIO().Framerate);
 
 	ImGui::End();
 }
