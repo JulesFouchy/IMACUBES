@@ -21,6 +21,7 @@ App::App() : m_running(true)
 	initSDL();
     initImgui();
 
+	GLCall(glClearColor(1.0f, 1.0f, 0.0f, 1.0f));
 	GLCall(glEnable(GL_DEPTH_TEST));
 }
 
@@ -69,19 +70,30 @@ void App::initSDL() {
 		debug_break();
 	}
 	SDL_GL_LoadLibrary(NULL);
+	// Decide GL+GLSL versions
+#if __APPLE__
+	const char* glsl_version = "#version 150";
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); // Always required on Mac
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+#else
+	const char* glsl_version = "#version 130";
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+#endif
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 	SDL_GL_SetSwapInterval(1);
 
 	m_window = SDL_CreateWindow(
 		"IMACUBES",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		500, 500,
-		SDL_WINDOW_OPENGL
+		1280, 720,
+		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI
     );
 	if (m_window == nullptr) {
         spdlog::critical("[SDL2] Window is null: {}", SDL_GetError());
