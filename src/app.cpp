@@ -1,28 +1,55 @@
-#include "app.h"
+#include "App.hpp"
 
-#include <glad/glad.h>
-#include <spdlog/spdlog.h>
+#include <Debugging/Log.hpp>
 #include <debug_break/debug_break.h>
 #include <imgui.h>
 #include <imgui/imgui_impl_sdl.h>
 #include <imgui/imgui_impl_opengl3.h>
-#include "openGL/gl-exception.h"
+#include "OpenGL/gl-exception.h"
 
 
 bool App::m_instanciated = false;
 
-App::App() : m_running(true), m_bShowImGUIDemoWindow(false)
+App::App() : m_running(true), m_bShowImGUIDemoWindow(false), m_shader("res/shaders/standardLighting.vert", "res/shaders/standardLighting.frag", false)
 {
     assert(!m_instanciated);
 	m_instanciated = true;
 
-    spdlog::set_pattern("[%l] %^ %v %$");
+	Log::Initialize();
 
 	initSDL();
     initImgui();
 
-	GLCall(glClearColor(0.2f, 0.3f, 0.95f, 1.0f));
+	GLCall(glClearColor(0.4f, 0.6f, 0.95f, 1.0f));
 	GLCall(glEnable(GL_DEPTH_TEST));
+
+	// ----------------PLAYGROUND!------------------
+	m_shader.compile();
+	const int vboSize = 4 * 3;
+	const int iboSize = 6;
+	const float cubeVBO[vboSize] = {
+		// position
+		-0.5f, -0.5f, -1.0f,
+		 0.5f, -0.5f, -1.0f,
+		 0.5f,  0.5f, -1.0f,
+		-0.5f,  0.5f, -1.0f,
+	};
+
+	const unsigned int cubeIBO[iboSize] = {
+		0, 1, 2,
+		0, 2, 3
+	};
+	// gen buffers
+	GLCall(glGenBuffers(1, &m_vboID));
+	GLCall(glGenBuffers(1, &m_iboID));
+	// VBO data
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vboID));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, vboSize * sizeof(float), cubeVBO, GL_STATIC_DRAW));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	// IBO data
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
+	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize * sizeof(unsigned int), cubeIBO, GL_STATIC_DRAW));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
 App::~App() {
@@ -51,6 +78,18 @@ void App::update() {
 	ImGUI_DebugWindow();
 	if (m_bShowImGUIDemoWindow) // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		ImGui::ShowDemoWindow(&m_bShowImGUIDemoWindow);
+
+	// ----------------PLAYGROUND!------------------
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vboID));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
+	GLCall(glEnableVertexAttribArray(0));
+	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
+
+	//m_shader.bind();
+	GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+	// ---------------------------------------------
 
 	// Render ImGui
 	ImGui::Render();
@@ -109,7 +148,7 @@ void App::initImgui() const {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui_ImplSDL2_InitForOpenGL(m_window, m_glContext);
-	ImGui_ImplOpenGL3_Init("#version 300 es");
+	ImGui_ImplOpenGL3_Init(m_glsl_version);
 	ImGui::StyleColorsClassic();
 }
 
@@ -121,20 +160,19 @@ void App::initSDL() {
 	SDL_GL_LoadLibrary(NULL);
 	// Decide GL+GLSL versions
 #if __APPLE__
-	const char* glsl_version = "#version 150";
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); // Always required on Mac
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 #else
-	const char* glsl_version = "#version 130";
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 #endif
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
 	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 
 	m_window = SDL_CreateWindow(
