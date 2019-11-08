@@ -19,15 +19,16 @@ public:
     void exit();
 
 private:
-    void initSDL();
-    void initImgui() const;
+    void ImGUI_DebugWindow();
+	void handleSDLEvents();
 
-    void handleSDLEvents();
-    void renderMenu();
+	void initImgui() const;
+	void initSDL();
 
 private:
     SDL_Window* m_window;
     SDL_GLContext m_glContext;
     static bool m_instanciated;
     bool m_running;
+	bool m_bShowImGUIDemoWindow;
 };
