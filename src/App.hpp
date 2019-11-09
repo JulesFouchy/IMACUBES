@@ -30,11 +30,6 @@ private:
 	void initSDL();
 
 private:
-#if __APPLE__
-	const char* m_glsl_version = "#version 150";
-#else
-	const char* m_glsl_version = "#version 130";
-#endif
     SDL_Window* m_window;
     SDL_GLContext m_glContext;
     static bool m_instanciated;

@@ -159,10 +159,15 @@ void App::handleSDLEvents() {
 }
 
 void App::initImgui() const {
+#if __APPLE__
+	const char* glslVersion = "#version 150";
+#else
+	const char* glslVersion = "#version 130";
+#endif
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui_ImplSDL2_InitForOpenGL(m_window, m_glContext);
-	ImGui_ImplOpenGL3_Init(m_glsl_version);
+	ImGui_ImplOpenGL3_Init(glslVersion);
 	ImGui::StyleColorsClassic();
 }
 
