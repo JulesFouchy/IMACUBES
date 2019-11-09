@@ -41,11 +41,17 @@ App::App() : m_running(true), m_bShowImGUIDemoWindow(false), m_shader("res/shade
 	};
 	// gen buffers
 	GLCall(glGenBuffers(1, &m_vboID));
+	GLCall(glGenVertexArrays(1, &m_vaoID));
 	GLCall(glGenBuffers(1, &m_iboID));
 	// VBO data
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vboID));
 	GLCall(glBufferData(GL_ARRAY_BUFFER, vboSize * sizeof(float), cubeVBO, GL_STATIC_DRAW));
+	// VBO attrib pointer
+	GLCall(glBindVertexArray(m_vaoID));
+	GLCall(glEnableVertexAttribArray(0));
+	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	GLCall(glBindVertexArray(0));
 	// IBO data
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
 	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize * sizeof(unsigned int), cubeIBO, GL_STATIC_DRAW));
@@ -80,10 +86,8 @@ void App::update() {
 		ImGui::ShowDemoWindow(&m_bShowImGUIDemoWindow);
 
 	// ----------------PLAYGROUND!------------------
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vboID));
+	GLCall(glBindVertexArray(m_vaoID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
-	GLCall(glEnableVertexAttribArray(0));
-	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
 
 	m_shader.bind();
 	GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
@@ -168,18 +172,14 @@ void App::initSDL() {
 		debug_break();
 	}
 	SDL_GL_LoadLibrary(NULL);
-	// Decide GL+GLSL versions
 #if __APPLE__
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); // Always required on Mac
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
 #else
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
+#endif
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-#endif
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
@@ -204,7 +204,7 @@ void App::initSDL() {
 
 	SDL_GL_SetSwapInterval(1);
 
-	if (!gladLoadGLES2Loader(SDL_GL_GetProcAddress)) {
+	if (!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
 		spdlog::critical("[Glad] Glad not init");
 		debug_break();
 	}

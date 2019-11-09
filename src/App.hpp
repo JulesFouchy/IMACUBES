@@ -43,6 +43,7 @@ private:
 
 	// ----------------PLAYGROUND!------------------
 	GLuint m_vboID;
+	GLuint m_vaoID;
 	GLuint m_iboID;
 	Shader m_shader;
 };

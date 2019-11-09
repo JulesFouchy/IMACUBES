@@ -1,4 +1,4 @@
-#version 440 core
+#version 330 core
 
 void main() {
 	vec3 color = vec3(0.8);
