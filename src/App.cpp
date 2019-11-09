@@ -134,6 +134,16 @@ void App::handleSDLEvents() {
 		case SDL_MOUSEBUTTONUP:
 			break;
 
+		case SDL_WINDOWEVENT:
+			switch (e.window.event) {
+			case SDL_WINDOWEVENT_RESIZED:
+				// get new width and height and update the viewport
+				int w, h;
+				SDL_GetWindowSize(m_window, &w, &h);
+				GLCall(glViewport(0, 0, w, h));
+				break;
+			}
+
 		default:
 			break;
 		}
