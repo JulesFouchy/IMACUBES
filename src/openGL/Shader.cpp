@@ -5,6 +5,8 @@
 #include <fstream>
 #include <iostream>
 
+#include "Helper/String.hpp"
+
 #include "Debugging/Log.hpp"
 
 Shader::Shader(const std::string& vertexShaderFilepath, const std::string& fragmentShaderFilepath, bool compileShader)
@@ -25,7 +27,7 @@ void Shader::bind() {
 }
 
 void Shader::compile() {
-	spdlog::info("[Compiling Shader] " + m_vertexShaderFilepath + " & " + m_fragmentShaderFilepath);
+	spdlog::info("[Compiling Shader] " + MyString::RemoveFolderHierarchy(m_vertexShaderFilepath) + " & " + MyString::RemoveFolderHierarchy(m_fragmentShaderFilepath));
 	if (m_shaderId != -1)
 		glDeleteProgram(m_shaderId);
 	m_shaderId = glCreateProgram();
