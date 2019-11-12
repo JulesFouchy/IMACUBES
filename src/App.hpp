@@ -3,7 +3,6 @@
 #include <SDL2/SDL.h>
 #include <memory>
 
-
 #include <glad/glad.h>
 #include "OpenGL/Shader.hpp"
 
