@@ -11,8 +11,8 @@
  */
 class App {
 public:
-    App();
-    ~App();
+    App(SDL_Window* window);
+    ~App() = default;
 
     void update();
 
@@ -25,12 +25,8 @@ private:
     void ImGUI_DebugWindow();
 	void handleSDLEvents();
 
-	void initImgui() const;
-	void initSDL();
-
 private:
-    SDL_Window* m_window;
-    SDL_GLContext m_glContext;
+	SDL_Window* m_window;
     static bool m_instanciated;
     bool m_running;
 	bool m_bShowImGUIDemoWindow;

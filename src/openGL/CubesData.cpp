@@ -82,7 +82,9 @@ CubesData::CubesData(unsigned int width, unsigned int height, unsigned int depth
 }
 
 CubesData::~CubesData(){
-	
+	GLCall(glDeleteBuffers(1, &m_vboID));
+	GLCall(glDeleteBuffers(1, &m_iboID));
+	GLCall(glDeleteVertexArrays(1, &m_vaoID));
 }
 
 

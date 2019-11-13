@@ -1,7 +1,6 @@
 #include "App.hpp"
 
 #include <Debugging/Log.hpp>
-#include <debug_break/debug_break.h>
 #include <imgui.h>
 #include <imgui/imgui_impl_sdl.h>
 #include <imgui/imgui_impl_opengl3.h>
@@ -13,17 +12,13 @@
 
 bool App::m_instanciated = false;
 
-App::App() : m_running(true), m_bShowImGUIDemoWindow(false), m_shader("res/shaders/standardLighting.vert", "res/shaders/standardLighting.frag", false)
+App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDemoWindow(false),
+							   m_shader("res/shaders/standardLighting.vert", "res/shaders/standardLighting.frag", false), cubesData(10, 10, 10)
 {
     assert(!m_instanciated);
 	m_instanciated = true;
 
 	Log::Initialize();
-
-	initSDL();
-    initImgui();
-
-	cubesData = CubesData(10, 10, 10);
 
 	GLCall(glClearColor(0.4f, 0.6f, 0.95f, 1.0f));
 	GLCall(glEnable(GL_DEPTH_TEST));
@@ -31,19 +26,10 @@ App::App() : m_running(true), m_bShowImGUIDemoWindow(false), m_shader("res/shade
 	// ----------------PLAYGROUND!------------------
 	m_shader.compile();
 	
-	
 	// Set uniform
 	glm::mat4 projMat = glm::perspective(1.0f, 16.0f/9, 0.1f, 10.0f);
 	m_shader.bind();
 	m_shader.setUniformMat4f("u_projMat", projMat);
-}
-
-App::~App() {
-    ImGui_ImplOpenGL3_Shutdown();
-	ImGui_ImplSDL2_Shutdown();
-	ImGui::DestroyContext();
-    SDL_DestroyWindow(m_window);
-	SDL_Quit();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -132,63 +118,6 @@ void App::handleSDLEvents() {
 
 	if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
 
-	}
-}
-
-void App::initImgui() const {
-#if __APPLE__
-	const char* glslVersion = "#version 150";
-#else
-	const char* glslVersion = "#version 130";
-#endif
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGui_ImplSDL2_InitForOpenGL(m_window, m_glContext);
-	ImGui_ImplOpenGL3_Init(glslVersion);
-	ImGui::StyleColorsClassic();
-}
-
-void App::initSDL() {
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
-		spdlog::critical("[SDL2] Unable to initialize SDL: {}", SDL_GetError());
-		debug_break();
-	}
-	SDL_GL_LoadLibrary(NULL);
-#if __APPLE__
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG); // Always required on Mac
-#else
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, 0);
-#endif
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
-	SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
-
-	m_window = SDL_CreateWindow(
-		"IMACUBES",
-		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		1280, 720,
-		SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI
-	);
-	if (m_window == nullptr) {
-		spdlog::critical("[SDL2] Window is null: {}", SDL_GetError());
-		debug_break();
-	}
-
-	m_glContext = SDL_GL_CreateContext(m_window);
-	if (m_glContext == nullptr) {
-		spdlog::critical("[SDL2] OpenGL context is null: {}", SDL_GetError());
-		debug_break();
-	}
-
-	SDL_GL_SetSwapInterval(1);
-
-	if (!gladLoadGLLoader(SDL_GL_GetProcAddress)) {
-		spdlog::critical("[Glad] Glad not init");
-		debug_break();
 	}
 }
 

@@ -4,8 +4,7 @@
 
 
 class CubesData {
-public: 
-	CubesData() = default;
+public:
 	CubesData(unsigned int width, unsigned int height, unsigned int depth);
 	~CubesData();
 
