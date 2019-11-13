@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <memory>
 
-#include <glad/glad.h>
+#include "OpenGL/CubesData.hpp"
 #include "OpenGL/Shader.hpp"
 
 /**
@@ -36,8 +36,6 @@ private:
 	bool m_bShowImGUIDemoWindow;
 
 	// ----------------PLAYGROUND!------------------
-	GLuint m_vboID;
-	GLuint m_vaoID;
-	GLuint m_iboID;
 	Shader m_shader;
+	CubesData cubesData;
 };
