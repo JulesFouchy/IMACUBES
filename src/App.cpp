@@ -28,11 +28,16 @@ App::App() : m_running(true), m_bShowImGUIDemoWindow(false), m_shader("res/shade
 
 	// ----------------PLAYGROUND!------------------
 	m_shader.compile();
-	const int nbFaces = 2;
+	const int nbFaces = 6;
 	const int vboSize = 4 * 3 * nbFaces;
 	const int iboSize = 6 * nbFaces;
 	const float cubeVBO[vboSize] = {
 		// position
+		// Back face
+		-0.5f, -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
 		// Back face
 		-0.5f, -0.5f, -0.5f,
 		 0.5f, -0.5f, -0.5f,
@@ -43,15 +48,42 @@ App::App() : m_running(true), m_bShowImGUIDemoWindow(false), m_shader("res/shade
 		 0.5f,  0.5f, -0.5f,
 		 0.5f,  0.5f,  0.5f,
 		-0.5f,  0.5f,  0.5f,
+		// Bottom face 
+		-0.5f,  -0.5f, -0.5f,
+		 0.5f,  -0.5f, -0.5f,
+		 0.5f,  -0.5f,  0.5f,
+		-0.5f,  -0.5f,  0.5f,
+		// Left face 
+		-0.5f,  -0.5f, -0.5f,
+		-0.5f,   0.5f, -0.5f,
+		-0.5f,   0.5f,  0.5f,
+		-0.5f,  -0.5f,  0.5f,
+		// Right face 
+		 0.5f,  -0.5f, -0.5f,
+		 0.5f,   0.5f, -0.5f,
+		 0.5f,   0.5f,  0.5f,
+		 0.5f,  -0.5f,  0.5f,
 	};
 
 	const unsigned int cubeIBO[iboSize] = {
 		// Back face
 		0, 1, 2,
 		0, 2, 3,
-		// Top face
+		// Front face
 		4, 5, 6,
-		4, 6, 7
+		4, 6, 7,
+		// Top face
+		8, 9, 10,
+		8, 10, 11,
+		// Bottom face
+		12, 13 , 14,
+		12, 14, 15,
+		// Left face
+		16, 17 , 18,
+		16, 18, 19,
+		// Right face
+		20, 21 , 22,
+		20, 22, 23,
 	};
 	// gen buffers
 	GLCall(glGenBuffers(1, &m_vboID));
@@ -108,7 +140,7 @@ void App::update() {
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
 	m_shader.bind();
 
-	GLCall(glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0));
+	GLCall(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 	// ---------------------------------------------
