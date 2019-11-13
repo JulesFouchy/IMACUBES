@@ -7,6 +7,9 @@
 #include <imgui/imgui_impl_opengl3.h>
 #include "OpenGL/gl-exception.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 
 bool App::m_instanciated = false;
 
@@ -25,19 +28,30 @@ App::App() : m_running(true), m_bShowImGUIDemoWindow(false), m_shader("res/shade
 
 	// ----------------PLAYGROUND!------------------
 	m_shader.compile();
-	const int vboSize = 4 * 3;
-	const int iboSize = 6;
+	const int nbFaces = 2;
+	const int vboSize = 4 * 3 * nbFaces;
+	const int iboSize = 6 * nbFaces;
 	const float cubeVBO[vboSize] = {
 		// position
-		-0.5f, -0.5f, -1.0f,
-		 0.5f, -0.5f, -1.0f,
-		 0.5f,  0.5f, -1.0f,
-		-0.5f,  0.5f, -1.0f,
+		// Back face
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f, -0.5f,
+		// Top face
+		-0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
 	};
 
 	const unsigned int cubeIBO[iboSize] = {
+		// Back face
 		0, 1, 2,
-		0, 2, 3
+		0, 2, 3,
+		// Top face
+		4, 5, 6,
+		4, 6, 7
 	};
 	// gen buffers
 	GLCall(glGenBuffers(1, &m_vboID));
@@ -56,6 +70,10 @@ App::App() : m_running(true), m_bShowImGUIDemoWindow(false), m_shader("res/shade
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
 	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize * sizeof(unsigned int), cubeIBO, GL_STATIC_DRAW));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+	// Set uniform
+	glm::mat4 projMat = glm::perspective(1.0f, 16.0f/9, 0.1f, 10.0f);
+	m_shader.bind();
+	m_shader.setUniformMat4f("u_projMat", projMat);
 }
 
 App::~App() {
@@ -90,7 +108,7 @@ void App::update() {
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
 	m_shader.bind();
 
-	GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0));
+	GLCall(glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 	// ---------------------------------------------
