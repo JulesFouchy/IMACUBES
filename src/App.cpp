@@ -140,7 +140,7 @@ void App::update() {
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
 	m_shader.bind();
 
-	GLCall(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0));
+	GLCall(glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, 3));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 	// ---------------------------------------------
