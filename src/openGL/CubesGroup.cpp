@@ -81,12 +81,12 @@ CubesGroup::CubesGroup(unsigned int width, unsigned int height, unsigned int dep
 	};
 
 	// gen buffers
-	GLCall(glGenBuffers(1, &m_vboID));
+	GLCall(glGenBuffers(1, &m_cubeMeshVBO_ID));
 	GLCall(glGenVertexArrays(1, &m_vaoID));
-	GLCall(glGenBuffers(1, &m_iboID));
-	GLCall(glGenBuffers(1, &m_iboWireframeID));
+	GLCall(glGenBuffers(1, &m_cubeMeshIBO_ID));
+	GLCall(glGenBuffers(1, &m_cubeWireframeIBO_ID));
 	// VBO data
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vboID));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshVBO_ID));
 	GLCall(glBufferData(GL_ARRAY_BUFFER, vboSize * sizeof(float), cubeVBO, GL_STATIC_DRAW));
 	// VBO attrib pointer
 	GLCall(glBindVertexArray(m_vaoID));
@@ -95,26 +95,26 @@ CubesGroup::CubesGroup(unsigned int width, unsigned int height, unsigned int dep
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	GLCall(glBindVertexArray(0));
 	// IBO data
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeMeshIBO_ID));
 	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize * sizeof(unsigned int), cubeIBO, GL_STATIC_DRAW));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 	// IBO data
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboWireframeID));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeWireframeIBO_ID));
 	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeWireframeIBO), cubeWireframeIBO, GL_STATIC_DRAW));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
 CubesGroup::~CubesGroup(){
-	GLCall(glDeleteBuffers(1, &m_vboID));
-	GLCall(glDeleteBuffers(1, &m_iboID));
-	GLCall(glDeleteBuffers(1, &m_iboWireframeID));
+	GLCall(glDeleteBuffers(1, &m_cubeMeshVBO_ID));
+	GLCall(glDeleteBuffers(1, &m_cubeMeshIBO_ID));
+	GLCall(glDeleteBuffers(1, &m_cubeWireframeIBO_ID));
 	GLCall(glDeleteVertexArrays(1, &m_vaoID));
 }
 
 
 void CubesGroup::draw() {
 	GLCall(glBindVertexArray(m_vaoID));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeMeshIBO_ID));
 
 	GLCall(glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, 3));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
@@ -123,7 +123,7 @@ void CubesGroup::draw() {
 
 void CubesGroup::drawWireframe() {
 	GLCall(glBindVertexArray(m_vaoID));
-	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboWireframeID));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeWireframeIBO_ID));
 
 	GLCall(glDrawElementsInstanced(GL_LINES, 24, GL_UNSIGNED_INT, 0, 3));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));

@@ -12,8 +12,8 @@ public:
 	void drawWireframe();
 
 private:
-	GLuint m_vboID;
+	GLuint m_cubeMeshVBO_ID;
 	GLuint m_vaoID;
-	GLuint m_iboID;
-	GLuint m_iboWireframeID;
+	GLuint m_cubeMeshIBO_ID;
+	GLuint m_cubeWireframeIBO_ID;
 };
