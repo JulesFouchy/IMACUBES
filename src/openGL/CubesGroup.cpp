@@ -1,9 +1,9 @@
-#include "CubesData.hpp"
+#include "CubesGroup.hpp"
 
 #include "OpenGL/gl-exception.h"
 
 
-CubesData::CubesData(unsigned int width, unsigned int height, unsigned int depth){
+CubesGroup::CubesGroup(unsigned int width, unsigned int height, unsigned int depth){
 	const int nbFaces = 6;
 	const int vboSize = 4 * 3 * nbFaces;
 	const int iboSize = 6 * nbFaces;
@@ -104,7 +104,7 @@ CubesData::CubesData(unsigned int width, unsigned int height, unsigned int depth
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
-CubesData::~CubesData(){
+CubesGroup::~CubesGroup(){
 	GLCall(glDeleteBuffers(1, &m_vboID));
 	GLCall(glDeleteBuffers(1, &m_iboID));
 	GLCall(glDeleteBuffers(1, &m_iboWireframeID));
@@ -112,7 +112,7 @@ CubesData::~CubesData(){
 }
 
 
-void CubesData::draw() {
+void CubesGroup::draw() {
 	GLCall(glBindVertexArray(m_vaoID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
 
@@ -121,7 +121,7 @@ void CubesData::draw() {
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
-void CubesData::drawWireframe() {
+void CubesGroup::drawWireframe() {
 	GLCall(glBindVertexArray(m_vaoID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboWireframeID));
 

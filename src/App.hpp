@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <memory>
 
-#include "OpenGL/CubesData.hpp"
+#include "OpenGL/CubesGroup.hpp"
 #include "OpenGL/Shader.hpp"
 
 /**
@@ -33,5 +33,5 @@ private:
 
 	// ----------------PLAYGROUND!------------------
 	Shader m_shader;
-	CubesData cubesData;
+	CubesGroup cubesData;
 };

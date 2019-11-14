@@ -3,10 +3,10 @@
 #include <glad/glad.h>
 
 
-class CubesData {
+class CubesGroup {
 public:
-	CubesData(unsigned int width, unsigned int height, unsigned int depth);
-	~CubesData();
+	CubesGroup(unsigned int width, unsigned int height, unsigned int depth);
+	~CubesGroup();
 
 	void draw();
 	void drawWireframe();
