@@ -54,7 +54,7 @@ void App::update() {
 	// ----------------PLAYGROUND!------------------
 	
 	m_shader.bind();
-	cubesData.draw();
+	cubesData.drawWireframe();
 	
 	// ---------------------------------------------
 

@@ -62,10 +62,29 @@ CubesData::CubesData(unsigned int width, unsigned int height, unsigned int depth
 		20, 22, 23,
 	};
 
+	unsigned int cubeWireframeIBO[] = {
+		// Top face
+		8, 9,
+		9, 10,
+		10, 11,
+		11, 8,
+		// Bot face
+		12, 13,
+		13, 14,
+		14, 15, 
+		15, 12,
+		// Laterals
+		8, 12,
+		9, 13,
+		10, 14,
+		11, 15
+	};
+
 	// gen buffers
 	GLCall(glGenBuffers(1, &m_vboID));
 	GLCall(glGenVertexArrays(1, &m_vaoID));
 	GLCall(glGenBuffers(1, &m_iboID));
+	GLCall(glGenBuffers(1, &m_iboWireframeID));
 	// VBO data
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_vboID));
 	GLCall(glBufferData(GL_ARRAY_BUFFER, vboSize * sizeof(float), cubeVBO, GL_STATIC_DRAW));
@@ -79,11 +98,16 @@ CubesData::CubesData(unsigned int width, unsigned int height, unsigned int depth
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
 	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize * sizeof(unsigned int), cubeIBO, GL_STATIC_DRAW));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+	// IBO data
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboWireframeID));
+	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeWireframeIBO), cubeWireframeIBO, GL_STATIC_DRAW));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
 CubesData::~CubesData(){
 	GLCall(glDeleteBuffers(1, &m_vboID));
 	GLCall(glDeleteBuffers(1, &m_iboID));
+	GLCall(glDeleteBuffers(1, &m_iboWireframeID));
 	GLCall(glDeleteVertexArrays(1, &m_vaoID));
 }
 
@@ -93,6 +117,15 @@ void CubesData::draw() {
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboID));
 
 	GLCall(glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, 3));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+}
+
+void CubesData::drawWireframe() {
+	GLCall(glBindVertexArray(m_vaoID));
+	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_iboWireframeID));
+
+	GLCall(glDrawElementsInstanced(GL_LINES, 24, GL_UNSIGNED_INT, 0, 3));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }

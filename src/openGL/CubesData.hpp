@@ -9,9 +9,11 @@ public:
 	~CubesData();
 
 	void draw();
+	void drawWireframe();
 
 private:
 	GLuint m_vboID;
 	GLuint m_vaoID;
 	GLuint m_iboID;
+	GLuint m_iboWireframeID;
 };
