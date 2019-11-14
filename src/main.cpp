@@ -78,11 +78,18 @@ int main(int argc, char *argv[]) {
 		ImGui_ImplOpenGL3_Init(glslVersion);
 		ImGui::StyleColorsClassic();
 
+		// ------ Initialize our own classes
+
+		CubesGroup::Initialize();
+
+		// Main loop
+
 		App app(window);
 		while (app.isRunning()) {
 			app.update();
 		}
 
+		CubesGroup::ShutDown();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();

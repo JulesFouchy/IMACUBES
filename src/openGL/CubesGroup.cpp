@@ -2,8 +2,11 @@
 
 #include "OpenGL/gl-exception.h"
 
+GLuint CubesGroup::m_cubeMeshVBO_ID;
+GLuint CubesGroup::m_cubeMeshIBO_ID;
+GLuint CubesGroup::m_cubeWireframeIBO_ID;
 
-CubesGroup::CubesGroup(unsigned int width, unsigned int height, unsigned int depth){
+void CubesGroup::Initialize() {
 	const int nbFaces = 6;
 	const int vboSize = 4 * 3 * nbFaces;
 	const int iboSize = 6 * nbFaces;
@@ -71,7 +74,7 @@ CubesGroup::CubesGroup(unsigned int width, unsigned int height, unsigned int dep
 		// Bot face
 		12, 13,
 		13, 14,
-		14, 15, 
+		14, 15,
 		15, 12,
 		// Laterals
 		8, 12,
@@ -79,21 +82,13 @@ CubesGroup::CubesGroup(unsigned int width, unsigned int height, unsigned int dep
 		10, 14,
 		11, 15
 	};
-
 	// gen buffers
 	GLCall(glGenBuffers(1, &m_cubeMeshVBO_ID));
-	GLCall(glGenVertexArrays(1, &m_vaoID));
 	GLCall(glGenBuffers(1, &m_cubeMeshIBO_ID));
 	GLCall(glGenBuffers(1, &m_cubeWireframeIBO_ID));
 	// VBO data
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshVBO_ID));
 	GLCall(glBufferData(GL_ARRAY_BUFFER, vboSize * sizeof(float), cubeVBO, GL_STATIC_DRAW));
-	// VBO attrib pointer
-	GLCall(glBindVertexArray(m_vaoID));
-	GLCall(glEnableVertexAttribArray(0));
-	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-	GLCall(glBindVertexArray(0));
 	// IBO data
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeMeshIBO_ID));
 	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize * sizeof(unsigned int), cubeIBO, GL_STATIC_DRAW));
@@ -104,10 +99,25 @@ CubesGroup::CubesGroup(unsigned int width, unsigned int height, unsigned int dep
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
-CubesGroup::~CubesGroup(){
+void CubesGroup::ShutDown() {
 	GLCall(glDeleteBuffers(1, &m_cubeMeshVBO_ID));
 	GLCall(glDeleteBuffers(1, &m_cubeMeshIBO_ID));
 	GLCall(glDeleteBuffers(1, &m_cubeWireframeIBO_ID));
+}
+
+CubesGroup::CubesGroup(unsigned int width, unsigned int height, unsigned int depth){
+	// Generate VAO
+	GLCall(glGenVertexArrays(1, &m_vaoID));	
+	// VBO attrib pointer
+	GLCall(glBindVertexArray(m_vaoID));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshVBO_ID));
+		GLCall(glEnableVertexAttribArray(0));
+		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	GLCall(glBindVertexArray(0));
+}
+
+CubesGroup::~CubesGroup(){
 	GLCall(glDeleteVertexArrays(1, &m_vaoID));
 }
 
