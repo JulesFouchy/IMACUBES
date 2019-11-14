@@ -108,6 +108,10 @@ void App::handleSDLEvents() {
 				int w, h;
 				SDL_GetWindowSize(m_window, &w, &h);
 				GLCall(glViewport(0, 0, w, h));
+				// Update camera's ratio
+				glm::mat4 projMat = glm::perspective(1.0f, float(w) / float(h), 0.1f, 10.0f);
+				m_shader.bind();
+				m_shader.setUniformMat4f("u_projMat", projMat);
 				break;
 			}
 
