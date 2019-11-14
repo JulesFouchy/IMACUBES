@@ -7,10 +7,7 @@ GLuint CubesGroup::m_cubeMeshIBO_ID;
 GLuint CubesGroup::m_cubeWireframeIBO_ID;
 
 void CubesGroup::Initialize() {
-	const int nbFaces = 6;
-	const int vboSize = 4 * 3 * nbFaces;
-	const int iboSize = 6 * nbFaces;
-	const float cubeVBO[vboSize] = {
+	float cubeMeshVBO[] = {
 		// position
 		// Back face
 		-0.5f, -0.5f,  0.5f,
@@ -44,7 +41,7 @@ void CubesGroup::Initialize() {
 		 0.5f,  -0.5f,  0.5f,
 	};
 
-	const unsigned int cubeIBO[iboSize] = {
+	unsigned int cubeMeshIBO[] = {
 		// Back face
 		0, 1, 2,
 		0, 2, 3,
@@ -88,10 +85,10 @@ void CubesGroup::Initialize() {
 	GLCall(glGenBuffers(1, &m_cubeWireframeIBO_ID));
 	// VBO data
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshVBO_ID));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, vboSize * sizeof(float), cubeVBO, GL_STATIC_DRAW));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(cubeMeshVBO), cubeMeshVBO, GL_STATIC_DRAW));
 	// IBO data
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeMeshIBO_ID));
-	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, iboSize * sizeof(unsigned int), cubeIBO, GL_STATIC_DRAW));
+	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeMeshIBO), cubeMeshIBO, GL_STATIC_DRAW));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 	// IBO data
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeWireframeIBO_ID));
@@ -125,17 +122,15 @@ CubesGroup::~CubesGroup(){
 void CubesGroup::draw() {
 	GLCall(glBindVertexArray(m_vaoID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeMeshIBO_ID));
-
-	GLCall(glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, 3));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+		GLCall(glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, 3));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+	GLCall(glBindVertexArray(0));
 }
 
 void CubesGroup::drawWireframe() {
 	GLCall(glBindVertexArray(m_vaoID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeWireframeIBO_ID));
-
-	GLCall(glDrawElementsInstanced(GL_LINES, 24, GL_UNSIGNED_INT, 0, 3));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+		GLCall(glDrawElementsInstanced(GL_LINES, 24, GL_UNSIGNED_INT, 0, 3));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+	GLCall(glBindVertexArray(0));
 }
