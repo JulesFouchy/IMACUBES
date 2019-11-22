@@ -7,7 +7,7 @@ class CubesGroup {
 public:
 	static void Initialize();
 	static void ShutDown();
-	CubesGroup(unsigned int width, unsigned int height, unsigned int depth);
+	CubesGroup(unsigned int width=0, unsigned int height=0, unsigned int depth=0);
 	~CubesGroup();
 
 	void draw();

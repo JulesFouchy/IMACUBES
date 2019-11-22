@@ -9,6 +9,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include "Types/UniformsStruct.hpp"
+
 
 bool App::m_instanciated = false;
 
@@ -30,6 +32,19 @@ App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDe
 	glm::mat4 projMat = glm::perspective(1.0f, 16.0f/9, 0.1f, 10.0f);
 	m_shader.bind();
 	m_shader.setUniformMat4f("u_projMat", projMat);
+
+	UniformStruct myStruct;
+	myStruct.addType(Int);
+	myStruct.addType(Int);
+	myStruct.addType(Int);
+	int* int0ptr = (int*) myStruct[0];
+	int* int1ptr = (int*) myStruct[1];
+	int* int2ptr = (int*) myStruct[2];
+	*int0ptr = 5;
+	*int1ptr = 11;
+	*int2ptr = 14;
+	spdlog::info("{} {} {}", *int0ptr, *int1ptr, *int2ptr);
+	int a = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////
