@@ -16,23 +16,23 @@ namespace UniformFactory {
 		OpenGLType type = GLType::FromString(line.substr(posBeginType, posEndType - posBeginType));
 		switch (type)
 		{
-		case Int:
+		case OpenGLType::Int:
 			return ReadNameAndValuesAndCreateUniformOfType<int>(shaderID, line, posEndType);
 			break;
-		case Float:
+		case OpenGLType::Float:
 			return ReadNameAndValuesAndCreateUniformOfType<float>(shaderID, line, posEndType);
 			break;
-		case Vec2:
+		case OpenGLType::Vec2:
 			return ReadNameAndValuesAndCreateUniformOfType<glm::vec2>(shaderID, line, posEndType);
 			break;
-		case Vec3:
+		case OpenGLType::Vec3:
 			return ReadNameAndValuesAndCreateUniformOfType<glm::vec3>(shaderID, line, posEndType);
 			break;
-		case Vec4:
+		case OpenGLType::Vec4:
 			return ReadNameAndValuesAndCreateUniformOfType<glm::vec4>(shaderID, line, posEndType);
 			break;
 		default:
-			spdlog::warn("[UniformFactory::FromShaderLine] Unknown OpenGL type : {}", type);
+			spdlog::warn("[UniformFactory::FromShaderLine] Unknown OpenGL type : {}", (int)type);
 			return nullptr;
 			break;
 		}

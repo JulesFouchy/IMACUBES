@@ -2,7 +2,7 @@
 
 #include <string>
 
-enum OpenGLType {
+enum class OpenGLType {
 	Int,
 	Float,
 	Vec2,
