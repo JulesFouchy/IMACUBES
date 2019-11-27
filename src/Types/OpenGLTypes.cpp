@@ -20,6 +20,6 @@ OpenGLType GLType::FromString(const std::string& s_type) {
 		return Vec4;
 	}
 	else {
-		spdlog::error("[GLType::FromString] unknown type : {}", s_type);
+		spdlog::error("[GLType::FromString] Unknown type : {}", s_type);
 	}
 }

@@ -14,12 +14,12 @@ public:
 	ArrayOfStructOfUniforms();
 	~ArrayOfStructOfUniforms() = default;
 
-	void set();
+	void setUniforms();
 
 	void addStruct();
 	void addUniform(Uniform* uniform);
 
-	void ImGui_Sliders();
+	void ImGui_Sliders(const std::string& windowName);
 private:
-	std::vector<StructOfUniforms> m_structOfUniforms;
+	std::vector<StructOfUniforms> m_structsOfUniforms;
 };

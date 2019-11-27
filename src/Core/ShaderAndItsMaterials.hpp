@@ -15,6 +15,8 @@ public:
 
 	void draw();
 
+	inline void ImGui_Sliders() { m_uniforms.ImGui_Sliders(m_name); }
+
 private:
 	void setUniforms();
 
@@ -23,4 +25,6 @@ public:
 	Shader m_shader;
 	CubesGroup m_cubes;
 	ArrayOfStructOfUniforms m_uniforms;
+
+	std::string m_name;
 };

@@ -83,8 +83,8 @@ void App::update() {
 	//cubesData.drawWireframe();
 	m_mat.draw();
 	//m_mat.m_uniforms.showGUI();
-	m_arr.ImGui_Sliders();
-	//spdlog::info(m_arr.m_structOfUniforms[0]->getLocation());
+	m_mat.ImGui_Sliders();
+	//spdlog::info(m_arr.m_structsOfUniforms[0]->getLocation());
 	
 	// ---------------------------------------------
 

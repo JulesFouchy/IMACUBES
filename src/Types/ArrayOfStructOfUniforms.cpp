@@ -8,9 +8,8 @@ ArrayOfStructOfUniforms::ArrayOfStructOfUniforms() {
 
 }
 
-void ArrayOfStructOfUniforms::set() {
-	for (int k = 0; k < m_structOfUniforms.size(); ++k) {
-		StructOfUniforms& uniStruct = m_structOfUniforms[k];
+void ArrayOfStructOfUniforms::setUniforms() {
+	for (StructOfUniforms& uniStruct : m_structsOfUniforms) {
 		for (Uniform* uni : uniStruct) {
 			uni->set();
 		}
@@ -18,21 +17,20 @@ void ArrayOfStructOfUniforms::set() {
 }
 
 void ArrayOfStructOfUniforms::addStruct(){
-	m_structOfUniforms.resize(m_structOfUniforms.size() + 1);
+	m_structsOfUniforms.resize(m_structsOfUniforms.size() + 1);
 }
 
 void ArrayOfStructOfUniforms::addUniform(Uniform* uniform) {
-	for (StructOfUniforms& structUni : m_structOfUniforms) {
+	for (StructOfUniforms& uniStruct : m_structsOfUniforms) {
 		Uniform* ptr = uniform->createPtrWithSameData();
-		spdlog::info((int)ptr);
-		structUni.push_back(ptr);
+		uniStruct.push_back(ptr);
 	}
 }
 
-void ArrayOfStructOfUniforms::ImGui_Sliders() {
-	ImGui::Begin("Mats");
-	for (StructOfUniforms unis : m_structOfUniforms) {
-		for (Uniform* uni : unis) {
+void ArrayOfStructOfUniforms::ImGui_Sliders(const std::string& windowName) {
+	ImGui::Begin(windowName.c_str());
+	for (StructOfUniforms uniStruct : m_structsOfUniforms) {
+		for (Uniform* uni : uniStruct) {
 			uni->ImGui_Slider();
 		}
 	}

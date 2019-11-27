@@ -1,7 +1,6 @@
 #pragma once
 
 #include <glad/glad.h>
-
 #include <string>
 
 class Uniform {
@@ -11,11 +10,9 @@ public:
 	{}
 	~Uniform() = default;
 
-	//virtual UniformAbstract* createFromString(const std::string& line) = 0;
-
 	virtual void set() = 0;
 	
-	virtual std::tuple<bool, bool, bool> ImGui_Slider() = 0; // was value modified this frame | did dragging start this frame | did dragging end this frame
+	virtual std::tuple<bool, bool, bool> ImGui_Slider() = 0; // RETURNS : was value modified this frame / did dragging start this frame / did dragging end this frame
 
 	virtual Uniform* createPtrWithSameData() = 0;
 

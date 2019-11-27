@@ -3,6 +3,9 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+/*------------------------------------
+------------------INT-----------------
+--------------------------------------*/
 template <>
 void UniformConcrete<int>::set() {
 	glUniform1i(getLocation(), m_value);
@@ -14,6 +17,9 @@ std::tuple<bool, bool, bool> UniformConcrete<int>::ImGui_Slider() {
 	return std::make_tuple(wasJusModified, ImGui::IsItemActivated(), ImGui::IsItemDeactivatedAfterEdit());
 }
 
+/*------------------------------------
+------------------FLOAT---------------
+--------------------------------------*/
 template <>
 void UniformConcrete<float>::set() {
 	glUniform1f(getLocation(), m_value);
@@ -25,6 +31,9 @@ std::tuple<bool, bool, bool> UniformConcrete<float>::ImGui_Slider() {
 	return std::make_tuple(wasJusModified, ImGui::IsItemActivated(), ImGui::IsItemDeactivatedAfterEdit());
 }
 
+/*------------------------------------
+------------------VEC2----------------
+--------------------------------------*/
 template <>
 void UniformConcrete<glm::vec2>::set() {
 	glUniform2f(getLocation(), m_value.x, m_value.y);
@@ -36,6 +45,9 @@ std::tuple<bool, bool, bool> UniformConcrete<glm::vec2>::ImGui_Slider() {
 	return std::make_tuple(wasJusModified, ImGui::IsItemActivated(), ImGui::IsItemDeactivatedAfterEdit());
 }
 
+/*------------------------------------
+------------------VEC3----------------
+--------------------------------------*/
 template <>
 void UniformConcrete<glm::vec3>::set() {
 	glUniform3f(getLocation(), m_value.x, m_value.y, m_value.z);
@@ -47,6 +59,9 @@ std::tuple<bool, bool, bool> UniformConcrete<glm::vec3>::ImGui_Slider() {
 	return std::make_tuple(wasJusModified, ImGui::IsItemActivated(), ImGui::IsItemDeactivatedAfterEdit());
 }
 
+/*------------------------------------
+------------------VEC4----------------
+--------------------------------------*/
 template <>
 void UniformConcrete<glm::vec4>::set() {
 	glUniform4f(getLocation(), m_value.x, m_value.y, m_value.z, m_value.w);
