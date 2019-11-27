@@ -18,6 +18,12 @@ void ArrayOfStructOfUniforms::setUniforms() {
 
 void ArrayOfStructOfUniforms::addStruct(){
 	m_structsOfUniforms.resize(m_structsOfUniforms.size() + 1);
+	size_t size = m_structsOfUniforms.size();
+	if (size > 1) {
+		for (Uniform* uni : m_structsOfUniforms[size-2]) {
+			m_structsOfUniforms[size-1].push_back(uni->createPtrWithSameData());
+		}
+	}
 }
 
 void ArrayOfStructOfUniforms::addUniform(Uniform* uniform) {

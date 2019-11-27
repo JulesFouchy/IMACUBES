@@ -12,6 +12,7 @@ ShaderAndItsMaterials::ShaderAndItsMaterials(const std::string& vertexFilepath, 
 {
 	m_uniforms.addStruct();
 	parseShader(fragmentFilepath);
+	m_uniforms.addStruct();
 }
 
 ShaderAndItsMaterials::~ShaderAndItsMaterials() {
