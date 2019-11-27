@@ -39,6 +39,7 @@ void ArrayOfStructOfUniforms::ImGui_Sliders(const std::string& windowName) {
 		for (Uniform* uni : uniStruct) {
 			uni->ImGui_Slider();
 		}
+		ImGui::Separator();
 	}
 	ImGui::End();
 }
