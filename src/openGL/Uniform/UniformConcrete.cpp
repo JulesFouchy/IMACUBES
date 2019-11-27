@@ -54,7 +54,7 @@ void UniformConcrete<glm::vec3>::set() {
 }
 std::tuple<bool, bool, bool> UniformConcrete<glm::vec3>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	bool wasJusModified = ImGui::SliderFloat3(getName().c_str(), glm::value_ptr(m_value), m_minValue.x, m_maxValue.x);
+	bool wasJusModified = ImGui::ColorPicker3(getName().c_str(), glm::value_ptr(m_value));
 	ImGui::PopID();
 	return std::make_tuple(wasJusModified, ImGui::IsItemActivated(), ImGui::IsItemDeactivatedAfterEdit());
 }
@@ -68,7 +68,7 @@ void UniformConcrete<glm::vec4>::set() {
 }
 std::tuple<bool, bool, bool> UniformConcrete<glm::vec4>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	bool wasJusModified = ImGui::SliderFloat4(getName().c_str(), glm::value_ptr(m_value), m_minValue.x, m_maxValue.x);
+	bool wasJusModified = ImGui::ColorPicker4(getName().c_str(), glm::value_ptr(m_value));
 	ImGui::PopID();
 	return std::make_tuple(wasJusModified, ImGui::IsItemActivated(), ImGui::IsItemDeactivatedAfterEdit());
 }
