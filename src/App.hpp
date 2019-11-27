@@ -6,6 +6,11 @@
 #include "OpenGL/CubesGroup.hpp"
 #include "OpenGL/Shader.hpp"
 
+#include "Core/ShaderAndItsMaterials.hpp"
+#include "Types/ArrayOfStructOfUniforms.hpp"
+
+//#include "Types/UniformFactory.hpp"
+
 /**
  * @brief Base root of the app
  */
@@ -34,4 +39,6 @@ private:
 	// ----------------PLAYGROUND!------------------
 	Shader m_shader;
 	CubesGroup cubesData;
+	ShaderAndItsMaterials m_mat;
+	ArrayOfStructOfUniforms m_arr;
 };

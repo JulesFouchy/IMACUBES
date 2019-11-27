@@ -9,13 +9,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Types/UniformsStruct.hpp"
-
+#include "Types/UniformFactory.hpp"
 
 bool App::m_instanciated = false;
 
 App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDemoWindow(false),
-							   m_shader("res/shaders/standardLighting.vert", "res/shaders/standardLighting.frag", false), cubesData(10, 10, 10)
+							   m_shader("res/shaders/standardLighting.vert", "res/shaders/standardLighting.frag", false), cubesData(10, 10, 10),
+							   m_mat("res/shaders/standardLighting.vert", "res/shaders/standardLighting.frag")
 {
     assert(!m_instanciated);
 	m_instanciated = true;
@@ -27,13 +27,24 @@ App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDe
 
 	// ----------------PLAYGROUND!------------------
 	m_shader.compile();
+
+	//UniformConcrete<float> unif(m_shader.getID(), "testUni", 0.5, -2, 2);
+	//
+	//m_arr.addStruct();
+	//m_arr.addStruct();
+	//m_arr.addUniform(&unif);
+	//m_arr.addUniform(new UniformConcrete<float>(m_shader.getID(), "testUni2", 0.5, 0, 1));
+
+	//unif.ImGui_Slider();
 	
 	// Set uniform
 	glm::mat4 projMat = glm::perspective(1.0f, 16.0f/9, 0.1f, 10.0f);
 	m_shader.bind();
+	m_mat.m_shader.bind();
+	m_mat.m_shader.setUniformMat4f("u_projMat", projMat);;
 	m_shader.setUniformMat4f("u_projMat", projMat);
 
-	UniformStruct myStruct;
+	/*UniformStruct myStruct;
 	myStruct.addType(Int);
 	myStruct.addType(Int);
 	myStruct.addType(Int);
@@ -43,7 +54,7 @@ App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDe
 	*int0ptr = 5;
 	*int1ptr = 11;
 	*int2ptr = 14;
-	spdlog::info("{} {} {}", *int0ptr, *int1ptr, *int2ptr);
+	spdlog::info("{} {} {}", *int0ptr, *int1ptr, *int2ptr);*/
 	int a = 0;
 }
 
@@ -68,8 +79,12 @@ void App::update() {
 
 	// ----------------PLAYGROUND!------------------
 	
-	m_shader.bind();
-	cubesData.drawWireframe();
+	//m_shader.bind();
+	//cubesData.drawWireframe();
+	m_mat.draw();
+	//m_mat.m_uniforms.showGUI();
+	m_arr.ImGui_Sliders();
+	//spdlog::info(m_arr.m_structOfUniforms[0]->getLocation());
 	
 	// ---------------------------------------------
 
