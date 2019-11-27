@@ -2,7 +2,7 @@
 
 #include "Helper/String.hpp"
 
-#include "Types/OpenGLTypes.hpp"
+#include "OpenGL/OpenGLTypes.hpp"
 
 #include "glm/glm.hpp"
 

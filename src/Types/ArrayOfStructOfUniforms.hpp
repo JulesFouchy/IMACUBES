@@ -1,6 +1,6 @@
 #pragma once
 
-#include "UniformFactory.hpp"
+#include "OpenGL/Uniform/UniformFactory.hpp"
 
 #include <vector>
 #include <memory>

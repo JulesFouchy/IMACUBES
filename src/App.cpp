@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Types/UniformFactory.hpp"
+#include "OpenGL/Uniform/UniformFactory.hpp"
 
 bool App::m_instanciated = false;
 

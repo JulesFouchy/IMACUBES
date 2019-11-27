@@ -4,8 +4,8 @@
 #include "Helper/String.hpp"
 
 #include "Debugging/Log.hpp"
-#include "Types/OpenGLTypes.hpp"
-#include "Types/UniformFactory.hpp"
+#include "OpenGL/OpenGLTypes.hpp"
+#include "OpenGL/Uniform/UniformFactory.hpp"
 
 ShaderAndItsMaterials::ShaderAndItsMaterials(const std::string& vertexFilepath, const std::string& fragmentFilepath)
 	: m_shader(vertexFilepath, fragmentFilepath), m_cubes(0,0,0), m_name(MyString::RemoveFolderHierarchy(fragmentFilepath))
