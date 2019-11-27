@@ -3,7 +3,7 @@
 #include "OpenGL/Shader.hpp"
 #include "OpenGL/CubesGroup.hpp"
 
-#include "Types/ArrayOfStructOfUniforms.hpp"
+#include "OpenGL/Uniform/ArrayOfStructOfUniforms.hpp"
 
 #include <string>
 
