@@ -49,16 +49,18 @@ void ShaderAndItsMaterials::parseShader(const std::string& fragmentFilepath) {
 			size_t posBeginComment = line.find("//");
 			if (posBeginUniform != std::string::npos && posBeginUniform < posBeginComment) {
 				// Check if the uniform already existed
-				MyString::GetNextWord(line, &posBeginUniform); // skip type
-				std::string name = MyString::GetNextWord(line, &posBeginUniform);
+				size_t currentPos = posBeginUniform;
+				MyString::GetNextWord(line, &currentPos); // skip uniform
+				MyString::GetNextWord(line, &currentPos); // skip type
+				std::string name = MyString::GetNextWord(line, &currentPos);
 				int uniformIndex = m_uniforms.find(name);
 				if (uniformIndex == -1) {
 					newUniforms.addUniform(UniformFactory::FromShaderLine(&m_shader, line));
 				}
 				else {
-					spdlog::info("uni {} alrezady exists", name);
+					newUniforms.addUniform(m_uniforms.structsOfUniforms()[0][uniformIndex]);
 					for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
-						newUniforms.structsOfUniforms()[k][uniformIndex] = m_uniforms.structsOfUniforms()[k][uniformIndex];
+						newUniforms.structsOfUniforms()[k].back() = m_uniforms.structsOfUniforms()[k][uniformIndex];
 					}
 				}
 			}
