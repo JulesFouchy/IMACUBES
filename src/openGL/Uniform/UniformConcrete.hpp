@@ -11,8 +11,8 @@ template <typename T>
 class UniformConcrete : public Uniform {
 public:
 	UniformConcrete() = default;
-	UniformConcrete(GLuint shaderID, const std::string& name, T value, T minValue, T maxValue)
-		: Uniform(shaderID, name), m_value(value), m_valueWhenDraggingStarted(value), m_minValue(minValue), m_maxValue(maxValue)
+	UniformConcrete(Shader* shader, const std::string& name, T value, T minValue, T maxValue)
+		: Uniform(shader, name), m_value(value), m_valueWhenDraggingStarted(value), m_minValue(minValue), m_maxValue(maxValue)
 	{}
 
 	void set() override;
@@ -20,7 +20,7 @@ public:
 	std::tuple<bool, bool, bool> ImGui_Slider() override; // RETURNS : was value modified this frame / did dragging start this frame / did dragging end this frame
 
 	Uniform* createPtrWithSameData() override {
-		return new UniformConcrete<T>(m_shaderID, m_name, m_value, m_minValue, m_maxValue);
+		return new UniformConcrete<T>(m_shader, m_name, m_value, m_minValue, m_maxValue);
 	}
 
 	inline T& value() { return m_value; }

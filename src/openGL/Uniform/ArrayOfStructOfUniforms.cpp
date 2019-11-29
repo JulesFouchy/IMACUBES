@@ -43,3 +43,11 @@ void ArrayOfStructOfUniforms::ImGui_Sliders(const std::string& windowName) {
 	}
 	ImGui::End();
 }
+
+int ArrayOfStructOfUniforms::find(const std::string& uniformName) {
+	for (int k = 0; k < m_structsOfUniforms[0].size(); ++k) {
+		if (m_structsOfUniforms[0][k]->getName() == uniformName)
+			return k;
+	}
+	return -1;
+}

@@ -8,7 +8,7 @@
 --------------------------------------*/
 template <>
 void UniformConcrete<int>::set() {
-	glUniform1i(getLocation(), m_value);
+	m_shader->setUniform1i(getName(), m_value);
 }
 std::tuple<bool, bool, bool> UniformConcrete<int>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
@@ -22,7 +22,7 @@ std::tuple<bool, bool, bool> UniformConcrete<int>::ImGui_Slider() {
 --------------------------------------*/
 template <>
 void UniformConcrete<float>::set() {
-	glUniform1f(getLocation(), m_value);
+	m_shader->setUniform1f(getName(), m_value);
 }
 std::tuple<bool, bool, bool> UniformConcrete<float>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
@@ -36,7 +36,7 @@ std::tuple<bool, bool, bool> UniformConcrete<float>::ImGui_Slider() {
 --------------------------------------*/
 template <>
 void UniformConcrete<glm::vec2>::set() {
-	glUniform2f(getLocation(), m_value.x, m_value.y);
+	m_shader->setUniform2f(getName(), m_value);
 }
 std::tuple<bool, bool, bool> UniformConcrete<glm::vec2>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
@@ -50,7 +50,7 @@ std::tuple<bool, bool, bool> UniformConcrete<glm::vec2>::ImGui_Slider() {
 --------------------------------------*/
 template <>
 void UniformConcrete<glm::vec3>::set() {
-	glUniform3f(getLocation(), m_value.x, m_value.y, m_value.z);
+	m_shader->setUniform3f(getName(), m_value);
 }
 std::tuple<bool, bool, bool> UniformConcrete<glm::vec3>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
@@ -64,7 +64,7 @@ std::tuple<bool, bool, bool> UniformConcrete<glm::vec3>::ImGui_Slider() {
 --------------------------------------*/
 template <>
 void UniformConcrete<glm::vec4>::set() {
-	glUniform4f(getLocation(), m_value.x, m_value.y, m_value.z, m_value.w);
+	m_shader->setUniform4f(getName(), m_value);
 }
 std::tuple<bool, bool, bool> UniformConcrete<glm::vec4>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);

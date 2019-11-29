@@ -40,10 +40,10 @@ App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDe
 	// Set uniform
 	glm::mat4 projMat = glm::perspective(1.0f, 16.0f/9, 0.1f, 10.0f);
 	m_shader.bind();
+	m_mat.reloadShader();
 	m_mat.m_shader.bind();
-	m_mat.m_shader.setUniformMat4f("u_projMat", projMat);;
+	m_mat.m_shader.setUniformMat4f("u_projMat", projMat);
 	m_shader.setUniformMat4f("u_projMat", projMat);
-
 	/*UniformStruct myStruct;
 	myStruct.addType(Int);
 	myStruct.addType(Int);
@@ -81,6 +81,9 @@ void App::update() {
 	
 	//m_shader.bind();
 	//cubesData.drawWireframe();
+	m_mat.m_shader.bind();
+	glm::mat4 projMat = glm::perspective(1.0f, 16.0f / 9, 0.1f, 10.0f);
+	m_mat.m_shader.setUniformMat4f("u_projMat", projMat);
 	m_mat.draw();
 	//m_mat.m_uniforms.showGUI();
 	m_mat.ImGui_Sliders();
@@ -129,6 +132,13 @@ void App::handleSDLEvents() {
 			break;
 
 		case SDL_MOUSEBUTTONUP:
+			break;
+
+
+		case SDL_KEYDOWN:
+			if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
+				m_mat.reloadShader();
+			}
 			break;
 
 		case SDL_WINDOWEVENT:

@@ -7,7 +7,7 @@
 #include "glm/glm.hpp"
 
 namespace UniformFactory {
-	Uniform* FromShaderLine(GLuint shaderID, const std::string& line) {
+	Uniform* FromShaderLine(Shader* shader, const std::string& line) {
 		// Parse uniform
 		size_t posBeginUniform = line.find("uniform");
 		// Get type
@@ -17,19 +17,19 @@ namespace UniformFactory {
 		switch (type)
 		{
 		case OpenGLType::Int:
-			return ReadNameAndValuesAndCreateUniformOfType<int>(shaderID, line, posEndType);
+			return ReadNameAndValuesAndCreateUniformOfType<int>(shader, line, posEndType);
 			break;
 		case OpenGLType::Float:
-			return ReadNameAndValuesAndCreateUniformOfType<float>(shaderID, line, posEndType);
+			return ReadNameAndValuesAndCreateUniformOfType<float>(shader, line, posEndType);
 			break;
 		case OpenGLType::Vec2:
-			return ReadNameAndValuesAndCreateUniformOfType<glm::vec2>(shaderID, line, posEndType);
+			return ReadNameAndValuesAndCreateUniformOfType<glm::vec2>(shader, line, posEndType);
 			break;
 		case OpenGLType::Vec3:
-			return ReadNameAndValuesAndCreateUniformOfType<glm::vec3>(shaderID, line, posEndType);
+			return ReadNameAndValuesAndCreateUniformOfType<glm::vec3>(shader, line, posEndType);
 			break;
 		case OpenGLType::Vec4:
-			return ReadNameAndValuesAndCreateUniformOfType<glm::vec4>(shaderID, line, posEndType);
+			return ReadNameAndValuesAndCreateUniformOfType<glm::vec4>(shader, line, posEndType);
 			break;
 		default:
 			spdlog::warn("[UniformFactory::FromShaderLine] Unknown OpenGL type : {}", (int)type);

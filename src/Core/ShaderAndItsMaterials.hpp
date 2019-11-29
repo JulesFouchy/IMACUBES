@@ -14,6 +14,8 @@ public:
 
 	void draw();
 
+	void reloadShader();
+
 	inline void ImGui_Sliders() { m_uniforms.ImGui_Sliders(m_name); }
 
 private:

@@ -25,22 +25,43 @@ void ShaderAndItsMaterials::draw() {
 	m_cubes.draw();
 }
 
+void ShaderAndItsMaterials::reloadShader() {
+	m_shader.compile();
+	parseShader(m_shader.getFragmentFilepath());
+}
+
 void ShaderAndItsMaterials::setUniforms() {
 	m_uniforms.setUniforms();
 }
 
 
 void ShaderAndItsMaterials::parseShader(const std::string& fragmentFilepath) {
+	ArrayOfStructOfUniforms newUniforms;
+	for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
+		newUniforms.addStruct();
+	}
 	std::ifstream file(fragmentFilepath);
 	if (file.is_open()) {
 		std::string line;
 		while (std::getline(file, line)) {
-			// Parse uniform
+			// Look for 'uniform'
 			size_t posBeginUniform = line.find("uniform");
 			size_t posBeginComment = line.find("//");
 			if (posBeginUniform != std::string::npos && posBeginUniform < posBeginComment) {
-				m_uniforms.addUniform(UniformFactory::FromShaderLine(m_shader.getID(), line));
+				// Check if the uniform already existed
+				MyString::GetNextWord(line, &posBeginUniform); // skip type
+				std::string name = MyString::GetNextWord(line, &posBeginUniform);
+				int uniformIndex = m_uniforms.find(name);
+				if (uniformIndex == -1) {
+					newUniforms.addUniform(UniformFactory::FromShaderLine(&m_shader, line));
+				}
+				else {
+					for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
+						newUniforms.structsOfUniforms()[k][uniformIndex] = m_uniforms.structsOfUniforms()[k][uniformIndex];
+					}
+				}
 			}
 		}
 	}
+	m_uniforms = newUniforms;
 }

@@ -32,6 +32,8 @@ public:
 
 private:
 	unsigned int m_shaderId;
+	unsigned int m_vsID;
+	unsigned int m_fsID;
 	std::string m_vertexShaderFilepath;
 	std::string m_fragmentShaderFilepath;
 	/* Utilities to open files and compile shaders */

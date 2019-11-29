@@ -1,6 +1,7 @@
 #include "Shader.hpp"
 
 #include <glad/glad.h>
+#include "OpenGL/gl-exception.h"
 
 #include <fstream>
 #include <iostream>
@@ -28,19 +29,20 @@ void Shader::bind() {
 
 void Shader::compile() {
 	spdlog::info("[Compiling Shader] " + MyString::RemoveFolderHierarchy(m_vertexShaderFilepath) + " & " + MyString::RemoveFolderHierarchy(m_fragmentShaderFilepath));
-	if (m_shaderId != -1)
-		glDeleteProgram(m_shaderId);
-	m_shaderId = glCreateProgram();
-	unsigned int vs = compileShader(GL_VERTEX_SHADER, parseFile(m_vertexShaderFilepath));
-	unsigned int fs = compileShader(GL_FRAGMENT_SHADER, parseFile(m_fragmentShaderFilepath));
+	//if (m_shaderId == -1) {
+		m_shaderId = glCreateProgram();
+	//}
 
-	glAttachShader(m_shaderId, vs);
-	glAttachShader(m_shaderId, fs);
-	glLinkProgram(m_shaderId);
-	glValidateProgram(m_shaderId);
+	m_vsID = compileShader(GL_VERTEX_SHADER, parseFile(m_vertexShaderFilepath));
+	m_fsID = compileShader(GL_FRAGMENT_SHADER, parseFile(m_fragmentShaderFilepath));
 
-	glDeleteShader(vs);
-	glDeleteShader(fs);
+	GLCall(glAttachShader(m_shaderId, m_vsID));
+	GLCall(glAttachShader(m_shaderId, m_fsID));
+	GLCall(glLinkProgram(m_shaderId));
+	GLCall(glValidateProgram(m_shaderId));
+
+	glDeleteShader(m_vsID);
+	glDeleteShader(m_fsID);
 	Log::separationLine();
 }
 

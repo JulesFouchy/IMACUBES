@@ -4,7 +4,7 @@
 
 namespace UniformFactory {
 	// public :
-	Uniform* FromShaderLine(GLuint shaderID, const std::string& line);
+	Uniform* FromShaderLine(Shader* shader, const std::string& line);
 
 	// private :
 	namespace { // anonymous namespace to make functions private
@@ -12,7 +12,7 @@ namespace UniformFactory {
 		T ReadValue(const std::string& str, size_t* currentPosPtr);
 
 		template <typename T>
-		Uniform* ReadNameAndValuesAndCreateUniformOfType(GLuint shaderID, const std::string& line, size_t posEndType) {
+		Uniform* ReadNameAndValuesAndCreateUniformOfType(Shader* shader, const std::string& line, size_t posEndType) {
 			// Get name
 			size_t posBeginName = MyString::BeginningOfNextWord(line, posEndType);
 			size_t posEndName = MyString::EndOfNextWord(line, posBeginName);
@@ -43,7 +43,7 @@ namespace UniformFactory {
 				}
 			}
 			// Return uniform
-			return new UniformConcrete<T>(shaderID, s_name, initialValue, minValue, maxValue);
+			return new UniformConcrete<T>(shader, s_name, initialValue, minValue, maxValue);
 		}
 	}
 }

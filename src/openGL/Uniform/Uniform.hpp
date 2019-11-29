@@ -3,10 +3,12 @@
 #include <glad/glad.h>
 #include <string>
 
+#include "OpenGL/Shader.hpp"
+
 class Uniform {
 public:
-	Uniform(GLuint shaderID, const std::string& name)
-		: m_shaderID(shaderID), m_name(name), m_location(glGetUniformLocation(shaderID, name.c_str()))
+	Uniform(Shader* shader, const std::string& name)
+		: m_shader(shader), m_name(name)
 	{}
 	~Uniform() = default;
 
@@ -17,10 +19,8 @@ public:
 	virtual Uniform* createPtrWithSameData() = 0;
 
 	inline const std::string& getName() const { return m_name; }
-	inline int getLocation() const { return m_location; }
 
 protected:
-	GLuint m_shaderID;
+	Shader* m_shader;
 	std::string m_name;
-	int m_location;
 };
