@@ -11,8 +11,9 @@ typedef std::vector<Uniform*> StructOfUniforms;
 
 class ArrayOfStructOfUniforms {
 public:
-	ArrayOfStructOfUniforms();
-	~ArrayOfStructOfUniforms();
+	ArrayOfStructOfUniforms() = default;
+	~ArrayOfStructOfUniforms() = default;
+	void deleteAllPointers();
 
 	void setUniforms();
 

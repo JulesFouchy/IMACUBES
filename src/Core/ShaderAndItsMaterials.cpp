@@ -16,7 +16,7 @@ ShaderAndItsMaterials::ShaderAndItsMaterials(const std::string& vertexFilepath, 
 }
 
 ShaderAndItsMaterials::~ShaderAndItsMaterials() {
-
+	m_uniforms.deleteAllPointers();
 }
 
 void ShaderAndItsMaterials::draw() {
@@ -56,6 +56,7 @@ void ShaderAndItsMaterials::parseShader(const std::string& fragmentFilepath) {
 					newUniforms.addUniform(UniformFactory::FromShaderLine(&m_shader, line));
 				}
 				else {
+					spdlog::info("uni {} alrezady exists", name);
 					for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
 						newUniforms.structsOfUniforms()[k][uniformIndex] = m_uniforms.structsOfUniforms()[k][uniformIndex];
 					}

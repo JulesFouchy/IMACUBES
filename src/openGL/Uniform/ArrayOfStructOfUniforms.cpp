@@ -4,11 +4,7 @@
 
 #include "Debugging/Log.hpp"
 
-ArrayOfStructOfUniforms::ArrayOfStructOfUniforms() {
-
-}
-
-ArrayOfStructOfUniforms::~ArrayOfStructOfUniforms() {
+void ArrayOfStructOfUniforms::deleteAllPointers() {
 	for (StructOfUniforms uniStruct : m_structsOfUniforms) {
 		for (Uniform* uniPtr : uniStruct)
 			delete uniPtr;
