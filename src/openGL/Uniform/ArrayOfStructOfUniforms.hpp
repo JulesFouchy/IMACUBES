@@ -12,7 +12,7 @@ typedef std::vector<Uniform*> StructOfUniforms;
 class ArrayOfStructOfUniforms {
 public:
 	ArrayOfStructOfUniforms();
-	~ArrayOfStructOfUniforms() = default;
+	~ArrayOfStructOfUniforms();
 
 	void setUniforms();
 

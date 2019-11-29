@@ -8,6 +8,13 @@ ArrayOfStructOfUniforms::ArrayOfStructOfUniforms() {
 
 }
 
+ArrayOfStructOfUniforms::~ArrayOfStructOfUniforms() {
+	for (StructOfUniforms uniStruct : m_structsOfUniforms) {
+		for (Uniform* uniPtr : uniStruct)
+			delete uniPtr;
+	}
+}
+
 void ArrayOfStructOfUniforms::setUniforms() {
 	for (StructOfUniforms& uniStruct : m_structsOfUniforms) {
 		for (Uniform* uni : uniStruct) {
