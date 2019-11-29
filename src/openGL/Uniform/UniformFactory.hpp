@@ -17,7 +17,6 @@ namespace UniformFactory {
 			size_t posBeginName = MyString::BeginningOfNextWord(line, posEndType);
 			size_t posEndName = MyString::EndOfNextWord(line, posBeginName);
 			std::string s_name = line.substr(posBeginName, posEndName - posBeginName);
-			spdlog::info("found uniform {}", s_name);
 			// Get options
 			T initialValue = T(0);
 			T minValue = T(0);
@@ -27,7 +26,6 @@ namespace UniformFactory {
 				size_t currentPos = MyString::BeginningOfNextWord(line, MyString::EndOfNextWord(line, posBeginComment) + 1);
 				while (currentPos < line.size()) {
 					std::string arg = MyString::GetNextWord(line, &currentPos);
-					spdlog::info("|" + arg + "|");
 					if (arg == "default") {
 						initialValue = ReadValue<T>(line, &currentPos);
 					}
