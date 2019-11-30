@@ -12,10 +12,12 @@ void ArrayOfStructOfUniforms::deleteAllPointers() {
 }
 
 void ArrayOfStructOfUniforms::setUniforms() {
+	int structID = 0;
 	for (StructOfUniforms& uniStruct : m_structsOfUniforms) {
 		for (Uniform* uni : uniStruct) {
-			uni->set();
+			uni->set(structID);
 		}
+		structID++;
 	}
 }
 
@@ -47,9 +49,9 @@ void ArrayOfStructOfUniforms::ImGui_Sliders(const std::string& windowName) {
 	ImGui::End();
 }
 
-int ArrayOfStructOfUniforms::find(const std::string& uniformName) {
+int ArrayOfStructOfUniforms::find(const std::string& nameInsideStruct) {
 	for (int k = 0; k < m_structsOfUniforms[0].size(); ++k) {
-		if (!m_structsOfUniforms[0][k]->getName().compare(uniformName))
+		if (!m_structsOfUniforms[0][k]->getNameInsideStruct().compare(nameInsideStruct))
 			return k;
 	}
 	return -1;

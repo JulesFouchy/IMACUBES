@@ -1,11 +1,11 @@
 #include "String.hpp"
 
 size_t MyString::BeginningOfNextWord(const std::string& myString, size_t beginPos) {
-	return myString.find_first_not_of(" ,;/()|", beginPos);
+	return myString.find_first_not_of(" ,;/()|\t", beginPos);
 }
 
 size_t MyString::EndOfNextWord(const std::string& myString, size_t beginPos) {
-	size_t pos = myString.find_first_of(" ,;/()|", beginPos);
+	size_t pos = myString.find_first_of(" ,;/()|\t", beginPos);
 	return pos == std::string::npos ? myString.size() : pos;
 }
 

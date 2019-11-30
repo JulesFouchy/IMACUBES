@@ -8,28 +8,25 @@
 
 namespace UniformFactory {
 	Uniform* FromShaderLine(Shader* shader, const std::string& line) {
-		// Parse uniform
-		size_t posBeginUniform = line.find("uniform");
 		// Get type
-		size_t posBeginType = MyString::BeginningOfNextWord(line, MyString::EndOfNextWord(line, posBeginUniform) + 1);
-		size_t posEndType = MyString::EndOfNextWord(line, posBeginType);
-		OpenGLType type = GLType::FromString(line.substr(posBeginType, posEndType - posBeginType));
+		size_t currentPos = 0;
+		OpenGLType type = GLType::FromString(MyString::GetNextWord(line, &currentPos));
 		switch (type)
 		{
 		case OpenGLType::Int:
-			return ReadNameAndValuesAndCreateUniformOfType<int>(shader, line, posEndType);
+			return ReadNameAndValuesAndCreateUniformOfType<int>(shader, line, currentPos);
 			break;
 		case OpenGLType::Float:
-			return ReadNameAndValuesAndCreateUniformOfType<float>(shader, line, posEndType);
+			return ReadNameAndValuesAndCreateUniformOfType<float>(shader, line, currentPos);
 			break;
 		case OpenGLType::Vec2:
-			return ReadNameAndValuesAndCreateUniformOfType<glm::vec2>(shader, line, posEndType);
+			return ReadNameAndValuesAndCreateUniformOfType<glm::vec2>(shader, line, currentPos);
 			break;
 		case OpenGLType::Vec3:
-			return ReadNameAndValuesAndCreateUniformOfType<glm::vec3>(shader, line, posEndType);
+			return ReadNameAndValuesAndCreateUniformOfType<glm::vec3>(shader, line, currentPos);
 			break;
 		case OpenGLType::Vec4:
-			return ReadNameAndValuesAndCreateUniformOfType<glm::vec4>(shader, line, posEndType);
+			return ReadNameAndValuesAndCreateUniformOfType<glm::vec4>(shader, line, currentPos);
 			break;
 		default:
 			spdlog::warn("[UniformFactory::FromShaderLine] Unknown OpenGL type : {}", (int)type);

@@ -32,6 +32,9 @@ void ShaderAndItsMaterials::reloadShader() {
 
 void ShaderAndItsMaterials::setUniforms() {
 	m_uniforms.setUniforms();
+	//for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
+	//	m_shader.setUniform1i("materialIndices["+std::to_string(k)+"]", 1);
+	//}
 }
 
 
@@ -44,24 +47,27 @@ void ShaderAndItsMaterials::parseShader(const std::string& fragmentFilepath) {
 	if (file.is_open()) {
 		std::string line;
 		while (std::getline(file, line)) {
-			// Look for 'uniform'
-			size_t posBeginUniform = line.find("uniform");
-			size_t posBeginComment = line.find("//");
-			if (posBeginUniform != std::string::npos && posBeginUniform < posBeginComment) {
-				// Check if the uniform already existed
-				size_t currentPos = posBeginUniform;
-				MyString::GetNextWord(line, &currentPos); // skip uniform
-				MyString::GetNextWord(line, &currentPos); // skip type
-				std::string name = MyString::GetNextWord(line, &currentPos);
-				int uniformIndex = m_uniforms.find(name);
-				if (uniformIndex == -1) {
-					newUniforms.addUniform(UniformFactory::FromShaderLine(&m_shader, line));
-				}
-				else {
-					newUniforms.addUniform(m_uniforms.structsOfUniforms()[0][uniformIndex]);
-					for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
-						newUniforms.structsOfUniforms()[k].back() = m_uniforms.structsOfUniforms()[k][uniformIndex];
+			// Look for 'struct MaterialParameters'
+			if (line.find("struct MaterialParameters") != std::string::npos) { // TODO check that the line isn't commented out
+				std::getline(file, line);
+				while (line.find("}") == std::string::npos) {
+					// Check if the uniform already existed
+					size_t currentPos = 0;
+					MyString::GetNextWord(line, &currentPos); // skip type
+					std::string name = MyString::GetNextWord(line, &currentPos);
+					spdlog::info("found uni |{}|", name);
+					int uniformIndex = m_uniforms.find(name);
+					if (uniformIndex == -1) {
+						newUniforms.addUniform(UniformFactory::FromShaderLine(&m_shader, line));
 					}
+					else {
+						newUniforms.addUniform(m_uniforms.structsOfUniforms()[0][uniformIndex]);
+						for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
+							newUniforms.structsOfUniforms()[k].back() = m_uniforms.structsOfUniforms()[k][uniformIndex];
+						}
+					}
+					// Go to next line
+					std::getline(file, line);
 				}
 			}
 		}

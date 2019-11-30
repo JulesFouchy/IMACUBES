@@ -54,9 +54,10 @@ int Shader::getUniformLocation(const std::string& uniformName) {
 	}
 
 	int location = glGetUniformLocation(m_shaderId, uniformName.c_str());
-	//if (location == -1) {
-	//	spdlog::warn("[Shader] uniform '{}' doesn't exist !", name);
-	//}
+	if (location == -1) {
+		spdlog::warn("[Shader::getUniformLocation] uniform '{}' doesn't exist or it was removed durong compilation because it wasn't used", uniformName);
+		return -1;
+	}
 	m_UniformLocationCache[uniformName] = location;
 	return location;
 }
