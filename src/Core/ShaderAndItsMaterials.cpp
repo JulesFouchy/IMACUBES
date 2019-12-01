@@ -8,11 +8,10 @@
 #include "OpenGL/Uniform/UniformFactory.hpp"
 
 ShaderAndItsMaterials::ShaderAndItsMaterials(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex)
-	: m_shader(vertexFilepath, fragmentFilepath), m_cubes(0,0,0), m_name(MyString::RemoveFolderHierarchy(fragmentFilepath)), m_shaderIndex(shaderIndex)
+	: m_shader(vertexFilepath, fragmentFilepath), m_cubes(0,0,0), m_name(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(fragmentFilepath))), m_shaderIndex(shaderIndex)
 {
-	m_uniforms.addStruct();
+	m_uniforms.addStruct(m_name);
 	parseShader(fragmentFilepath);
-	m_uniforms.addStruct();
 }
 
 ShaderAndItsMaterials::~ShaderAndItsMaterials() {
@@ -30,6 +29,17 @@ void ShaderAndItsMaterials::reloadShader() {
 	parseShader(m_shader.getFragmentFilepath());
 }
 
+void ShaderAndItsMaterials::ImGui_Menu(){
+	ImGui::PushID((int)this);
+		ImGui::Text(m_name.c_str());
+		if (ImGui::Button("Add Material")) {
+			m_uniforms.addStruct(m_name);
+		}
+		m_uniforms.ImGui_Sliders(); 
+	ImGui::Separator();
+	ImGui::PopID();
+}
+
 void ShaderAndItsMaterials::setUniforms() {
 	m_uniforms.setUniforms();
 	//for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
@@ -41,7 +51,7 @@ void ShaderAndItsMaterials::setUniforms() {
 void ShaderAndItsMaterials::parseShader(const std::string& fragmentFilepath) {
 	ArrayOfStructOfUniforms newUniforms;
 	for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
-		newUniforms.addStruct();
+		newUniforms.addStruct(m_name);
 	}
 	std::ifstream file(fragmentFilepath);
 	if (file.is_open()) {

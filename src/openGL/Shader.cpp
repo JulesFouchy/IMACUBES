@@ -30,7 +30,7 @@ Shader::~Shader() {
 	glDeleteProgram(m_shaderId);
 }
 
-void Shader::bind() {
+void Shader::bind() const {
 	glUseProgram(m_shaderId);
 }
 

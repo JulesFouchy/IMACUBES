@@ -11,10 +11,10 @@ public:
 	Shader(const Shader& other);
 	~Shader();
 
-	void bind();
+	void bind() const;
 	void compile();
 
-	inline bool createdSuccessfully() { return m_bCreatedSuccessfully; }
+	inline bool createdSuccessfully() const { return m_bCreatedSuccessfully; }
 
 	inline unsigned int getID() const { return m_shaderId; }
 	inline const std::string& getFragmentFilepath() const { return m_fragmentShaderFilepath; }

@@ -9,10 +9,12 @@ void MaterialsManager::draw() {
 	}
 }
 
-void MaterialsManager::ImGui_Sliders() {
+void MaterialsManager::ImGui_Menu() {
+	ImGui::Begin("Materials");
 	for (ShaderAndItsMaterials& shader : m_shadersList) {
-		shader.ImGui_Sliders();
+		shader.ImGui_Menu();
 	}
+	ImGui::End();
 }
 
 void MaterialsManager::updateMatrixUniform(const std::string& name, const glm::mat4& mat) {

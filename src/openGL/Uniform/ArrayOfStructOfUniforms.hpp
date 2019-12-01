@@ -18,10 +18,10 @@ public:
 
 	void setUniforms();
 
-	void addStruct();
+	void addStruct(const std::string& shaderName);
 	void addUniform(Uniform* uniform);
 
-	void ImGui_Sliders(const std::string& windowName);
+	void ImGui_Sliders();
 
 	int find(const std::string& uniformName);
 
@@ -30,4 +30,5 @@ public:
 
 private:
 	std::vector<StructOfUniforms> m_structsOfUniforms;
+	std::vector<std::string> m_structNames;
 };

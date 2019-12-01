@@ -17,7 +17,7 @@ public:
 
 	void reloadShader();
 
-	inline void ImGui_Sliders() { m_uniforms.ImGui_Sliders(m_name); }
+	void ImGui_Menu();
 
 private:
 	void setUniforms();

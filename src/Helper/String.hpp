@@ -9,4 +9,5 @@ namespace MyString {
 	void ReplaceAll(std::string& str, const std::string& from, const std::string& to);
 	std::string GetFileExtension(const std::string& myString);
 	std::string RemoveFolderHierarchy(const std::string& myString);
+	std::string RemoveFileExtension(const std::string& myString);
 }

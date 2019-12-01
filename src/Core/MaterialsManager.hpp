@@ -16,7 +16,7 @@ public:
 	~MaterialsManager() = delete;
 
 	static void draw();
-	static void ImGui_Sliders();
+	static void ImGui_Menu();
 
 	static inline void addShader(const std::string& vertexFilepath, const std::string& fragmentFilepath) { m_shadersList.emplace_back(vertexFilepath, fragmentFilepath, m_shaderCount++); }
 	static void updateMatrixUniform(const std::string& name, const glm::mat4& mat);

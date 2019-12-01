@@ -4,7 +4,9 @@
 
 #include "Debugging/Log.hpp"
 
-ArrayOfStructOfUniforms::ArrayOfStructOfUniforms(const ArrayOfStructOfUniforms& other) {
+ArrayOfStructOfUniforms::ArrayOfStructOfUniforms(const ArrayOfStructOfUniforms& other)
+	: m_structNames(other.m_structNames)
+{
 	m_structsOfUniforms.resize(other.m_structsOfUniforms.size());
 	for (int k = 0; k < other.m_structsOfUniforms.size(); ++k) {
 		m_structsOfUniforms[k].resize(other.m_structsOfUniforms[k].size());
@@ -31,7 +33,8 @@ void ArrayOfStructOfUniforms::setUniforms() {
 	}
 }
 
-void ArrayOfStructOfUniforms::addStruct(){
+void ArrayOfStructOfUniforms::addStruct(const std::string& shaderName){
+	m_structNames.push_back(shaderName + std::to_string(m_structNames.size()));
 	m_structsOfUniforms.resize(m_structsOfUniforms.size() + 1);
 	size_t size = m_structsOfUniforms.size();
 	if (size > 1) {
@@ -49,15 +52,16 @@ void ArrayOfStructOfUniforms::addUniform(Uniform* uniform) {
 	delete uniform;
 }
 
-void ArrayOfStructOfUniforms::ImGui_Sliders(const std::string& windowName) {
-	ImGui::Begin(windowName.c_str());
+void ArrayOfStructOfUniforms::ImGui_Sliders() {
+	int k = 0;
 	for (StructOfUniforms uniStruct : m_structsOfUniforms) {
+		ImGui::Text(m_structNames[k].c_str());
 		for (Uniform* uni : uniStruct) {
 			uni->ImGui_Slider();
 		}
 		ImGui::Separator();
+		k++;
 	}
-	ImGui::End();
 }
 
 int ArrayOfStructOfUniforms::find(const std::string& nameInsideStruct) {

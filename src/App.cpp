@@ -57,7 +57,7 @@ void App::update() {
 	// ----------------PLAYGROUND!------------------
 	
 	MaterialsManager::draw();
-	MaterialsManager::ImGui_Sliders();
+	MaterialsManager::ImGui_Menu();
 	
 	// ---------------------------------------------
 
