@@ -11,8 +11,9 @@
 
 #include "OpenGL/Uniform/UniformFactory.hpp"
 
+#include "Core/MaterialsManager.hpp"
+
 bool App::m_instanciated = false;
-MaterialsManager App::m_materialsManager;
 
 App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDemoWindow(false)
 {
@@ -116,7 +117,7 @@ void App::handleSDLEvents() {
 				// get new width and height and update the viewport
 				Display::UpdateWindowSize(m_window);
 				// Update camera's ratio
-				m_materialsManager.updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+				MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 				break;
 			}
 

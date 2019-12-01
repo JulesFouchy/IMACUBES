@@ -6,7 +6,6 @@
 #include "OpenGL/CubesGroup.hpp"
 #include "OpenGL/Shader.hpp"
 
-#include "Core/MaterialsManager.hpp"
 #include "Core/Camera.hpp"
 
 /**
@@ -24,8 +23,6 @@ public:
     bool isRunning() const;
     void exit();
 
-	inline static MaterialsManager& MatManager() { return m_materialsManager; }
-
 private:
     void ImGUI_DebugWindow();
 	void handleSDLEvents();
@@ -36,8 +33,6 @@ private:
     bool m_running;
 	bool m_bShowImGUIDemoWindow;
 
-
-	static MaterialsManager m_materialsManager;
 	Camera m_camera;
 
 	// ----------------PLAYGROUND!------------------
