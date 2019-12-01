@@ -55,12 +55,15 @@ void ArrayOfStructOfUniforms::addUniform(Uniform* uniform) {
 
 void ArrayOfStructOfUniforms::ImGui_Sliders() {
 	int k = 0;
-	for (StructOfUniforms uniStruct : m_structsOfUniforms) {
-		ImGui::InputText("", &m_structNames[k]);
+	for (StructOfUniforms& uniStruct : m_structsOfUniforms) {
+		ImGui::PushID((int)&uniStruct);
+		ImGui::Text("Mat "); ImGui::SameLine();
+		ImGui::InputText("", &m_structNames[k]); ImGui::SameLine(); ImGui::Text(" :");
 		for (Uniform* uni : uniStruct) {
 			uni->ImGui_Slider();
 		}
 		ImGui::Separator();
+		ImGui::PopID();
 		k++;
 	}
 }
