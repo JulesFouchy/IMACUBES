@@ -3,6 +3,8 @@
 std::vector<ShaderAndItsMaterials> MaterialsManager::m_shadersList;
 int MaterialsManager::m_shaderCount = 0;
 
+MaterialLocation MaterialsManager::m_selectedMaterial(0, 0);
+
 void MaterialsManager::draw() {
 	for (ShaderAndItsMaterials& shader : m_shadersList) {
 		shader.draw();

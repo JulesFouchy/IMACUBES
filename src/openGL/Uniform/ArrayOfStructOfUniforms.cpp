@@ -5,8 +5,17 @@
 
 #include "Debugging/Log.hpp"
 
+#include "Core/MaterialsManager.hpp"
+
+
+ArrayOfStructOfUniforms::ArrayOfStructOfUniforms(int shaderIndex)
+	: m_shaderIndex(shaderIndex)
+{
+
+}
+
 ArrayOfStructOfUniforms::ArrayOfStructOfUniforms(const ArrayOfStructOfUniforms& other)
-	: m_structNames(other.m_structNames)
+	: m_structNames(other.m_structNames), m_shaderIndex(other.m_shaderIndex)
 {
 	m_structsOfUniforms.resize(other.m_structsOfUniforms.size());
 	for (int k = 0; k < other.m_structsOfUniforms.size(); ++k) {
@@ -57,11 +66,19 @@ void ArrayOfStructOfUniforms::ImGui_Sliders() {
 	int k = 0;
 	for (StructOfUniforms& uniStruct : m_structsOfUniforms) {
 		ImGui::PushID((int)&uniStruct);
-		ImGui::Text("Mat "); ImGui::SameLine();
-		ImGui::InputText("", &m_structNames[k]); ImGui::SameLine(); ImGui::Text(" :");
-		for (Uniform* uni : uniStruct) {
-			uni->ImGui_Slider();
+
+		if (MaterialsManager::SelectedMaterial().materialID == k && MaterialsManager::SelectedMaterial().shaderID == m_shaderIndex) {
+			ImGui::Text("Mat "); ImGui::SameLine();
+			ImGui::InputText("", &m_structNames[k]); ImGui::SameLine(); ImGui::Text(" :");
+			for (Uniform* uni : uniStruct) {
+				uni->ImGui_Slider();
+			}
 		}
+		else {
+			ImGui::Text("Mat"); ImGui::SameLine();
+			ImGui::Text(m_structNames[k].c_str());
+		}
+
 		ImGui::Separator();
 		ImGui::PopID();
 		k++;

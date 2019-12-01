@@ -7,7 +7,10 @@
 
 struct MaterialLocation {
 	int shaderID;
-	int MaterialID;
+	int materialID;
+
+	MaterialLocation(int shaderID, int materialID)
+		: shaderID(shaderID), materialID(materialID) {}
 };
 
 class MaterialsManager {
@@ -22,8 +25,10 @@ public:
 	static void updateMatrixUniform(const std::string& name, const glm::mat4& mat);
 
 	static inline std::vector<ShaderAndItsMaterials>& Shaders() { return m_shadersList; }
-
+	static inline const MaterialLocation& SelectedMaterial() { return m_selectedMaterial; }
 private:
 	static std::vector<ShaderAndItsMaterials> m_shadersList;
 	static int m_shaderCount;
+
+	static MaterialLocation m_selectedMaterial;
 };

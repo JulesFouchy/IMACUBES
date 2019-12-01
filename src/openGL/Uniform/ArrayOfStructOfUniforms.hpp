@@ -11,7 +11,7 @@ typedef std::vector<Uniform*> StructOfUniforms;
 
 class ArrayOfStructOfUniforms {
 public:
-	ArrayOfStructOfUniforms() = default;
+	ArrayOfStructOfUniforms(int shaderIndex);
 	ArrayOfStructOfUniforms(const ArrayOfStructOfUniforms& other);
 	~ArrayOfStructOfUniforms() = default;
 	void deleteAllPointers();
@@ -31,4 +31,5 @@ public:
 private:
 	std::vector<StructOfUniforms> m_structsOfUniforms;
 	std::vector<std::string> m_structNames;
+	int m_shaderIndex;
 };
