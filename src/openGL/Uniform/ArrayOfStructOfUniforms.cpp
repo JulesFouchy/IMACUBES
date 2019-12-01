@@ -1,6 +1,7 @@
 #include "ArrayOfStructOfUniforms.hpp"
 
 #include "imgui.h"
+#include "imgui/misc/cpp/imgui_stdlib.h"
 
 #include "Debugging/Log.hpp"
 
@@ -55,7 +56,7 @@ void ArrayOfStructOfUniforms::addUniform(Uniform* uniform) {
 void ArrayOfStructOfUniforms::ImGui_Sliders() {
 	int k = 0;
 	for (StructOfUniforms uniStruct : m_structsOfUniforms) {
-		ImGui::Text(m_structNames[k].c_str());
+		ImGui::InputText("", &m_structNames[k]);
 		for (Uniform* uni : uniStruct) {
 			uni->ImGui_Slider();
 		}
