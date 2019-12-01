@@ -68,15 +68,16 @@ void ArrayOfStructOfUniforms::ImGui_Sliders() {
 		ImGui::PushID((int)&uniStruct);
 
 		if (MaterialsManager::SelectedMaterial().materialID == k && MaterialsManager::SelectedMaterial().shaderID == m_shaderIndex) {
-			ImGui::Text("Mat "); ImGui::SameLine();
-			ImGui::InputText("", &m_structNames[k]); ImGui::SameLine(); ImGui::Text(" :");
+			ImGui::InputText("", &m_structNames[k]);
 			for (Uniform* uni : uniStruct) {
 				uni->ImGui_Slider();
 			}
 		}
 		else {
-			ImGui::Text("Mat"); ImGui::SameLine();
-			ImGui::Text(m_structNames[k].c_str());
+			//ImGui::Text("Mat"); ImGui::SameLine();
+			if (ImGui::Selectable(m_structNames[k].c_str(), false)) {
+				MaterialsManager::SetSelectedMaterial(m_shaderIndex, k);
+			}
 		}
 
 		ImGui::Separator();

@@ -26,6 +26,7 @@ public:
 
 	static inline std::vector<ShaderAndItsMaterials>& Shaders() { return m_shadersList; }
 	static inline const MaterialLocation& SelectedMaterial() { return m_selectedMaterial; }
+	static inline void SetSelectedMaterial(int shaderID, int matID) { m_selectedMaterial = { shaderID, matID }; }
 private:
 	static std::vector<ShaderAndItsMaterials> m_shadersList;
 	static int m_shaderCount;
