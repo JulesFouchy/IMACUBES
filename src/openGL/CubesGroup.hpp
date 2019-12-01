@@ -8,6 +8,7 @@ public:
 	static void Initialize();
 	static void ShutDown();
 	CubesGroup(unsigned int width=0, unsigned int height=0, unsigned int depth=0);
+	CubesGroup(const CubesGroup& other);
 	~CubesGroup();
 
 	void draw();

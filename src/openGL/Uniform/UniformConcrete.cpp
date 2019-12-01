@@ -8,7 +8,7 @@
 --------------------------------------*/
 template <>
 void UniformConcrete<int>::set(int structIndex) {
-	m_shader->setUniform1i(getNameFull(structIndex), m_value);
+	getShader().setUniform1i(getNameFull(structIndex), m_value);
 }
 std::tuple<bool, bool, bool> UniformConcrete<int>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
@@ -22,7 +22,7 @@ std::tuple<bool, bool, bool> UniformConcrete<int>::ImGui_Slider() {
 --------------------------------------*/
 template <>
 void UniformConcrete<float>::set(int structIndex) {
-	m_shader->setUniform1f(getNameFull(structIndex), m_value);
+	getShader().setUniform1f(getNameFull(structIndex), m_value);
 }
 std::tuple<bool, bool, bool> UniformConcrete<float>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
@@ -36,7 +36,7 @@ std::tuple<bool, bool, bool> UniformConcrete<float>::ImGui_Slider() {
 --------------------------------------*/
 template <>
 void UniformConcrete<glm::vec2>::set(int structIndex) {
-	m_shader->setUniform2f(getNameFull(structIndex), m_value);
+	getShader().setUniform2f(getNameFull(structIndex), m_value);
 }
 std::tuple<bool, bool, bool> UniformConcrete<glm::vec2>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
@@ -50,7 +50,7 @@ std::tuple<bool, bool, bool> UniformConcrete<glm::vec2>::ImGui_Slider() {
 --------------------------------------*/
 template <>
 void UniformConcrete<glm::vec3>::set(int structIndex) {
-	m_shader->setUniform3f(getNameFull(structIndex), m_value);
+	getShader().setUniform3f(getNameFull(structIndex), m_value);
 }
 std::tuple<bool, bool, bool> UniformConcrete<glm::vec3>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
@@ -64,7 +64,7 @@ std::tuple<bool, bool, bool> UniformConcrete<glm::vec3>::ImGui_Slider() {
 --------------------------------------*/
 template <>
 void UniformConcrete<glm::vec4>::set(int structIndex) {
-	m_shader->setUniform4f(getNameFull(structIndex), m_value);
+	getShader().setUniform4f(getNameFull(structIndex), m_value);
 }
 std::tuple<bool, bool, bool> UniformConcrete<glm::vec4>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);

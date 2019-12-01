@@ -4,6 +4,16 @@
 
 #include "Debugging/Log.hpp"
 
+ArrayOfStructOfUniforms::ArrayOfStructOfUniforms(const ArrayOfStructOfUniforms& other) {
+	m_structsOfUniforms.resize(other.m_structsOfUniforms.size());
+	for (int k = 0; k < other.m_structsOfUniforms.size(); ++k) {
+		m_structsOfUniforms[k].resize(other.m_structsOfUniforms[k].size());
+		for (int i = 0; i < other.m_structsOfUniforms[k].size(); ++i) {
+			m_structsOfUniforms[k][i] = other.m_structsOfUniforms[k][i]->createPtrWithSameData();
+		}
+	}
+}
+
 void ArrayOfStructOfUniforms::deleteAllPointers() {
 	for (StructOfUniforms uniStruct : m_structsOfUniforms) {
 		for (Uniform* uniPtr : uniStruct)

@@ -19,6 +19,13 @@ Shader::Shader(const std::string& vertexShaderFilepath, const std::string& fragm
 	}
 }
 
+Shader::Shader(const Shader& other)
+	: m_shaderId(-1), m_vertexShaderFilepath(other.m_vertexShaderFilepath), m_fragmentShaderFilepath(other.m_fragmentShaderFilepath),
+	m_bCreatedSuccessfully(true)
+{
+	compile();
+}
+
 Shader::~Shader() {
 	glDeleteProgram(m_shaderId);
 }
@@ -48,14 +55,14 @@ void Shader::compile() {
 
 //Uniforms
 
-int Shader::getUniformLocation(const std::string& uniformName) {
+int Shader::getUniformLocation(std::string uniformName) {
 	if (m_UniformLocationCache.find(uniformName) != m_UniformLocationCache.end()) {
 		return m_UniformLocationCache[uniformName];
 	}
 
 	int location = glGetUniformLocation(m_shaderId, uniformName.c_str());
 	if (location == -1) {
-		spdlog::warn("[Shader::getUniformLocation] uniform '{}' doesn't exist or it was removed durong compilation because it wasn't used", uniformName);
+		//spdlog::warn("[Shader::getUniformLocation] uniform '{}' doesn't exist or it was removed durong compilation because it wasn't used", uniformName);
 		return -1;
 	}
 	m_UniformLocationCache[uniformName] = location;

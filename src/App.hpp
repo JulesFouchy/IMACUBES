@@ -6,7 +6,8 @@
 #include "OpenGL/CubesGroup.hpp"
 #include "OpenGL/Shader.hpp"
 
-#include "Core/ShaderAndItsMaterials.hpp"
+#include "Core/MaterialsManager.hpp"
+#include "Core/Camera.hpp"
 
 /**
  * @brief Base root of the app
@@ -23,6 +24,8 @@ public:
     bool isRunning() const;
     void exit();
 
+	inline static MaterialsManager& MatManager() { return m_materialsManager; }
+
 private:
     void ImGUI_DebugWindow();
 	void handleSDLEvents();
@@ -33,8 +36,9 @@ private:
     bool m_running;
 	bool m_bShowImGUIDemoWindow;
 
+
+	static MaterialsManager m_materialsManager;
+	Camera m_camera;
+
 	// ----------------PLAYGROUND!------------------
-	Shader m_shader;
-	CubesGroup cubesData;
-	ShaderAndItsMaterials m_mat;
 };

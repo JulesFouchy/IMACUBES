@@ -7,8 +7,8 @@
 #include "OpenGL/OpenGLTypes.hpp"
 #include "OpenGL/Uniform/UniformFactory.hpp"
 
-ShaderAndItsMaterials::ShaderAndItsMaterials(const std::string& vertexFilepath, const std::string& fragmentFilepath)
-	: m_shader(vertexFilepath, fragmentFilepath), m_cubes(0,0,0), m_name(MyString::RemoveFolderHierarchy(fragmentFilepath))
+ShaderAndItsMaterials::ShaderAndItsMaterials(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex)
+	: m_shader(vertexFilepath, fragmentFilepath), m_cubes(0,0,0), m_name(MyString::RemoveFolderHierarchy(fragmentFilepath)), m_shaderIndex(shaderIndex)
 {
 	m_uniforms.addStruct();
 	parseShader(fragmentFilepath);
@@ -58,7 +58,7 @@ void ShaderAndItsMaterials::parseShader(const std::string& fragmentFilepath) {
 					spdlog::info("found uni |{}|", name);
 					int uniformIndex = m_uniforms.find(name);
 					if (uniformIndex == -1) {
-						newUniforms.addUniform(UniformFactory::FromShaderLine(&m_shader, line));
+						newUniforms.addUniform(UniformFactory::FromShaderLine(m_shaderIndex, line));
 					}
 					else {
 						newUniforms.addUniform(m_uniforms.structsOfUniforms()[0][uniformIndex]);

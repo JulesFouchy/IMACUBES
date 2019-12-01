@@ -5,10 +5,12 @@
 
 #include "OpenGL/Shader.hpp"
 
+#include "Core/MaterialsLocator.hpp"
+
 class Uniform {
 public:
-	Uniform(Shader* shader, const std::string& nameInsideStruct)
-		: m_shader(shader), m_nameInsideStruct(nameInsideStruct)
+	Uniform(int shaderIndex, const std::string& nameInsideStruct)
+		: m_shaderIndex(shaderIndex), m_nameInsideStruct(nameInsideStruct)
 	{}
 	~Uniform() = default;
 
@@ -18,9 +20,10 @@ public:
 
 	virtual Uniform* createPtrWithSameData() = 0;
 
+	inline Shader& getShader() { return MaterialsLocator::GetShader(m_shaderIndex); }
 	inline const std::string getNameFull(int structIndex) const { return std::string("params[") + std::to_string(structIndex) + std::string("].") + m_nameInsideStruct; }
 	inline const std::string& getNameInsideStruct() const { return m_nameInsideStruct; }
 protected:
-	Shader* m_shader;
+	int m_shaderIndex;
 	std::string m_nameInsideStruct;
 };

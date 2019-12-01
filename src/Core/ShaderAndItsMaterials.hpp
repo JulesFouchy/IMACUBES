@@ -8,8 +8,9 @@
 #include <string>
 
 class ShaderAndItsMaterials {
+friend class MaterialsManager;
 public:
-	ShaderAndItsMaterials(const std::string& vertexFilepath, const std::string& fragmentFilepath);
+	ShaderAndItsMaterials(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex);
 	~ShaderAndItsMaterials();
 
 	void draw();
@@ -28,4 +29,5 @@ public:
 	ArrayOfStructOfUniforms m_uniforms;
 
 	std::string m_name;
+	int m_shaderIndex;
 };

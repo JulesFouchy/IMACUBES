@@ -5,57 +5,33 @@
 #include <imgui/imgui_impl_sdl.h>
 #include <imgui/imgui_impl_opengl3.h>
 #include "OpenGL/gl-exception.h"
+#include "Helper/Display.hpp"
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 #include "OpenGL/Uniform/UniformFactory.hpp"
 
 bool App::m_instanciated = false;
+MaterialsManager App::m_materialsManager;
 
-App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDemoWindow(false),
-							   m_shader("res/shaders/standardLighting.vert", "res/shaders/standardLighting.frag", false), cubesData(10, 10, 10),
-							   m_mat("res/shaders/standardLighting.vert", "res/shaders/standardLighting.frag")
+App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDemoWindow(false)
 {
     assert(!m_instanciated);
 	m_instanciated = true;
 
 	Log::Initialize();
 
+	Display::UpdateWindowSize(m_window);
+
 	GLCall(glClearColor(0.4f, 0.6f, 0.95f, 1.0f));
 	GLCall(glEnable(GL_DEPTH_TEST));
 
 	// ----------------PLAYGROUND!------------------
-	m_shader.compile();
-
-	//UniformConcrete<float> unif(m_shader.getID(), "testUni", 0.5, -2, 2);
-	//
-	//m_arr.addStruct();
-	//m_arr.addStruct();
-	//m_arr.addUniform(&unif);
-	//m_arr.addUniform(new UniformConcrete<float>(m_shader.getID(), "testUni2", 0.5, 0, 1));
-
-	//unif.ImGui_Slider();
 	
-	// Set uniform
-	glm::mat4 projMat = glm::perspective(1.0f, 16.0f/9, 0.1f, 10.0f);
-	m_shader.bind();
-	m_mat.reloadShader();
-	m_mat.m_shader.bind();
-	m_mat.m_shader.setUniformMat4f("u_projMat", projMat);
-	m_shader.setUniformMat4f("u_projMat", projMat);
-	/*UniformStruct myStruct;
-	myStruct.addType(Int);
-	myStruct.addType(Int);
-	myStruct.addType(Int);
-	int* int0ptr = (int*) myStruct[0];
-	int* int1ptr = (int*) myStruct[1];
-	int* int2ptr = (int*) myStruct[2];
-	*int0ptr = 5;
-	*int1ptr = 11;
-	*int2ptr = 14;
-	spdlog::info("{} {} {}", *int0ptr, *int1ptr, *int2ptr);*/
-	int a = 0;
+	//MaterialsManager::m_shadersList.reserve(10);
+	MaterialsManager::addShader("res/shaders/standardLighting.vert", "res/shaders/testShader.frag");
+	MaterialsManager::addShader("res/shaders/standardLighting.vert", "res/shaders/standardLighting.frag");
+	MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -79,15 +55,8 @@ void App::update() {
 
 	// ----------------PLAYGROUND!------------------
 	
-	//m_shader.bind();
-	//cubesData.drawWireframe();
-	m_mat.m_shader.bind();
-	glm::mat4 projMat = glm::perspective(1.0f, 16.0f / 9, 0.1f, 10.0f);
-	m_mat.m_shader.setUniformMat4f("u_projMat", projMat);
-	m_mat.draw();
-	//m_mat.m_uniforms.showGUI();
-	m_mat.ImGui_Sliders();
-	//spdlog::info(m_arr.m_structsOfUniforms[0]->getLocation());
+	MaterialsManager::draw();
+	MaterialsManager::ImGui_Sliders();
 	
 	// ---------------------------------------------
 
@@ -137,7 +106,7 @@ void App::handleSDLEvents() {
 
 		case SDL_KEYDOWN:
 			if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
-				m_mat.reloadShader();
+				//m_mat.reloadShader();
 			}
 			break;
 
@@ -145,13 +114,9 @@ void App::handleSDLEvents() {
 			switch (e.window.event) {
 			case SDL_WINDOWEVENT_RESIZED:
 				// get new width and height and update the viewport
-				int w, h;
-				SDL_GetWindowSize(m_window, &w, &h);
-				GLCall(glViewport(0, 0, w, h));
+				Display::UpdateWindowSize(m_window);
 				// Update camera's ratio
-				glm::mat4 projMat = glm::perspective(1.0f, float(w) / float(h), 0.1f, 10.0f);
-				m_shader.bind();
-				m_shader.setUniformMat4f("u_projMat", projMat);
+				m_materialsManager.updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 				break;
 			}
 
