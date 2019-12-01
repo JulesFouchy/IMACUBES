@@ -46,6 +46,7 @@ void ArrayOfStructOfUniforms::addUniform(Uniform* uniform) {
 		Uniform* ptr = uniform->createPtrWithSameData();
 		uniStruct.push_back(ptr);
 	}
+	delete uniform;
 }
 
 void ArrayOfStructOfUniforms::ImGui_Sliders(const std::string& windowName) {
