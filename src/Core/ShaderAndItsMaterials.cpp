@@ -49,10 +49,10 @@ void ShaderAndItsMaterials::setUniforms() {
 
 
 void ShaderAndItsMaterials::parseShader(const std::string& fragmentFilepath) {
-	ArrayOfStructOfUniforms newUniforms(m_shaderIndex);
+	/*ArrayOfStructOfUniforms newUniforms(m_shaderIndex);
 	for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
 		newUniforms.addStruct(m_name);
-	}
+	}*/
 	std::ifstream file(fragmentFilepath);
 	if (file.is_open()) {
 		std::string line;
@@ -68,19 +68,19 @@ void ShaderAndItsMaterials::parseShader(const std::string& fragmentFilepath) {
 					spdlog::info("found uni |{}|", name);
 					int uniformIndex = m_uniforms.find(name);
 					if (uniformIndex == -1) {
-						newUniforms.addUniform(UniformFactory::FromShaderLine(m_shaderIndex, line));
+						m_uniforms.addUniform(UniformFactory::FromShaderLine(m_shaderIndex, line));
 					}
-					else {
+					/*else {
 						newUniforms.addUniform(m_uniforms.structsOfUniforms()[0][uniformIndex]);
 						for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
 							newUniforms.structsOfUniforms()[k].back() = m_uniforms.structsOfUniforms()[k][uniformIndex];
 						}
-					}
+					}*/
 					// Go to next line
 					std::getline(file, line);
 				}
 			}
 		}
 	}
-	m_uniforms = newUniforms;
+	//m_uniforms = newUniforms;
 }

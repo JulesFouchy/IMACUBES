@@ -107,7 +107,8 @@ void App::handleSDLEvents() {
 
 		case SDL_KEYDOWN:
 			if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
-				//m_mat.reloadShader();
+				MaterialsManager::Shaders()[MaterialsManager::SelectedMaterial().shaderID].reloadShader();
+				MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 			}
 			break;
 

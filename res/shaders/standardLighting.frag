@@ -15,6 +15,6 @@ uniform MaterialParameters params[];
 
 
 void main() {
-	vec3 color = params[0].bright * params[0].color + float(params[0].btb);//vPos + vec3(0.5);
+	vec3 color = params[0].bright * params[0].color + 0.1*float(params[0].btb);//vPos + vec3(0.5);
 	gl_FragColor = vec4(color,1.0);
 }
