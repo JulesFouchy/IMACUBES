@@ -3,6 +3,8 @@
 
 #include "UI/Settings.hpp"
 
+#include "Helper/Maths.hpp"
+
 #include "Debugging/Log.hpp"
 
 CameraControlState_Rotation::CameraControlState_Rotation(Camera* camera)
@@ -11,13 +13,12 @@ CameraControlState_Rotation::CameraControlState_Rotation(Camera* camera)
 	m_initialAngleGround(camera->m_sphereCoord.getAngleGround()),
 	m_initialAngleUp(camera->m_sphereCoord.getAngleUp())
 {
-spdlog::warn("rot");
 }
 
 void CameraControlState_Rotation::update(float dt) {
-	glm::vec2 mouseDL = Input::MousePositionInInches() - m_mouseInitialPosInInches;
-	m_camera->m_sphereCoord.angleGround() = m_initialAngleGround + mouseDL.x * Settings::CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH;
-	m_camera->m_sphereCoord.angleUp()     = m_initialAngleUp     + mouseDL.y * Settings::CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH;
+	glm::vec2 mouseDL = m_mouseInitialPosInInches - Input::MousePositionInInches();
+	m_camera->m_sphereCoord.angleGround() = m_initialAngleGround + mouseDL.x * Settings::CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH * MyMaths::TAU;
+	m_camera->m_sphereCoord.angleUp()     = m_initialAngleUp     + mouseDL.y * Settings::CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH * MyMaths::TAU;
 }
 
 void CameraControlState_Rotation::onWheelUp() {

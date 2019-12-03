@@ -63,6 +63,8 @@ void App::update() {
 		ImGui::ShowDemoWindow(&m_bShowImGUIDemoWindow);
 
 	// ----------------PLAYGROUND!------------------
+	m_camera.update(1.0f / 60.0f);
+	MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 	MaterialsManager::draw();
 	MaterialsManager::ImGui_Menu();
 	

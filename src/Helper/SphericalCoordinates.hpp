@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 struct SphericalCoordinates {
 	SphericalCoordinates(float radius = 1.0f, float angleGround = 0.0f, float angleUp = 0.0f)
 		: m_radius(radius), m_angleGround(angleGround), m_angleUp(angleUp),
@@ -15,6 +17,7 @@ struct SphericalCoordinates {
 	inline const float getAngleGround() const { return m_angleGround; }
 	inline const float getAngleUp() const { return m_angleUp; }
 
+	inline const glm::vec3 getXYZ() { return glm::vec3(getX(), getY(), getZ()); }
 	inline const float getX() { if (m_bMustRecomputeXYZ) computeXYZ(); return m_x; }
 	inline const float getY() { if (m_bMustRecomputeXYZ) computeXYZ(); return m_y; }
 	inline const float getZ() { if (m_bMustRecomputeXYZ) computeXYZ(); return m_z; }
