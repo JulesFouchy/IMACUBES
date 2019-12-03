@@ -17,7 +17,7 @@ public:
 	Camera();
 	~Camera() = default;
 
-	inline const glm::mat4& getViewMatrix() { return m_viewMatrix; }
+	inline const glm::mat4& getViewMatrix() { return glm::inverse(m_transformMatrix); }
 	inline const glm::mat4 getProjMatrix() { return glm::perspective(1.0f, Display::GetRatio(), 0.1f, 10.0f);  }
 
 	inline void onWheelDown() { m_controlState->onWheelDown(); }
@@ -30,7 +30,7 @@ private:
 	}
 
 private:
-	glm::mat4 m_viewMatrix;
+	glm::mat4 m_transformMatrix;
 	SphericalCoordinates m_sphereCoord;
 	std::unique_ptr<CameraControlState> m_controlState;
 };
