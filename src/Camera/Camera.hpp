@@ -20,9 +20,12 @@ public:
 	inline const glm::mat4& getViewMatrix() { return m_viewMatrix; }
 	inline const glm::mat4 getProjMatrix() { return glm::perspective(1.0f, Display::GetRatio(), 0.1f, 10.0f);  }
 
+	inline void onWheelDown() { m_controlState->onWheelDown(); }
+	inline void onWheelUp()   { m_controlState->onWheelUp();   }
+
 private:
 	template <typename T>
-	void setControlState() {
+	inline void setControlState() {
 		m_controlState = std::make_unique<T>(this);
 	}
 

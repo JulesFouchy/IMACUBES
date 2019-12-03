@@ -106,9 +106,13 @@ void App::handleSDLEvents() {
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
+			if( e.button.button == SDL_BUTTON_MIDDLE)
+				m_camera.onWheelDown();
 			break;
 
 		case SDL_MOUSEBUTTONUP:
+			if (e.button.button == SDL_BUTTON_MIDDLE)
+				m_camera.onWheelUp();
 			break;
 
 

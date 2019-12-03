@@ -3,12 +3,16 @@
 
 #include "UI/Settings.hpp"
 
+#include "Debugging/Log.hpp"
+
 CameraControlState_Rotation::CameraControlState_Rotation(Camera* camera)
 	: CameraControlState(camera),
-	  m_initialRadius(camera->m_sphereCoord.getRadius()),
-	  m_initialAngleGround(camera->m_sphereCoord.getAngleGround()),
-	  m_initialAngleUp(camera->m_sphereCoord.getAngleUp())
-{}
+	m_initialRadius(camera->m_sphereCoord.getRadius()),
+	m_initialAngleGround(camera->m_sphereCoord.getAngleGround()),
+	m_initialAngleUp(camera->m_sphereCoord.getAngleUp())
+{
+spdlog::warn("rot");
+}
 
 void CameraControlState_Rotation::update(float dt) {
 	glm::vec2 mouseDL = Input::MousePositionInInches() - m_mouseInitialPosInInches;
