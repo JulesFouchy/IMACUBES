@@ -13,27 +13,32 @@
  */
 class App {
 public:
-    App(SDL_Window* window);
-    ~App() = default;
+	static void Initialize(SDL_Window* window);
+	static void ShutDown();
+	inline static App& Get() { return *m_instance; }
 
-    void update();
+	SDL_Window* getWindow() const;
+	bool isRunning() const;
+	void exit();
+private:
+	App(SDL_Window* window);
+	~App() = default;
 
 public:
-    SDL_Window* getWindow() const;
-    bool isRunning() const;
-    void exit();
+	void update();
 
 private:
     void ImGUI_DebugWindow();
 	void handleSDLEvents();
 
-private:
-	SDL_Window* m_window;
-    static bool m_instanciated;
-    bool m_running;
+public:
+	// Members
+	Camera m_camera;
 	bool m_bShowImGUIDemoWindow;
 
-	Camera m_camera;
+	SDL_Window* m_window;
+	bool m_running;
 
-	// ----------------PLAYGROUND!------------------
+	// Singleton-ishy things
+	static App* m_instance;
 };

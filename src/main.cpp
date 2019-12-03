@@ -84,12 +84,13 @@ int main(int argc, char *argv[]) {
 
 		// Main loop
 
-		App app(window);
-		while (app.isRunning()) {
-			app.update();
+		App::Initialize(window);
+		while (App::Get().isRunning()) {
+			App::Get().update();
 		}
 
 		CubesGroup::ShutDown();
+		App::ShutDown();
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplSDL2_Shutdown();
 		ImGui::DestroyContext();

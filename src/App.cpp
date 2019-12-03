@@ -13,13 +13,19 @@
 
 #include "Core/MaterialsManager.hpp"
 
-bool App::m_instanciated = false;
+App* App::m_instance = nullptr;
+
+void App::Initialize(SDL_Window* window) {
+	assert(!m_instance);
+	m_instance = new App(window);
+}
+
+void App::ShutDown() {
+	delete m_instance;
+}
 
 App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDemoWindow(false)
 {
-    assert(!m_instanciated);
-	m_instanciated = true;
-
 	Log::Initialize();
 
 	Display::UpdateWindowSize(m_window);
@@ -29,7 +35,6 @@ App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDe
 
 	// ----------------PLAYGROUND!------------------
 	
-	//MaterialsManager::m_shadersList.reserve(10);
 	MaterialsManager::addShader("res/shaders/testShader.vert", "res/shaders/testShader.frag");
 	MaterialsManager::addShader("res/shaders/standardLighting.vert", "res/shaders/testShader.frag");
 	MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
