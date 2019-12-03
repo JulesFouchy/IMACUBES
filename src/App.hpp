@@ -6,7 +6,7 @@
 #include "OpenGL/CubesGroup.hpp"
 #include "OpenGL/Shader.hpp"
 
-#include "Core/Camera.hpp"
+#include "Camera/Camera.hpp"
 
 #include "History/History.hpp"
 
@@ -25,7 +25,7 @@ public:
 	void exit();
 private:
 	App(SDL_Window* window);
-	~App() = default;
+	~App() {};
 
 public:
 	void update();

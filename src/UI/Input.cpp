@@ -2,11 +2,13 @@
 
 #include "Debugging/Log.hpp"
 
-/*glm::vec2 Input::GetMousePosition() {
+glm::vec2 Input::MousePositionInInches() {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
-	return conv::screenCoordFromPixelCoord(x, y);
-}*/
+	float hdpi, vdpi;
+	SDL_GetDisplayDPI(0, nullptr, &hdpi, &vdpi);
+	return glm::vec2(x/hdpi, y/vdpi);
+}
 
 bool Input::KeyIsDown(Key key) {
 	const Uint8* state = SDL_GetKeyboardState(NULL);

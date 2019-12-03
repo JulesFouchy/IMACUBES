@@ -4,10 +4,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "Helper/Display.hpp"
+#include "Helper/SphericalCoordinates.hpp"
+
+#include "CameraControlState.hpp"
 
 class Camera {
 public:
-	Camera() = default;
+	Camera();
 	~Camera() = default;
 
 	inline const glm::mat4& getViewMatrix() { return m_viewMatrix; }
@@ -15,4 +18,6 @@ public:
 
 private:
 	glm::mat4 m_viewMatrix;
+	SphericalCoordinates m_sphereCoord;
+	CameraControlState* m_controlState;
 };
