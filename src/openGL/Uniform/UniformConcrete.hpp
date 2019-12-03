@@ -26,7 +26,32 @@ public:
 	inline T& value() { return m_value; }
 	//inline const T& getValueWhenDraggingStarted() const { return m_valueWhenDraggingStarted; }
 	//inline void setValueWhenDraggingStarted(T newValue) { m_valueWhenDraggingStarted = newValue; }
-public:
+private:
+	void checkEditingBeginAndEnd() {
+		if (ImGui::IsItemActivated()) {
+			m_valueWhenDraggingStarted = m_value;
+		}
+		if (ImGui::IsItemDeactivatedAfterEdit()) {
+			History& history = Locate::history();
+			history.beginUndoGroup();
+			T val = m_value;
+			T prevVal = m_valueWhenDraggingStarted;
+			history.addAction(Action(
+				// DO action
+				[this, val]()
+			{
+				this->m_value = val;
+			},
+				// UNDO action
+				[this, prevVal]()
+			{
+				this->m_value = prevVal;
+			}
+			));
+			history.endUndoGroup();
+		}
+	}
+private:
 	T m_value;
 	T m_valueWhenDraggingStarted;
 	T m_minValue;

@@ -8,10 +8,13 @@
 
 #include "Core/Camera.hpp"
 
+#include "History/History.hpp"
+
 /**
  * @brief Base root of the app
  */
 class App {
+friend class Locate;
 public:
 	static void Initialize(SDL_Window* window);
 	static void ShutDown();
@@ -31,9 +34,11 @@ private:
     void ImGUI_DebugWindow();
 	void handleSDLEvents();
 
-public:
+private:
 	// Members
 	Camera m_camera;
+	History m_history;
+
 	bool m_bShowImGUIDemoWindow;
 
 	SDL_Window* m_window;

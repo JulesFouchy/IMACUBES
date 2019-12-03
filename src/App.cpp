@@ -117,6 +117,12 @@ void App::handleSDLEvents() {
 				MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 				MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 			}
+			else if (e.key.keysym.sym == 'z'){
+				m_history.moveBackward();
+			}
+			else if (e.key.keysym.sym == 'y') {
+				m_history.moveForward();
+			}
 			break;
 
 		case SDL_WINDOWEVENT:

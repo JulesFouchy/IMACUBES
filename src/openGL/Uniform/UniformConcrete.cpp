@@ -3,6 +3,8 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
+#include "Locator/HistoryLocator.hpp"
+
 /*------------------------------------
 ------------------INT-----------------
 --------------------------------------*/
@@ -14,6 +16,7 @@ std::tuple<bool, bool, bool> UniformConcrete<int>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
 	bool wasJusModified = ImGui::SliderInt(getNameInsideStruct().c_str(), &m_value, m_minValue, m_maxValue);
 	ImGui::PopID();
+	checkEditingBeginAndEnd();
 	return std::make_tuple(wasJusModified, ImGui::IsItemActivated(), ImGui::IsItemDeactivatedAfterEdit());
 }
 
@@ -28,6 +31,7 @@ std::tuple<bool, bool, bool> UniformConcrete<float>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
 	bool wasJusModified = ImGui::SliderFloat(getNameInsideStruct().c_str(), &m_value, m_minValue, m_maxValue);
 	ImGui::PopID();
+	checkEditingBeginAndEnd();
 	return std::make_tuple(wasJusModified, ImGui::IsItemActivated(), ImGui::IsItemDeactivatedAfterEdit());
 }
 
@@ -42,6 +46,7 @@ std::tuple<bool, bool, bool> UniformConcrete<glm::vec2>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
 	bool wasJusModified = ImGui::SliderFloat2(getNameInsideStruct().c_str(), glm::value_ptr(m_value), m_minValue.x, m_maxValue.x);
 	ImGui::PopID();
+	checkEditingBeginAndEnd();
 	return std::make_tuple(wasJusModified, ImGui::IsItemActivated(), ImGui::IsItemDeactivatedAfterEdit());
 }
 
@@ -56,6 +61,7 @@ std::tuple<bool, bool, bool> UniformConcrete<glm::vec3>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
 	bool wasJusModified = ImGui::ColorPicker3(getNameInsideStruct().c_str(), glm::value_ptr(m_value));
 	ImGui::PopID();
+	checkEditingBeginAndEnd();
 	return std::make_tuple(wasJusModified, ImGui::IsItemActivated(), ImGui::IsItemDeactivatedAfterEdit());
 }
 
@@ -70,5 +76,6 @@ std::tuple<bool, bool, bool> UniformConcrete<glm::vec4>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
 	bool wasJusModified = ImGui::ColorPicker4(getNameInsideStruct().c_str(), glm::value_ptr(m_value));
 	ImGui::PopID();
+	checkEditingBeginAndEnd();
 	return std::make_tuple(wasJusModified, ImGui::IsItemActivated(), ImGui::IsItemDeactivatedAfterEdit());
 }
