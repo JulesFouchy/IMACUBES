@@ -17,8 +17,8 @@ public:
 	Camera();
 	~Camera() = default;
 
-	inline const glm::mat4& getViewMatrix() { return glm::inverse(m_transformMatrix); }
-	inline const glm::mat4 getProjMatrix() { return glm::perspective(1.0f, Display::GetRatio(), 0.1f, 10.0f);  }
+	inline const glm::mat4 getViewMatrix() { return glm::inverse(m_transformMatrix); } // TODO return a reference to a member
+	inline const glm::mat4 getProjMatrix() { return glm::perspective(1.0f, Display::GetRatio(), 0.1f, 10.0f);  } // TODO return a reference to a member
 
 	inline void onWheelDown() { m_controlState->onWheelDown(); }
 	inline void onWheelUp()   { m_controlState->onWheelUp();   }
