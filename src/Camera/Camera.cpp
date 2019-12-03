@@ -3,6 +3,10 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "UI/Settings.hpp"
+
+#include "Helper/Maths.hpp"
+
 #include "Debugging/Log.hpp"
 
 Camera::Camera()
@@ -10,6 +14,12 @@ Camera::Camera()
 	  m_bMustRecomputeTransformMatrix(true),
 	  m_controlState(std::make_unique<CameraControlState_Rest>(this))
 {
+}
+
+void Camera::onWheelScroll(float dl) {
+	m_sphereCoord.radius() *= MyMaths::pow(Settings::CAMERA_SCALE_RADIUS_PER_SCROLL, dl);
+
+	m_bMustRecomputeTransformMatrix = true;
 }
 
 void Camera::computeTransformMatrixAndItsInverse() {

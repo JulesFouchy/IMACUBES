@@ -9,3 +9,7 @@ float MyMaths::cos(float x) {
 float MyMaths::sin(float x) {
 	return std::sin(x);
 }
+
+float MyMaths::pow(float x, float p) {
+	return std::pow(x, p);
+}

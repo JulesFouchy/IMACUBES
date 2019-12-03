@@ -5,4 +5,5 @@ namespace MyMaths {
 
 	float cos(float x);
 	float sin(float x);
+	float pow(float x, float p);
 }

@@ -24,6 +24,7 @@ public:
 
 	inline void onWheelDown() { m_controlState->onWheelDown(); }
 	inline void onWheelUp()   { m_controlState->onWheelUp();   }
+	void onWheelScroll(float dl);
 
 private:
 	void computeTransformMatrixAndItsInverse();

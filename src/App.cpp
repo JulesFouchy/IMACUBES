@@ -102,6 +102,7 @@ void App::handleSDLEvents() {
 			break;
 
 		case SDL_MOUSEWHEEL:
+			m_camera.onWheelScroll(e.wheel.y);
 			break;
 
 		case SDL_MOUSEMOTION:
