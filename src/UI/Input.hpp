@@ -10,7 +10,12 @@ class Input {
 public:
 	Input() = delete;
 	~Input() = delete;
+	static void Initialize();
 
 	static glm::vec2 MousePositionInInches();
 	static bool KeyIsDown(Key key);
+
+private:
+	static float m_horizontalDPI;
+	static float m_verticalDPI;
 };

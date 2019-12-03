@@ -11,6 +11,8 @@
 
 #include "OpenGL/Uniform/UniformFactory.hpp"
 
+#include "UI/Input.hpp"
+
 #include "Core/MaterialsManager.hpp"
 
 App* App::m_instance = nullptr;
@@ -27,6 +29,7 @@ void App::ShutDown() {
 App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDemoWindow(false)
 {
 	Log::Initialize();
+	Input::Initialize();
 
 	Display::UpdateWindowSize(m_window);
 
@@ -45,7 +48,6 @@ App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDe
 ////////////////////////////// PUBLIC METHODS ///////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-
 void App::update() {
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 
@@ -61,7 +63,6 @@ void App::update() {
 		ImGui::ShowDemoWindow(&m_bShowImGUIDemoWindow);
 
 	// ----------------PLAYGROUND!------------------
-	
 	MaterialsManager::draw();
 	MaterialsManager::ImGui_Menu();
 	

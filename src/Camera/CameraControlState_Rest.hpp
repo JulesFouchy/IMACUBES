@@ -8,5 +8,5 @@ public:
 	CameraControlState_Rest(Camera* camera);
 	~CameraControlState_Rest() = default;
 
-	void onWheelUp() override;
+	void onWheelDown() override;
 };

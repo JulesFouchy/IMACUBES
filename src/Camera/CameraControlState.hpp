@@ -9,13 +9,13 @@ class Camera;
 class CameraControlState {
 public:
 	inline CameraControlState(Camera* camera)
-		: m_camera(camera), m_mouseInitialPosInPx(Input::MousePositionInInches()) {}
+		: m_camera(camera), m_mouseInitialPosInInches(Input::MousePositionInInches()) {}
 	~CameraControlState() = default;
 public:
 	virtual void update(float dt) {};
 	virtual void onWheelDown() {};
 	virtual void onWheelUp() {};
-private:
+protected:
 	Camera* m_camera;
-	glm::vec2 m_mouseInitialPosInPx;
+	glm::vec2 m_mouseInitialPosInInches;
 };
