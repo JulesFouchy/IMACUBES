@@ -31,7 +31,7 @@ App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDe
 	
 	//MaterialsManager::m_shadersList.reserve(10);
 	MaterialsManager::addShader("res/shaders/testShader.vert", "res/shaders/testShader.frag");
-	MaterialsManager::addShader("res/shaders/standardLighting.vert", "res/shaders/standardLighting.frag");
+	MaterialsManager::addShader("res/shaders/standardLighting.vert", "res/shaders/testShader.frag");
 	MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 }
 
