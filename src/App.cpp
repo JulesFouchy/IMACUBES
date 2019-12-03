@@ -33,6 +33,7 @@ App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDe
 	MaterialsManager::addShader("res/shaders/testShader.vert", "res/shaders/testShader.frag");
 	MaterialsManager::addShader("res/shaders/standardLighting.vert", "res/shaders/testShader.frag");
 	MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+	MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -109,6 +110,7 @@ void App::handleSDLEvents() {
 			if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
 				MaterialsManager::Shaders()[MaterialsManager::SelectedMaterial().shaderID].reloadShader();
 				MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+				MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 			}
 			break;
 
