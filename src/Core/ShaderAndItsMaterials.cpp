@@ -65,7 +65,7 @@ void ShaderAndItsMaterials::parseShader(const std::string& fragmentFilepath) {
 					size_t currentPos = 0;
 					MyString::GetNextWord(line, &currentPos); // skip type
 					std::string name = MyString::GetNextWord(line, &currentPos);
-					spdlog::info("found uni |{}|", name);
+					//spdlog::info("found uni |{}|", name);
 					int uniformIndex = m_uniforms.find(name);
 					if (uniformIndex == -1) {
 						m_uniforms.addUniform(UniformFactory::FromShaderLine(m_shaderIndex, line));

@@ -8,12 +8,12 @@ History::History()
 }
 
 void History::beginUndoGroup() {
-	spdlog::info("begin undo group");
+	//spdlog::info("begin undo group");
 	m_tmpActionBuffer.resize(0);
 }
 
 void History::endUndoGroup() {
-	spdlog::info("end undo group");
+	//spdlog::info("end undo group");
 	if (m_tmpActionBuffer.size() > 0) {
 		//
 		m_cumulNbOfActionsToGetToThisUndoGroup.resize(m_indexOfCumulfNbOfActions + 1);
@@ -32,13 +32,13 @@ void History::endUndoGroup() {
 }
 
 void History::addAction(Action action) {
-	spdlog::info("add action");
+	//spdlog::info("add action");
 	m_tmpActionBuffer.push_back(action);
 }
 
 void History::moveBackward() {
 	if (m_indexOfCumulfNbOfActions > -1) {
-		spdlog::info("moving backward");
+		//spdlog::info("moving backward");
 		for (int i = 0; i < nbOfActionsBetweenThisAndPreviousUndoGroup(m_indexOfCumulfNbOfActions); ++i) {
 			m_actions[m_index].Undo();
 			m_index--;
@@ -49,7 +49,7 @@ void History::moveBackward() {
 
 void History::moveForward() {
 	if (m_indexOfCumulfNbOfActions < (int)(m_cumulNbOfActionsToGetToThisUndoGroup.size() - 1)) { // cast to an int because size_t is an unsigned type and it causes a bug when m_indexOfCumulfNbOfActions == -1
-		spdlog::info("moving forward");
+		//spdlog::info("moving forward");
 		for (int i = 0; i < nbOfActionsBetweenThisAndPreviousUndoGroup(m_indexOfCumulfNbOfActions+1); ++i) {
 			m_index++;
 			m_actions[m_index].Do();
