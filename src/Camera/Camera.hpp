@@ -22,7 +22,7 @@ public:
 	~Camera() = default;
 
 	inline const glm::mat4& getViewMatrix() { if(m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_inverseTransformMatrix; }
-	inline const glm::mat4 getProjMatrix() { return glm::perspective(1.0f, Display::GetRatio(), 0.1f, 10.0f);  } // TODO return a reference to a member
+	inline const glm::mat4 getProjMatrix() { return glm::infinitePerspective(1.0f, Display::GetRatio(), 0.1f);  } // TODO return a reference to a member
 
 	inline void update(float dt) { 
 		ImGui::Begin("cam pos");
