@@ -102,34 +102,47 @@ void App::handleSDLEvents() {
 			break;
 
 		case SDL_MOUSEWHEEL:
-			m_camera.onWheelScroll(e.wheel.y);
+			if( !ImGui::GetIO().WantCaptureMouse )
+				m_camera.onWheelScroll(e.wheel.y);
 			break;
 
 		case SDL_MOUSEMOTION:
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
-			if( e.button.button == SDL_BUTTON_MIDDLE)
-				m_camera.onWheelDown();
+			if (!ImGui::GetIO().WantCaptureMouse) {
+				if (e.button.button == SDL_BUTTON_MIDDLE)
+					m_camera.onWheelDown();
+			}
 			break;
 
 		case SDL_MOUSEBUTTONUP:
-			if (e.button.button == SDL_BUTTON_MIDDLE)
-				m_camera.onWheelUp();
+			if (!ImGui::GetIO().WantCaptureMouse) {
+				if (e.button.button == SDL_BUTTON_MIDDLE)
+					m_camera.onWheelUp();
+			}
 			break;
 
 
 		case SDL_KEYDOWN:
-			if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
-				MaterialsManager::Shaders()[MaterialsManager::SelectedMaterial().shaderID].reloadShader();
-				MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-				MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+			if (!ImGui::GetIO().WantCaptureKeyboard) {
+				if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
+					MaterialsManager::Shaders()[MaterialsManager::SelectedMaterial().shaderID].reloadShader();
+					MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+					MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+				}
+				else if (e.key.keysym.sym == 'z') {
+					m_history.moveBackward();
+				}
+				else if (e.key.keysym.sym == 'y') {
+					m_history.moveForward();
+				}
 			}
-			else if (e.key.keysym.sym == 'z'){
-				m_history.moveBackward();
-			}
-			else if (e.key.keysym.sym == 'y') {
-				m_history.moveForward();
+			break;
+
+		case SDL_KEYUP:
+			if (!ImGui::GetIO().WantCaptureKeyboard) {
+
 			}
 			break;
 
