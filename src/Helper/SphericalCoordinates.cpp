@@ -5,8 +5,9 @@
 #include "Debugging/Log.hpp"
 
 void SphericalCoordinates::computeXYZ() {
-	m_x = getRadius() * MyMaths::cos(getAngleUp()) * MyMaths::cos(-getAngleGround());
-	m_y = getRadius() * MyMaths::sin(getAngleUp());
-	m_z = getRadius() * MyMaths::cos(getAngleUp()) * MyMaths::sin(-getAngleGround());
+	using namespace MyMaths;
+	m_x = getRadius() * Cos(getAngleUp()) * Cos(-getAngleGround());
+	m_y = getRadius() * Sin(getAngleUp());
+	m_z = getRadius() * Cos(getAngleUp()) * Sin(-getAngleGround());
 	m_bMustRecomputeXYZ = false;
 }

@@ -135,5 +135,6 @@ void main() {
 
 
 	//vec3 color = params[0].col*params[0].t + vec3(params[0].grayLevel)* (vPos + vec3(0.5));
+	color = vWorldPos + vec3(0.5);
 	gl_FragColor = vec4(color,1.0);
 }

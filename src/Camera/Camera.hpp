@@ -8,6 +8,10 @@
 
 #include "CameraControlState.hpp"
 
+#include "Debugging/Log.hpp"
+
+#include "imgui/imgui.h"
+
 #include <memory>
 
 class Camera {
@@ -20,7 +24,18 @@ public:
 	inline const glm::mat4& getViewMatrix() { if(m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_inverseTransformMatrix; }
 	inline const glm::mat4 getProjMatrix() { return glm::perspective(1.0f, Display::GetRatio(), 0.1f, 10.0f);  } // TODO return a reference to a member
 
-	inline void update(float dt) { m_controlState->update(dt); }
+	inline void update(float dt) { 
+		ImGui::Begin("cam pos");
+		ImGui::Text(std::to_string(m_sphereCoord.getAngleGround()).c_str()); ImGui::SameLine();
+		ImGui::Text(std::to_string(m_sphereCoord.getAngleUp()).c_str());
+
+		ImGui::Text(std::to_string(m_sphereCoord.getX()).c_str()); ImGui::SameLine();
+		ImGui::Text(std::to_string(m_sphereCoord.getY()).c_str()); ImGui::SameLine();
+		ImGui::Text(std::to_string(m_sphereCoord.getZ()).c_str());
+
+		ImGui::End();
+		//spdlog::warn("{} | {}", m_sphereCoord.getAngleGround(), m_sphereCoord.getAngleUp());
+	m_controlState->update(dt); }
 
 	inline void onWheelDown() { m_controlState->onWheelDown(); }
 	inline void onWheelUp()   { m_controlState->onWheelUp();   }
