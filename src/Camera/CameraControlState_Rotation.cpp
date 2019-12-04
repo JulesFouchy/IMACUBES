@@ -17,6 +17,7 @@ CameraControlState_Rotation::CameraControlState_Rotation(Camera* camera)
 
 void CameraControlState_Rotation::update(float dt) {
 	glm::vec2 mouseDL = Input::MousePositionInInches() - m_mouseInitialPosInInches;
+	mouseDL.x *= MyMaths::Cos(m_camera->m_sphereCoord.getAngleUp());
 	m_camera->m_sphereCoord.angleGround() = m_initialAngleGround + mouseDL.x * Settings::CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH * MyMaths::TAU;
 	m_camera->m_sphereCoord.angleUp()     = m_initialAngleUp     + mouseDL.y * Settings::CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH * MyMaths::TAU;
 
