@@ -24,7 +24,7 @@ void Camera::onWheelScroll(float dl) {
 
 void Camera::computeTransformMatrixAndItsInverse() {
 	using namespace MyMaths;
-	m_transformMatrix = glm::inverse(glm::lookAt(m_sphereCoord.getXYZ(), glm::vec3(0.0f), -glm::vec3(0.0f, Sign(Cos(m_sphereCoord.getAngleUp())), 0.0f)));
+	m_transformMatrix = glm::inverse(glm::lookAt(m_sphereCoord.getXYZ(), glm::vec3(0.0f), glm::vec3(0.0f, Sign(Cos(m_sphereCoord.getAngleUp())), 0.0f)));
 	m_inverseTransformMatrix = glm::inverse(m_transformMatrix);
 
 	m_bMustRecomputeTransformMatrix = false;
