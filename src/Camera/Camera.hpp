@@ -39,7 +39,7 @@ public:
 
 	inline void onWheelDown() { m_controlState->onWheelDown(); }
 	inline void onWheelUp()   { m_controlState->onWheelUp();   }
-	void onWheelScroll(float dl);
+	inline void onWheelScroll(float dl) { m_controlState->onWheelScroll(dl); }
 
 private:
 	void computeTransformMatrixAndItsInverse();

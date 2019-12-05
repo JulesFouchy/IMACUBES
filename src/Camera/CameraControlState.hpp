@@ -15,6 +15,7 @@ public:
 	virtual void update(float dt) {};
 	virtual void onWheelDown() {};
 	virtual void onWheelUp() {};
+	virtual void onWheelScroll(float dl) {};
 protected:
 	Camera* m_camera;
 	glm::vec2 m_mouseInitialPosInInches;

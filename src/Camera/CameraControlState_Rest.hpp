@@ -9,4 +9,5 @@ public:
 	~CameraControlState_Rest() = default;
 
 	void onWheelDown() override;
+	void onWheelScroll(float dl) override;
 };
