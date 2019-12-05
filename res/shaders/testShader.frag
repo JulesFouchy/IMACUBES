@@ -128,7 +128,7 @@ void main() {
 	vec3 color;
 
 	float t = pow(params[0].u_starIntensity * snoise(uv * params[0].u_noiseScale + params[0].u_distortOutScale*snoise(uv*params[0].u_distortInScale)), params[0].u_starIntensityPow);
-	color = mix(params[0].u_SkyColor, params[0].u_StarColor, t);
-	//color = vWorldPos + vec3(0.5);
+	//color = mix(params[0].u_SkyColor, params[0].u_StarColor, t);
+	color = vWorldPos + vec3(0.5);
 	gl_FragColor = vec4(color,1.0);
 }
