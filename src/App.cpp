@@ -6,6 +6,7 @@
 #include <imgui/imgui_impl_opengl3.h>
 #include "OpenGL/gl-exception.h"
 #include "Helper/Display.hpp"
+#include "OpenGL/Texture2D.hpp"
 
 #include <glm/glm.hpp>
 
@@ -30,7 +31,6 @@ App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDe
 {
 	Log::Initialize();
 	Input::Initialize();
-
 	Display::UpdateWindowSize(m_window);
 
 	GLCall(glClearColor(0.4f, 0.6f, 0.95f, 1.0f));
