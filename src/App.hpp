@@ -7,8 +7,8 @@
 #include "OpenGL/Shader.hpp"
 
 #include "Camera/Camera.hpp"
-
 #include "History/History.hpp"
+#include "GUI/SaveView.hpp"
 
 /**
  * @brief Base root of the app
@@ -38,7 +38,8 @@ private:
 	// Members
 	Camera m_camera;
 	History m_history;
-
+	PopupWindow_SaveView m_saveViewWindow;
+	//
 	bool m_bShowImGUIDemoWindow;
 
 	SDL_Window* m_window;

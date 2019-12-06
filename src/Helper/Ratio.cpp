@@ -100,5 +100,5 @@ void Ratio::recomputeNumAndDenom() const {// we need to mark this method as cons
 	*(unsigned int*)& m_numerator = N_n;
 	*(unsigned int*)& m_denominator = D_n;
 	*(bool*)& m_bMustRecomputeNumAndDenom = false;
-	spdlog::info("{} is approx {} / {}", m_ratio, m_numerator, m_denominator);
+	//spdlog::info("{} is approx {} / {}", m_ratio, m_numerator, m_denominator);
 }

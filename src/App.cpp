@@ -67,6 +67,7 @@ void App::update() {
 	MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 	MaterialsManager::draw();
 	MaterialsManager::ImGui_Menu();
+	m_saveViewWindow.Show_IfOpen();
 	
 	// ---------------------------------------------
 
@@ -126,16 +127,23 @@ void App::handleSDLEvents() {
 
 		case SDL_KEYDOWN:
 			if (!ImGui::GetIO().WantCaptureKeyboard) {
-				if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
-					MaterialsManager::Shaders()[MaterialsManager::SelectedMaterial().shaderID].reloadShader();
-					MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-					MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+				if (Input::KeyIsDown(CTRL)) {
+					if (e.key.keysym.sym == 'z') {
+						m_history.moveBackward();
+					}
+					else if (e.key.keysym.sym == 'y') {
+						m_history.moveForward();
+					}
+					else if (e.key.keysym.sym == 's') {
+						m_saveViewWindow.Open();
+					}
 				}
-				else if (e.key.keysym.sym == 'z') {
-					m_history.moveBackward();
-				}
-				else if (e.key.keysym.sym == 'y') {
-					m_history.moveForward();
+				else {
+					if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
+						MaterialsManager::Shaders()[MaterialsManager::SelectedMaterial().shaderID].reloadShader();
+						MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+						MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+					}
 				}
 			}
 			break;
