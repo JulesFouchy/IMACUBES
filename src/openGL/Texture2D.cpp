@@ -1,7 +1,5 @@
 #include "Texture2D.hpp"
 
-#include <stb_image/stb_image_write.h>
-
 #include "Debugging/Log.hpp"
 #include "OpenGL/gl-exception.h"
 

@@ -2,6 +2,7 @@
 
 #include "imgui/imgui.h"
 #include "Helper/Display.hpp"
+#include "OpenGL/FrameBuffer.hpp"
 
 PopupWindow_SaveView::PopupWindow_SaveView()
 	: PopupWindow("Saving current view"),
@@ -31,5 +32,10 @@ void PopupWindow_SaveView::Show() {
 }
 
 void PopupWindow_SaveView::OnConfirmation() {
-	// TODO : save
+	FrameBuffer saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight());
+	saveBuffer.bind();
+	saveBuffer.clear();
+	// TODO : render scene
+	saveBuffer.save(m_filepathPicker.getFilepath());
+	saveBuffer.unbind();
 }

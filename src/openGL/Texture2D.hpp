@@ -19,6 +19,7 @@ public:
 	inline int getHeight() const { return m_height; }
 	inline float getAspectRatio() const { return m_aspectRatio; }
 	inline int getBPP() const { return m_BPP; }
+	inline GLenum getGLpixelFormat() const { return GLpixelFormat(m_pixelFormat); }
 
 	inline unsigned int getID() const { return m_textureID; }
 
@@ -31,7 +32,7 @@ private:
 
 	unsigned int m_textureID;
 
-public:
+private:
 	static unsigned int BytesPerPixel(PixelFormat format);
 	static GLint GLpixelInternalFormat(PixelFormat format);
 	static GLenum GLpixelFormat(PixelFormat format);

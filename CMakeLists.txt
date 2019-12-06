@@ -38,6 +38,7 @@ endif()
 
 add_library(GLAD STATIC "lib/glad/src/glad.c")
 add_library(STB_IMAGE STATIC "lib/stb_image/stb_image.cpp")
+add_library(STB_IMAGE_WRITE STATIC "lib/stb_image/stb_image_write.cpp")
 file(GLOB_RECURSE IMGUI_SOURCES lib/imgui/*)
 add_library(IMGUI STATIC ${IMGUI_SOURCES})
 
@@ -67,6 +68,7 @@ target_link_libraries(
     ${SDL2_LIBRARIES}
     GLAD
     STB_IMAGE
+    STB_IMAGE_WRITE
     IMGUI
 )
 
