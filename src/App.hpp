@@ -28,7 +28,8 @@ private:
 	~App() {};
 
 public:
-	void update();
+	void drawScene();
+	void mainLoopIteration();
 
 private:
     void ImGUI_DebugWindow();

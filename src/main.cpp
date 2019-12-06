@@ -86,7 +86,7 @@ int main(int argc, char *argv[]) {
 
 		App::Initialize(window);
 		while (App::Get().isRunning()) {
-			App::Get().update();
+			App::Get().mainLoopIteration();
 		}
 
 		CubesGroup::ShutDown();

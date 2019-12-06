@@ -33,7 +33,6 @@ App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDe
 	Input::Initialize();
 	Display::UpdateWindowSize(m_window);
 
-	GLCall(glClearColor(0.4f, 0.6f, 0.95f, 1.0f));
 	GLCall(glEnable(GL_DEPTH_TEST));
 
 	// ----------------PLAYGROUND!------------------
@@ -48,9 +47,13 @@ App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDe
 ////////////////////////////// PUBLIC METHODS ///////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-void App::update() {
+void App::drawScene() {
+	GLCall(glClearColor(0.4f, 0.6f, 0.95f, 1.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+	MaterialsManager::draw();
+}
 
+void App::mainLoopIteration() {
 	// Feed inputs
 	handleSDLEvents();
 	ImGui_ImplOpenGL3_NewFrame();
@@ -65,7 +68,7 @@ void App::update() {
 	// ----------------PLAYGROUND!------------------
 	m_camera.update(1.0f / 60.0f);
 	MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
-	MaterialsManager::draw();
+	drawScene();
 	MaterialsManager::ImGui_Menu();
 	m_saveViewWindow.Show_IfOpen();
 	

@@ -4,6 +4,8 @@
 #include "Helper/Display.hpp"
 #include "OpenGL/FrameBuffer.hpp"
 
+#include "App.hpp"
+
 PopupWindow_SaveView::PopupWindow_SaveView()
 	: PopupWindow("Saving current view"),
 	  m_widthHeightRatioPicker(),
@@ -35,7 +37,7 @@ void PopupWindow_SaveView::OnConfirmation() {
 	FrameBuffer saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight());
 	saveBuffer.bind();
 	saveBuffer.clear();
-	// TODO : render scene
+	App::Get().drawScene();
 	saveBuffer.save(m_filepathPicker.getFilepath());
 	saveBuffer.unbind();
 }
