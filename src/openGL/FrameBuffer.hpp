@@ -15,11 +15,12 @@ public:
 	void clear(); // Make sure you have bound the framebuffer beforehand
 	void save(const std::string& filePath);  // Make sure you have bound the framebuffer beforehand
 
-	inline Texture2D& getTexture() { return m_texture; }
+	inline Texture2D& getColorTexture() { return m_colorTexture; }
 
 private:
 	unsigned int m_frameBufferId;
-	Texture2D m_texture;
+	Texture2D m_colorTexture;
+	unsigned int m_depthRenderBufferID;
 
 	int m_prevViewportSettings[4];
 };
