@@ -12,27 +12,25 @@ class UniformConcrete : public Uniform {
 public:
 	UniformConcrete() = default;
 	UniformConcrete(int shaderIndex, const std::string& nameInsideStruct, T value, T minValue, T maxValue)
-		: Uniform(shaderIndex, nameInsideStruct), m_value(value), m_valueWhenDraggingStarted(value), m_minValue(minValue), m_maxValue(maxValue)
+		: Uniform(shaderIndex, nameInsideStruct), m_value(value), m_valueBeforeEditingStarted(value), m_minValue(minValue), m_maxValue(maxValue)
 	{}
 
 	void set(int structIndex) override;
 
-	std::tuple<bool, bool, bool> ImGui_Slider() override; // RETURNS : was value modified this frame / did dragging start this frame / did dragging end this frame
+	void ImGui_Slider() override;
 
 	Uniform* createPtrWithSameData() override {
 		return new UniformConcrete<T>(m_shaderIndex, getNameInsideStruct(), m_value, m_minValue, m_maxValue);
 	}
 
 	inline T& value() { return m_value; }
-	//inline const T& getValueWhenDraggingStarted() const { return m_valueWhenDraggingStarted; }
-	//inline void setValueWhenDraggingStarted(T newValue) { m_valueWhenDraggingStarted = newValue; }
 private:
-	void checkEditingBeginAndEnd() {
+	void pushChangeInHistory_IfNecessary() {
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
 			History& history = Locate::history();
 			history.beginUndoGroup();
 			T val = m_value;
-			T prevVal = m_valueWhenDraggingStarted;
+			T prevVal = m_valueBeforeEditingStarted;
 			history.addAction(Action(
 				// DO action
 				[this, val]()
@@ -46,12 +44,12 @@ private:
 			}
 			));
 			history.endUndoGroup();
-			m_valueWhenDraggingStarted = m_value;
+			m_valueBeforeEditingStarted = m_value; // ready for next edit
 		}
 	}
 private:
 	T m_value;
-	T m_valueWhenDraggingStarted;
+	T m_valueBeforeEditingStarted;
 	T m_minValue;
 	T m_maxValue;
 };

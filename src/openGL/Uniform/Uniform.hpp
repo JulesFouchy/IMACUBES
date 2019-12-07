@@ -16,7 +16,7 @@ public:
 
 	virtual void set(int structIndex) = 0;
 	
-	virtual std::tuple<bool, bool, bool> ImGui_Slider() = 0; // RETURNS : was value modified this frame / did dragging start this frame / did dragging end this frame
+	virtual void ImGui_Slider() = 0;
 
 	virtual Uniform* createPtrWithSameData() = 0;
 
