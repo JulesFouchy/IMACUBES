@@ -28,9 +28,6 @@ public:
 	//inline void setValueWhenDraggingStarted(T newValue) { m_valueWhenDraggingStarted = newValue; }
 private:
 	void checkEditingBeginAndEnd() {
-		if (ImGui::IsItemActivated()) {
-			m_valueWhenDraggingStarted = m_value;
-		}
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
 			History& history = Locate::history();
 			history.beginUndoGroup();
@@ -49,6 +46,7 @@ private:
 			}
 			));
 			history.endUndoGroup();
+			m_valueWhenDraggingStarted = m_value;
 		}
 	}
 private:
