@@ -10,36 +10,38 @@
 #include <stb_image/stb_image_write.h>
 
 FrameBuffer::FrameBuffer(int width, int height)
-	: m_frameBufferId(0), m_colorTexture(), m_depthRenderBufferID(0), m_prevViewportSettings()
+	: m_width(width), m_height(height), m_BPP(4), m_GLpixelFormat(GL_RGBA)
 {	
-	// Gen Buffer
+	// Gen and Bind FrameBuffer
 	GLCall(glGenFramebuffers(1, &m_frameBufferId));
-	// Bind
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId));
-	// Attach texture to framebuffer
-	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_colorTexture.getID(), 0));
-	// Depth buffer
+	// Color RenderBuffer
+	GLCall(glGenRenderbuffers(1, &m_colorRenderBufferID));
+	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, m_colorRenderBufferID));
+	GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_RGBA8, width, height));
+	GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, m_colorRenderBufferID));
+	// Depth RenderBuffer
 	GLCall(glGenRenderbuffers(1, &m_depthRenderBufferID));
 	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferID));
 	GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height));
 	GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBufferID));
-	// Unbind
+	// Unbind FrameBuffer
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-	// Set texture size
-	m_colorTexture.setData(width, height, 4);
 	// Check for completeness
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		spdlog::error("Framebuffer is not complete!");
 }
 
 FrameBuffer::~FrameBuffer() {
+	GLCall(glDeleteRenderbuffers(1, &m_colorRenderBufferID));
+	GLCall(glDeleteRenderbuffers(1, &m_depthRenderBufferID));
 	GLCall(glDeleteFramebuffers(1, &m_frameBufferId));
 }
 
 void FrameBuffer::bind() {
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId));
 	GLCall(glGetIntegerv(GL_VIEWPORT, m_prevViewportSettings)); // Store viewport settings to restore them when unbinding
-	GLCall(glViewport(0, 0, m_colorTexture.getWidth(), m_colorTexture.getHeight()));
+	GLCall(glViewport(0, 0, m_width, m_height));
 }
 
 void FrameBuffer::unbind() {
@@ -58,11 +60,11 @@ void FrameBuffer::save(const std::string& filePath) {
 	if (!filePath.empty()) {
 		spdlog::info("[FrameBuffer::save] Saving as " + filePath);
 		// Get pixels
-		unsigned int width = m_colorTexture.getWidth();
-		unsigned int height = m_colorTexture.getHeight();
-		unsigned int BPP = m_colorTexture.getBPP();
+		unsigned int width = m_width;
+		unsigned int height = m_height;
+		unsigned int BPP = m_BPP;
 		unsigned char* data = new unsigned char[width * height * BPP];
-		GLCall(glReadPixels(0, 0, width, height, m_colorTexture.getGLpixelFormat(), GL_UNSIGNED_BYTE, data));
+		GLCall(glReadPixels(0, 0, width, height, m_GLpixelFormat, GL_UNSIGNED_BYTE, data));
 		// Save
 		stbi_flip_vertically_on_write(1);
 		stbi_write_png(filePath.c_str(), width, height, BPP, data, 0);

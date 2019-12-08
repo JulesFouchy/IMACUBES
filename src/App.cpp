@@ -6,7 +6,6 @@
 #include <imgui/imgui_impl_opengl3.h>
 #include "OpenGL/gl-exception.h"
 #include "Helper/Display.hpp"
-#include "OpenGL/Texture2D.hpp"
 
 #include <glm/glm.hpp>
 
