@@ -8,7 +8,7 @@
 #include "App.hpp"
 
 PopupWindow_SaveView::PopupWindow_SaveView()
-	: PopupWindow("Saving current view"),
+	: PopupWindow_WithConfirmationWarning("Saving current view"),
 	  m_widthHeightRatioPicker(),
 	  m_filepathPicker(" PNG (*.png)\0*.png;*.PNG\0All Files (*.*)\0*.*\0")
 {
@@ -35,15 +35,18 @@ void PopupWindow_SaveView::Show() {
 }
 
 void PopupWindow_SaveView::OnConfirmation() {
-	if (MyFile::Exists(m_filepathPicker.getFilepath())) {
-		spdlog::warn("file exists : '{}'", m_filepathPicker.getFilepath());
-	}
-	else {
-		SaveBuffer saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight());
-		saveBuffer.bind();
-		saveBuffer.clear();
-		App::Get().drawScene();
-		saveBuffer.save(m_filepathPicker.getFilepath());
-		saveBuffer.unbind();
-	}
+	SaveBuffer saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight());
+	saveBuffer.bind();
+	saveBuffer.clear();
+	App::Get().drawScene();
+	saveBuffer.save(m_filepathPicker.getFilepath());
+	saveBuffer.unbind();
+}
+
+bool PopupWindow_SaveView::WarnIf() {
+	return MyFile::Exists(m_filepathPicker.getFilepath());
+}
+
+std::string PopupWindow_SaveView::WarningMessage() {
+	return "This file already exists and will be overwritten : \n" + m_filepathPicker.getFilepath();
 }

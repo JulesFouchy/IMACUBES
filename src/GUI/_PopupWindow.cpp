@@ -25,8 +25,7 @@ void PopupWindow::BeginWindow() {
 
 void PopupWindow::ConfirmationButton() {
 	if (ImGui::Button("OK !")) {
-		m_bMustShow = false;
-		OnConfirmation();
+		Confirm();
 	}
 }
 

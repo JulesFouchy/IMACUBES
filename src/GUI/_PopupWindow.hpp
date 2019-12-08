@@ -3,16 +3,17 @@
 #include <string>
 
 class PopupWindow {
-// Functions to override
+friend class PopupWindow_AreYouSure;
+	// Functions to override
 public:
 	virtual void Open();
 protected:
 	virtual void Show() = 0;
 	virtual void OnConfirmation() = 0;
 
-// Base functions
+	// Base functions
 public:
-	void Show_IfOpen();
+	virtual void Show_IfOpen();
 protected:
 	PopupWindow(const std::string& windowName);
 	~PopupWindow() = default;
@@ -20,6 +21,8 @@ protected:
 	void BeginWindow();
 	void ConfirmationButton();
 	void EndWindow();
+
+	virtual void Confirm(bool iAmSure = false) { OnConfirmation(); m_bMustShow = false; }; // indirection required by PopupWindow_WithConfirmationWarning to add checks
 
 protected:
 	bool m_bMustShow;
