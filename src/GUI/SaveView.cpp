@@ -2,7 +2,7 @@
 
 #include "imgui/imgui.h"
 #include "Helper/Display.hpp"
-#include "OpenGL/FrameBuffer.hpp"
+#include "OpenGL/SaveBuffer.hpp"
 
 #include "App.hpp"
 
@@ -34,7 +34,7 @@ void PopupWindow_SaveView::Show() {
 }
 
 void PopupWindow_SaveView::OnConfirmation() {
-	FrameBuffer saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight());
+	SaveBuffer saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight());
 	saveBuffer.bind();
 	saveBuffer.clear();
 	App::Get().drawScene();

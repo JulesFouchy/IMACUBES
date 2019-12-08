@@ -1,10 +1,10 @@
 #include "App.hpp"
 
 #include <Debugging/Log.hpp>
+#include "Debugging/gl-exception.h"
 #include <imgui.h>
 #include <imgui/imgui_impl_sdl.h>
 #include <imgui/imgui_impl_opengl3.h>
-#include "OpenGL/gl-exception.h"
 #include "Helper/Display.hpp"
 
 #include <glm/glm.hpp>

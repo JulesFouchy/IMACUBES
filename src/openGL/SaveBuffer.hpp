@@ -3,10 +3,10 @@
 #include <string>
 #include <glad/glad.h>
 
-class FrameBuffer {
+class SaveBuffer {
 public: 
-	FrameBuffer(int width, int height);
-	~FrameBuffer();
+	SaveBuffer(int width, int height);
+	~SaveBuffer();
 
 	void bind();
 	void unbind();

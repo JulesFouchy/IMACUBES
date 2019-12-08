@@ -1,15 +1,15 @@
-#include "frameBuffer.hpp"
+#include "SaveBuffer.hpp"
 
 #include <glad/glad.h>
 
 #include "Debugging/Log.hpp"
+#include "Debugging/gl-exception.h"
 #include "Helper/Display.hpp"
 #include "Helper/String.hpp"
-#include "OpenGL/gl-exception.h"
 
 #include <stb_image/stb_image_write.h>
 
-FrameBuffer::FrameBuffer(int width, int height)
+SaveBuffer::SaveBuffer(int width, int height)
 	: m_width(width), m_height(height), m_BPP(4), m_GLpixelFormat(GL_RGBA)
 {	
 	// Gen and Bind FrameBuffer
@@ -32,33 +32,33 @@ FrameBuffer::FrameBuffer(int width, int height)
 		spdlog::error("Framebuffer is not complete!");
 }
 
-FrameBuffer::~FrameBuffer() {
+SaveBuffer::~SaveBuffer() {
 	GLCall(glDeleteRenderbuffers(1, &m_colorRenderBufferID));
 	GLCall(glDeleteRenderbuffers(1, &m_depthRenderBufferID));
 	GLCall(glDeleteFramebuffers(1, &m_frameBufferId));
 }
 
-void FrameBuffer::bind() {
+void SaveBuffer::bind() {
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId));
 	GLCall(glGetIntegerv(GL_VIEWPORT, m_prevViewportSettings)); // Store viewport settings to restore them when unbinding
 	GLCall(glViewport(0, 0, m_width, m_height));
 }
 
-void FrameBuffer::unbind() {
+void SaveBuffer::unbind() {
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	GLCall(glViewport(m_prevViewportSettings[0], m_prevViewportSettings[1], m_prevViewportSettings[2], m_prevViewportSettings[3]));
 }
 
-void FrameBuffer::clear() {
+void SaveBuffer::clear() {
 	// Make sure you have bound the framebuffer beforehand
 	GLCall(glClearColor(0.0f, 0.0f, 0.0f, 0.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT));
 }
 
-void FrameBuffer::save(const std::string& filePath) {
+void SaveBuffer::save(const std::string& filePath) {
 	// Make sure you have bound the framebuffer beforehand
 	if (!filePath.empty()) {
-		spdlog::info("[FrameBuffer::save] Saving as " + filePath);
+		spdlog::info("[SaveBuffer::save] Saving as " + filePath);
 		// Get pixels
 		unsigned int width = m_width;
 		unsigned int height = m_height;
@@ -74,6 +74,6 @@ void FrameBuffer::save(const std::string& filePath) {
 		Log::separationLine();
 	}
 	else {
-		spdlog::warn("[FrameBuffer::Save] invalid file path : |{}|", filePath);
+		spdlog::warn("[SaveBuffer::Save] invalid file path : |{}|", filePath);
 	}
 }
