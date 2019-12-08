@@ -2,6 +2,7 @@
 
 #include "imgui/imgui.h"
 #include "Helper/Display.hpp"
+#include "Helper/File.hpp"
 #include "OpenGL/SaveBuffer.hpp"
 
 #include "App.hpp"
@@ -34,10 +35,15 @@ void PopupWindow_SaveView::Show() {
 }
 
 void PopupWindow_SaveView::OnConfirmation() {
-	SaveBuffer saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight());
-	saveBuffer.bind();
-	saveBuffer.clear();
-	App::Get().drawScene();
-	saveBuffer.save(m_filepathPicker.getFilepath());
-	saveBuffer.unbind();
+	if (MyFile::Exists(m_filepathPicker.getFilepath())) {
+		spdlog::warn("file exists : '{}'", m_filepathPicker.getFilepath());
+	}
+	else {
+		SaveBuffer saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight());
+		saveBuffer.bind();
+		saveBuffer.clear();
+		App::Get().drawScene();
+		saveBuffer.save(m_filepathPicker.getFilepath());
+		saveBuffer.unbind();
+	}
 }
