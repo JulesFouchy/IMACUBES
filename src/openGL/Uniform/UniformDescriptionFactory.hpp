@@ -1,10 +1,12 @@
 #pragma once
 
-#include "UniformConcrete.hpp"
+#include "UniformDescriptionConcrete.hpp"
 
-namespace UniformFactory {
+#include "Debugging/Log.hpp"
+
+namespace UniformDescriptionFactory {
 	// public :
-	Uniform* FromShaderLine(int shaderIndex, const std::string& line);
+	UniformDescription* FromShaderLine(const std::string& line);
 
 	// private :
 	namespace { // anonymous namespace to make functions private
@@ -12,7 +14,7 @@ namespace UniformFactory {
 		T ReadValue(const std::string& str, size_t* currentPosPtr);
 
 		template <typename T>
-		Uniform* ReadNameAndValuesAndCreateUniformOfType(int shaderIndex, const std::string& line, size_t posEndType) {
+		UniformDescription* ReadNameAndValuesAndCreateUniformDescriptionOfType(const std::string& line, size_t posEndType) {
 			// Get name
 			size_t posBeginName = MyString::BeginningOfNextWord(line, posEndType);
 			size_t posEndName = MyString::EndOfNextWord(line, posBeginName);
@@ -36,12 +38,12 @@ namespace UniformFactory {
 						maxValue = ReadValue<T>(line, &currentPos);
 					}
 					else {
-						spdlog::warn("[UniformFactory::ReadNameAndValuesAndCreateUniformOfType] Unknown argument : {}", arg);
+						spdlog::warn("[UniformDescriptionFactory::ReadNameAndValuesAndCreateUniformOfType] Unknown argument : {}", arg);
 					}
 				}
 			}
 			// Return uniform
-			return new UniformConcrete<T>(shaderIndex, s_name, initialValue, minValue, maxValue);
+			return new UniformDescriptionConcrete<T>(s_name, initialValue, minValue, maxValue);
 		}
 	}
 }

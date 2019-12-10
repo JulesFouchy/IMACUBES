@@ -9,6 +9,9 @@
 
 template <typename T>
 class UniformConcrete : public Uniform {
+friend class UniformDescription;
+template <typename T>
+friend class UniformDescriptionConcrete;
 public:
 	UniformConcrete() = default;
 	UniformConcrete(int shaderIndex, const std::string& nameInsideStruct, T value, T minValue, T maxValue)

@@ -1,4 +1,4 @@
-#include "UniformFactory.hpp"
+#include "UniformDescriptionFactory.hpp"
 
 #include "Helper/String.hpp"
 
@@ -6,30 +6,31 @@
 
 #include "glm/glm.hpp"
 
-namespace UniformFactory {
-	Uniform* FromShaderLine(int shaderIndex, const std::string& line) {
+namespace UniformDescriptionFactory {
+
+	UniformDescription* FromShaderLine(const std::string& line) {
 		// Get type
 		size_t currentPos = 0;
 		OpenGLType type = GLType::FromString(MyString::GetNextWord(line, &currentPos));
 		switch (type)
 		{
 		case OpenGLType::Int:
-			return ReadNameAndValuesAndCreateUniformOfType<int>(shaderIndex, line, currentPos);
+			return ReadNameAndValuesAndCreateUniformDescriptionOfType<int>(line, currentPos);
 			break;
 		case OpenGLType::Float:
-			return ReadNameAndValuesAndCreateUniformOfType<float>(shaderIndex, line, currentPos);
+			return ReadNameAndValuesAndCreateUniformDescriptionOfType<float>(line, currentPos);
 			break;
 		case OpenGLType::Vec2:
-			return ReadNameAndValuesAndCreateUniformOfType<glm::vec2>(shaderIndex, line, currentPos);
+			return ReadNameAndValuesAndCreateUniformDescriptionOfType<glm::vec2>(line, currentPos);
 			break;
 		case OpenGLType::Vec3:
-			return ReadNameAndValuesAndCreateUniformOfType<glm::vec3>(shaderIndex, line, currentPos);
+			return ReadNameAndValuesAndCreateUniformDescriptionOfType<glm::vec3>(line, currentPos);
 			break;
 		case OpenGLType::Vec4:
-			return ReadNameAndValuesAndCreateUniformOfType<glm::vec4>(shaderIndex, line, currentPos);
+			return ReadNameAndValuesAndCreateUniformDescriptionOfType<glm::vec4>(line, currentPos);
 			break;
 		default:
-			spdlog::warn("[UniformFactory::FromShaderLine] Unknown OpenGL type : {}", (int)type);
+			spdlog::warn("[UniformDescriptionFactory::FromShaderLine] Unknown OpenGL type : {}", (int)type);
 			return nullptr;
 			break;
 		}

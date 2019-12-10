@@ -10,8 +10,6 @@
 
 #include <glm/glm.hpp>
 
-#include "OpenGL/Uniform/UniformFactory.hpp"
-
 #include "UI/Input.hpp"
 
 #include "Material/MaterialsManager.hpp"

@@ -2,8 +2,9 @@
 
 #include "OpenGL/Shader.hpp"
 #include "OpenGL/CubesGroup.hpp"
+#include "OpenGL/Uniform/UniformDescription.hpp"
 
-#include "OpenGL/Uniform/ArrayOfStructOfUniforms.hpp"
+#include "Material/Material.hpp"
 
 #include <string>
 
@@ -11,9 +12,11 @@ class MaterialsForAGivenShader {
 friend class MaterialsManager;
 public:
 	MaterialsForAGivenShader(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex);
+	MaterialsForAGivenShader(const MaterialsForAGivenShader& other);
 	~MaterialsForAGivenShader();
 
 	void draw();
+	void addMaterial();
 
 	void reloadShader();
 
@@ -22,11 +25,13 @@ public:
 private:
 	void setUniforms();
 
-	void parseShader(const std::string& fragmentFilepath);
+	void parseShaderAndCreateUniformDescriptions(const std::string& fragmentFilepath);
+	void updateMaterialsLayout();
 public:
 	Shader m_shader;
 	CubesGroup m_cubes;
-	ArrayOfStructOfUniforms m_uniforms;
+	std::vector<UniformDescription*> m_structLayout;
+	std::vector<Material> m_materials;
 
 	std::string m_name;
 	int m_shaderIndex;

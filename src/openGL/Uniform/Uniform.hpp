@@ -5,9 +5,12 @@
 
 #include "OpenGL/Shader.hpp"
 
+#include "Debugging/Log.hpp"
+
 #include "Material/MaterialsLocator.hpp"
 
 class Uniform {
+friend class UniformDescription;
 public:
 	Uniform(int shaderIndex, const std::string& nameInsideStruct)
 		: m_shaderIndex(shaderIndex), m_nameInsideStruct(nameInsideStruct)
