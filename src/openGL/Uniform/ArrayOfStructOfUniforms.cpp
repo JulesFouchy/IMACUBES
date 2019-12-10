@@ -5,7 +5,7 @@
 
 #include "Debugging/Log.hpp"
 
-#include "Core/MaterialsManager.hpp"
+#include "Material/MaterialsManager.hpp"
 
 
 ArrayOfStructOfUniforms::ArrayOfStructOfUniforms(int shaderIndex)

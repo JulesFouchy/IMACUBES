@@ -14,7 +14,7 @@
 
 #include "UI/Input.hpp"
 
-#include "Core/MaterialsManager.hpp"
+#include "Material/MaterialsManager.hpp"
 
 App* App::m_instance = nullptr;
 

@@ -1,4 +1,4 @@
-#include "ShaderAndItsMaterials.hpp"
+#include "MaterialsForAGivenShader.hpp"
 
 #include <fstream>
 #include "Helper/String.hpp"
@@ -7,29 +7,29 @@
 #include "OpenGL/OpenGLTypes.hpp"
 #include "OpenGL/Uniform/UniformFactory.hpp"
 
-ShaderAndItsMaterials::ShaderAndItsMaterials(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex)
+MaterialsForAGivenShader::MaterialsForAGivenShader(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex)
 	: m_shader(vertexFilepath, fragmentFilepath), m_cubes(0,0,0), m_name(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(fragmentFilepath))), m_shaderIndex(shaderIndex), m_uniforms(shaderIndex)
 {
 	m_uniforms.addStruct(m_name);
 	parseShader(fragmentFilepath);
 }
 
-ShaderAndItsMaterials::~ShaderAndItsMaterials() {
+MaterialsForAGivenShader::~MaterialsForAGivenShader() {
 	m_uniforms.deleteAllPointers();
 }
 
-void ShaderAndItsMaterials::draw() {
+void MaterialsForAGivenShader::draw() {
 	m_shader.bind();
 	setUniforms();
 	m_cubes.draw();
 }
 
-void ShaderAndItsMaterials::reloadShader() {
+void MaterialsForAGivenShader::reloadShader() {
 	m_shader.compile();
 	parseShader(m_shader.getFragmentFilepath());
 }
 
-void ShaderAndItsMaterials::ImGui_Menu(){
+void MaterialsForAGivenShader::ImGui_Menu(){
 	ImGui::PushID((int)this);
 		ImGui::Text(m_name.c_str());
 		if (ImGui::Button("Add Material")) {
@@ -40,7 +40,7 @@ void ShaderAndItsMaterials::ImGui_Menu(){
 	ImGui::PopID();
 }
 
-void ShaderAndItsMaterials::setUniforms() {
+void MaterialsForAGivenShader::setUniforms() {
 	m_uniforms.setUniforms();
 	//for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
 	//	m_shader.setUniform1i("materialIndices["+std::to_string(k)+"]", 1);
@@ -48,7 +48,7 @@ void ShaderAndItsMaterials::setUniforms() {
 }
 
 
-void ShaderAndItsMaterials::parseShader(const std::string& fragmentFilepath) {
+void MaterialsForAGivenShader::parseShader(const std::string& fragmentFilepath) {
 	/*ArrayOfStructOfUniforms newUniforms(m_shaderIndex);
 	for (int k = 0; k < m_uniforms.nbOfStructs(); ++k) {
 		newUniforms.addStruct(m_name);

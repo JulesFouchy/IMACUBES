@@ -5,7 +5,7 @@
 
 #include "OpenGL/Shader.hpp"
 
-#include "Core/MaterialsLocator.hpp"
+#include "Material/MaterialsLocator.hpp"
 
 class Uniform {
 public:

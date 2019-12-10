@@ -7,11 +7,11 @@
 
 #include <string>
 
-class ShaderAndItsMaterials {
+class MaterialsForAGivenShader {
 friend class MaterialsManager;
 public:
-	ShaderAndItsMaterials(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex);
-	~ShaderAndItsMaterials();
+	MaterialsForAGivenShader(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex);
+	~MaterialsForAGivenShader();
 
 	void draw();
 
