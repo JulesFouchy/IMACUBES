@@ -7,14 +7,14 @@ in vec3 vWorldPos;
 //uniform int materialIndices[2]; 
  
 struct MaterialParameters{ 
-	vec3 u_Offset; // default 0.740f, 0.179f, 0.179f 
-	float u_starIntensity; // default 1.408 min 0 max 2 
-	float u_starIntensityPow; // default 1.788 min 0 max 40 
-	float u_noiseScale; // default 0 min 0 max 2 
-	float u_distortInScale; // default 10.391 min 0 max 60 
-	float u_distortOutScale; // default 2.346 min 0 max 60 
-	vec3 u_SkyColor; // default 0 0 0 
-	vec3 u_StarColor; // default 0.355f, 0.670f, 1.000f 
+	vec3 u_Offset; // default 0.740f, 0.179f, 0.179f
+	float u_starIntensity; // default 1.408 min 0 max 2
+	float u_starIntensityPow; // default 1.788 min 0 max 40
+	float u_noiseScale; // default 0 min 0 max 2
+	float u_distortInScale; // default 10.391 min 0 max 60
+	float u_distortOutScale; // default 2.346 min 0 max 60
+	vec3 u_SkyColor; // default 0 0 0
+	vec3 u_StarColor; // default 0.355f, 0.670f, 1.000f
 }; 
  
 uniform MaterialParameters params[]; 
