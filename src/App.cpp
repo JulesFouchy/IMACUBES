@@ -1,6 +1,7 @@
 #include "App.hpp"
 
 #include <Debugging/Log.hpp>
+#include "Debugging/ImGuiLog.hpp"
 #include "Debugging/gl-exception.h"
 #include <imgui.h>
 #include <imgui/imgui_impl_sdl.h>
@@ -70,7 +71,7 @@ void App::mainLoopIteration() {
 	drawScene();
 	MaterialsManager::ImGui_Menu();
 	m_saveViewWindow.Show_IfOpen();
-	
+
 	// ---------------------------------------------
 
 	// Render ImGui
