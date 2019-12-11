@@ -8,7 +8,7 @@ class CubesGroup {
 public:
 	static void Initialize();
 	static void ShutDown();
-	CubesGroup(unsigned int width=0, unsigned int height=0, unsigned int depth=0);
+	CubesGroup();
 	CubesGroup(const CubesGroup& other);
 	~CubesGroup();
 
@@ -16,6 +16,9 @@ public:
 	void addCube(glm::vec3 position); 
 	void draw();
 	void drawWireframe();
+
+private:
+	void createOpenGLStuffs();
 
 private:
 	GLuint m_vaoID;
