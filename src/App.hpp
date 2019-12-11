@@ -11,6 +11,8 @@
 #include "CubesMap/CubesMap.hpp"
 #include "GUI/SaveView.hpp"
 
+#include <glm/glm.hpp>
+
 /**
  * @brief Base root of the app
  */
@@ -43,6 +45,7 @@ private:
 	History m_history;
 	CubesMap m_cubesMap;
 	PopupWindow_SaveView m_saveViewWindow;
+	glm::vec3 m_pos = glm::vec3(0.);
 	//
 	bool m_bShowImGUIDemoWindow;
 

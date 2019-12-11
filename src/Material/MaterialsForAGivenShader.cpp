@@ -11,7 +11,7 @@
 #include "Locator/MaterialManagerLocator.hpp"
 
 MaterialsForAGivenShader::MaterialsForAGivenShader(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex)
-	: m_shader(vertexFilepath, fragmentFilepath), m_cubes(0,0,0), m_name(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(fragmentFilepath))), m_shaderIndex(shaderIndex)
+	: m_shader(vertexFilepath, fragmentFilepath), m_cubes(), m_name(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(fragmentFilepath))), m_shaderIndex(shaderIndex)
 {
 	parseShaderAndCreateUniformDescriptions(fragmentFilepath);
 	addMaterial();
