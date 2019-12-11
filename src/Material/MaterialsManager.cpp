@@ -1,9 +1,8 @@
 #include "MaterialsManager.hpp"
 
-std::vector<MaterialsForAGivenShader> MaterialsManager::m_shadersList;
-int MaterialsManager::m_shaderCount = 0;
-
-MaterialLocation MaterialsManager::m_selectedMaterial(0, 0);
+MaterialsManager::MaterialsManager()
+	: m_shaderCount(0), m_selectedMaterial(0, 0)
+{}
 
 void MaterialsManager::draw() {
 	for (MaterialsForAGivenShader& shader : m_shadersList) {

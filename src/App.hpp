@@ -8,6 +8,7 @@
 
 #include "Camera/Camera.hpp"
 #include "History/History.hpp"
+#include "CubesMap/CubesMap.hpp"
 #include "GUI/SaveView.hpp"
 
 /**
@@ -39,6 +40,7 @@ private:
 	// Members
 	Camera m_camera;
 	History m_history;
+	CubesMap m_cubesMap;
 	PopupWindow_SaveView m_saveViewWindow;
 	//
 	bool m_bShowImGUIDemoWindow;

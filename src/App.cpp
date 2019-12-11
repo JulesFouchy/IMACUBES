@@ -25,7 +25,9 @@ void App::ShutDown() {
 	delete m_instance;
 }
 
-App::App(SDL_Window* window) : m_window(window), m_running(true), m_bShowImGUIDemoWindow(false)
+App::App(SDL_Window* window)
+	: m_window(window), m_running(true), m_bShowImGUIDemoWindow(false),
+	  m_cubesMap(10,10,10)
 {
 	Log::Initialize();
 	Input::Initialize();

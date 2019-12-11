@@ -8,21 +8,21 @@
 
 class MaterialsManager {
 public:
-	MaterialsManager() = delete;
-	~MaterialsManager() = delete;
+	MaterialsManager();
+	~MaterialsManager();
 
-	static void draw();
-	static void ImGui_Menu();
+	void draw();
+	void ImGui_Menu();
 
-	static inline void addShader(const std::string& vertexFilepath, const std::string& fragmentFilepath) { m_shadersList.emplace_back(vertexFilepath, fragmentFilepath, m_shaderCount++); }
-	static void updateMatrixUniform(const std::string& name, const glm::mat4& mat);
+	inline void addShader(const std::string& vertexFilepath, const std::string& fragmentFilepath) { m_shadersList.emplace_back(vertexFilepath, fragmentFilepath, m_shaderCount++); }
+	void updateMatrixUniform(const std::string& name, const glm::mat4& mat);
 
-	static inline std::vector<MaterialsForAGivenShader>& Shaders() { return m_shadersList; }
-	static inline const MaterialLocation& SelectedMaterial() { return m_selectedMaterial; }
-	static inline void SetSelectedMaterial(int shaderID, int matID) { m_selectedMaterial = { shaderID, matID }; }
+	inline std::vector<MaterialsForAGivenShader>& Shaders() { return m_shadersList; }
+	inline const MaterialLocation& SelectedMaterial() { return m_selectedMaterial; }
+	inline void SetSelectedMaterial(int shaderID, int matID) { m_selectedMaterial = { shaderID, matID }; }
 private:
-	static std::vector<MaterialsForAGivenShader> m_shadersList;
-	static int m_shaderCount;
+	std::vector<MaterialsForAGivenShader> m_shadersList;
+	int m_shaderCount;
 
-	static MaterialLocation m_selectedMaterial;
+	MaterialLocation m_selectedMaterial;
 };
