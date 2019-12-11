@@ -1,17 +1,10 @@
 #pragma once
 
 #include "MaterialsForAGivenShader.hpp"
+#include "MaterialLocation.hpp"
 #include <vector>
 
 #include "glm/glm.hpp"
-
-struct MaterialLocation {
-	int shaderID;
-	int materialID;
-
-	MaterialLocation(int shaderID, int materialID)
-		: shaderID(shaderID), materialID(materialID) {}
-};
 
 class MaterialsManager {
 public:
