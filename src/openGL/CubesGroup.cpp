@@ -147,7 +147,7 @@ void CubesGroup::addCube(glm::vec3 position) {
 void CubesGroup::draw() {
 	GLCall(glBindVertexArray(m_vaoID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeMeshIBO_ID));
-		GLCall(glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, 3));
+		GLCall(glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, m_positions.size()));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 	GLCall(glBindVertexArray(0));
 }
