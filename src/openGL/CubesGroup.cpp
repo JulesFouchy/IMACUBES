@@ -85,7 +85,7 @@ void CubesGroup::Initialize() {
 	GLCall(glGenBuffers(1, &m_cubeMeshVBO_ID));
 	GLCall(glGenBuffers(1, &m_cubeMeshIBO_ID));
 	GLCall(glGenBuffers(1, &m_cubeWireframeIBO_ID));
-	// VBO data
+	// VBO data sommet Cube 
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshVBO_ID));
 	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(cubeMeshVBO), cubeMeshVBO, GL_STATIC_DRAW));
 	// IBO data
@@ -107,13 +107,19 @@ void CubesGroup::ShutDown() {
 CubesGroup::CubesGroup(unsigned int width, unsigned int height, unsigned int depth){
 	// Generate VAO
 	GLCall(glGenVertexArrays(1, &m_vaoID));	
+	GLCall(glGenBuffers(1, &m_cubePositionsVBO_ID));
 	// VBO attrib pointer
 	GLCall(glBindVertexArray(m_vaoID));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshVBO_ID));
-		GLCall(glEnableVertexAttribArray(0));
-		GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshVBO_ID));
+			GLCall(glEnableVertexAttribArray(0));
+			GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubePositionsVBO_ID));
+			GLCall(glEnableVertexAttribArray(1));
+			GLCall(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
+			GLCall(glVertexAttribDivisor(1, 1));
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	GLCall(glBindVertexArray(0));
+
 }
 
 CubesGroup::CubesGroup(const CubesGroup& other) {
@@ -132,6 +138,11 @@ CubesGroup::~CubesGroup(){
 	GLCall(glDeleteVertexArrays(1, &m_vaoID));
 }
 
+
+void CubesGroup::addCube(glm::vec3 position) {
+	m_positions.push_back(position); 
+	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(m_positions), &m_positions[0], GL_STATIC_DRAW));
+}
 
 void CubesGroup::draw() {
 	GLCall(glBindVertexArray(m_vaoID));
