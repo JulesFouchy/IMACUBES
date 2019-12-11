@@ -9,7 +9,7 @@
 class MaterialsManager {
 public:
 	MaterialsManager();
-	~MaterialsManager();
+	~MaterialsManager() = default;
 
 	void draw();
 	void ImGui_Menu();

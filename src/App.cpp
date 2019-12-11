@@ -8,6 +8,8 @@
 #include <imgui/imgui_impl_opengl3.h>
 #include "Helper/Display.hpp"
 
+#include "Locator/MaterialManagerLocator.hpp"
+
 #include <glm/glm.hpp>
 
 #include "UI/Input.hpp"
@@ -34,23 +36,24 @@ App::App(SDL_Window* window)
 	Display::UpdateWindowSize(m_window);
 
 	GLCall(glEnable(GL_DEPTH_TEST));
-
-	// ----------------PLAYGROUND!------------------
-	
-	MaterialsManager::addShader("res/shaders/testShader.vert", "res/shaders/testShader.frag");
-	MaterialsManager::addShader("res/shaders/standardLighting.vert", "res/shaders/testShader.frag");
-	MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-	MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 }
 
 /////////////////////////////////////////////////////////////////////////////
 ////////////////////////////// PUBLIC METHODS ///////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
+void App::onInit() {
+	// ----------------PLAYGROUND!------------------
+	Locate::materialsManager().addShader("res/shaders/testShader.vert", "res/shaders/testShader.frag");
+	Locate::materialsManager().addShader("res/shaders/standardLighting.vert", "res/shaders/testShader.frag");
+	Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+}
+
 void App::drawScene() {
 	GLCall(glClearColor(0.4f, 0.6f, 0.95f, 1.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-	MaterialsManager::draw();
+	Locate::materialsManager().draw();
 }
 
 void App::mainLoopIteration() {
@@ -67,9 +70,9 @@ void App::mainLoopIteration() {
 
 	// ----------------PLAYGROUND!------------------
 	m_camera.update(1.0f / 60.0f);
-	MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 	drawScene();
-	MaterialsManager::ImGui_Menu();
+	Locate::materialsManager().ImGui_Menu();
 	m_saveViewWindow.Show_IfOpen();
 
 	// ---------------------------------------------
@@ -143,9 +146,9 @@ void App::handleSDLEvents() {
 				}
 				else {
 					if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
-						MaterialsManager::Shaders()[MaterialsManager::SelectedMaterial().shaderID].reloadShader();
-						MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-						MaterialsManager::updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+						Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterial().shaderID].reloadShader();
+						Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+						Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 					}
 				}
 			}
@@ -163,7 +166,7 @@ void App::handleSDLEvents() {
 				// get new width and height and update the viewport
 				Display::UpdateWindowSize(m_window);
 				// Update camera's ratio
-				MaterialsManager::updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+				Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 				break;
 			}
 

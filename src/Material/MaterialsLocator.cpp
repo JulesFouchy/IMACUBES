@@ -1,7 +1,7 @@
 #include "MaterialsLocator.hpp"
 
-#include "MaterialsManager.hpp"
+#include "Locator/MaterialManagerLocator.hpp"
 
 Shader& MaterialsLocator::GetShader(int shaderIndex) {
-	return MaterialsManager::Shaders()[shaderIndex].m_shader;
+	return Locate::materialsManager().Shaders()[shaderIndex].m_shader;
 }

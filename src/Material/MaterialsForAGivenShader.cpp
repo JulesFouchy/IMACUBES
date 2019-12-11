@@ -8,7 +8,7 @@
 
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
-#include "MaterialsManager.hpp"
+#include "Locator/MaterialManagerLocator.hpp"
 
 MaterialsForAGivenShader::MaterialsForAGivenShader(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex)
 	: m_shader(vertexFilepath, fragmentFilepath), m_cubes(0,0,0), m_name(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(fragmentFilepath))), m_shaderIndex(shaderIndex)
@@ -58,14 +58,14 @@ void MaterialsForAGivenShader::ImGui_Menu(){
 		for (Material& mat : m_materials) {
 			ImGui::PushID((int)&mat);
 			// Sliders of selected material
-			if (MaterialsManager::SelectedMaterial().materialID == mat.getIndex() && MaterialsManager::SelectedMaterial().shaderID == m_shaderIndex) {
+			if (Locate::materialsManager().SelectedMaterial().materialID == mat.getIndex() && Locate::materialsManager().SelectedMaterial().shaderID == m_shaderIndex) {
 				ImGui::InputText("", mat.getNamePointer());
 				mat.ImGui_Sliders();
 			}
 			// Name of other materials
 			else {
 				if (ImGui::Selectable(mat.getName().c_str(), false)) {
-					MaterialsManager::SetSelectedMaterial(m_shaderIndex, mat.getIndex());
+					Locate::materialsManager().SetSelectedMaterial(m_shaderIndex, mat.getIndex());
 				}
 			}
 			//

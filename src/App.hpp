@@ -30,6 +30,7 @@ private:
 
 public:
 	void drawScene();
+	void onInit();
 	void mainLoopIteration();
 
 private:

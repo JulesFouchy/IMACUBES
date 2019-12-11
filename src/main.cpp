@@ -85,6 +85,7 @@ int main(int argc, char *argv[]) {
 		// Main loop
 
 		App::Initialize(window);
+		App::Get().onInit();
 		while (App::Get().isRunning()) {
 			App::Get().mainLoopIteration();
 		}
