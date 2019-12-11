@@ -132,7 +132,7 @@ void App::handleSDLEvents() {
 
 
 		case SDL_KEYDOWN:
-			MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+			Locate::materialsManager().Shaders()[0].m_cubes.addCube(m_pos);
 			m_pos.x += 1;
 			if (!ImGui::GetIO().WantCaptureKeyboard) {
 				if (Input::KeyIsDown(CTRL)) {
