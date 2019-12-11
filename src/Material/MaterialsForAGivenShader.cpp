@@ -33,7 +33,7 @@ MaterialsForAGivenShader::~MaterialsForAGivenShader() {
 void MaterialsForAGivenShader::draw() {
 	m_shader.bind();
 	setUniforms(); // TODO only update uniform on material change
-	m_cubes.drawWireframe();
+	m_cubes.draw();
 }
 
 void MaterialsForAGivenShader::addMaterial() {
