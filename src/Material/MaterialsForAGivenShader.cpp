@@ -49,7 +49,7 @@ void MaterialsForAGivenShader::reloadShader() {
 void MaterialsForAGivenShader::ImGui_Menu(){
 	ImGui::PushID((int)this);
 		// Shader name
-		ImGui::TextColored(ImVec4(54/255.0f, 158 / 255.0f, 61 / 255.0f,1.0), m_name.c_str());
+		ImGui::TextColored(ImVec4(54/255.0f, 158 / 255.0f, 61 / 255.0f,1.0), m_name.c_str()); ImGui::SameLine();
 		// Add material
 		if (ImGui::Button("Add Material")) {
 			addMaterial();
@@ -58,15 +58,16 @@ void MaterialsForAGivenShader::ImGui_Menu(){
 		for (Material& mat : m_materials) {
 			ImGui::PushID((int)&mat);
 			// Sliders of selected material
-			if (Locate::materialsManager().SelectedMaterial().materialID == mat.getIndex() && Locate::materialsManager().SelectedMaterial().shaderID == m_shaderIndex) {
+			bool isSelected = Locate::materialsManager().SelectedMaterial().materialID == mat.getIndex() && Locate::materialsManager().SelectedMaterial().shaderID == m_shaderIndex;
+			if (isSelected) {
+				ImGui::Begin("Current material");
 				ImGui::InputText("", mat.getNamePointer());
 				mat.ImGui_Sliders();
+				ImGui::End();
 			}
 			// Name of other materials
-			else {
-				if (ImGui::Selectable(mat.getName().c_str(), false)) {
-					Locate::materialsManager().SetSelectedMaterial(m_shaderIndex, mat.getIndex());
-				}
+			if (ImGui::Selectable(mat.getName().c_str(), isSelected)) {
+				Locate::materialsManager().SetSelectedMaterial(m_shaderIndex, mat.getIndex());
 			}
 			//
 			ImGui::Separator();

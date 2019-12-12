@@ -45,7 +45,7 @@ App::App(SDL_Window* window)
 void App::onInit() {
 	// ----------------PLAYGROUND!------------------
 	Locate::materialsManager().addShader("res/shaders/testShader.vert", "res/shaders/testShader.frag");
-	Locate::materialsManager().addShader("res/shaders/standardLighting.vert", "res/shaders/testShader.frag");
+	Locate::materialsManager().addShader("res/shaders/standardLighting.vert", "res/shaders/standardLighting.frag");
 	Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 }
@@ -132,9 +132,9 @@ void App::handleSDLEvents() {
 
 
 		case SDL_KEYDOWN:
-			Locate::materialsManager().Shaders()[0].m_cubes.addCube(m_pos);
-			m_pos.x += 1;
 			if (!ImGui::GetIO().WantCaptureKeyboard) {
+				Locate::materialsManager().Shaders()[0].m_cubes.addCube(m_pos);
+				m_pos.x += 1;
 				if (Input::KeyIsDown(CTRL)) {
 					if (e.key.keysym.sym == 'z') {
 						m_history.moveBackward();
