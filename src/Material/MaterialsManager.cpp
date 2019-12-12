@@ -24,3 +24,12 @@ void MaterialsManager::updateMatrixUniform(const std::string& name, const glm::m
 		shader.m_shader.setUniformMat4f(name, mat);
 	}
 }
+
+MaterialLocation MaterialsManager::addCube(glm::vec3 pos) {
+	Shaders()[m_selectedMaterial.shaderID].m_cubes.addCube(m_selectedMaterial.materialID, pos);
+	return m_selectedMaterial;
+}
+
+void MaterialsManager::removeCube(int shaderID, glm::vec3 pos) {
+	Shaders()[shaderID].m_cubes.removeCube(pos);
+}

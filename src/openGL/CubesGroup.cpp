@@ -108,13 +108,16 @@ CubesGroup::CubesGroup(){
 	createOpenGLStuffs();
 }
 
-CubesGroup::CubesGroup(const CubesGroup& other) {
+CubesGroup::CubesGroup(const CubesGroup& other)
+	: m_positions(other.m_positions)
+{
 	createOpenGLStuffs();
 }
 
 void CubesGroup::createOpenGLStuffs(){
 	// Generate VAO
 	GLCall(glGenVertexArrays(1, &m_vaoID));
+	// Generate Positions' VBO
 	GLCall(glGenBuffers(1, &m_cubePositionsVBO_ID));
 	// VBO attrib pointer
 	GLCall(glBindVertexArray(m_vaoID));
@@ -135,11 +138,25 @@ CubesGroup::~CubesGroup(){
 }
 
 
-void CubesGroup::addCube(glm::vec3 position) {
+void CubesGroup::addCube(int materialID, glm::vec3 position) {
+	// TODO add materialID to a buffer
 	m_positions.push_back(position); 
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubePositionsVBO_ID));
 	GLCall(glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float) * m_positions.size(), &m_positions[0], GL_STATIC_DRAW));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+}
+
+void CubesGroup::removeCube(glm::vec3 position) {
+	int index = findCubeAt(position);
+	// TODO swap last element with m_positions[index], and then remove last element
+}
+
+int CubesGroup::findCubeAt(glm::vec3 position) {
+	for (int k = 0; k < m_positions.size(); ++k) {
+		if (glm::length(position - m_positions[k]) < 0.1f)
+			return k;
+	}
+	return -1;
 }
 
 void CubesGroup::draw() {
