@@ -44,8 +44,8 @@ App::App(SDL_Window* window)
 
 void App::onInit() {
 	// ----------------PLAYGROUND!------------------
-	Locate::materialsManager().addShader("res/shaders/testShader.vert", "res/shaders/testShader.frag");
-	Locate::materialsManager().addShader("res/shaders/standardLighting.vert", "res/shaders/standardLighting.frag");
+	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/testShader.frag");
+	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/standardLighting.frag");
 	Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 }

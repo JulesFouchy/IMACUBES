@@ -109,41 +109,56 @@ CubesGroup::CubesGroup(){
 }
 
 CubesGroup::CubesGroup(const CubesGroup& other)
-	: m_positions(other.m_positions)
+	: m_positions(other.m_positions), m_materialIndices(other.m_materialIndices)
 {
 	createOpenGLStuffs();
 }
 
 void CubesGroup::createOpenGLStuffs(){
-	// Generate VAO
+	// Generate buffers and VAO
+	GLCall(glGenBuffers(1, &m_cubesPositionsVBO_ID));
+	GLCall(glGenBuffers(1, &m_cubesMaterialIndicesVBO_ID));
 	GLCall(glGenVertexArrays(1, &m_vaoID));
-	// Generate Positions' VBO
-	GLCall(glGenBuffers(1, &m_cubePositionsVBO_ID));
 	// VBO attrib pointer
 	GLCall(glBindVertexArray(m_vaoID));
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshVBO_ID));
 			GLCall(glEnableVertexAttribArray(0));
 			GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
-		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubePositionsVBO_ID));
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubesPositionsVBO_ID));
 			GLCall(glEnableVertexAttribArray(1));
 			GLCall(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
 			GLCall(glVertexAttribDivisor(1, 1));
+		GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubesMaterialIndicesVBO_ID));
+			GLCall(glEnableVertexAttribArray(2));
+			GLCall(glVertexAttribIPointer(2, 1, GL_INT, sizeof(int), 0));
+			GLCall(glVertexAttribDivisor(2, 1));
 		GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	GLCall(glBindVertexArray(0));
 }
 
 CubesGroup::~CubesGroup(){
+	GLCall(glDeleteBuffers(1, &m_cubesPositionsVBO_ID));
+	GLCall(glDeleteBuffers(1, &m_cubesMaterialIndicesVBO_ID));
 	GLCall(glDeleteVertexArrays(1, &m_vaoID));
-	GLCall(glDeleteBuffers(1, &m_cubePositionsVBO_ID));
+}
+
+void CubesGroup::updateGPU() {
+	// Positions
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubesPositionsVBO_ID));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float) * m_positions.size(), &m_positions[0], GL_STATIC_DRAW));
+	// Material indices
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubesMaterialIndicesVBO_ID));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(int) * m_materialIndices.size(), &m_materialIndices[0], GL_STATIC_DRAW));
+	//
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
 
 
 void CubesGroup::addCube(int materialID, glm::vec3 position) {
-	// TODO add materialID to a buffer
-	m_positions.push_back(position); 
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubePositionsVBO_ID));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float) * m_positions.size(), &m_positions[0], GL_STATIC_DRAW));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	assert(materialID > -1);
+	m_positions.push_back(position);
+	m_materialIndices.push_back(materialID);
+	updateGPU();
 }
 
 void CubesGroup::removeCube(glm::vec3 position) {

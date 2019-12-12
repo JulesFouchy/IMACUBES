@@ -1,10 +1,8 @@
 #version 330 core 
  
 in vec3 vObjectPos; 
-in vec3 vWorldPos; 
- 
-// must be generated so that 2 is replaced by the actual nb of cubes in the group (actually it should be a varying read from a buffer) 
-//uniform int materialIndices[2]; 
+in vec3 vWorldPos;
+flat in int vMaterialIndex;
  
 struct MaterialParameters{ 
 	vec3 u_Offset; // default 0.740f, 0.179f, 0.179f
@@ -17,7 +15,7 @@ struct MaterialParameters{
 	vec3 u_StarColor; // default 0.355f, 0.670f, 1.000f
 }; 
  
-uniform MaterialParameters params[]; 
+uniform MaterialParameters params[512]; 
  
 // 
 // Description : Array and textureless GLSL 2D/3D/4D simplex  
@@ -123,12 +121,12 @@ float snoise(vec3 v)
                                 dot(p2,x2), dot(p3,x3) ) ); 
   } 
  
-void main() { 
-	vec3 uv = vWorldPos + params[0].u_Offset; 
+void main() {
+    int i = vMaterialIndex;
+	vec3 uv = vWorldPos + params[i].u_Offset; 
 	vec3 color; 
  
-	float t = pow(params[0].u_starIntensity * snoise(uv * params[0].u_noiseScale + params[0].u_distortOutScale*snoise(uv*params[0].u_distortInScale)), params[0].u_starIntensityPow); 
-	color = mix(params[0].u_SkyColor, params[0].u_StarColor, t); 
-	//color = vWorldPos + vec3(0.5); 
+	float t = pow(params[i].u_starIntensity * snoise(uv * params[i].u_noiseScale + params[i].u_distortOutScale*snoise(uv*params[i].u_distortInScale)), params[i].u_starIntensityPow); 
+	color = mix(params[i].u_SkyColor, params[i].u_StarColor, t);
 	gl_FragColor = vec4(color,1.0); 
 }
