@@ -133,8 +133,14 @@ void App::handleSDLEvents() {
 
 		case SDL_KEYDOWN:
 			if (!ImGui::GetIO().WantCaptureKeyboard) {
-				m_cubesMap.addCube(m_pos);
-				m_pos.x += 1;
+				if (Input::KeyIsDown(SHIFT)) {
+					m_pos.z -= 1;
+					//m_cubesMap.removeCube(m_pos);
+				}
+				else {
+					m_cubesMap.addCube(m_pos);
+					m_pos.z += 1;
+				}
 				if (Input::KeyIsDown(CTRL)) {
 					if (e.key.keysym.sym == 'z') {
 						m_history.moveBackward();

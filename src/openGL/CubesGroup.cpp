@@ -4,6 +4,8 @@
 
 #include "Debugging/Log.hpp"
 
+#include <algorithm>
+
 GLuint CubesGroup::m_cubeMeshVBO_ID;
 GLuint CubesGroup::m_cubeMeshIBO_ID;
 GLuint CubesGroup::m_cubeWireframeIBO_ID;
@@ -145,10 +147,10 @@ CubesGroup::~CubesGroup(){
 void CubesGroup::updateGPU() {
 	// Positions
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubesPositionsVBO_ID));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float) * m_positions.size(), &m_positions[0], GL_STATIC_DRAW));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float) * m_positions.size(), m_positions.size() > 0 ? &m_positions[0] : nullptr, GL_STATIC_DRAW));
 	// Material indices
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubesMaterialIndicesVBO_ID));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(int) * m_materialIndices.size(), &m_materialIndices[0], GL_STATIC_DRAW));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(int) * m_materialIndices.size(), m_materialIndices.size() > 0 ? &m_materialIndices[0] : nullptr, GL_STATIC_DRAW));
 	//
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
@@ -163,7 +165,12 @@ void CubesGroup::addCube(int materialID, glm::vec3 position) {
 
 void CubesGroup::removeCube(glm::vec3 position) {
 	int index = findCubeAt(position);
-	// TODO swap last element with m_positions[index], and then remove last element
+	int lastIndex = m_positions.size() - 1;
+	std::swap(m_positions[index], m_positions[lastIndex]);
+	std::swap(m_materialIndices[index], m_materialIndices[lastIndex]);
+	m_positions.pop_back();
+	m_materialIndices.pop_back();
+	updateGPU();
 }
 
 int CubesGroup::findCubeAt(glm::vec3 position) {
