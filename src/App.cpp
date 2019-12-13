@@ -153,28 +153,28 @@ void App::handleSDLEvents() {
 						Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 					}
 					if (e.key.keysym.sym == 'z') {
-						m_cubesMap.addCube(m_pos);
 						m_pos.y += 1;
+						m_cubesMap.addCube(m_pos);
 					}
 					else if (e.key.keysym.sym == 's') {
-						m_cubesMap.addCube(m_pos);
 						m_pos.y -= 1;
+						m_cubesMap.addCube(m_pos);
 					}
 					else if (e.key.keysym.sym == 'q') {
-						m_cubesMap.addCube(m_pos);
 						m_pos.x += 1;
+						m_cubesMap.addCube(m_pos);
 					}
 					else if (e.key.keysym.sym == 'd') {
-						m_cubesMap.addCube(m_pos);
 						m_pos.x -= 1;
+						m_cubesMap.addCube(m_pos);
 					}
 					else if (e.key.keysym.sym == 'w') {
-						m_cubesMap.addCube(m_pos);
 						m_pos.z += 1;
+						m_cubesMap.addCube(m_pos);
 					}
 					else if (e.key.keysym.sym == 'x') {
-						m_cubesMap.addCube(m_pos);
 						m_pos.z -= 1;
+						m_cubesMap.addCube(m_pos);
 					}
 				}
 			}
