@@ -45,7 +45,7 @@ private:
 	History m_history;
 	CubesMap m_cubesMap;
 	PopupWindow_SaveView m_saveViewWindow;
-	glm::vec3 m_pos = glm::vec3(0.);
+	glm::vec3 m_pos = glm::vec3(50.0f);
 	//
 	bool m_bShowImGUIDemoWindow;
 

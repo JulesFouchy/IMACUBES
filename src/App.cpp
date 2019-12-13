@@ -29,7 +29,7 @@ void App::ShutDown() {
 
 App::App(SDL_Window* window)
 	: m_window(window), m_running(true), m_bShowImGUIDemoWindow(false),
-	  m_cubesMap(10,10,10)
+	  m_cubesMap(100,100,100)
 {
 	Log::Initialize();
 	Input::Initialize();
