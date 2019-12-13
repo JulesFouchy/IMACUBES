@@ -153,27 +153,27 @@ void App::handleSDLEvents() {
 						Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 					}
 					if (e.key.keysym.sym == 'z') {
-						MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+						m_cubesMap.addCube(m_pos);
 						m_pos.y += 1;
 					}
 					else if (e.key.keysym.sym == 's') {
-						MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+						m_cubesMap.addCube(m_pos);
 						m_pos.y -= 1;
 					}
 					else if (e.key.keysym.sym == 'q') {
-						MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+						m_cubesMap.addCube(m_pos);
 						m_pos.x += 1;
 					}
 					else if (e.key.keysym.sym == 'd') {
-						MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+						m_cubesMap.addCube(m_pos);
 						m_pos.x -= 1;
 					}
 					else if (e.key.keysym.sym == 'w') {
-						MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+						m_cubesMap.addCube(m_pos);
 						m_pos.z += 1;
 					}
 					else if (e.key.keysym.sym == 'x') {
-						MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+						m_cubesMap.addCube(m_pos);
 						m_pos.z -= 1;
 					}
 				}
