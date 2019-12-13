@@ -1,4 +1,4 @@
-#include "MaterialManagerLocator.hpp"
+#include "Locate.hpp"
 
 #include "App.hpp"
 

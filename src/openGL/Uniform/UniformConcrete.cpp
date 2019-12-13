@@ -3,7 +3,7 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-#include "Locator/HistoryLocator.hpp"
+#include "Locator/Locate.hpp"
 
 /*------------------------------------
 ------------------INT-----------------

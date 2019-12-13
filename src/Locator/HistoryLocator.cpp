@@ -1,4 +1,4 @@
-#include "HistoryLocator.hpp"
+#include "Locate.hpp"
 
 #include "App.hpp"
 

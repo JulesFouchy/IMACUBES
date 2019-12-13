@@ -8,7 +8,7 @@
 
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
-#include "Locator/MaterialManagerLocator.hpp"
+#include "Locator/Locate.hpp"
 
 MaterialsForAGivenShader::MaterialsForAGivenShader(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex)
 	: m_shader(vertexFilepath, fragmentFilepath), m_cubes(), m_name(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(fragmentFilepath))), m_shaderIndex(shaderIndex)

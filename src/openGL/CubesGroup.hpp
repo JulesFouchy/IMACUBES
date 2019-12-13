@@ -15,6 +15,7 @@ public:
 
 	void addCube(int materialID, glm::vec3 position); 
 	void removeCube(glm::vec3 position);
+	int getCubeMaterialID(const glm::vec3& position);
 	void draw();
 	void drawWireframe();
 

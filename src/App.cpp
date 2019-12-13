@@ -8,7 +8,7 @@
 #include <imgui/imgui_impl_opengl3.h>
 #include "Helper/Display.hpp"
 
-#include "Locator/MaterialManagerLocator.hpp"
+#include "Locator/Locate.hpp"
 
 #include <glm/glm.hpp>
 
@@ -152,6 +152,7 @@ void App::handleSDLEvents() {
 						Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 						Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 					}
+					Locate::history().beginUndoGroup();
 					if (e.key.keysym.sym == 'z') {
 						m_pos.y += 1;
 						m_cubesMap.addCube(m_pos);
@@ -176,6 +177,7 @@ void App::handleSDLEvents() {
 						m_pos.z -= 1;
 						m_cubesMap.addCube(m_pos);
 					}
+					Locate::history().endUndoGroup();
 				}
 			}
 			break;

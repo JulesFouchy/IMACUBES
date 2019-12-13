@@ -12,14 +12,14 @@ public:
 	CubesMap(size_t width, size_t height, size_t depth);
 	~CubesMap() = default;
 
-	void addCube(glm::ivec3 pos);
-	void removeCube(glm::ivec3 pos);
+	void addCube(glm::ivec3 pos, bool bPushActionInHistory = true); // Dont forget to call history.beginUndoGroup() if you want to push the action in history !
+	void removeCube(glm::ivec3 pos, bool bPushActionInHistory = true);
 
 private:
 	size_t index1Dfrom3D(glm::ivec3 id3D) const;
 	bool isIDvalid(glm::ivec3 id3D) const;
 	inline const MaterialLocation& getMaterialLocationOf(glm::ivec3 id3D) const { return m_cubesLocations[index1Dfrom3D(id3D)]; }
-	inline void setMaterialLocation(glm::ivec3 id3D, const MaterialLocation& matLoc) { m_cubesLocations[index1Dfrom3D(id3D)] = matLoc; }
+	void setMaterialLocation(glm::ivec3 id3D, const MaterialLocation& matLoc, bool bPushActionInHistory = true);
 	inline MaterialsManager& getMaterialsManager() { return m_materialsManager;	}
 
 private:

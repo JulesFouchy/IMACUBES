@@ -173,6 +173,11 @@ void CubesGroup::removeCube(glm::vec3 position) {
 	updateGPU();
 }
 
+int CubesGroup::getCubeMaterialID(const glm::vec3& position) {
+	int index = findCubeAt(position);
+	return m_materialIndices[index];
+}
+
 int CubesGroup::findCubeAt(glm::vec3 position) {
 	for (int k = 0; k < m_positions.size(); ++k) {
 		if (glm::length(position - m_positions[k]) < 0.1f)
