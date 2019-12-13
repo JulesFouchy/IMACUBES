@@ -132,15 +132,9 @@ void App::handleSDLEvents() {
 
 
 		case SDL_KEYDOWN:
-			if (!ImGui::GetIO().WantCaptureKeyboard) {
-				if (Input::KeyIsDown(SHIFT)) {
-					m_pos.z -= 1;
-					//m_cubesMap.removeCube(m_pos);
-				}
-				else {
-					m_cubesMap.addCube(m_pos);
-					m_pos.z += 1;
-				}
+		
+		 if (!ImGui::GetIO().WantCaptureKeyboard) {
+				
 				if (Input::KeyIsDown(CTRL)) {
 					if (e.key.keysym.sym == 'z') {
 						m_history.moveBackward();
@@ -157,6 +151,30 @@ void App::handleSDLEvents() {
 						Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterial().shaderID].reloadShader();
 						Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 						Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+					}
+					if (e.key.keysym.sym == 'z') {
+						MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+						m_pos.y += 1;
+					}
+					else if (e.key.keysym.sym == 's') {
+						MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+						m_pos.y -= 1;
+					}
+					else if (e.key.keysym.sym == 'q') {
+						MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+						m_pos.x += 1;
+					}
+					else if (e.key.keysym.sym == 'd') {
+						MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+						m_pos.x -= 1;
+					}
+					else if (e.key.keysym.sym == 'w') {
+						MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+						m_pos.z += 1;
+					}
+					else if (e.key.keysym.sym == 'x') {
+						MaterialsManager::Shaders()[0].m_cubes.addCube(m_pos);
+						m_pos.z -= 1;
 					}
 				}
 			}
