@@ -37,7 +37,7 @@ void CubesMap::setMaterialLocation(glm::ivec3 id3D, const MaterialLocation& matL
 	if (bPushActionInHistory) {
 		MaterialLocation prevLoc = m_cubesLocations[index1Dfrom3D(id3D)];
 		MaterialLocation newLoc = matLoc;
-		Locate::history().addAction(Action(
+		Locate::history(HistoryType::Cubes).addAction(Action(
 			// DO action
 			[this, newLoc, id3D]()
 		{

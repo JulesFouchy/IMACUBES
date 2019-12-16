@@ -7,7 +7,7 @@
 #include "OpenGL/Shader.hpp"
 
 #include "Camera/Camera.hpp"
-#include "History/History.hpp"
+#include "History/HistoriesManager.hpp"
 #include "CubesMap/CubesMap.hpp"
 #include "GUI/SaveView.hpp"
 
@@ -42,7 +42,7 @@ private:
 private:
 	// Members
 	Camera m_camera;
-	History m_history;
+	HistoriesManager m_histories;
 	CubesMap m_cubesMap;
 	PopupWindow_SaveView m_saveViewWindow;
 	glm::vec3 m_pos = glm::vec3(50.0f);

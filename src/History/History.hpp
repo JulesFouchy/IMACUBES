@@ -1,11 +1,13 @@
 #pragma once
 
-#include <vector>
 #include "Action.hpp"
+
+#include <vector>
+#include <string>
 
 class History {
 public:
-	History();
+	History(const std::string& name = "History");
 	~History() = default;
 
 	void beginUndoGroup();
@@ -23,6 +25,8 @@ private:
 	std::vector<Action> m_tmpActionBuffer;
 	int m_index;
 	int m_indexOfCumulfNbOfActions;
+
+	std::string m_name;
 /*
 	We are always in the state m_actions[m_index] (m_index == -1 means that we are in the initial state, no action ever performed)
 */

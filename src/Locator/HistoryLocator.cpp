@@ -2,6 +2,6 @@
 
 #include "App.hpp"
 
-History& Locate::history() {
-	return App::Get().m_history;
+History& Locate::history(HistoryType type) {
+	return App::Get().m_histories.getHistory(type);
 }

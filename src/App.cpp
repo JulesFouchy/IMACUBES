@@ -137,10 +137,10 @@ void App::handleSDLEvents() {
 				
 				if (Input::KeyIsDown(CTRL)) {
 					if (e.key.keysym.sym == 'z') {
-						m_history.moveBackward();
+						m_histories.getActiveHistory().moveBackward();
 					}
 					else if (e.key.keysym.sym == 'y') {
-						m_history.moveForward();
+						m_histories.getActiveHistory().moveForward();
 					}
 					else if (e.key.keysym.sym == 's') {
 						m_saveViewWindow.Open();
@@ -152,7 +152,7 @@ void App::handleSDLEvents() {
 						Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 						Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 					}
-					Locate::history().beginUndoGroup();
+					Locate::history(HistoryType::Cubes).beginUndoGroup();
 					if (e.key.keysym.sym == 'z') {
 						m_pos.y += 1;
 						m_cubesMap.addCube(m_pos);
@@ -177,7 +177,7 @@ void App::handleSDLEvents() {
 						m_pos.z -= 1;
 						m_cubesMap.addCube(m_pos);
 					}
-					Locate::history().endUndoGroup();
+					Locate::history(HistoryType::Cubes).endUndoGroup();
 				}
 			}
 			break;

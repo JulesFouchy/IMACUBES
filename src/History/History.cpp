@@ -2,8 +2,8 @@
 
 #include "Debugging/Log.hpp"
 
-History::History()
-	: m_index(-1), m_indexOfCumulfNbOfActions(-1)
+History::History(const std::string& name)
+	: m_index(-1), m_indexOfCumulfNbOfActions(-1), m_name(name)
 {
 }
 
