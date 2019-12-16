@@ -16,6 +16,8 @@ public:
 
 	void moveBackward();
 	void moveForward();
+
+	inline const std::string& getName() const { return m_name; }
 private:
 	unsigned int nbOfActionsBetweenThisAndPreviousUndoGroup(int index);
 

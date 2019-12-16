@@ -73,6 +73,7 @@ void App::mainLoopIteration() {
 	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 	drawScene();
 	Locate::materialsManager().ImGui_Menu();
+	m_histories.ImGuiWindow();
 	m_saveViewWindow.Show_IfOpen();
 
 	// ---------------------------------------------
