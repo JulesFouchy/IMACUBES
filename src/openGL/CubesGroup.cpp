@@ -158,6 +158,7 @@ void CubesGroup::updateGPU() {
 
 void CubesGroup::addCube(int materialID, glm::vec3 position) {
 	assert(materialID > -1);
+	removeCube(position);
 	m_positions.push_back(position);
 	m_materialIndices.push_back(materialID);
 	updateGPU();
