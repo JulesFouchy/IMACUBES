@@ -165,12 +165,14 @@ void CubesGroup::addCube(int materialID, glm::vec3 position) {
 
 void CubesGroup::removeCube(glm::vec3 position) {
 	int index = findCubeAt(position);
-	int lastIndex = m_positions.size() - 1;
-	std::swap(m_positions[index], m_positions[lastIndex]);
-	std::swap(m_materialIndices[index], m_materialIndices[lastIndex]);
-	m_positions.pop_back();
-	m_materialIndices.pop_back();
-	updateGPU();
+	if (index != -1) {
+		int lastIndex = m_positions.size() - 1;
+		std::swap(m_positions[index], m_positions[lastIndex]);
+		m_positions.pop_back();
+		std::swap(m_materialIndices[index], m_materialIndices[lastIndex]);
+		m_materialIndices.pop_back();
+		updateGPU();
+	}
 }
 
 int CubesGroup::getCubeMaterialID(const glm::vec3& position) {
