@@ -33,6 +33,7 @@ private:
 
 public:
 	void drawScene();
+	void placeCursorJustBeforeHoveredCube();
 	void onInit();
 	void mainLoopIteration();
 

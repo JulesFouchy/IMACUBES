@@ -57,6 +57,22 @@ void App::drawScene() {
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	Locate::materialsManager().draw();
 }
+void App::placeCursorJustBeforeHoveredCube(){
+	Ray ray = m_camera.getRayGoingThroughMousePos();
+	glm::ivec3 iPos = CubeMaths::CubeContaining(ray.origin);
+	glm::ivec3 prevIpos = iPos;
+	while (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos)) {
+		float t = CubeMaths::IntersectionRayCube_WROIC(ray, iPos);
+		ray.origin += (t + 0.01f) * ray.direction;
+		iPos = CubeMaths::CubeContaining(ray.origin);
+		if (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos))
+			prevIpos = iPos;
+	}
+	if (m_cubesMap.isIDvalid(prevIpos)) {
+		m_cursor.setPosition(prevIpos);
+	}
+}
+
 
 void App::mainLoopIteration() {
 	// Feed inputs
@@ -80,21 +96,7 @@ void App::mainLoopIteration() {
 	m_saveViewWindow.Show_IfOpen();
 
 	
-	Ray ray = m_camera.getRayGoingThroughMousePos();
-	glm::ivec3 iPos = CubeMaths::CubeContaining(ray.origin);
-	glm::ivec3 prevIpos = iPos;
-	while (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos)) {
-		float t = CubeMaths::IntersectionRayCube_WROIC(ray, iPos);
-		ray.origin += (t + 0.01f) * ray.direction;
-		iPos = CubeMaths::CubeContaining(ray.origin);
-		if(m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos))
-			prevIpos = iPos;
-	}
-	if (m_cubesMap.isIDvalid(prevIpos)) {
-		CubesGroup cuuuubes;
-		cuuuubes.addCube(0, prevIpos);
-		cuuuubes.drawWireframe();
-	}
+
 
 	//cuuuuubes.draw();
 	//spdlog::warn(t);
@@ -138,26 +140,17 @@ void App::handleSDLEvents() {
 			break;
 
 		case SDL_MOUSEMOTION:
+			if (!ImGui::GetIO().WantCaptureMouse)
+				placeCursorJustBeforeHoveredCube();
 			break;
 
 		case SDL_MOUSEBUTTONDOWN:
 			if (!ImGui::GetIO().WantCaptureMouse) {
 				if (e.button.button == SDL_BUTTON_MIDDLE)
 					m_camera.onWheelDown();
-				else {
-					Ray ray = m_camera.getRayGoingThroughMousePos();
-					glm::ivec3 iPos = CubeMaths::CubeContaining(ray.origin);
-					glm::ivec3 prevIpos = iPos;
-					while (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos)) {
-						float t = CubeMaths::IntersectionRayCube_WROIC(ray, iPos);
-						ray.origin += (t + 0.01f) * ray.direction;
-						iPos = CubeMaths::CubeContaining(ray.origin);
-						if (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos))
-							prevIpos = iPos;
-					}
-					if (m_cubesMap.isIDvalid(prevIpos)) {
-						m_cubesMap.addCube(prevIpos);
-					}
+				else if (e.button.button == SDL_BUTTON_LEFT) {
+					m_cubesMap.addCube(m_cursor.getPosition());
+					placeCursorJustBeforeHoveredCube();
 				}
 			}
 			break;
