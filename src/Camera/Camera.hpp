@@ -30,7 +30,14 @@ public:
 	inline void onWheelUp()   { m_controlState->onWheelUp();   }
 	inline void onWheelScroll(float dl) { m_controlState->onWheelScroll(dl); }
 
+	inline glm::vec3 getLocalX() { return glm::normalize( getTransformMatrix() * glm::vec4(1.0f, 0.0f, 0.0f, 0.0f) ); }
+	inline glm::vec3 getLocalY() { return glm::normalize( getTransformMatrix() * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f) ); }
+	inline glm::vec3 getLocalZ() { return glm::normalize( getTransformMatrix() * glm::vec4(0.0f, 0.0f, 1.0f, 0.0f) ); }
+	inline glm::vec3 getPosition() { return getTransformMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); }
+
 private:
+	inline const glm::mat4& getTransformMatrix() { if (m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_transformMatrix; }
+
 	void computeTransformMatrixAndItsInverse();
 
 	template <typename T>

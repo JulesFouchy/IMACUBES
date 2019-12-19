@@ -15,7 +15,9 @@ public:
 	void addCube(glm::ivec3 pos, bool bPushActionInHistory = true); // Dont forget to call history.beginUndoGroup() if you want to push the action in history !
 	void removeCube(glm::ivec3 pos, bool bPushActionInHistory = true);
 
-private:
+	inline bool cubeExists(glm::ivec3 pos) { return getMaterialLocationOf(pos).isValid(); }
+
+public: //tmp, should be private
 	size_t index1Dfrom3D(glm::ivec3 id3D) const;
 	bool isIDvalid(glm::ivec3 id3D) const;
 	inline const MaterialLocation& getMaterialLocationOf(glm::ivec3 id3D) const { return m_cubesLocations[index1Dfrom3D(id3D)]; }

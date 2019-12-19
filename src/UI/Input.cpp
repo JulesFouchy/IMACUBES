@@ -1,5 +1,7 @@
 #include "Input.hpp"
 
+#include "Helper/Display.hpp"
+
 #include "Debugging/Log.hpp"
 
 float Input::m_horizontalDPI;
@@ -10,9 +12,13 @@ void Input::Initialize() {
 }
 
 glm::vec2 Input::MousePositionInInches() {
+	return MousePositionInPixels() / glm::vec2(m_horizontalDPI, m_verticalDPI);
+}
+
+glm::vec2 Input::MousePositionInPixels() {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
-	return glm::vec2(x/ m_horizontalDPI, y/ m_verticalDPI);
+	return glm::vec2(x, Display::GetHeight() - y);
 }
 
 bool Input::KeyIsDown(Key key) {

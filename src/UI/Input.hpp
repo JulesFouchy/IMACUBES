@@ -12,6 +12,7 @@ public:
 	~Input() = delete;
 	static void Initialize();
 
+	static glm::vec2 MousePositionInPixels();
 	static glm::vec2 MousePositionInInches();
 	static bool KeyIsDown(Key key);
 

@@ -16,6 +16,8 @@
 
 #include "Material/MaterialsManager.hpp"
 
+#include "CubeMaths/CubeMaths.hpp"
+
 App* App::m_instance = nullptr;
 
 void App::Initialize(SDL_Window* window) {
@@ -45,7 +47,7 @@ App::App(SDL_Window* window)
 void App::onInit() {
 	// ----------------PLAYGROUND!------------------
 	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/testShader.frag");
-	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/standardLighting.frag");
+	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/FlatColorPlusBorder.frag");
 	Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 }
@@ -75,6 +77,28 @@ void App::mainLoopIteration() {
 	Locate::materialsManager().ImGui_Menu();
 	m_histories.ImGuiWindow();
 	m_saveViewWindow.Show_IfOpen();
+
+	
+	glm::vec3 pos = m_camera.getPosition();
+	glm::vec3 mousePos = glm::unProject(glm::vec3(Input::MousePositionInPixels(), 0.), m_camera.getViewMatrix(), m_camera.getProjMatrix(), glm::vec4(0.0f, 0.0f, Display::GetWidth(), Display::GetHeight()));
+	glm::vec3 dir = glm::normalize(mousePos - pos);
+	glm::ivec3 iPos = CubeMaths::CubeContaining(pos);
+	glm::ivec3 prevIpos = iPos;
+	while (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos)) {
+		float t = CubeMaths::IntersectionRayCube_WROIC(pos, dir, iPos);
+		pos += (t + 0.01f) * dir;
+		iPos = CubeMaths::CubeContaining(pos);
+		if(m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos))
+			prevIpos = iPos;
+	}
+	if (m_cubesMap.isIDvalid(prevIpos)) {
+		CubesGroup cuuuubes;
+		cuuuubes.addCube(0, prevIpos);
+		cuuuubes.drawWireframe();
+	}
+
+	//cuuuuubes.draw();
+	//spdlog::warn(t);
 
 	// ---------------------------------------------
 
@@ -121,6 +145,23 @@ void App::handleSDLEvents() {
 			if (!ImGui::GetIO().WantCaptureMouse) {
 				if (e.button.button == SDL_BUTTON_MIDDLE)
 					m_camera.onWheelDown();
+				else {
+					glm::vec3 pos = m_camera.getPosition();
+					glm::vec3 mousePos = glm::unProject(glm::vec3(Input::MousePositionInPixels(), 0.), m_camera.getViewMatrix(), m_camera.getProjMatrix(), glm::vec4(0.0f, 0.0f, Display::GetWidth(), Display::GetHeight()));
+					glm::vec3 dir = glm::normalize(mousePos - pos);
+					glm::ivec3 iPos = CubeMaths::CubeContaining(pos);
+					glm::ivec3 prevIpos = iPos;
+					while (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos)) {
+						float t = CubeMaths::IntersectionRayCube_WROIC(pos, dir, iPos);
+						pos += (t + 0.01f) * dir;
+						iPos = CubeMaths::CubeContaining(pos);
+						if (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos))
+							prevIpos = iPos;
+					}
+					if (m_cubesMap.isIDvalid(prevIpos)) {
+						m_cubesMap.addCube(prevIpos);
+					}
+				}
 			}
 			break;
 
