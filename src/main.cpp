@@ -17,6 +17,9 @@ int main(int argc, char *argv[]) {
 	#ifdef _WIN32 // Check memory leaks
 		_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 	#endif
+		// ---------- Initialize spdlog ---------------
+
+		Log::Initialize();
 
 		// ------- Initialize SDL and OpenGL ------------
 
@@ -80,16 +83,20 @@ int main(int argc, char *argv[]) {
 
 		// ------ Initialize our own classes
 
+		glEnable(GL_DEPTH_TEST);
+		Input::Initialize();
+		Display::UpdateWindowSize(window);
 		CubesGroup::Initialize();
 
-		// Main loop
+		// ------ Actual App
 
 		App::Initialize(window);
 		App::Get().onInit();
 		while (App::Get().isRunning()) {
-			App::Get().mainLoopIteration();
+			App::Get()._loopIteration();
 		}
 
+		// ------ Shutdown
 		CubesGroup::ShutDown();
 		App::ShutDown();
 		ImGui_ImplOpenGL3_Shutdown();

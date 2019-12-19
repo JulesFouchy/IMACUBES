@@ -1,48 +1,28 @@
 #include "App.hpp"
 
-#include <Debugging/Log.hpp>
-#include "Debugging/ImGuiLog.hpp"
-#include "Debugging/gl-exception.h"
 #include <imgui.h>
 #include <imgui/imgui_impl_sdl.h>
 #include <imgui/imgui_impl_opengl3.h>
-#include "Helper/Display.hpp"
-
-#include "Locator/Locate.hpp"
-
 #include <glm/glm.hpp>
 
+#include <Debugging/Log.hpp>
+#include "Debugging/ImGuiLog.hpp"
+#include "Debugging/gl-exception.h"
+
+#include "Helper/Display.hpp"
 #include "UI/Input.hpp"
-
+#include "Locator/Locate.hpp"
 #include "Material/MaterialsManager.hpp"
-
 #include "CubeMaths/CubeMaths.hpp"
 
-App* App::m_instance = nullptr;
-
-void App::Initialize(SDL_Window* window) {
-	assert(!m_instance);
-	m_instance = new App(window);
-}
-
-void App::ShutDown() {
-	delete m_instance;
-}
 
 App::App(SDL_Window* window)
-	: m_window(window), m_running(true), m_bShowImGUIDemoWindow(false),
-	m_cubesMap(100, 100, 100), m_cursor(50, 50, 50)
+	: m_cubesMap(100, 100, 100), m_cursor(50, 50, 50), 
+	  m_bShowImGUIDemoWindow(false),
+	  m_window(window), m_running(true)
 {
-	Log::Initialize();
-	Input::Initialize();
-	Display::UpdateWindowSize(m_window);
-
-	GLCall(glEnable(GL_DEPTH_TEST));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-////////////////////////////// PUBLIC METHODS ///////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
 
 void App::onInit() {
 	// ----------------PLAYGROUND!------------------
@@ -52,11 +32,30 @@ void App::onInit() {
 	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 }
 
+
+void App::onLoopIteration() {
+	// ImGui windows
+	ImGUI_DebugWindow();
+	if (m_bShowImGUIDemoWindow) // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
+		ImGui::ShowDemoWindow(&m_bShowImGUIDemoWindow);
+
+	// ----------------PLAYGROUND!------------------
+	m_camera.update(1.0f / 60.0f);
+	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+	drawScene();
+	m_cursor.draw();
+	Locate::materialsManager().ImGui_Menu();
+	m_histories.ImGuiWindow();
+	m_saveViewWindow.Show_IfOpen();
+}
+
+
 void App::drawScene() {
 	GLCall(glClearColor(0.4f, 0.6f, 0.95f, 1.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	Locate::materialsManager().draw();
 }
+
 void App::placeCursorJustBeforeHoveredCube(){
 	Ray ray = m_camera.getRayGoingThroughMousePos();
 	glm::ivec3 iPos = CubeMaths::CubeContaining(ray.origin);
@@ -73,59 +72,15 @@ void App::placeCursorJustBeforeHoveredCube(){
 	}
 }
 
-
-void App::mainLoopIteration() {
-	// Feed inputs
-	handleSDLEvents();
-	ImGui_ImplOpenGL3_NewFrame();
-	ImGui_ImplSDL2_NewFrame(m_window);
-	ImGui::NewFrame();
-
-	// ImGui windows
-	ImGUI_DebugWindow();
-	if (m_bShowImGUIDemoWindow) // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
-		ImGui::ShowDemoWindow(&m_bShowImGUIDemoWindow);
-
-	// ----------------PLAYGROUND!------------------
-	m_camera.update(1.0f / 60.0f);
-	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
-	drawScene();
-	m_cursor.draw();
-	Locate::materialsManager().ImGui_Menu();
-	m_histories.ImGuiWindow();
-	m_saveViewWindow.Show_IfOpen();
-
-	
-
-
-	//cuuuuubes.draw();
-	//spdlog::warn(t);
-
-	// ---------------------------------------------
-
-	// Render ImGui
-	ImGui::Render();
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-	// Reset input deltas
-	SDL_GL_SwapWindow(m_window);
-}
-
-/////////////////////////////////////////////////////////////////////////////
-///////////////////////////// PRIVATE METHODS ///////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-
-
 void App::ImGUI_DebugWindow() {
 	ImGui::Begin("Debug");
-
-	ImGui::Checkbox("Show Demo Window", &m_bShowImGUIDemoWindow);
-	ImGui::Text("Application average %.1f FPS", ImGui::GetIO().Framerate);
-
+		ImGui::Checkbox("Show Demo Window", &m_bShowImGUIDemoWindow);
+		ImGui::Text("Application average %.1f FPS", ImGui::GetIO().Framerate);
 	ImGui::End();
 }
 
-void App::handleSDLEvents() {
+
+void App::onEvent() {
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
 		ImGui_ImplSDL2_ProcessEvent(&e);
@@ -135,7 +90,7 @@ void App::handleSDLEvents() {
 			break;
 
 		case SDL_MOUSEWHEEL:
-			if( !ImGui::GetIO().WantCaptureMouse )
+			if (!ImGui::GetIO().WantCaptureMouse)
 				m_camera.onWheelScroll(e.wheel.y);
 			break;
 
@@ -164,9 +119,9 @@ void App::handleSDLEvents() {
 
 
 		case SDL_KEYDOWN:
-		
-		 if (!ImGui::GetIO().WantCaptureKeyboard) {
-				
+
+			if (!ImGui::GetIO().WantCaptureKeyboard) {
+
 				if (Input::KeyIsDown(CTRL)) {
 					if (e.key.keysym.sym == 'z') {
 						m_histories.getActiveHistory().moveBackward();
@@ -228,16 +183,38 @@ void App::handleSDLEvents() {
 			break;
 		}
 	}
-
-	if (ImGui::IsWindowHovered(ImGuiHoveredFlags_AnyWindow)) {
-
-	}
 }
 
 /////////////////////////////////////////////////////////////////////////////
-//////////////////////////// GETTERS & SETTERS //////////////////////////////
+///////////////////////////// INTERNAL CODE /////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////
 
-SDL_Window* App::getWindow() const { return m_window; }
-bool App::isRunning() const { return m_running; }
-void App::exit() { m_running = false; }
+App* App::m_instance = nullptr;
+
+void App::Initialize(SDL_Window* window) {
+	assert(!m_instance);
+	m_instance = new App(window);
+}
+
+void App::ShutDown() {
+	delete m_instance;
+}
+
+void App::_loopIteration() {
+	// Events
+	onEvent();
+	// Start ImGui frame
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame(m_window);
+	ImGui::NewFrame();
+
+	// Actual application code
+	onLoopIteration();
+
+	// Render ImGui
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+	// End frame
+	SDL_GL_SwapWindow(m_window);
+}
