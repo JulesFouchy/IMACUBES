@@ -33,6 +33,7 @@ private:
 	CubesMap m_cubesMap;
 	Cursor m_cursor;
 	PopupWindow_SaveView m_saveViewWindow;
+	Shader m_cursorShader;
 	bool m_bShowImGUIDemoWindow;
 
 

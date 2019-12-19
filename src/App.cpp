@@ -17,7 +17,7 @@
 
 
 App::App(SDL_Window* window)
-	: m_cubesMap(100, 100, 100), m_cursor(50, 50, 50), 
+	: m_cubesMap(100, 100, 100), m_cursor(50, 50, 50), m_cursorShader("res/shaders/cursor.vert", "res/shaders/cursor.frag"),
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
 {
@@ -30,6 +30,9 @@ void App::onInit() {
 	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/FlatColorPlusBorder.frag");
 	Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+	m_cursorShader.bind();
+	m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
+	m_cursorShader.setUniformMat4f("u_viewMat", m_camera.getViewMatrix());
 }
 
 
@@ -42,7 +45,10 @@ void App::onLoopIteration() {
 	// ----------------PLAYGROUND!------------------
 	m_camera.update(1.0f / 60.0f);
 	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+	m_cursorShader.bind();
+	m_cursorShader.setUniformMat4f("u_viewMat", m_camera.getViewMatrix());
 	drawScene();
+	m_cursorShader.bind();
 	m_cursor.draw();
 	Locate::materialsManager().ImGui_Menu();
 	m_histories.ImGuiWindow();
@@ -176,6 +182,8 @@ void App::onEvent() {
 				Display::UpdateWindowSize(m_window);
 				// Update camera's ratio
 				Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+				m_cursorShader.bind();
+				m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
 				break;
 			}
 
