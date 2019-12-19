@@ -26,13 +26,23 @@ App::App(SDL_Window* window)
 
 void App::onInit() {
 	// ----------------PLAYGROUND!------------------
-	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/testShader.frag");
 	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/FlatColorPlusBorder.frag");
+	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/testShader.frag");
 	Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 	m_cursorShader.bind();
 	m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
 	m_cursorShader.setUniformMat4f("u_viewMat", m_camera.getViewMatrix());
+
+	Locate::history(HistoryType::Cubes).beginUndoGroup();
+	for (int x = 40; x < 60; ++x) {
+		for (int z = 40; z < 60; ++z) {
+			for (int y = 49; y < 50; ++y) {
+				m_cubesMap.addCube(glm::ivec3(x, y, z));
+			}
+		}
+	}
+	Locate::history(HistoryType::Cubes).endUndoGroup();
 }
 
 
