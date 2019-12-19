@@ -104,7 +104,9 @@ void App::onEvent() {
 				if (e.button.button == SDL_BUTTON_MIDDLE)
 					m_camera.onWheelDown();
 				else if (e.button.button == SDL_BUTTON_LEFT) {
-					m_cubesMap.addCube(m_cursor.getPosition());
+					Locate::history(HistoryType::Cubes).beginUndoGroup();
+						m_cubesMap.addCube(m_cursor.getPosition());
+					Locate::history(HistoryType::Cubes).endUndoGroup();
 					placeCursorJustBeforeHoveredCube();
 				}
 			}
@@ -139,7 +141,6 @@ void App::onEvent() {
 						Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 						Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 					}
-					Locate::history(HistoryType::Cubes).beginUndoGroup();
 					if (e.key.keysym.sym == 'z') {
 						m_cursor.setPosition(glm::ivec3(0, 1, 0) + m_cursor.getPosition());
 					}
@@ -158,7 +159,6 @@ void App::onEvent() {
 					else if (e.key.keysym.sym == 'x') {
 						m_cursor.setPosition(glm::ivec3(0, 0, -1) + m_cursor.getPosition());
 					}
-					Locate::history(HistoryType::Cubes).endUndoGroup();
 				}
 			}
 			break;
