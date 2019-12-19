@@ -21,3 +21,10 @@ void Camera::computeTransformMatrixAndItsInverse() {
 
 	m_bMustRecomputeTransformMatrix = false;
 }
+
+Ray Camera::getRayGoingThroughMousePos() {
+	glm::vec3 pos = getPosition();
+	glm::vec3 mousePos = glm::unProject(glm::vec3(Input::MousePositionInPixels(), 0.0f), getViewMatrix(), getProjMatrix(), glm::vec4(0.0f, 0.0f, Display::GetWidth(), Display::GetHeight()));
+	glm::vec3 dir = glm::normalize(mousePos - pos);
+	return Ray(pos, dir);
+}

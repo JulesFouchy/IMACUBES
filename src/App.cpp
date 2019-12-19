@@ -31,7 +31,7 @@ void App::ShutDown() {
 
 App::App(SDL_Window* window)
 	: m_window(window), m_running(true), m_bShowImGUIDemoWindow(false),
-	  m_cubesMap(100,100,100)
+	m_cubesMap(100, 100, 100), m_cursor(50, 50, 50)
 {
 	Log::Initialize();
 	Input::Initialize();
@@ -74,20 +74,19 @@ void App::mainLoopIteration() {
 	m_camera.update(1.0f / 60.0f);
 	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
 	drawScene();
+	m_cursor.draw();
 	Locate::materialsManager().ImGui_Menu();
 	m_histories.ImGuiWindow();
 	m_saveViewWindow.Show_IfOpen();
 
 	
-	glm::vec3 pos = m_camera.getPosition();
-	glm::vec3 mousePos = glm::unProject(glm::vec3(Input::MousePositionInPixels(), 0.), m_camera.getViewMatrix(), m_camera.getProjMatrix(), glm::vec4(0.0f, 0.0f, Display::GetWidth(), Display::GetHeight()));
-	glm::vec3 dir = glm::normalize(mousePos - pos);
-	glm::ivec3 iPos = CubeMaths::CubeContaining(pos);
+	Ray ray = m_camera.getRayGoingThroughMousePos();
+	glm::ivec3 iPos = CubeMaths::CubeContaining(ray.origin);
 	glm::ivec3 prevIpos = iPos;
 	while (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos)) {
-		float t = CubeMaths::IntersectionRayCube_WROIC(pos, dir, iPos);
-		pos += (t + 0.01f) * dir;
-		iPos = CubeMaths::CubeContaining(pos);
+		float t = CubeMaths::IntersectionRayCube_WROIC(ray, iPos);
+		ray.origin += (t + 0.01f) * ray.direction;
+		iPos = CubeMaths::CubeContaining(ray.origin);
 		if(m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos))
 			prevIpos = iPos;
 	}
@@ -146,15 +145,13 @@ void App::handleSDLEvents() {
 				if (e.button.button == SDL_BUTTON_MIDDLE)
 					m_camera.onWheelDown();
 				else {
-					glm::vec3 pos = m_camera.getPosition();
-					glm::vec3 mousePos = glm::unProject(glm::vec3(Input::MousePositionInPixels(), 0.), m_camera.getViewMatrix(), m_camera.getProjMatrix(), glm::vec4(0.0f, 0.0f, Display::GetWidth(), Display::GetHeight()));
-					glm::vec3 dir = glm::normalize(mousePos - pos);
-					glm::ivec3 iPos = CubeMaths::CubeContaining(pos);
+					Ray ray = m_camera.getRayGoingThroughMousePos();
+					glm::ivec3 iPos = CubeMaths::CubeContaining(ray.origin);
 					glm::ivec3 prevIpos = iPos;
 					while (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos)) {
-						float t = CubeMaths::IntersectionRayCube_WROIC(pos, dir, iPos);
-						pos += (t + 0.01f) * dir;
-						iPos = CubeMaths::CubeContaining(pos);
+						float t = CubeMaths::IntersectionRayCube_WROIC(ray, iPos);
+						ray.origin += (t + 0.01f) * ray.direction;
+						iPos = CubeMaths::CubeContaining(ray.origin);
 						if (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos))
 							prevIpos = iPos;
 					}
@@ -196,28 +193,22 @@ void App::handleSDLEvents() {
 					}
 					Locate::history(HistoryType::Cubes).beginUndoGroup();
 					if (e.key.keysym.sym == 'z') {
-						m_pos.y += 1;
-						m_cubesMap.addCube(m_pos);
+						m_cursor.setPosition(glm::ivec3(0, 1, 0) + m_cursor.getPosition());
 					}
 					else if (e.key.keysym.sym == 's') {
-						m_pos.y -= 1;
-						m_cubesMap.addCube(m_pos);
+						m_cursor.setPosition(glm::ivec3(0, -1, 0) + m_cursor.getPosition());
 					}
 					else if (e.key.keysym.sym == 'q') {
-						m_pos.x += 1;
-						m_cubesMap.addCube(m_pos);
+						m_cursor.setPosition(glm::ivec3(1, 0, 0) + m_cursor.getPosition());
 					}
 					else if (e.key.keysym.sym == 'd') {
-						m_pos.x -= 1;
-						m_cubesMap.addCube(m_pos);
+						m_cursor.setPosition(glm::ivec3(-1, 0, 0) + m_cursor.getPosition());
 					}
 					else if (e.key.keysym.sym == 'w') {
-						m_pos.z += 1;
-						m_cubesMap.addCube(m_pos);
+						m_cursor.setPosition(glm::ivec3(0, 0, 1) + m_cursor.getPosition());
 					}
 					else if (e.key.keysym.sym == 'x') {
-						m_pos.z -= 1;
-						m_cubesMap.addCube(m_pos);
+						m_cursor.setPosition(glm::ivec3(0, 0, -1) + m_cursor.getPosition());
 					}
 					Locate::history(HistoryType::Cubes).endUndoGroup();
 				}

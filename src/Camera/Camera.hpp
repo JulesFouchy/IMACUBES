@@ -5,6 +5,7 @@
 
 #include "Helper/Display.hpp"
 #include "Helper/SphericalCoordinates.hpp"
+#include "Helper/Ray.hpp"
 
 #include "CameraControlState.hpp"
 
@@ -34,6 +35,8 @@ public:
 	inline glm::vec3 getLocalY() { return glm::normalize( getTransformMatrix() * glm::vec4(0.0f, 1.0f, 0.0f, 0.0f) ); }
 	inline glm::vec3 getLocalZ() { return glm::normalize( getTransformMatrix() * glm::vec4(0.0f, 0.0f, 1.0f, 0.0f) ); }
 	inline glm::vec3 getPosition() { return getTransformMatrix() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); }
+
+	Ray getRayGoingThroughMousePos();
 
 private:
 	inline const glm::mat4& getTransformMatrix() { if (m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_transformMatrix; }

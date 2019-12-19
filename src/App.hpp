@@ -9,6 +9,7 @@
 #include "Camera/Camera.hpp"
 #include "History/HistoriesManager.hpp"
 #include "CubesMap/CubesMap.hpp"
+#include "Cursor/Cursor.hpp"
 #include "GUI/SaveView.hpp"
 
 #include <glm/glm.hpp>
@@ -44,8 +45,8 @@ private:
 	Camera m_camera;
 	HistoriesManager m_histories;
 	CubesMap m_cubesMap;
+	Cursor m_cursor;
 	PopupWindow_SaveView m_saveViewWindow;
-	glm::vec3 m_pos = glm::vec3(50.0f);
 	//
 	bool m_bShowImGUIDemoWindow;
 
