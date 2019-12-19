@@ -146,8 +146,7 @@ void CubesGroup_WithoutMaterialIndices::updateGPU() {
 }
 
 
-void CubesGroup_WithoutMaterialIndices::addCube(int materialID, glm::vec3 position) {
-	assert(materialID > -1);
+void CubesGroup_WithoutMaterialIndices::addCube(glm::vec3 position) {
 	removeCube(position);
 	m_positions.push_back(position);
 	updateGPU();

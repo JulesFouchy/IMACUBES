@@ -13,7 +13,7 @@ public:
 	virtual ~CubesGroup_WithoutMaterialIndices();
 
 
-	virtual void addCube(int materialID, glm::vec3 position);
+	void addCube(glm::vec3 position);
 	virtual void removeCube(glm::vec3 position);
 	virtual void removeAllCubes();
 	void draw();

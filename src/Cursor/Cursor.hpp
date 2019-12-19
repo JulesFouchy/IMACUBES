@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-#include "OpenGL/CubesGroup.hpp"
+#include "OpenGL/CubesGroup_WithoutMaterialIndices.hpp"
 
 class Cursor {
 public:
@@ -16,5 +16,5 @@ public:
 
 private:
 	glm::ivec3 m_position;
-	CubesGroup m_selectedCubes;
+	CubesGroup_WithoutMaterialIndices m_selectedCubes;
 };
