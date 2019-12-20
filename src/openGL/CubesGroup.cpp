@@ -2,8 +2,10 @@
 
 #include "Debugging/gl-exception.h"
 
-CubesGroup::CubesGroup() {
+CubesGroup::CubesGroup()
+{
 	createOpenGLStuffs();
+	bMustUpdateGPU = true;
 }
 
 CubesGroup::CubesGroup(const CubesGroup& other)
@@ -49,7 +51,7 @@ void CubesGroup::addCube(int materialID, glm::vec3 position) {
 	removeCube(position);
 	m_positions.push_back(position);
 	m_materialIndices.push_back(materialID);
-	updateGPU();
+	bMustUpdateGPU = true;
 }
 
 void CubesGroup::removeCube(glm::vec3 position) {
@@ -60,14 +62,14 @@ void CubesGroup::removeCube(glm::vec3 position) {
 		m_positions.pop_back();
 		std::swap(m_materialIndices[index], m_materialIndices[lastIndex]);
 		m_materialIndices.pop_back();
-		updateGPU();
+		bMustUpdateGPU = true;
 	}
 }
 
 void CubesGroup::removeAllCubes() {
 	m_positions.resize(0);
 	m_materialIndices.resize(0);
-	updateGPU();
+	bMustUpdateGPU = true;
 }
 
 int CubesGroup::getCubeMaterialID(const glm::vec3& position) {

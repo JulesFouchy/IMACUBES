@@ -35,9 +35,9 @@ void App::onInit() {
 	m_cursorShader.setUniformMat4f("u_viewMat", m_camera.getViewMatrix());
 
 	Locate::history(HistoryType::Cubes).beginUndoGroup();
-	for (int x = 40; x < 60; ++x) {
-		for (int z = 40; z < 60; ++z) {
-			for (int y = 49; y < 50; ++y) {
+	for (int x = 30; x < 70; ++x) {
+		for (int z = 30; z < 70; ++z) {
+			for (int y = 45; y < 50; ++y) {
 				m_cubesMap.addCube(glm::ivec3(x, y, z));
 			}
 		}

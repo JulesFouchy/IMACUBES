@@ -25,6 +25,8 @@ protected:
 	int findCubeAt(glm::vec3 position);
 
 protected:
+	bool bMustUpdateGPU;
+
 	GLuint m_vaoID;
 	GLuint m_cubesPositionsVBO_ID;
 	std::vector<glm::vec3> m_positions;

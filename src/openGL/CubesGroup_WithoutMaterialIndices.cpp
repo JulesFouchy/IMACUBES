@@ -106,12 +106,14 @@ void CubesGroup_WithoutMaterialIndices::ShutDown() {
 	GLCall(glDeleteBuffers(1, &m_cubeWireframeIBO_ID));
 }
 
-CubesGroup_WithoutMaterialIndices::CubesGroup_WithoutMaterialIndices() {
+CubesGroup_WithoutMaterialIndices::CubesGroup_WithoutMaterialIndices()
+	: bMustUpdateGPU(true)
+{
 	createOpenGLStuffs();
 }
 
 CubesGroup_WithoutMaterialIndices::CubesGroup_WithoutMaterialIndices(const CubesGroup_WithoutMaterialIndices& other)
-	: m_positions(other.m_positions)
+	: m_positions(other.m_positions), bMustUpdateGPU(true)
 {
 	createOpenGLStuffs();
 }
@@ -143,13 +145,15 @@ void CubesGroup_WithoutMaterialIndices::updateGPU() {
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubesPositionsVBO_ID));
 		GLCall(glBufferData(GL_ARRAY_BUFFER, 3 * sizeof(float) * m_positions.size(), m_positions.size() > 0 ? &m_positions[0] : nullptr, GL_STATIC_DRAW));
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+	//
+	bMustUpdateGPU = false;
 }
 
 
 void CubesGroup_WithoutMaterialIndices::addCube(glm::vec3 position) {
 	removeCube(position);
 	m_positions.push_back(position);
-	updateGPU();
+	bMustUpdateGPU = true;
 }
 
 void CubesGroup_WithoutMaterialIndices::removeCube(glm::vec3 position) {
@@ -158,13 +162,13 @@ void CubesGroup_WithoutMaterialIndices::removeCube(glm::vec3 position) {
 		int lastIndex = m_positions.size() - 1;
 		std::swap(m_positions[index], m_positions[lastIndex]);
 		m_positions.pop_back();
-		updateGPU();
+		bMustUpdateGPU = true;
 	}
 }
 
 void CubesGroup_WithoutMaterialIndices::removeAllCubes() {
 	m_positions.resize(0);
-	updateGPU();
+	bMustUpdateGPU = true;
 }
 
 int CubesGroup_WithoutMaterialIndices::findCubeAt(glm::vec3 position) {
@@ -176,6 +180,8 @@ int CubesGroup_WithoutMaterialIndices::findCubeAt(glm::vec3 position) {
 }
 
 void CubesGroup_WithoutMaterialIndices::draw() {
+	if (bMustUpdateGPU)
+		updateGPU();
 	GLCall(glBindVertexArray(m_vaoID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeMeshIBO_ID));
 	GLCall(glDrawElementsInstanced(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0, m_positions.size()));
@@ -184,6 +190,8 @@ void CubesGroup_WithoutMaterialIndices::draw() {
 }
 
 void CubesGroup_WithoutMaterialIndices::drawWireframe() {
+	if (bMustUpdateGPU)
+		updateGPU();
 	GLCall(glBindVertexArray(m_vaoID));
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeWireframeIBO_ID));
 	GLCall(glDrawElementsInstanced(GL_LINES, 24, GL_UNSIGNED_INT, 0, m_positions.size()));
