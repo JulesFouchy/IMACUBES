@@ -87,11 +87,13 @@ void App::placeCursorJustBeforeHoveredCube(){
 		m_cursor.setPosition(prevIpos);
 	}
 }
+#include "UI/Settings.hpp"
 
 void App::ImGUI_DebugWindow() {
 	ImGui::Begin("Debug");
 		ImGui::Checkbox("Show Demo Window", &m_bShowImGUIDemoWindow);
 		ImGui::Text("Application average %.1f FPS", ImGui::GetIO().Framerate);
+		ImGui::SliderFloat("cam", &Settings::CAMERA_TRANSLATION_SPEED_PER_INCH, 0., 0.1);
 	ImGui::End();
 }
 
