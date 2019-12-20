@@ -10,7 +10,7 @@ struct MaterialParameters{
 	float borderRampEnd; // default 0.5 min 0 max 0.5
 };
 
-uniform MaterialParameters params[200];
+uniform MaterialParameters params[100];
 
 float ramp(float d){
 	MaterialParameters u_ = params[vMaterialIndex];
@@ -18,11 +18,11 @@ float ramp(float d){
 }
 
 void main() {
-	int i = vMaterialIndex;
+	MaterialParameters u_ = params[vMaterialIndex];
 	float x = ramp(abs(vObjectPos.x));
 	float y = ramp(abs(vObjectPos.y));
 	float z = ramp(abs(vObjectPos.z));
 	float t = min(min(max(x,y), max(x,z)), max(y,z)) ;
-	vec3 color = params[i].color * t;
+	vec3 color = u_.color * t;
 	gl_FragColor = vec4(color,1.0);
 }

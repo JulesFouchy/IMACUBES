@@ -15,7 +15,7 @@ struct MaterialParameters{
 	vec3 u_StarColor; // default 0.355f, 0.670f, 1.000f
 }; 
  
-uniform MaterialParameters params[200]; 
+uniform MaterialParameters params[100]; 
  
 // 
 // Description : Array and textureless GLSL 2D/3D/4D simplex  
