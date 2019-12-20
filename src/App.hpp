@@ -24,6 +24,7 @@ public:
 	void drawScene();
 	void placeCursorJustBeforeHoveredCube();
 	void ImGUI_DebugWindow();
+	void ImGui_Settings();
 
 	void onEvent();
 
