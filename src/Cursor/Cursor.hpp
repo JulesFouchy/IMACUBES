@@ -6,6 +6,7 @@
 
 class Cursor {
 public:
+	Cursor() = default;
 	Cursor(int x, int y, int z);
 	~Cursor() = default;
 

@@ -13,5 +13,5 @@ void Cursor::draw() {
 void Cursor::setPosition(const glm::ivec3& newPos) {
 	m_position = newPos;
 	m_selectedCubes.removeAllCubes();
-	m_selectedCubes.addCube(m_position);
+	m_selectedCubes.addCube_NoExistenceCheck(m_position);
 }

@@ -8,8 +8,8 @@ public:
 	CubesGroup(const CubesGroup& other);
 	~CubesGroup();
 
-	void addCube(int materialID, glm::vec3 position);
-	void removeCube(glm::vec3 position) override;
+	void addCube(int materialID, const glm::ivec3& position);
+	int removeCube(const glm::ivec3& position) override;
 	void removeAllCubes() override;
 
 	int getCubeMaterialID(const glm::vec3& position);

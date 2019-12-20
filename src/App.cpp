@@ -17,7 +17,7 @@
 
 
 App::App(SDL_Window* window)
-	: m_cubesMap(100, 100, 100), m_cursor(50, 50, 50), m_cursorShader("res/shaders/cursor.vert", "res/shaders/cursor.frag"),
+	: m_cubesMap(100, 100, 100), m_cursor(), m_cursorShader("res/shaders/cursor.vert", "res/shaders/cursor.frag"),
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
 {
@@ -26,6 +26,7 @@ App::App(SDL_Window* window)
 
 void App::onInit() {
 	// ----------------PLAYGROUND!------------------
+	m_cursor = Cursor(50, 50, 50);
 	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/FlatColorPlusBorder.frag");
 	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/testShader.frag");
 	Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
