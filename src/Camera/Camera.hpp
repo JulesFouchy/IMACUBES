@@ -40,9 +40,7 @@ public:
 	Ray getRayGoingThroughMousePos();
 
 	inline const glm::vec3& getTranslation() const { return m_translation; }
-	inline void setTranslation(glm::vec3 newTranslation) {
-		m_translation = newTranslation;
-	}
+	inline void setTranslation(const glm::vec3& newTranslation) { m_translation = newTranslation; }
 
 private:
 	inline const glm::mat4& getTransformMatrix() { if (m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_transformMatrix; }
