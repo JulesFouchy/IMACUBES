@@ -16,9 +16,12 @@
 #include "Material/MaterialsManager.hpp"
 #include "CubeMaths/CubeMaths.hpp"
 
+#include <algorithm>
+
 
 App::App(SDL_Window* window)
 	: m_cubesMap(100, 100, 100), m_cursor(), m_cursorShader("res/shaders/cursor.vert", "res/shaders/cursor.frag"),
+	  m_camera(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2)),
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
 {
@@ -27,7 +30,7 @@ App::App(SDL_Window* window)
 
 void App::onInit() {
 	// ----------------PLAYGROUND!------------------
-	m_cursor = Cursor(50, 50, 50);
+	m_cursor = Cursor(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2);
 	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/FlatColorPlusBorder.frag");
 	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/testShader.frag");
 	Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
@@ -37,9 +40,9 @@ void App::onInit() {
 	m_cursorShader.setUniformMat4f("u_viewMat", m_camera.getViewMatrix());
 
 	Locate::history(HistoryType::Cubes).beginUndoGroup();
-	for (int x = 20; x < 80; ++x) {
-		for (int z = 20; z < 80; ++z) {
-			for (int y = 45; y < 50; ++y) {
+	for (int x = m_cubesMap.width()*0.2; x < m_cubesMap.width()*0.8; ++x) {
+		for (int z = m_cubesMap.depth()*0.2; z < m_cubesMap.depth()*0.8; ++z) {
+			for (int y = std::max((int)m_cubesMap.height()/2 - 5, 0); y < m_cubesMap.height()/2; ++y) {
 				m_cubesMap.addCube(glm::ivec3(x, y, z));
 			}
 		}

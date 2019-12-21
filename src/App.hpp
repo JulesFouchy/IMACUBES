@@ -29,12 +29,12 @@ public:
 	void onEvent(const SDL_Event& e);
 
 private:
-	Camera m_camera;
-	HistoriesManager m_histories;
 	CubesMap m_cubesMap;
 	Cursor m_cursor;
-	PopupWindow_SaveView m_saveViewWindow;
 	Shader m_cursorShader;
+	Camera m_camera;
+	HistoriesManager m_histories;
+	PopupWindow_SaveView m_saveViewWindow;
 	bool m_bShowImGUIDemoWindow;
 
 

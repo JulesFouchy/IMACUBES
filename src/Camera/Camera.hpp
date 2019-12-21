@@ -20,7 +20,7 @@ friend class CameraControlState_Rest;
 friend class CameraControlState_Rotation;
 friend class CameraControlState_Translation; 
 public:
-	Camera();
+	Camera(const glm::vec3& lookedAtPoint);
 	~Camera() = default;
 
 	inline const glm::mat4& getViewMatrix() { if(m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_inverseTransformMatrix; }
@@ -41,8 +41,8 @@ public:
 
 	Ray getRayGoingThroughMousePos();
 
-	inline const glm::vec3& getTranslation() const { return m_translation; }
-	inline void setTranslation(const glm::vec3& newTranslation) { m_translation = newTranslation; }
+	inline const glm::vec3& getLookedAtPoint() const { return m_lookedAtPoint; }
+	inline void setLookedAtPoint(const glm::vec3& newLookedAtPoint) { m_lookedAtPoint = newLookedAtPoint; }
 
 private:
 	inline const glm::mat4& getTransformMatrix() { if (m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_transformMatrix; }
@@ -62,7 +62,7 @@ private:
 	glm::mat4 m_transformMatrix;
 	glm::mat4 m_inverseTransformMatrix;
 	SphericalCoordinates m_sphereCoord;
-	glm::vec3 m_translation;
+	glm::vec3 m_lookedAtPoint;
 	bool m_bMustRecomputeTransformMatrix;
 
 	std::unique_ptr<CameraControlState> m_controlState;

@@ -17,6 +17,10 @@ public:
 
 	inline bool cubeExists(glm::ivec3 pos) { return getMaterialLocationOf(pos).isValid(); }
 
+	inline size_t width() { return m_width; }
+	inline size_t height() { return m_height; }
+	inline size_t depth() { return m_depth; }
+
 public: //tmp, should be private
 	size_t index1Dfrom3D(glm::ivec3 id3D) const;
 	bool isIDvalid(glm::ivec3 id3D) const;
