@@ -68,7 +68,7 @@ void CubesGroup::removeAllCubes() {
 	m_materialIndices.resize(0);
 }
 
-int CubesGroup::getCubeMaterialID(const glm::vec3& position) {
+int CubesGroup::getCubeMaterialID(const glm::ivec3& position) {
 	int index = findCubeAt(position);
 	return m_materialIndices[index];
 }

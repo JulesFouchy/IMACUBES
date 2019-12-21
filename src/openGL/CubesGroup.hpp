@@ -12,7 +12,7 @@ public:
 	int removeCube(const glm::ivec3& position) override;
 	void removeAllCubes() override;
 
-	int getCubeMaterialID(const glm::vec3& position);
+	int getCubeMaterialID(const glm::ivec3& position);
 
 private:
 	void createOpenGLStuffs() override;
