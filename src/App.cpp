@@ -11,6 +11,7 @@
 
 #include "Helper/Display.hpp"
 #include "UI/Input.hpp"
+#include "UI/Settings.hpp"
 #include "Locator/Locate.hpp"
 #include "Material/MaterialsManager.hpp"
 #include "CubeMaths/CubeMaths.hpp"
@@ -89,7 +90,6 @@ void App::placeCursorJustBeforeHoveredCube(){
 		m_cursor.setPosition(prevIpos);
 	}
 }
-#include "UI/Settings.hpp"
 
 void App::ImGUI_DebugWindow() {
 	ImGui::Begin("Debug");
@@ -107,118 +107,114 @@ void App::ImGui_Settings() {
 	ImGui::End();
 }
 
+void App::onEvent(const SDL_Event& e) {
+	switch (e.type) {
 
-void App::onEvent() {
-	SDL_Event e;
-	while (SDL_PollEvent(&e)) {
-		ImGui_ImplSDL2_ProcessEvent(&e);
-		switch (e.type) {
-		case SDL_QUIT:
-			exit();
-			break;
+	case SDL_MOUSEMOTION:
+		if (!ImGui::GetIO().WantCaptureMouse)
+			placeCursorJustBeforeHoveredCube();
+		break;
 
-		case SDL_MOUSEWHEEL:
-			if (!ImGui::GetIO().WantCaptureMouse)
-				m_camera.onWheelScroll(e.wheel.y);
-			break;
+	case SDL_MOUSEWHEEL:
+		if (!ImGui::GetIO().WantCaptureMouse)
+			m_camera.onWheelScroll(e.wheel.y);
+		break;
 
-		case SDL_MOUSEMOTION:
-			if (!ImGui::GetIO().WantCaptureMouse)
+	case SDL_MOUSEBUTTONDOWN:
+		if (!ImGui::GetIO().WantCaptureMouse) {
+			if (e.button.button == SDL_BUTTON_MIDDLE)
+				m_camera.onWheelDown();
+			else if (e.button.button == SDL_BUTTON_LEFT) {
+				Locate::history(HistoryType::Cubes).beginUndoGroup();
+					m_cubesMap.addCube(m_cursor.getPosition());
+				Locate::history(HistoryType::Cubes).endUndoGroup();
 				placeCursorJustBeforeHoveredCube();
-			break;
-
-		case SDL_MOUSEBUTTONDOWN:
-			if (!ImGui::GetIO().WantCaptureMouse) {
-				if (e.button.button == SDL_BUTTON_MIDDLE)
-					m_camera.onWheelDown();
-				else if (e.button.button == SDL_BUTTON_LEFT) {
-					Locate::history(HistoryType::Cubes).beginUndoGroup();
-						m_cubesMap.addCube(m_cursor.getPosition());
-					Locate::history(HistoryType::Cubes).endUndoGroup();
-					placeCursorJustBeforeHoveredCube();
-				}
-				else {
-					Locate::history(HistoryType::Cubes).beginUndoGroup();
-						m_cubesMap.removeCube(m_cursor.getPosition());
-					Locate::history(HistoryType::Cubes).endUndoGroup();
-					placeCursorJustBeforeHoveredCube();
-				}
 			}
-			break;
-
-		case SDL_MOUSEBUTTONUP:
-			if (!ImGui::GetIO().WantCaptureMouse) {
-				if (e.button.button == SDL_BUTTON_MIDDLE)
-					m_camera.onWheelUp();
+			else {
+				Locate::history(HistoryType::Cubes).beginUndoGroup();
+					m_cubesMap.removeCube(m_cursor.getPosition());
+				Locate::history(HistoryType::Cubes).endUndoGroup();
+				placeCursorJustBeforeHoveredCube();
 			}
-			break;
+		}
+		break;
+
+	case SDL_MOUSEBUTTONUP:
+		if (!ImGui::GetIO().WantCaptureMouse) {
+			if (e.button.button == SDL_BUTTON_MIDDLE)
+				m_camera.onWheelUp();
+		}
+		break;
 
 
-		case SDL_KEYDOWN:
+	case SDL_KEYDOWN:
+		if (!ImGui::GetIO().WantCaptureKeyboard) {
 
-			if (!ImGui::GetIO().WantCaptureKeyboard) {
-
-				if (Input::KeyIsDown(CTRL)) {
-					if (e.key.keysym.sym == 'z') {
-						m_histories.getActiveHistory().moveBackward();
-					}
-					else if (e.key.keysym.sym == 'y') {
-						m_histories.getActiveHistory().moveForward();
-					}
-					else if (e.key.keysym.sym == 's') {
-						m_saveViewWindow.Open();
-					}
+			if (Input::KeyIsDown(CTRL)) {
+				if (e.key.keysym.sym == 'z') {
+					m_histories.getActiveHistory().moveBackward();
 				}
-				else {
-					if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
-						Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterial().shaderID].reloadShader();
-						Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-						Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
-					}
-					if (e.key.keysym.sym == 'z') {
-						m_cursor.setPosition(glm::ivec3(0, 1, 0) + m_cursor.getPosition());
-					}
-					else if (e.key.keysym.sym == 's') {
-						m_cursor.setPosition(glm::ivec3(0, -1, 0) + m_cursor.getPosition());
-					}
-					else if (e.key.keysym.sym == 'q') {
-						m_cursor.setPosition(glm::ivec3(1, 0, 0) + m_cursor.getPosition());
-					}
-					else if (e.key.keysym.sym == 'd') {
-						m_cursor.setPosition(glm::ivec3(-1, 0, 0) + m_cursor.getPosition());
-					}
-					else if (e.key.keysym.sym == 'w') {
-						m_cursor.setPosition(glm::ivec3(0, 0, 1) + m_cursor.getPosition());
-					}
-					else if (e.key.keysym.sym == 'x') {
-						m_cursor.setPosition(glm::ivec3(0, 0, -1) + m_cursor.getPosition());
-					}
+				else if (e.key.keysym.sym == 'y') {
+					m_histories.getActiveHistory().moveForward();
+				}
+				else if (e.key.keysym.sym == 's') {
+					m_saveViewWindow.Open();
 				}
 			}
-			break;
-
-		case SDL_KEYUP:
-			if (!ImGui::GetIO().WantCaptureKeyboard) {
-
+			else {
+				if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
+					Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterial().shaderID].reloadShader();
+					Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+					Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+				}
+				if (e.key.keysym.sym == 'z') {
+					m_cursor.setPosition(glm::ivec3(0, 1, 0) + m_cursor.getPosition());
+				}
+				else if (e.key.keysym.sym == 's') {
+					m_cursor.setPosition(glm::ivec3(0, -1, 0) + m_cursor.getPosition());
+				}
+				else if (e.key.keysym.sym == 'q') {
+					m_cursor.setPosition(glm::ivec3(1, 0, 0) + m_cursor.getPosition());
+				}
+				else if (e.key.keysym.sym == 'd') {
+					m_cursor.setPosition(glm::ivec3(-1, 0, 0) + m_cursor.getPosition());
+				}
+				else if (e.key.keysym.sym == 'w') {
+					m_cursor.setPosition(glm::ivec3(0, 0, 1) + m_cursor.getPosition());
+				}
+				else if (e.key.keysym.sym == 'x') {
+					m_cursor.setPosition(glm::ivec3(0, 0, -1) + m_cursor.getPosition());
+				}
 			}
-			break;
+		}
+		break;
 
-		case SDL_WINDOWEVENT:
-			switch (e.window.event) {
-			case SDL_WINDOWEVENT_RESIZED:
-				// get new width and height and update the viewport
-				Display::UpdateWindowSize(m_window);
-				// Update camera's ratio
-				m_camera.mustRecomputeProjectionMatrix();
-				Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-				m_cursorShader.bind();
-				m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
-				break;
-			}
+	case SDL_KEYUP:
+		if (!ImGui::GetIO().WantCaptureKeyboard) {
 
-		default:
+		}
+		break;
+
+	case SDL_WINDOWEVENT:
+		switch (e.window.event) {
+		case SDL_WINDOWEVENT_RESIZED:
+			// get new width and height and update the viewport
+			Display::UpdateWindowSize(m_window);
+			// Update camera's ratio
+			m_camera.mustRecomputeProjectionMatrix();
+			Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+			m_cursorShader.bind();
+			m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
 			break;
 		}
+		break;
+
+	case SDL_QUIT:
+		exit();
+		break;
+
+	default:
+		break;
 	}
 }
 
@@ -239,7 +235,7 @@ void App::ShutDown() {
 
 void App::_loopIteration() {
 	// Events
-	onEvent();
+	handleSDLevents();
 	// Start ImGui frame
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(m_window);
@@ -254,4 +250,12 @@ void App::_loopIteration() {
 
 	// End frame
 	SDL_GL_SwapWindow(m_window);
+}
+
+void App::handleSDLevents() {
+	SDL_Event e;
+	while (SDL_PollEvent(&e)) {
+		ImGui_ImplSDL2_ProcessEvent(&e);
+		onEvent(e);
+	}
 }

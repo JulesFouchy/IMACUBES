@@ -26,7 +26,7 @@ public:
 	void ImGUI_DebugWindow();
 	void ImGui_Settings();
 
-	void onEvent();
+	void onEvent(const SDL_Event& e);
 
 private:
 	Camera m_camera;
@@ -48,6 +48,7 @@ public:
 	inline static App& Get() { return *m_instance; }
 
 	void _loopIteration();
+	void handleSDLevents();
 
 	inline SDL_Window* getWindow() const { return m_window; }
 	inline bool isRunning() const { return m_running; }
