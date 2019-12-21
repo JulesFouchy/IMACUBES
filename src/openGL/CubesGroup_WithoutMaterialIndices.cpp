@@ -5,6 +5,8 @@
 
 #include "Locator/Locate.hpp"
 
+#include "CubeMaths/CubeMaths.hpp"
+
 #include <algorithm>
 
 GLuint CubesGroup_WithoutMaterialIndices::m_cubeMeshVBO_ID;
@@ -165,15 +167,19 @@ void CubesGroup_WithoutMaterialIndices::addCube_NoExistenceCheck(const glm::ivec
 
 int CubesGroup_WithoutMaterialIndices::removeCube(const glm::ivec3& position) {
 	int index = findCubeAt(position);
+	// if cube exists
 	if (index != -1) {
+		// remove it from hash map
+		m_indicesMap.erase(Locate::cubesMap().index1Dfrom3D(position));
+		// remove it from vector of positions
 		int lastIndex = m_positions.size() - 1;
-		if (lastIndex != -1) { // SHOUDNT HAVE TO DO THIS CHECK
-			m_indicesMap.erase(Locate::cubesMap().index1Dfrom3D(position));
-			m_indicesMap[Locate::cubesMap().index1Dfrom3D(m_positions.back())] = index;
+		if (lastIndex != index) { // import because otherwise next line recreates the entry that was just removed in hash map
+			m_indicesMap[Locate::cubesMap().index1Dfrom3D(CubeMaths::CubeContaining(m_positions.back()))] = index;
 			std::swap(m_positions[index], m_positions[lastIndex]);
-			m_positions.pop_back();
-			bMustUpdateGPU = true;
 		}
+		m_positions.pop_back();
+		// update GPU
+		bMustUpdateGPU = true;
 	}
 	return index;
 }

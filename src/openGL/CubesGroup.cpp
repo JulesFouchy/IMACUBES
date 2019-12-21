@@ -1,6 +1,7 @@
 #include "CubesGroup.hpp"
 
 #include "Debugging/gl-exception.h"
+#include "Debugging/Log.hpp"
 
 CubesGroup::CubesGroup()
 {

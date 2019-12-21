@@ -36,8 +36,8 @@ void App::onInit() {
 	m_cursorShader.setUniformMat4f("u_viewMat", m_camera.getViewMatrix());
 
 	Locate::history(HistoryType::Cubes).beginUndoGroup();
-	for (int x = 30; x < 70; ++x) {
-		for (int z = 30; z < 70; ++z) {
+	for (int x = 20; x < 80; ++x) {
+		for (int z = 20; z < 80; ++z) {
 			for (int y = 45; y < 50; ++y) {
 				m_cubesMap.addCube(glm::ivec3(x, y, z));
 			}
@@ -134,6 +134,12 @@ void App::onEvent() {
 				else if (e.button.button == SDL_BUTTON_LEFT) {
 					Locate::history(HistoryType::Cubes).beginUndoGroup();
 						m_cubesMap.addCube(m_cursor.getPosition());
+					Locate::history(HistoryType::Cubes).endUndoGroup();
+					placeCursorJustBeforeHoveredCube();
+				}
+				else {
+					Locate::history(HistoryType::Cubes).beginUndoGroup();
+						m_cubesMap.removeCube(m_cursor.getPosition());
 					Locate::history(HistoryType::Cubes).endUndoGroup();
 					placeCursorJustBeforeHoveredCube();
 				}
