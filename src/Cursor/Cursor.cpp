@@ -1,5 +1,7 @@
 #include "Cursor.hpp"
 
+#include "Locator/Locate.hpp"
+
 Cursor::Cursor(int x, int y, int z) {
 	setPosition(glm::ivec3(x, y, z));
 }
@@ -11,7 +13,11 @@ void Cursor::draw() {
 }
 
 void Cursor::setPosition(const glm::ivec3& newPos) {
-	m_position = newPos;
-	m_selectedCubes.removeAllCubes();
-	m_selectedCubes.addCube_NoExistenceCheck(m_position);
+	if (Locate::cubesMap().isPositionInsideWorld(newPos)) {
+		m_position = newPos;
+		m_selectedCubes.removeAllCubes();
+		m_selectedCubes.addCube_NoExistenceCheck(m_position);
+	}
+	else
+		spdlog::warn("[Cursor::setPosition] trying to position it outside of world's boundaries");
 }
