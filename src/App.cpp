@@ -81,6 +81,13 @@ void App::drawScene() {
 
 void App::placeCursorJustBeforeHoveredCube(){
 	Ray ray = m_camera.getRayGoingThroughMousePos();
+	if (!m_cubesMap.isPositionInsideWorld(ray.origin)) {
+		float t = CubeMaths::IntersectionRayWorldborder(ray);
+		if (t < std::numeric_limits<float>::infinity())
+			ray.origin += (t + 0.01f) * ray.direction;
+		else
+			return;
+	}
 	glm::ivec3 iPos = CubeMaths::CubeContaining(ray.origin);
 	glm::ivec3 prevIpos = iPos;
 	while (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos)) {
