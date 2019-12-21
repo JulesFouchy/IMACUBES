@@ -209,6 +209,7 @@ void App::onEvent() {
 				// get new width and height and update the viewport
 				Display::UpdateWindowSize(m_window);
 				// Update camera's ratio
+				m_camera.mustRecomputeProjectionMatrix();
 				Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 				m_cursorShader.bind();
 				m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());

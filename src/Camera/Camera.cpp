@@ -8,8 +8,8 @@
 #include "Debugging/Log.hpp"
 
 Camera::Camera()
-	: m_transformMatrix(1.0f), m_inverseTransformMatrix(1.0f), m_sphereCoord(5.0f, 1.8f, 0.0f), m_translation(0.0f),
-	  m_bMustRecomputeTransformMatrix(true),
+	: m_projectionMatrix(1.0f), m_transformMatrix(1.0f), m_inverseTransformMatrix(1.0f), m_sphereCoord(5.0f, 1.8f, 0.0f), m_translation(0.0f),
+	  m_bMustRecomputeProjectionMatrix(true), m_bMustRecomputeTransformMatrix(true),
 	  m_controlState(std::make_unique<CameraControlState_Rest>(this))
 {
 }
@@ -19,8 +19,13 @@ void Camera::computeTransformMatrixAndItsInverse() {
 	m_transformMatrix = glm::translate(glm::mat4(1.0f), m_translation) * glm::inverse(glm::lookAt(m_sphereCoord.getXYZ() + glm::vec3(50.0f), glm::vec3(50.0f), glm::vec3(0.0f, Sign(Cos(m_sphereCoord.getAngleUp())), 0.0f)));
 	m_inverseTransformMatrix = glm::inverse(m_transformMatrix);
 
-
 	m_bMustRecomputeTransformMatrix = false;
+}
+
+void Camera::computeProjectionMatrix() {
+	m_projectionMatrix = glm::infinitePerspective(1.0f, Display::GetRatio(), 0.1f);
+
+	m_bMustRecomputeProjectionMatrix = false;
 }
 
 Ray Camera::getRayGoingThroughMousePos() {

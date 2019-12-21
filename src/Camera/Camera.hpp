@@ -24,7 +24,9 @@ public:
 	~Camera() = default;
 
 	inline const glm::mat4& getViewMatrix() { if(m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_inverseTransformMatrix; }
-	inline const glm::mat4 getProjMatrix() { return glm::infinitePerspective(1.0f, Display::GetRatio(), 0.1f);  } // TODO return a reference to a member
+	inline const glm::mat4& getProjMatrix() { if(m_bMustRecomputeProjectionMatrix) computeProjectionMatrix(); return m_projectionMatrix; }
+	
+	inline void mustRecomputeProjectionMatrix() { m_bMustRecomputeProjectionMatrix = true; }
 
 	inline void update(float dt) { m_controlState->update(dt); }
 
@@ -46,6 +48,7 @@ private:
 	inline const glm::mat4& getTransformMatrix() { if (m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_transformMatrix; }
 
 	void computeTransformMatrixAndItsInverse();
+	void computeProjectionMatrix();
 
 	template <typename T>
 	inline void setControlState() {
@@ -53,6 +56,9 @@ private:
 	}
 
 private:
+	glm::mat4 m_projectionMatrix;
+	bool m_bMustRecomputeProjectionMatrix;
+
 	glm::mat4 m_transformMatrix;
 	glm::mat4 m_inverseTransformMatrix;
 	SphericalCoordinates m_sphereCoord;
