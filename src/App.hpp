@@ -25,6 +25,7 @@ public:
 	void placeCursorJustBeforeHoveredCube();
 	void ImGUI_DebugWindow();
 	void ImGui_Settings();
+	void ImGui_Camera();
 
 	void onEvent(const SDL_Event& e);
 

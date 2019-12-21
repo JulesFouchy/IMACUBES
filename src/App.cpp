@@ -55,6 +55,7 @@ void App::onLoopIteration() {
 	// ImGui windows
 	ImGUI_DebugWindow();
 	ImGui_Settings();
+	ImGui_Camera();
 	if (m_bShowImGUIDemoWindow) // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		ImGui::ShowDemoWindow(&m_bShowImGUIDemoWindow);
 
@@ -107,6 +108,16 @@ void App::ImGui_Settings() {
 		ImGui::SliderFloat("Translation", &Settings::CAMERA_TRANSLATION_SPEED_PER_INCH, 0., 0.3);
 		ImGui::SliderFloat("Rotation", &Settings::CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH, 0., 0.16);
 		ImGui::SliderFloat("Zoom", &Settings::CAMERA_SCALE_RADIUS_PER_SCROLL, 0.01, 1.0);
+	ImGui::End();
+}
+
+void App::ImGui_Camera() {
+	ImGui::Begin("Camera");
+	if (m_camera.ImGui_Sliders()) {
+		Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+		m_cursorShader.bind();
+		m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
+	}
 	ImGui::End();
 }
 

@@ -7,9 +7,11 @@
 
 #include "Debugging/Log.hpp"
 
+#include <imgui/imgui.h>
+
 Camera::Camera(const glm::vec3& lookedAtPoint)
-	: m_projectionMatrix(1.0f), m_transformMatrix(1.0f), m_inverseTransformMatrix(1.0f), m_sphereCoord(5.0f, 1.8f, 0.0f), m_lookedAtPoint(lookedAtPoint),
-	  m_bMustRecomputeProjectionMatrix(true), m_bMustRecomputeTransformMatrix(true),
+	: m_projectionMatrix(1.0f), m_fieldOfViewInRadians(0.79f), m_bMustRecomputeProjectionMatrix(true), 
+	  m_transformMatrix(1.0f), m_inverseTransformMatrix(1.0f), m_sphereCoord(5.0f, 1.8f, 0.0f), m_lookedAtPoint(lookedAtPoint), m_bMustRecomputeTransformMatrix(true),
 	  m_controlState(std::make_unique<CameraControlState_Rest>(this))
 {
 }
@@ -23,7 +25,7 @@ void Camera::computeTransformMatrixAndItsInverse() {
 }
 
 void Camera::computeProjectionMatrix() {
-	m_projectionMatrix = glm::infinitePerspective(1.0f, Display::GetRatio(), 0.1f);
+	m_projectionMatrix = glm::infinitePerspective(m_fieldOfViewInRadians, Display::GetRatio(), 0.1f);
 
 	m_bMustRecomputeProjectionMatrix = false;
 }
@@ -33,4 +35,12 @@ Ray Camera::getRayGoingThroughMousePos() {
 	glm::vec3 mousePos = glm::unProject(glm::vec3(Input::MousePositionInPixels(), 0.0f), getViewMatrix(), getProjMatrix(), glm::vec4(0.0f, 0.0f, Display::GetWidth(), Display::GetHeight()));
 	glm::vec3 dir = glm::normalize(mousePos - pos);
 	return Ray(pos, dir);
+}
+
+bool Camera::ImGui_Sliders() {
+	if (ImGui::SliderFloat("Field of view", &m_fieldOfViewInRadians, 0.01, 3.14)) {
+		mustRecomputeProjectionMatrix();
+		return true;
+	}
+	return false;
 }
