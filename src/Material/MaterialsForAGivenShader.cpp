@@ -38,6 +38,7 @@ void MaterialsForAGivenShader::draw() {
 
 void MaterialsForAGivenShader::addMaterial() {
 	m_materials.emplace_back(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(m_shader.getFragmentFilepath())) + std::to_string(m_materials.size()), m_structLayout, m_shaderIndex, (int)m_materials.size());
+	Locate::materialsManager().SetSelectedMaterial(m_shaderIndex, (int)m_materials.size() - 1);
 }
 
 void MaterialsForAGivenShader::reloadShader() {
