@@ -23,12 +23,15 @@ App::App(SDL_Window* window)
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
 {
-	m_cursorShaderLID = m_shaders.LoadShader("res/shaders/cursor.vert", "res/shaders/cursor.frag");
 }
 
 
 void App::onInit() {
 	// ----------------PLAYGROUND!------------------
+
+	m_cursorShaderLID = m_shaders.LoadShader("res/shaders/cursor.vert", "res/shaders/cursor.frag");
+	m_cameraUniforms.addSubscriber(m_cursorShaderLID);
+
 	m_cursor = Cursor(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2);
 	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/FlatColorPlusBorder.frag");
 	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/testShader.frag");
@@ -100,14 +103,10 @@ void App::placeCursorJustBeforeHoveredCube(){
 }
 
 void App::onViewMatrixChange(){
-	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
-	m_shaders[m_cursorShaderLID].bind();
-	m_shaders[m_cursorShaderLID].setUniformMat4f("u_viewMat", m_camera.getViewMatrix());
+	m_cameraUniforms.setUniform<glm::mat4>("u_viewMat", m_camera.getViewMatrix());
 }
 void App::onProjMatrixChange() {
-	Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-	m_shaders[m_cursorShaderLID].bind();
-	m_shaders[m_cursorShaderLID].setUniformMat4f("u_projMat", m_camera.getProjMatrix());
+	m_cameraUniforms.setUniform<glm::mat4>("u_projMat", m_camera.getProjMatrix());
 }
 
 void App::onEvent(const SDL_Event& e) {
@@ -167,8 +166,8 @@ void App::onEvent(const SDL_Event& e) {
 			else {
 				if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
 					Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterial().shaderID].reloadShader();
-					Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-					Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+					m_cameraUniforms.setUniformsFor(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterial().shaderID].shaderLID());
+					m_lightUniforms.setUniformsFor(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterial().shaderID].shaderLID());
 				}
 				if (e.key.keysym.sym == 'z') {
 					m_cursor.setPosition(glm::ivec3(0, 1, 0) + m_cursor.getPosition());

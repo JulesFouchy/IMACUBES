@@ -15,7 +15,6 @@ public:
 	void ImGui_Menu();
 
 	inline void addShader(const std::string& vertexFilepath, const std::string& fragmentFilepath) { m_shadersList.emplace_back(vertexFilepath, fragmentFilepath, m_shaderCount++); }
-	void updateMatrixUniform(const std::string& name, const glm::mat4& mat);
 
 	MaterialLocation addCube(glm::vec3 pos, bool bPushActionInHistory = true); // returns the location where the cube was added (i.e. m_selectedMaterial)
 	void removeCube(int shaderID, glm::vec3 pos, bool bPushActionInHistory = true);

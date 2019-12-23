@@ -26,13 +26,6 @@ void MaterialsManager::ImGui_Menu() {
 	ImGui::End();
 }
 
-void MaterialsManager::updateMatrixUniform(const std::string& name, const glm::mat4& mat) {
-	for (MaterialsForAGivenShader& matGroup : m_shadersList) {
-		matGroup.shader().bind();
-		matGroup.shader().setUniformMat4f(name, mat);
-	}
-}
-
 MaterialLocation MaterialsManager::addCube(glm::vec3 pos, bool bPushActionInHistory) {
 	if (bPushActionInHistory) {
 		glm::vec3 _pos = pos;

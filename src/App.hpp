@@ -6,6 +6,7 @@
 #include "OpenGL/CubesGroup.hpp"
 #include "OpenGL/Shader.hpp"
 #include "OpenGL/ShaderLibrary.hpp"
+#include "OpenGL/UniformUpdateList.hpp"
 #include "Camera/Camera.hpp"
 #include "History/HistoriesManager.hpp"
 #include "CubesMap/CubesMap.hpp"
@@ -42,6 +43,8 @@ private:
 	Cursor m_cursor;
 	ShaderLibrary m_shaders;
 	size_t m_cursorShaderLID;
+	UniformUpdateList m_cameraUniforms;
+	UniformUpdateList m_lightUniforms;
 	Camera m_camera;
 	HistoriesManager m_histories;
 	PopupWindow_SaveView m_saveViewWindow;

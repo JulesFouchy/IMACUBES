@@ -24,6 +24,7 @@ public:
 	void ImGui_Menu();
 
 	Shader& shader();
+	inline size_t shaderLID() { return m_shaderLID; }
 
 private:
 	void setUniforms();
