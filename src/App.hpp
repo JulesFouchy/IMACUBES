@@ -9,7 +9,7 @@
 #include "History/HistoriesManager.hpp"
 #include "CubesMap/CubesMap.hpp"
 #include "Cursor/Cursor.hpp"
-#include "GUI/SaveView.hpp"
+#include "GUI/PopupWindow/SaveView.hpp"
 
 
 class App {

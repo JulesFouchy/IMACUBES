@@ -2,8 +2,8 @@
 
 #include "_PopupWindow_WithConfirmationWarning.hpp"
 
-#include "Widget/WidthHeightRatioPicker.hpp"
-#include "Widget/FilepathPicker.hpp"
+#include "GUI/Widget/WidthHeightRatioPicker.hpp"
+#include "GUI/Widget/FilepathPicker.hpp"
 
 class PopupWindow_SaveView : public PopupWindow_WithConfirmationWarning {
 public:
