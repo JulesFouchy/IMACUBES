@@ -19,11 +19,11 @@
 
 
 App::App(SDL_Window* window)
-	: m_cubesMap(100, 100, 100), m_cursor(), m_cursorShader("res/shaders/cursor.vert", "res/shaders/cursor.frag"),
-	  m_camera(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2)),
+	: m_cubesMap(100, 100, 100), m_cursor(), m_camera(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2)),
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
 {
+	m_cursorShaderLID = m_shaders.LoadShader("res/shaders/cursor.vert", "res/shaders/cursor.frag");
 }
 
 
@@ -63,7 +63,7 @@ void App::onLoopIteration() {
 	m_camera.update(1.0f / 60.0f);
 	onViewMatrixChange();
 	drawScene();
-	m_cursorShader.bind();
+	m_shaders[m_cursorShaderLID].bind();
 	m_cursor.draw();
 	Locate::materialsManager().ImGui_Menu();
 	m_saveViewWindow.Show_IfOpen();
@@ -101,13 +101,13 @@ void App::placeCursorJustBeforeHoveredCube(){
 
 void App::onViewMatrixChange(){
 	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
-	m_cursorShader.bind();
-	m_cursorShader.setUniformMat4f("u_viewMat", m_camera.getViewMatrix());
+	m_shaders[m_cursorShaderLID].bind();
+	m_shaders[m_cursorShaderLID].setUniformMat4f("u_viewMat", m_camera.getViewMatrix());
 }
 void App::onProjMatrixChange() {
 	Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-	m_cursorShader.bind();
-	m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
+	m_shaders[m_cursorShaderLID].bind();
+	m_shaders[m_cursorShaderLID].setUniformMat4f("u_projMat", m_camera.getProjMatrix());
 }
 
 void App::onEvent(const SDL_Event& e) {

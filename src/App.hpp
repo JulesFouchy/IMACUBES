@@ -5,6 +5,7 @@
 
 #include "OpenGL/CubesGroup.hpp"
 #include "OpenGL/Shader.hpp"
+#include "OpenGL/ShaderLibrary.hpp"
 #include "Camera/Camera.hpp"
 #include "History/HistoriesManager.hpp"
 #include "CubesMap/CubesMap.hpp"
@@ -39,7 +40,8 @@ public:
 private:
 	CubesMap m_cubesMap;
 	Cursor m_cursor;
-	Shader m_cursorShader;
+	ShaderLibrary m_shaders;
+	size_t m_cursorShaderLID;
 	Camera m_camera;
 	HistoriesManager m_histories;
 	PopupWindow_SaveView m_saveViewWindow;
