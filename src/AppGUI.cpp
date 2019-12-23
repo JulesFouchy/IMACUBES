@@ -37,17 +37,13 @@ void App::_ImGui_CameraControls() {
 void App::_ImGui_CameraView() {
 	// Field of View
 	if (m_camera.ImGui_View()) {
-		Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-		m_cursorShader.bind();
-		m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
+		onProjMatrixChange();
 	}
 	if (ImGui::BeginPopupContextItem("fov reset"))
 	{
 		if (ImGui::Selectable("Reset")) {
 			m_camera.resetFieldOfView();
-			Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-			m_cursorShader.bind();
-			m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
+			onProjMatrixChange();
 		}
 		ImGui::EndPopup();
 	}

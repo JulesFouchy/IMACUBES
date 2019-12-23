@@ -32,11 +32,9 @@ void App::onInit() {
 	m_cursor = Cursor(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2);
 	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/FlatColorPlusBorder.frag");
 	Locate::materialsManager().addShader("res/shaders/default.vert", "res/shaders/testShader.frag");
-	Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
-	m_cursorShader.bind();
-	m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
-	m_cursorShader.setUniformMat4f("u_viewMat", m_camera.getViewMatrix());
+
+	onViewMatrixChange();
+	onProjMatrixChange();
 
 	Locate::history(HistoryType::Cubes).beginUndoGroup();
 	for (int x = m_cubesMap.width()*0.2; x < m_cubesMap.width()*0.8; ++x) {
@@ -61,9 +59,7 @@ void App::onLoopIteration() {
 
 	// ----------------PLAYGROUND!------------------
 	m_camera.update(1.0f / 60.0f);
-	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
-	m_cursorShader.bind();
-	m_cursorShader.setUniformMat4f("u_viewMat", m_camera.getViewMatrix());
+	onViewMatrixChange();
 	drawScene();
 	m_cursorShader.bind();
 	m_cursor.draw();
@@ -99,6 +95,17 @@ void App::placeCursorJustBeforeHoveredCube(){
 	if (m_cubesMap.isIDvalid(prevIpos)) {
 		m_cursor.setPosition(prevIpos);
 	}
+}
+
+void App::onViewMatrixChange(){
+	Locate::materialsManager().updateMatrixUniform("u_viewMat", m_camera.getViewMatrix());
+	m_cursorShader.bind();
+	m_cursorShader.setUniformMat4f("u_viewMat", m_camera.getViewMatrix());
+}
+void App::onProjMatrixChange() {
+	Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
+	m_cursorShader.bind();
+	m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
 }
 
 void App::onEvent(const SDL_Event& e) {
@@ -196,9 +203,7 @@ void App::onEvent(const SDL_Event& e) {
 			Display::UpdateWindowSize(m_window);
 			// Update camera's ratio
 			m_camera.mustRecomputeProjectionMatrix();
-			Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
-			m_cursorShader.bind();
-			m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
+			onProjMatrixChange();
 			break;
 		}
 		break;

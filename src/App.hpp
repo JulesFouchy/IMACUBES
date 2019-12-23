@@ -24,6 +24,9 @@ public:
 	void drawScene();
 	void placeCursorJustBeforeHoveredCube();
 
+	void onViewMatrixChange();
+	void onProjMatrixChange();
+
 	void onEvent(const SDL_Event& e);
 
 	// The ImGui functions are in AppGUI.cpp
