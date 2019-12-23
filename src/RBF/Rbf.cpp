@@ -1,9 +1,7 @@
 #include "Rbf.hpp"
 
-#include "Eigen/Dense"
 #include <math.h>
 #include <imgui.h>
-#include <glm/glm.hpp>
 
 double distance(glm::vec3 a, b) {
 	return glm::distance(a, b);
