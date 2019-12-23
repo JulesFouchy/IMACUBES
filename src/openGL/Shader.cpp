@@ -7,11 +7,12 @@
 #include <iostream>
 
 #include "Helper/String.hpp"
+#include "Helper/File.hpp"
 
 #include "Debugging/Log.hpp"
 
 Shader::Shader(const std::string& vertexShaderFilepath, const std::string& fragmentShaderFilepath, bool compileShader)
-	: m_shaderId(-1), m_vsID(-1), m_fsID(-1), m_vertexShaderFilepath(vertexShaderFilepath), m_fragmentShaderFilepath(fragmentShaderFilepath),
+	: m_shaderId(-1), m_vsID(-1), m_fsID(-1), m_vertexShaderFilepath(MyFile::GetFullPath(vertexShaderFilepath)), m_fragmentShaderFilepath(MyFile::GetFullPath(fragmentShaderFilepath)),
 	  m_bCreatedSuccessfully(true)
 {
 	if (compileShader) {

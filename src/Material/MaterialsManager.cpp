@@ -18,7 +18,7 @@ void MaterialsManager::draw() {
 void MaterialsManager::ImGui_Menu() {
 	ImGui::Begin("Materials");
 	if (ImGui::Button("Add shader")) {
-		addShader("res/shaders/default.vert", FileBrowser::openfilename(" frag (*.frag)\0*.frag;*.FRAG\0All Files (*.*)\0*.*\0"));
+		addShader("default.vert", FileBrowser::openfilename(" frag (*.frag)\0*.frag;*.FRAG\0All Files (*.*)\0*.*\0"));
 	}
 	for (MaterialsForAGivenShader& shader : m_shadersList) {
 		shader.ImGui_Menu();
