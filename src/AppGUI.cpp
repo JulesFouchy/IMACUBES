@@ -36,7 +36,7 @@ void App::_ImGui_CameraControls() {
 
 void App::_ImGui_CameraView() {
 	// Field of View
-	if (m_camera.ImGui_Sliders()) {
+	if (m_camera.ImGui_View()) {
 		Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 		m_cursorShader.bind();
 		m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
@@ -61,16 +61,31 @@ void App::ImGui_MainMenuBar() {
 				_ImGui_CameraControls();
 				ImGui::EndMenu();
 			}
-			if (ImGui::BeginMenu("Camera view")) {
-				_ImGui_CameraView();
-				ImGui::EndMenu();
-			}
 			ImGui::EndMenu();
 		}
 		// Histories
 		if (ImGui::BeginMenu("Histories")) {
 			if (ImGui::BeginMenu("Active history")) {
 				m_histories._ImGui_ActiveHistory();
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenu();
+		}
+		// Camera
+		if (ImGui::BeginMenu("Camera")) {
+			if (ImGui::BeginMenu("Transform")) {
+				m_camera.ImGui_Transform();
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginPopupContextItem("camera transform reset"))
+			{
+				if (ImGui::Selectable("Reset")) {
+					m_camera.resetTransform();
+				}
+				ImGui::EndPopup();
+			}
+			if (ImGui::BeginMenu("View")) {
+				_ImGui_CameraView();
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenu();

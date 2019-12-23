@@ -47,7 +47,10 @@ public:
 	inline void setLookedAtPoint(const glm::vec3& newLookedAtPoint) { m_lookedAtPoint = newLookedAtPoint; m_bMustRecomputeTransformMatrix = true; }
 
 	inline void resetFieldOfView() { m_fieldOfViewInRadians = Settings::DEFAULT_CAMERA_FIELD_OF_VIEW; mustRecomputeProjectionMatrix(); }
-	bool ImGui_Sliders();
+	void resetTransform();
+
+	bool ImGui_View();
+	bool ImGui_Transform();
 
 private:
 	inline const glm::mat4& getTransformMatrix() { if (m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_transformMatrix; }

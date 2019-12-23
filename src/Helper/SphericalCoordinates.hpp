@@ -22,6 +22,8 @@ struct SphericalCoordinates {
 	inline const float getY() { if (m_bMustRecomputeXYZ) computeXYZ(); return m_y; }
 	inline const float getZ() { if (m_bMustRecomputeXYZ) computeXYZ(); return m_z; }
 
+	bool _ImGui_CoordinatesSliders();
+
 private:
 	void computeXYZ();
 
