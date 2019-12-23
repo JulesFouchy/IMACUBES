@@ -11,14 +11,15 @@
 #include "Locator/Locate.hpp"
 
 MaterialsForAGivenShader::MaterialsForAGivenShader(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex)
-	: m_shader(vertexFilepath, fragmentFilepath), m_cubes(), m_name(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(fragmentFilepath))), m_shaderIndex(shaderIndex)
+	: m_shaderLID(Locate::shaderLibrary().LoadShader(vertexFilepath, fragmentFilepath)), 
+	  m_cubes(), m_name(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(fragmentFilepath))), m_shaderIndex(shaderIndex)
 {
 	parseShaderAndCreateUniformDescriptions(fragmentFilepath);
 	addMaterial();
 }
 
 MaterialsForAGivenShader::MaterialsForAGivenShader(const MaterialsForAGivenShader& other)
-	: m_shader(other.m_shader), m_cubes(other.m_cubes), m_materials(other.m_materials), m_name(other.m_name), m_shaderIndex(other.m_shaderIndex)
+	: m_shaderLID(other.m_shaderLID), m_cubes(other.m_cubes), m_materials(other.m_materials), m_name(other.m_name), m_shaderIndex(other.m_shaderIndex)
 {
 	for (UniformDescription* ptr : other.m_structLayout) {
 		m_structLayout.push_back(ptr->createPtrWithSameData());
@@ -26,7 +27,7 @@ MaterialsForAGivenShader::MaterialsForAGivenShader(const MaterialsForAGivenShade
 }
 
 MaterialsForAGivenShader::MaterialsForAGivenShader(MaterialsForAGivenShader&& other) noexcept
-	: m_shader(std::move(other.m_shader)), m_cubes(std::move(other.m_cubes)), m_materials(std::move(other.m_materials)), m_name(std::move(other.m_name)), m_shaderIndex(other.m_shaderIndex)
+	: m_shaderLID(other.m_shaderLID), m_cubes(std::move(other.m_cubes)), m_materials(std::move(other.m_materials)), m_name(std::move(other.m_name)), m_shaderIndex(other.m_shaderIndex)
 {
 	for (UniformDescription*& ptr : other.m_structLayout) {
 		m_structLayout.push_back(ptr);
@@ -40,20 +41,24 @@ MaterialsForAGivenShader::~MaterialsForAGivenShader() {
 }
 
 void MaterialsForAGivenShader::draw() {
-	m_shader.bind();
+	shader().bind();
 	setUniforms(); // TODO only update uniform on material change
 	m_cubes.draw();
 }
 
 void MaterialsForAGivenShader::addMaterial() {
-	m_materials.emplace_back(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(m_shader.getFragmentFilepath())) + std::to_string(m_materials.size()), m_structLayout, m_shaderIndex, (int)m_materials.size());
+	m_materials.emplace_back(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(shader().getFragmentFilepath())) + std::to_string(m_materials.size()), m_structLayout, m_shaderIndex, (int)m_materials.size());
 	Locate::materialsManager().SetSelectedMaterial(m_shaderIndex, (int)m_materials.size() - 1);
 }
 
 void MaterialsForAGivenShader::reloadShader() {
-	m_shader.compile();
-	parseShaderAndCreateUniformDescriptions(m_shader.getFragmentFilepath());
+	shader().compile();
+	parseShaderAndCreateUniformDescriptions(shader().getFragmentFilepath());
 	updateMaterialsLayout();
+}
+
+Shader& MaterialsForAGivenShader::shader() {
+	return Locate::shaderLibrary()[m_shaderLID];
 }
 
 void MaterialsForAGivenShader::ImGui_Menu(){

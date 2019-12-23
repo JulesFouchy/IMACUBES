@@ -23,13 +23,15 @@ public:
 
 	void ImGui_Menu();
 
+	Shader& shader();
+
 private:
 	void setUniforms();
 
 	void parseShaderAndCreateUniformDescriptions(const std::string& fragmentFilepath);
 	void updateMaterialsLayout();
-public:
-	Shader m_shader;
+private:
+	size_t m_shaderLID;
 	CubesGroup m_cubes;
 	std::vector<UniformDescription*> m_structLayout;
 	std::vector<Material> m_materials;

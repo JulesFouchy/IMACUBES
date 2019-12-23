@@ -27,9 +27,9 @@ void MaterialsManager::ImGui_Menu() {
 }
 
 void MaterialsManager::updateMatrixUniform(const std::string& name, const glm::mat4& mat) {
-	for (MaterialsForAGivenShader& shader : m_shadersList) {
-		shader.m_shader.bind();
-		shader.m_shader.setUniformMat4f(name, mat);
+	for (MaterialsForAGivenShader& matGroup : m_shadersList) {
+		matGroup.shader().bind();
+		matGroup.shader().setUniformMat4f(name, mat);
 	}
 }
 
