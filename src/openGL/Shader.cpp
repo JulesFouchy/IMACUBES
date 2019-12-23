@@ -11,7 +11,7 @@
 #include "Debugging/Log.hpp"
 
 Shader::Shader(const std::string& vertexShaderFilepath, const std::string& fragmentShaderFilepath, bool compileShader)
-	: m_shaderId(-1), m_vertexShaderFilepath(vertexShaderFilepath), m_fragmentShaderFilepath(fragmentShaderFilepath),
+	: m_shaderId(-1), m_vsID(-1), m_fsID(-1), m_vertexShaderFilepath(vertexShaderFilepath), m_fragmentShaderFilepath(fragmentShaderFilepath),
 	  m_bCreatedSuccessfully(true)
 {
 	if (compileShader) {
@@ -20,10 +20,17 @@ Shader::Shader(const std::string& vertexShaderFilepath, const std::string& fragm
 }
 
 Shader::Shader(const Shader& other)
-	: m_shaderId(-1), m_vertexShaderFilepath(other.m_vertexShaderFilepath), m_fragmentShaderFilepath(other.m_fragmentShaderFilepath),
+	: m_shaderId(-1), m_vsID(other.m_vsID), m_fsID(other.m_fsID), m_vertexShaderFilepath(other.m_vertexShaderFilepath), m_fragmentShaderFilepath(other.m_fragmentShaderFilepath),
 	m_bCreatedSuccessfully(true)
 {
 	compile();
+}
+
+Shader::Shader(Shader&& other) noexcept
+	: m_shaderId(other.m_shaderId), m_vsID(other.m_vsID), m_fsID(other.m_fsID), m_vertexShaderFilepath(other.m_vertexShaderFilepath), m_fragmentShaderFilepath(other.m_fragmentShaderFilepath),
+	m_bCreatedSuccessfully(true) 
+{
+	other.m_shaderId = -1;
 }
 
 Shader::~Shader() {
@@ -67,7 +74,7 @@ int Shader::getUniformLocation(std::string uniformName) {
 
 	int location = glGetUniformLocation(m_shaderId, uniformName.c_str());
 	if (location == -1) {
-		spdlog::warn("[Shader::getUniformLocation] uniform '{}' doesn't exist or it was removed during compilation because it wasn't used", uniformName);
+		//spdlog::warn("[Shader::getUniformLocation] uniform '{}' doesn't exist or it was removed during compilation because it wasn't used", uniformName);
 		return -1;
 	}
 	m_UniformLocationCache[uniformName] = location;

@@ -25,6 +25,15 @@ MaterialsForAGivenShader::MaterialsForAGivenShader(const MaterialsForAGivenShade
 	}
 }
 
+MaterialsForAGivenShader::MaterialsForAGivenShader(MaterialsForAGivenShader&& other) noexcept
+	: m_shader(std::move(other.m_shader)), m_cubes(std::move(other.m_cubes)), m_materials(std::move(other.m_materials)), m_name(std::move(other.m_name)), m_shaderIndex(other.m_shaderIndex)
+{
+	for (UniformDescription*& ptr : other.m_structLayout) {
+		m_structLayout.push_back(ptr);
+		ptr = nullptr;
+	}
+}
+
 MaterialsForAGivenShader::~MaterialsForAGivenShader() {
 	for (UniformDescription* ptr : m_structLayout)
 		delete ptr;

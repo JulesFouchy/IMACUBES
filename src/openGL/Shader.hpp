@@ -9,6 +9,7 @@ class Shader {
 public:
 	Shader(const std::string& vertexShaderFilepath, const std::string& fragmentShaderFilepath, bool compileShader = true);
 	Shader(const Shader& other);
+	Shader(Shader&& other) noexcept;
 	~Shader();
 
 	void bind() const;
@@ -16,7 +17,7 @@ public:
 
 	inline bool createdSuccessfully() const { return m_bCreatedSuccessfully; }
 
-	inline unsigned int getID() const { return m_shaderId; }
+	inline int getID() const { return m_shaderId; }
 	inline const std::string& getFragmentFilepath() const { return m_fragmentShaderFilepath; }
 
 	void setUniform1i(const std::string& uniformName, int v);
@@ -32,9 +33,9 @@ private:
 	unsigned int compileShader(unsigned int type, const std::string& source);
 
 private:
-	unsigned int m_shaderId;
-	unsigned int m_vsID;
-	unsigned int m_fsID;
+	int m_shaderId;
+	int m_vsID;
+	int m_fsID;
 	std::string m_vertexShaderFilepath;
 	std::string m_fragmentShaderFilepath;
 	std::unordered_map<std::string, int> m_UniformLocationCache;

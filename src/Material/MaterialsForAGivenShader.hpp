@@ -13,6 +13,7 @@ friend class MaterialsManager;
 public:
 	MaterialsForAGivenShader(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex);
 	MaterialsForAGivenShader(const MaterialsForAGivenShader& other);
+	MaterialsForAGivenShader(MaterialsForAGivenShader&& other) noexcept;
 	~MaterialsForAGivenShader();
 
 	void draw();
