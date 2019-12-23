@@ -1,7 +1,16 @@
 #pragma once
 
 struct Settings {
-	static const float CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH;
-	static const float CAMERA_SCALE_RADIUS_PER_SCROLL;
-	static const float CAMERA_TRANSLATION_SPEED_PER_UNIT;
+	// Camera control speed
+	static const float DEFAULT_CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH;
+	static float               CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH;
+	static const float DEFAULT_CAMERA_TRANSLATION_SPEED_PER_INCH;
+	static float               CAMERA_TRANSLATION_SPEED_PER_INCH;
+	static const float DEFAULT_CAMERA_SCALE_RADIUS_PER_SCROLL;
+	static float               CAMERA_SCALE_RADIUS_PER_SCROLL;
+
+	// Camera view	
+	static const float DEFAULT_CAMERA_FIELD_OF_VIEW;
+	static float               CAMERA_FIELD_OF_VIEW;
+
 };

@@ -1,8 +1,11 @@
 #include "CubesGroup_WithoutMaterialIndices.hpp"
 
 #include "Debugging/gl-exception.h"
-
 #include "Debugging/Log.hpp"
+
+#include "Locator/Locate.hpp"
+
+#include "CubeMaths/CubeMaths.hpp"
 
 #include <algorithm>
 
@@ -150,32 +153,47 @@ void CubesGroup_WithoutMaterialIndices::updateGPU() {
 }
 
 
-void CubesGroup_WithoutMaterialIndices::addCube(glm::vec3 position) {
+void CubesGroup_WithoutMaterialIndices::addCube(const glm::ivec3& position) {
 	removeCube(position);
+	addCube_NoExistenceCheck(position);
+}
+
+
+void CubesGroup_WithoutMaterialIndices::addCube_NoExistenceCheck(const glm::ivec3& position) {
 	m_positions.push_back(position);
+	m_indicesMap[Locate::cubesMap().index1Dfrom3D(position)] = m_positions.size() - 1;
 	bMustUpdateGPU = true;
 }
 
-void CubesGroup_WithoutMaterialIndices::removeCube(glm::vec3 position) {
+int CubesGroup_WithoutMaterialIndices::removeCube(const glm::ivec3& position) {
 	int index = findCubeAt(position);
+	// if cube exists
 	if (index != -1) {
+		// remove it from hash map
+		m_indicesMap.erase(Locate::cubesMap().index1Dfrom3D(position));
+		// remove it from vector of positions
 		int lastIndex = m_positions.size() - 1;
-		std::swap(m_positions[index], m_positions[lastIndex]);
+		if (lastIndex != index) { // import because otherwise next line recreates the entry that was just removed in hash map
+			m_indicesMap[Locate::cubesMap().index1Dfrom3D(CubeMaths::CubeContaining(m_positions.back()))] = index;
+			std::swap(m_positions[index], m_positions[lastIndex]);
+		}
 		m_positions.pop_back();
+		// update GPU
 		bMustUpdateGPU = true;
 	}
+	return index;
 }
 
 void CubesGroup_WithoutMaterialIndices::removeAllCubes() {
 	m_positions.resize(0);
+	m_indicesMap.clear();
 	bMustUpdateGPU = true;
 }
 
-int CubesGroup_WithoutMaterialIndices::findCubeAt(glm::vec3 position) {
-	for (int k = 0; k < m_positions.size(); ++k) {
-		if (glm::length(position - m_positions[k]) < 0.1f)
-			return k;
-	}
+int CubesGroup_WithoutMaterialIndices::findCubeAt(const glm::ivec3& position) {
+	auto it = m_indicesMap.find(Locate::cubesMap().index1Dfrom3D(position));
+	if (it != m_indicesMap.end())
+		return (*it).second;
 	return -1;
 }
 

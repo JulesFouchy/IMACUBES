@@ -7,20 +7,29 @@
 
 #include "Debugging/Log.hpp"
 
-Camera::Camera()
-	: m_transformMatrix(1.0f), m_inverseTransformMatrix(1.0f), m_sphereCoord(5.0f, 1.8f, 0.0f), m_translation(0.0f),
-	  m_bMustRecomputeTransformMatrix(true),
+#include "Locator/Locate.hpp"
+
+#include <imgui/imgui.h>
+
+Camera::Camera(const glm::vec3& lookedAtPoint)
+	: m_projectionMatrix(1.0f), m_fieldOfViewInRadians(Settings::CAMERA_FIELD_OF_VIEW), m_bMustRecomputeProjectionMatrix(true),
+	  m_transformMatrix(1.0f), m_inverseTransformMatrix(1.0f), m_sphereCoord(34.0f, 0.0f, 0.28f), m_lookedAtPoint(lookedAtPoint), m_bMustRecomputeTransformMatrix(true),
 	  m_controlState(std::make_unique<CameraControlState_Rest>(this))
 {
 }
 
 void Camera::computeTransformMatrixAndItsInverse() {
 	using namespace MyMaths;
-	m_transformMatrix = glm::translate(glm::inverse(glm::lookAt(m_sphereCoord.getXYZ() + glm::vec3(50.0f), glm::vec3(50.0f), glm::vec3(0.0f, Sign(Cos(m_sphereCoord.getAngleUp())), 0.0f))), m_translation);
-	m_inverseTransformMatrix = glm::inverse(m_transformMatrix);
-
+	m_inverseTransformMatrix = glm::lookAt(m_sphereCoord.getXYZ() + m_lookedAtPoint, m_lookedAtPoint, glm::vec3(0.0f, Sign(Cos(m_sphereCoord.getAngleUp())), 0.0f));
+	m_transformMatrix = glm::inverse(m_inverseTransformMatrix);
 
 	m_bMustRecomputeTransformMatrix = false;
+}
+
+void Camera::computeProjectionMatrix() {
+	m_projectionMatrix = glm::infinitePerspective(m_fieldOfViewInRadians, Display::GetRatio(), 0.1f);
+
+	m_bMustRecomputeProjectionMatrix = false;
 }
 
 Ray Camera::getRayGoingThroughMousePos() {
@@ -28,4 +37,26 @@ Ray Camera::getRayGoingThroughMousePos() {
 	glm::vec3 mousePos = glm::unProject(glm::vec3(Input::MousePositionInPixels(), 0.0f), getViewMatrix(), getProjMatrix(), glm::vec4(0.0f, 0.0f, Display::GetWidth(), Display::GetHeight()));
 	glm::vec3 dir = glm::normalize(mousePos - pos);
 	return Ray(pos, dir);
+}
+
+void Camera::resetTransform() {
+	m_sphereCoord = SphericalCoordinates(34.0f, 0.0f, 0.28f);
+	m_lookedAtPoint = glm::vec3(Locate::cubesMap().width()/2.0f, Locate::cubesMap().height() / 2.0f, Locate::cubesMap().depth() / 2.0f);
+	m_bMustRecomputeTransformMatrix = true;
+}
+
+bool Camera::ImGui_View() {
+	if (ImGui::SliderFloat("Field of view", &m_fieldOfViewInRadians, 0.01, 3.14)) {
+		mustRecomputeProjectionMatrix();
+		return true;
+	}
+	return false;
+}
+
+bool Camera::ImGui_Transform() {
+	bool modifs = m_sphereCoord._ImGui_CoordinatesSliders();
+	modifs |=     ImGui::DragFloat3("Looking at", (float*)&m_lookedAtPoint);
+	if (modifs)
+		m_bMustRecomputeTransformMatrix = true;
+	return modifs;
 }

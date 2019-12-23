@@ -1,6 +1,7 @@
 #include "CubesGroup.hpp"
 
 #include "Debugging/gl-exception.h"
+#include "Debugging/Log.hpp"
 
 CubesGroup::CubesGroup()
 {
@@ -46,33 +47,28 @@ void CubesGroup::updateGPU() {
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 }
 
-void CubesGroup::addCube(int materialID, glm::vec3 position) {
+void CubesGroup::addCube(int materialID, const glm::ivec3& position) {
 	assert(materialID > -1);
-	removeCube(position);
-	m_positions.push_back(position);
+	CubesGroup_WithoutMaterialIndices::addCube(position);
 	m_materialIndices.push_back(materialID);
-	bMustUpdateGPU = true;
 }
 
-void CubesGroup::removeCube(glm::vec3 position) {
-	int index = findCubeAt(position);
+int CubesGroup::removeCube(const glm::ivec3& position) {
+	int index = CubesGroup_WithoutMaterialIndices::removeCube(position);
 	if (index != -1) {
-		int lastIndex = m_positions.size() - 1;
-		std::swap(m_positions[index], m_positions[lastIndex]);
-		m_positions.pop_back();
+		int lastIndex = m_materialIndices.size() - 1;
 		std::swap(m_materialIndices[index], m_materialIndices[lastIndex]);
 		m_materialIndices.pop_back();
-		bMustUpdateGPU = true;
 	}
+	return index;
 }
 
 void CubesGroup::removeAllCubes() {
-	m_positions.resize(0);
+	CubesGroup_WithoutMaterialIndices::removeAllCubes();
 	m_materialIndices.resize(0);
-	bMustUpdateGPU = true;
 }
 
-int CubesGroup::getCubeMaterialID(const glm::vec3& position) {
+int CubesGroup::getCubeMaterialID(const glm::ivec3& position) {
 	int index = findCubeAt(position);
 	return m_materialIndices[index];
 }

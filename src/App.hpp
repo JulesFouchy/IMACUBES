@@ -9,7 +9,7 @@
 #include "History/HistoriesManager.hpp"
 #include "CubesMap/CubesMap.hpp"
 #include "Cursor/Cursor.hpp"
-#include "GUI/SaveView.hpp"
+#include "GUI/PopupWindow/SaveView.hpp"
 
 
 class App {
@@ -23,17 +23,26 @@ public:
 
 	void drawScene();
 	void placeCursorJustBeforeHoveredCube();
-	void ImGUI_DebugWindow();
 
-	void onEvent();
+	void onViewMatrixChange();
+	void onProjMatrixChange();
+
+	void onEvent(const SDL_Event& e);
+
+	// The ImGui functions are in AppGUI.cpp
+	void ImGui_DebugWindow();
+	void _ImGui_CameraControls();
+	void _ImGui_CameraView();
+	void ImGui_MainMenuBar();
+	// --------------------------------------
 
 private:
-	Camera m_camera;
-	HistoriesManager m_histories;
 	CubesMap m_cubesMap;
 	Cursor m_cursor;
-	PopupWindow_SaveView m_saveViewWindow;
 	Shader m_cursorShader;
+	Camera m_camera;
+	HistoriesManager m_histories;
+	PopupWindow_SaveView m_saveViewWindow;
 	bool m_bShowImGUIDemoWindow;
 
 
@@ -47,6 +56,7 @@ public:
 	inline static App& Get() { return *m_instance; }
 
 	void _loopIteration();
+	void handleSDLevents();
 
 	inline SDL_Window* getWindow() const { return m_window; }
 	inline bool isRunning() const { return m_running; }
