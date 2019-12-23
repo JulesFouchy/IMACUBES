@@ -10,7 +10,7 @@ struct MaterialParameters{
 	float borderRampEnd; // default 0.5 min 0 max 0.5
 };
 
-uniform MaterialParameters params[100];
+uniform MaterialParameters params[16];
 
 float ramp(float d){
 	MaterialParameters u_ = params[vMaterialIndex];
