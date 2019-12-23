@@ -9,8 +9,7 @@ HistoriesManager::HistoriesManager()
 	m_histories.emplace_back("Cubes");
 }
 
-void HistoriesManager::ImGuiWindow() {
-	ImGui::Begin("Histories");
+void HistoriesManager::_ImGui_ActiveHistory() {
 	int k = 0;
 	for (History& history : m_histories) {
 		if (ImGui::Selectable(history.getName().c_str(), k == m_activeHistoryIndex)) {
@@ -18,5 +17,4 @@ void HistoriesManager::ImGuiWindow() {
 		}
 		k++;
 	}
-	ImGui::End();
 }

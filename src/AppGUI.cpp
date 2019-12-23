@@ -67,6 +67,15 @@ void App::ImGui_MainMenuBar() {
 			}
 			ImGui::EndMenu();
 		}
+		// Histories
+		if (ImGui::BeginMenu("Histories")) {
+			if (ImGui::BeginMenu("Active history")) {
+				m_histories._ImGui_ActiveHistory();
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenu();
+		}
+		//
 		ImGui::EndMainMenuBar();
 	}
 }

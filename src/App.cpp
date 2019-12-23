@@ -68,7 +68,6 @@ void App::onLoopIteration() {
 	m_cursorShader.bind();
 	m_cursor.draw();
 	Locate::materialsManager().ImGui_Menu();
-	m_histories.ImGuiWindow();
 	m_saveViewWindow.Show_IfOpen();
 }
 
