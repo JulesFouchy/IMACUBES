@@ -54,8 +54,8 @@ void App::onInit() {
 void App::onLoopIteration() {
 	// ImGui windows
 	ImGui_DebugWindow();
-	ImGui_Settings();
-	ImGui_Camera();
+	//_ImGui_Settings();
+	//_ImGui_Camera();
 	if (m_bShowImGUIDemoWindow) // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		ImGui::ShowDemoWindow(&m_bShowImGUIDemoWindow);
 	ImGui_MainMenuBar();
@@ -110,23 +110,34 @@ void App::ImGui_DebugWindow() {
 	ImGui::End();
 }
 
-void App::ImGui_Settings() {
-	ImGui::Begin("Settings");
-		ImGui::Text("Camera Control");
+void App::_ImGui_Settings() {
+	//ImGui::Text("Camera Control");
 		ImGui::SliderFloat("Translation", &Settings::CAMERA_TRANSLATION_SPEED_PER_INCH, 0., 0.3);
+		if (ImGui::BeginPopupContextItem("translation reset"))
+		{
+			if (ImGui::Selectable("Reset")) Settings::CAMERA_TRANSLATION_SPEED_PER_INCH = Settings::DEFAULT_CAMERA_TRANSLATION_SPEED_PER_INCH;
+			ImGui::EndPopup();
+		}
 		ImGui::SliderFloat("Rotation", &Settings::CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH, 0., 0.16);
+		if (ImGui::BeginPopupContextItem("rotation reset"))
+		{
+			if (ImGui::Selectable("Reset")) Settings::CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH = Settings::DEFAULT_CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH;
+			ImGui::EndPopup();
+		}
 		ImGui::SliderFloat("Zoom", &Settings::CAMERA_SCALE_RADIUS_PER_SCROLL, 0.01, 1.0);
-	ImGui::End();
+		if (ImGui::BeginPopupContextItem("scale reset"))
+		{
+			if (ImGui::Selectable("Reset")) Settings::CAMERA_SCALE_RADIUS_PER_SCROLL = Settings::DEFAULT_CAMERA_SCALE_RADIUS_PER_SCROLL;
+			ImGui::EndPopup();
+		}
 }
 
-void App::ImGui_Camera() {
-	ImGui::Begin("Camera");
+void App::_ImGui_Camera() {
 	if (m_camera.ImGui_Sliders()) {
 		Locate::materialsManager().updateMatrixUniform("u_projMat", m_camera.getProjMatrix());
 		m_cursorShader.bind();
 		m_cursorShader.setUniformMat4f("u_projMat", m_camera.getProjMatrix());
 	}
-	ImGui::End();
 }
 
 void App::ImGui_MainMenuBar() {
@@ -205,6 +216,19 @@ void App::ImGui_MainMenuBar() {
 			if (ImGui::MenuItem("Cut", "CTRL+X")) {}
 			if (ImGui::MenuItem("Copy", "CTRL+C")) {}
 			if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("Settings")) {
+			if (ImGui::BeginMenu("Camera controls speed")) {
+				_ImGui_Settings();
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Camera view")) {
+				_ImGui_Camera();
+				ImGui::EndMenu();
+			}
+			//ImGui::Text("Camera Control");
+			//ImGui::SliderFloat("Translation", &Settings::CAMERA_TRANSLATION_SPEED_PER_INCH, 0., 0.3);
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();

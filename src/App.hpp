@@ -24,8 +24,8 @@ public:
 	void drawScene();
 	void placeCursorJustBeforeHoveredCube();
 	void ImGui_DebugWindow();
-	void ImGui_Settings();
-	void ImGui_Camera();
+	void _ImGui_Settings();
+	void _ImGui_Camera();
 	void ImGui_MainMenuBar();
 
 	void onEvent(const SDL_Event& e);
