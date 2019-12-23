@@ -10,7 +10,7 @@
 #include <imgui/imgui.h>
 
 Camera::Camera(const glm::vec3& lookedAtPoint)
-	: m_projectionMatrix(1.0f), m_fieldOfViewInRadians(0.79f), m_bMustRecomputeProjectionMatrix(true), 
+	: m_projectionMatrix(1.0f), m_fieldOfViewInRadians(Settings::CAMERA_FIELD_OF_VIEW), m_bMustRecomputeProjectionMatrix(true),
 	  m_transformMatrix(1.0f), m_inverseTransformMatrix(1.0f), m_sphereCoord(5.0f, 1.8f, 0.0f), m_lookedAtPoint(lookedAtPoint), m_bMustRecomputeTransformMatrix(true),
 	  m_controlState(std::make_unique<CameraControlState_Rest>(this))
 {

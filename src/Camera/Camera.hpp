@@ -7,6 +7,8 @@
 #include "Helper/SphericalCoordinates.hpp"
 #include "Helper/Ray.hpp"
 
+#include "UI/Settings.hpp"
+
 #include "CameraControlState.hpp"
 
 #include "Debugging/Log.hpp"
@@ -42,8 +44,9 @@ public:
 	Ray getRayGoingThroughMousePos();
 
 	inline const glm::vec3& getLookedAtPoint() const { return m_lookedAtPoint; }
-	inline void setLookedAtPoint(const glm::vec3& newLookedAtPoint) { m_lookedAtPoint = newLookedAtPoint; }
+	inline void setLookedAtPoint(const glm::vec3& newLookedAtPoint) { m_lookedAtPoint = newLookedAtPoint; m_bMustRecomputeTransformMatrix = true; }
 
+	inline void resetFieldOfView() { m_fieldOfViewInRadians = Settings::DEFAULT_CAMERA_FIELD_OF_VIEW; mustRecomputeProjectionMatrix(); }
 	bool ImGui_Sliders();
 
 private:

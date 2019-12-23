@@ -23,12 +23,15 @@ public:
 
 	void drawScene();
 	void placeCursorJustBeforeHoveredCube();
-	void ImGui_DebugWindow();
-	void _ImGui_Settings();
-	void _ImGui_Camera();
-	void ImGui_MainMenuBar();
 
 	void onEvent(const SDL_Event& e);
+
+	// The ImGui functions are in AppGUI.cpp
+	void ImGui_DebugWindow();
+	void _ImGui_CameraControls();
+	void _ImGui_CameraView();
+	void ImGui_MainMenuBar();
+	// --------------------------------------
 
 private:
 	CubesMap m_cubesMap;
