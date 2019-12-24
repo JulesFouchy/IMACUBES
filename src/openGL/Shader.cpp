@@ -43,7 +43,7 @@ void Shader::bind() const {
 }
 
 void Shader::compile() {
-	spdlog::info("[Compiling Shader] " + MyString::RemoveFolderHierarchy(m_vertexShaderFilepath) + " & " + MyString::RemoveFolderHierarchy(m_fragmentShaderFilepath));
+	spdlog::info("[Compiling Shader] " + m_vertexShaderFilepath + " & " +m_fragmentShaderFilepath);
 	if (m_shaderId == -1) {
 		m_shaderId = glCreateProgram();
 	}
@@ -106,15 +106,27 @@ void Shader::setUniformMat4f(const std::string& uniformName, const glm::mat4& ma
 std::string Shader::parseFile(const std::string& filepath) {
 	std::ifstream stream(filepath);
 	if (!stream.is_open()) {
-		spdlog::warn("Failed to open file |{}|", filepath);
+		spdlog::warn("[Shader::parseFile] Failed to open file |{}|", filepath);
 		m_bCreatedSuccessfully = false;
 		return "";
 	}
 
 	std::string str = "";
-	std::string tempLine = "";
-	while (getline(stream, tempLine)) {
-		str += tempLine + '\n';
+	std::string line = "";
+	while (getline(stream, line)) {
+		// Look for '#include'
+		if (line.find("#include") != std::string::npos) { // TODO check that the line isn't commented out
+			size_t pos = 0;
+			MyString::GetNextWord(line, &pos);
+			std::string filepathToInclude = MyString::GetNextWord(line, &pos, " ,;()|\t\"");
+			filepathToInclude = MyFile::rootDir + "/res/shaders/" + filepathToInclude; // make absolute path
+			spdlog::info("Including |{}|", filepathToInclude);
+			str += parseFile(filepathToInclude);
+		}
+		// Simply add line
+		else {
+			str += line + '\n';
+		}
 	}
 	stream.close();
 	return str;

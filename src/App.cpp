@@ -30,13 +30,13 @@ App::App(SDL_Window* window)
 void App::onInit() {
 	// ----------------PLAYGROUND!------------------
 
-	m_cursorShaderLID = m_shaders.LoadShader(MyFile::rootDir+"/res/shaders/cursor.vert", MyFile::rootDir + "/res/shaders/cursor.frag");
+	m_cursorShaderLID = m_shaders.LoadShader(MyFile::rootDir+"/res/shaders/_cursor.vert", MyFile::rootDir + "/res/shaders/_cursor.frag");
 	m_cameraUniforms.addSubscriber(m_cursorShaderLID);
 
 	m_cursor = Cursor(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2);
-	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/default.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
-	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/default.vert", MyFile::rootDir+"/res/shaders/testShader.frag");
-	//Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/default.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
+	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
+	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/testShader.frag");
+	//Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
 	Locate::materialsManager().SetSelectedMaterial(0, 0);
 
 	onViewMatrixChange();

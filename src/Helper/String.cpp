@@ -1,17 +1,17 @@
 #include "String.hpp"
 
-size_t MyString::BeginningOfNextWord(const std::string& myString, size_t beginPos) {
-	return myString.find_first_not_of(" ,;/()|\t", beginPos);
+size_t MyString::BeginningOfNextWord(const std::string& myString, size_t beginPos, const std::string& charsToIgnore) {
+	return myString.find_first_not_of(charsToIgnore, beginPos);
 }
 
-size_t MyString::EndOfNextWord(const std::string& myString, size_t beginPos) {
-	size_t pos = myString.find_first_of(" ,;/()|\t", beginPos);
+size_t MyString::EndOfNextWord(const std::string& myString, size_t beginPos, const std::string& charsToIgnore) {
+	size_t pos = myString.find_first_of(charsToIgnore, beginPos);
 	return pos == std::string::npos ? myString.size() : pos;
 }
 
-std::string MyString::GetNextWord(const std::string& myString, size_t* currentPosition) {
-	size_t beginWord = BeginningOfNextWord(myString, *currentPosition);
-	size_t endWord = EndOfNextWord(myString, beginWord);
+std::string MyString::GetNextWord(const std::string& myString, size_t* currentPosition, const std::string& charsToIgnore) {
+	size_t beginWord = BeginningOfNextWord(myString, *currentPosition, charsToIgnore);
+	size_t endWord = EndOfNextWord(myString, beginWord, charsToIgnore);
 	*currentPosition = endWord;
 	if (beginWord != std::string::npos) {
 		return myString.substr(beginWord, endWord - beginWord);

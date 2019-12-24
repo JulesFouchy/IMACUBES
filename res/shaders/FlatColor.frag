@@ -1,17 +1,29 @@
 #version 330 core
 
-in vec3 vObjectPos; 
-in vec3 vWorldPos;
-flat in int vMaterialIndex;
+//----------------------------------------------------------------------------------------
+//----------- All user-defined shaders must give their list of parameters here -----------
+//----------------------------------------------------------------------------------------
 
 struct MaterialParameters{
-	vec3 color; // default  0 0.5 11
+	vec3 color; // default  0 0.5 1
 };
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
 
-uniform MaterialParameters params[16];
+#include "_uniformsAndVaryings.frag"
+// Check the above-included file to know all the informations available (including position in World and Object spaces etc.)
 
-void main() {
+//----------------------------------------------------------------------------------------
+//----------- All user-defined shaders must fill in the 'albedo' function ----------------
+//----------------------------------------------------------------------------------------
+
+vec3 albedo(){
 	MaterialParameters u_ = params[vMaterialIndex];
-	vec3 color = u_.color;
-	gl_FragColor = vec4(color,1.0);
+	return u_.color;
 }
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+
+#include "_main.frag"
