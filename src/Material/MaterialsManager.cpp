@@ -3,6 +3,7 @@
 #include "Locator/Locate.hpp"
 
 #include "GUI/FileBrowser.hpp"
+#include "Helper/File.hpp"
 
 MaterialsManager::MaterialsManager()
 	: m_shaderCount(0), m_selectedMaterial(0, 0)
@@ -18,7 +19,7 @@ void MaterialsManager::draw() {
 void MaterialsManager::ImGui_Menu() {
 	ImGui::Begin("Materials");
 	if (ImGui::Button("Add shader")) {
-		addShader("default.vert", FileBrowser::openfilename(" frag (*.frag)\0*.frag;*.FRAG\0All Files (*.*)\0*.*\0"));
+		addShader(MyFile::rootDir + "/res/shaders/default.vert", FileBrowser::openfilename(" frag (*.frag)\0*.frag;*.FRAG\0All Files (*.*)\0*.*\0"));
 	}
 	for (MaterialsForAGivenShader& shader : m_shadersList) {
 		shader.ImGui_Menu();

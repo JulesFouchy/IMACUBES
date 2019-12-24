@@ -1,7 +1,6 @@
 #include "File.hpp"
 
 #include <sys/stat.h>
-#include <filesystem>
 
 bool MyFile::Exists(const std::string& filepath) {
 	struct stat buffer;
@@ -9,6 +8,5 @@ bool MyFile::Exists(const std::string& filepath) {
 }
 
 std::string MyFile::GetFullPath(const std::string& filepath) {
-	namespace fs = std::filesystem;
-	return fs::absolute(filepath).string();
+	return std::filesystem::absolute(filepath).string();
 }
