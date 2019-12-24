@@ -61,7 +61,7 @@ include_directories(
 # /////////////////////////////////// BUILD ///////////////////////////////////
 # /////////////////////////////////////////////////////////////////////////////
 
-set(EXECUTABLE_OUTPUT_PATH ../bin/${CMAKE_BUILD_TYPE})
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
 add_executable(${PROJECT_NAME} ${MY_SOURCES})
 target_link_libraries(
     ${PROJECT_NAME}
