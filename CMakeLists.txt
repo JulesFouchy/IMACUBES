@@ -88,6 +88,14 @@ if (WIN32) # Copy .dll to build folder
     )
 endif()
 
+# Copy res folder after a build
+add_custom_command(
+    TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/res/
+    $<TARGET_FILE_DIR:${PROJECT_NAME}>/res
+)
+
 # Setup working directory (to access the res folder) :
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES
