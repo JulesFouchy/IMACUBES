@@ -20,4 +20,5 @@ private:
 private:
 	GUIwidget_WidthHeightRatioPicker m_widthHeightRatioPicker;
 	GUIwidget_FilepathPicker m_filepathPicker;
+	int m_nbSamplesForMSAA;
 };

@@ -1,6 +1,7 @@
 #include "SaveView.hpp"
 
 #include <imgui/imgui.h>
+#include "GUI/MoreImGui.hpp"
 #include "Helper/Display.hpp"
 #include "Helper/File.hpp"
 #include "OpenGL/SaveBufferMultisampled.hpp"
@@ -10,7 +11,8 @@
 PopupWindow_SaveView::PopupWindow_SaveView()
 	: PopupWindow_WithConfirmationWarning("Saving current view"),
 	  m_widthHeightRatioPicker(),
-	  m_filepathPicker(" PNG (*.png)\0*.png;*.PNG\0All Files (*.*)\0*.*\0")
+	  m_filepathPicker(" PNG (*.png)\0*.png;*.PNG\0All Files (*.*)\0*.*\0"),
+	  m_nbSamplesForMSAA(4)
 {
 }
 
@@ -30,12 +32,32 @@ void PopupWindow_SaveView::Show() {
 	m_filepathPicker.ShowSavefilename();
 	//
 	ImGui::Separator();
-	ConfirmationButton();
+	//
+	ConfirmationButton(); ImGui::SameLine();
+	//
+	static int item_current = 1;
+	ImGui::SetNextItemWidth(50.0f);
+	ImGui::Combo("Samples", &item_current, " 1\0 4\0 16\0\0");
+	switch (item_current) {
+	case(0): 
+		m_nbSamplesForMSAA = 1;
+		break;
+	case(1):
+		m_nbSamplesForMSAA = 4;
+		break;
+	case(2) : 
+		m_nbSamplesForMSAA = 16;
+		break;
+	default:
+		m_nbSamplesForMSAA = -1;
+		break;
+	}
+	ImGui::SameLine(); ImGui::HelpMarker("Number of samples used by Multi Sampling to reduce aliasing");
 	EndWindow();
 }
 
 void PopupWindow_SaveView::OnConfirmation() {
-	SaveBufferMultisampled saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight(), 16);
+	SaveBufferMultisampled saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight(), m_nbSamplesForMSAA);
 	//SaveBuffer saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight());
 	saveBuffer.bind();
 	saveBuffer.clear();
