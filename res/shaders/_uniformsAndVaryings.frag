@@ -4,6 +4,7 @@
 
 in vec3 vObjectPos; 
 in vec3 vWorldPos;
+flat in vec3 vNormal;
 flat in int vMaterialIndex;
 
 uniform MaterialParameters params[16];

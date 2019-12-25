@@ -31,7 +31,7 @@ void main() {
 	// Point
 	lightColorIntensity += u_point.color * u_point.intensity / length(vWorldPos - u_point.position)/ length(vWorldPos - u_point.position);
 	// Directional
-	lightColorIntensity += u_directional.color * u_directional.intensity * max(-dot(u_directional.direction, vec3(0, 1, 0)),0.);
+	lightColorIntensity += u_directional.color * u_directional.intensity * max(-dot(u_directional.direction, vNormal),0.);
 	//
 	vec3 lightColor = min(lightColorIntensity, 1.0);
 	gl_FragColor = vec4(albedo() * lightColor,1.0);

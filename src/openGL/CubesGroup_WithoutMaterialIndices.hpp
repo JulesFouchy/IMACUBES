@@ -34,7 +34,8 @@ protected:
 	std::vector<glm::vec3> m_positions;
 	std::unordered_map<int, int> m_indicesMap;
 
-	static GLuint m_cubeMeshVBO_ID;
+	static GLuint m_cubeMeshPositionsVBO_ID;
+	static GLuint m_cubeMeshNormalsVBO_ID;
 	static GLuint m_cubeMeshIBO_ID;
 	static GLuint m_cubeWireframeIBO_ID;
 };

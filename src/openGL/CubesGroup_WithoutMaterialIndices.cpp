@@ -9,14 +9,14 @@
 
 #include <algorithm>
 
-GLuint CubesGroup_WithoutMaterialIndices::m_cubeMeshVBO_ID;
+GLuint CubesGroup_WithoutMaterialIndices::m_cubeMeshPositionsVBO_ID;
+GLuint CubesGroup_WithoutMaterialIndices::m_cubeMeshNormalsVBO_ID;
 GLuint CubesGroup_WithoutMaterialIndices::m_cubeMeshIBO_ID;
 GLuint CubesGroup_WithoutMaterialIndices::m_cubeWireframeIBO_ID;
 
 void CubesGroup_WithoutMaterialIndices::Initialize() {
-	float cubeMeshVBO[] = {
-		// position
-		// Back face
+	float cubeMeshPositions[] = {
+		// Front face
 		-0.5f, -0.5f,  0.5f,
 		 0.5f, -0.5f,  0.5f,
 		 0.5f,  0.5f,  0.5f,
@@ -31,7 +31,7 @@ void CubesGroup_WithoutMaterialIndices::Initialize() {
 		 0.5f,  0.5f, -0.5f,
 		 0.5f,  0.5f,  0.5f,
 		-0.5f,  0.5f,  0.5f,
-		// Bottom face 
+		// Bot face 
 		-0.5f,  -0.5f, -0.5f,
 		 0.5f,  -0.5f, -0.5f,
 		 0.5f,  -0.5f,  0.5f,
@@ -46,6 +46,39 @@ void CubesGroup_WithoutMaterialIndices::Initialize() {
 		 0.5f,   0.5f, -0.5f,
 		 0.5f,   0.5f,  0.5f,
 		 0.5f,  -0.5f,  0.5f,
+	};
+
+	float cubeMeshNormals[] = {
+		// Front face
+		 0.0f,  0.0f,  1.0f,
+		 0.0f,  0.0f,  1.0f,
+		 0.0f,  0.0f,  1.0f,
+		 0.0f,  0.0f,  1.0f,
+		// Back face
+		 0.0f,  0.0f, -1.0f,
+		 0.0f,  0.0f, -1.0f,
+		 0.0f,  0.0f, -1.0f,
+		 0.0f,  0.0f, -1.0f,
+		// Top face
+		 0.0f,  1.0f,  0.0f,
+		 0.0f,  1.0f,  0.0f,
+		 0.0f,  1.0f,  0.0f,
+		 0.0f,  1.0f,  0.0f,
+		// Bot face 
+		 0.0f, -1.0f,  0.0f,
+		 0.0f, -1.0f,  0.0f,
+		 0.0f, -1.0f,  0.0f,
+		 0.0f, -1.0f,  0.0f,
+		// Left face 
+		-1.0f,  0.0f,  0.0f,
+		-1.0f,  0.0f,  0.0f,
+		-1.0f,  0.0f,  0.0f,
+		-1.0f,  0.0f,  0.0f,
+		// Right face 
+		 1.0f,  0.0f,  0.0f,
+		 1.0f,  0.0f,  0.0f,
+		 1.0f,  0.0f,  0.0f,
+		 1.0f,  0.0f,  0.0f,
 	};
 
 	unsigned int cubeMeshIBO[] = {
@@ -87,12 +120,16 @@ void CubesGroup_WithoutMaterialIndices::Initialize() {
 		11, 15
 	};
 	// gen buffers
-	GLCall(glGenBuffers(1, &m_cubeMeshVBO_ID));
+	GLCall(glGenBuffers(1, &m_cubeMeshPositionsVBO_ID));
+	GLCall(glGenBuffers(1, &m_cubeMeshNormalsVBO_ID));
 	GLCall(glGenBuffers(1, &m_cubeMeshIBO_ID));
 	GLCall(glGenBuffers(1, &m_cubeWireframeIBO_ID));
-	// VBO data sommet Cube 
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshVBO_ID));
-	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(cubeMeshVBO), cubeMeshVBO, GL_STATIC_DRAW));
+	// VBO data vertices positions
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshPositionsVBO_ID));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(cubeMeshPositions), cubeMeshPositions, GL_STATIC_DRAW));
+	// VBO data normals
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshNormalsVBO_ID));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(cubeMeshNormals), cubeMeshNormals, GL_STATIC_DRAW));
 	// IBO data
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeMeshIBO_ID));
 	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeMeshIBO), cubeMeshIBO, GL_STATIC_DRAW));
@@ -104,7 +141,8 @@ void CubesGroup_WithoutMaterialIndices::Initialize() {
 }
 
 void CubesGroup_WithoutMaterialIndices::ShutDown() {
-	GLCall(glDeleteBuffers(1, &m_cubeMeshVBO_ID));
+	GLCall(glDeleteBuffers(1, &m_cubeMeshPositionsVBO_ID));
+	GLCall(glDeleteBuffers(1, &m_cubeMeshNormalsVBO_ID));
 	GLCall(glDeleteBuffers(1, &m_cubeMeshIBO_ID));
 	GLCall(glDeleteBuffers(1, &m_cubeWireframeIBO_ID));
 }
@@ -127,13 +165,20 @@ void CubesGroup_WithoutMaterialIndices::createOpenGLStuffs() {
 	GLCall(glGenVertexArrays(1, &m_vaoID));
 	// VBO attrib pointer
 	GLCall(glBindVertexArray(m_vaoID));
-	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshVBO_ID));
+		// Vertices positions
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshPositionsVBO_ID));
 	GLCall(glEnableVertexAttribArray(0));
 	GLCall(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
+		// Normals
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshNormalsVBO_ID));
+	GLCall(glEnableVertexAttribArray(3));
+	GLCall(glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
+		// Cubes positions
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubesPositionsVBO_ID));
 	GLCall(glEnableVertexAttribArray(1));
 	GLCall(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), 0));
 	GLCall(glVertexAttribDivisor(1, 1));
+		//
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
 	GLCall(glBindVertexArray(0));
 }
