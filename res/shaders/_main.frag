@@ -34,11 +34,6 @@ void main() {
 	// Directional
 	lightColorIntensity += u_directional.color * u_directional.intensity * max(-dot(u_directional.direction, vNormal),0.);
 	//
-	//lightColorIntensity = vec3(2.);
 	vec3 lightColor = min(lightColorIntensity, 1.0);
 	gl_FragColor = vec4(albedo() * lightColor,1.0);
-	gl_FragColor = vec4(vTexCoord, 0., 1.);
-	//gl_FragColor = vec4(min(albedo() , lightColor),1.0);
-	//gl_FragColor.xyz = lightColorIntensity;
-	//gl_FragColor.rgb = vec3(d);
 }

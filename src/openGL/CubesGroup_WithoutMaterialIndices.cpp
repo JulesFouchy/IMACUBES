@@ -12,6 +12,7 @@
 GLuint CubesGroup_WithoutMaterialIndices::m_cubeMeshPositionsVBO_ID;
 GLuint CubesGroup_WithoutMaterialIndices::m_cubeMeshNormalsVBO_ID;
 GLuint CubesGroup_WithoutMaterialIndices::m_cubeMeshTexCoordsVBO_ID;
+GLuint CubesGroup_WithoutMaterialIndices::m_cubeMeshFaceIdVBO_ID;
 GLuint CubesGroup_WithoutMaterialIndices::m_cubeMeshIBO_ID;
 GLuint CubesGroup_WithoutMaterialIndices::m_cubeWireframeIBO_ID;
 
@@ -115,6 +116,21 @@ void CubesGroup_WithoutMaterialIndices::Initialize() {
 		 0.0f,  1.0f,
 	};
 
+	int cubeMeshFaceIds[] = {
+		// Front face
+		5, 5, 5, 5,
+		// Back face
+		4, 4, 4, 4,
+		// Top face
+		3, 3, 3, 3,
+		// Bot face 
+		2, 2, 2, 2,
+		// Left face 
+		0, 0, 0, 0,
+		// Right face 
+		1, 1, 1, 1,
+	};
+
 	unsigned int cubeMeshIBO[] = {
 		// Back face
 		0, 1, 2,
@@ -157,6 +173,7 @@ void CubesGroup_WithoutMaterialIndices::Initialize() {
 	GLCall(glGenBuffers(1, &m_cubeMeshPositionsVBO_ID));
 	GLCall(glGenBuffers(1, &m_cubeMeshNormalsVBO_ID));
 	GLCall(glGenBuffers(1, &m_cubeMeshTexCoordsVBO_ID));
+	GLCall(glGenBuffers(1, &m_cubeMeshFaceIdVBO_ID));
 	GLCall(glGenBuffers(1, &m_cubeMeshIBO_ID));
 	GLCall(glGenBuffers(1, &m_cubeWireframeIBO_ID));
 	// VBO data vertices positions
@@ -168,6 +185,9 @@ void CubesGroup_WithoutMaterialIndices::Initialize() {
 	// VBO data tex coords
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshTexCoordsVBO_ID));
 	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(cubeMeshTexCoords), cubeMeshTexCoords, GL_STATIC_DRAW));
+	// VBO data face IDs
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshFaceIdVBO_ID));
+	GLCall(glBufferData(GL_ARRAY_BUFFER, sizeof(cubeMeshFaceIds), cubeMeshFaceIds, GL_STATIC_DRAW));
 	// IBO data
 	GLCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_cubeMeshIBO_ID));
 	GLCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(cubeMeshIBO), cubeMeshIBO, GL_STATIC_DRAW));
@@ -182,6 +202,7 @@ void CubesGroup_WithoutMaterialIndices::ShutDown() {
 	GLCall(glDeleteBuffers(1, &m_cubeMeshPositionsVBO_ID));
 	GLCall(glDeleteBuffers(1, &m_cubeMeshNormalsVBO_ID));
 	GLCall(glDeleteBuffers(1, &m_cubeMeshTexCoordsVBO_ID));
+	GLCall(glDeleteBuffers(1, &m_cubeMeshFaceIdVBO_ID));
 	GLCall(glDeleteBuffers(1, &m_cubeMeshIBO_ID));
 	GLCall(glDeleteBuffers(1, &m_cubeWireframeIBO_ID));
 }
@@ -216,6 +237,10 @@ void CubesGroup_WithoutMaterialIndices::createOpenGLStuffs() {
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshTexCoordsVBO_ID));
 	GLCall(glEnableVertexAttribArray(4));
 	GLCall(glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0));
+		// Face IDs
+	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubeMeshFaceIdVBO_ID));
+	GLCall(glEnableVertexAttribArray(5));
+	GLCall(glVertexAttribIPointer(5, 1, GL_INT, sizeof(int), 0));
 		// Cubes positions
 	GLCall(glBindBuffer(GL_ARRAY_BUFFER, m_cubesPositionsVBO_ID));
 	GLCall(glEnableVertexAttribArray(1));

@@ -37,6 +37,7 @@ protected:
 	static GLuint m_cubeMeshPositionsVBO_ID;
 	static GLuint m_cubeMeshNormalsVBO_ID;
 	static GLuint m_cubeMeshTexCoordsVBO_ID;
+	static GLuint m_cubeMeshFaceIdVBO_ID;
 	static GLuint m_cubeMeshIBO_ID;
 	static GLuint m_cubeWireframeIBO_ID;
 };

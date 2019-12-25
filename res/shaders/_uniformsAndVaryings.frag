@@ -6,6 +6,7 @@ in vec3 vObjectPos;
 in vec3 vWorldPos;
 flat in vec3 vNormal;
 in vec2 vTexCoord;
+flat in int vFaceID;
 flat in int vMaterialIndex;
 
 uniform MaterialParameters params[16];
