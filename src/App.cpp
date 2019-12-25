@@ -201,6 +201,10 @@ void App::onEvent(const SDL_Event& e) {
 				else if (e.key.keysym.sym == 'x') {
 					m_cursor.setPosition(glm::ivec3(0, 0, -1) + m_cursor.getPosition());
 				}
+				else if (e.key.keysym.sym == 'c') {
+					m_camera.setLookedAtPoint(m_cursor.getPosition());
+					onViewMatrixChange();
+				}
 			}
 		}
 		break;
