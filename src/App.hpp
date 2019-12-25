@@ -15,6 +15,7 @@
 
 #include "Light/Light.hpp"
 #include "Light/PointLight.hpp"
+#include "Light/DirectionalLight.hpp"
 
 
 class App {
@@ -51,6 +52,7 @@ private:
 	glm::vec3 m_clearColor;
 	Light m_ambiantLight;
 	PointLight m_pointLight;
+	DirectionalLight m_directionalLight;
 	Camera m_camera;
 	HistoriesManager m_histories;
 	PopupWindow_SaveView m_saveViewWindow;

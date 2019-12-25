@@ -7,7 +7,7 @@
 
 class Light {
 public:
-	Light(const std::string& name, const glm::vec3& color = glm::vec3(1.0f), float intensity = 1.0f);
+	Light(const std::string& name = "Ambiant Light", const glm::vec3& color = glm::vec3(1.0f), float intensity = 1.0f);
 	~Light() = default;
 
 	virtual void setUniforms(const std::string& uniformName, UniformUpdateList & uniformsList);

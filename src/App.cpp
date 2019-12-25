@@ -21,7 +21,7 @@
 
 App::App(SDL_Window* window)
 	: m_cubesMap(100, 100, 100), m_cursor(), m_camera(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2)),
-	  m_clearColor(0.4f, 0.6f, 0.95f), m_ambiantLight("Ambiant Light 1"), m_pointLight(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2), "PointLight 1"),
+	  m_clearColor(0.0f, 0.066f, 0.18f), m_ambiantLight("Ambiant Light 1"), m_pointLight(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2), "PointLight 1"), m_directionalLight(glm::vec3(0., -1, 0), "Directional Light 1"),
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
 {
@@ -35,9 +35,9 @@ void App::onInit() {
 	m_cameraUniforms.addSubscriber(m_cursorShaderLID);
 
 	m_cursor = Cursor(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2);
+	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/testShader.frag");
-	//Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
 	Locate::materialsManager().SetSelectedMaterial(0, 0);
 
 	onViewMatrixChange();
@@ -66,8 +66,12 @@ void App::onLoopIteration() {
 	ImGui::Begin("Point");
 	m_pointLight.ImGui_Sliders();
 	ImGui::End();
+	ImGui::Begin("Directional");
+	m_directionalLight.ImGui_Sliders();
+	ImGui::End();
 	m_ambiantLight.setUniforms("u_ambiant", m_lightUniforms);
 	m_pointLight.setUniforms("u_point", m_lightUniforms);
+	m_directionalLight.setUniforms("u_directional", m_lightUniforms);
 	if (m_bShowImGUIDemoWindow) // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		ImGui::ShowDemoWindow(&m_bShowImGUIDemoWindow);
 	ImGui_MainMenuBar();
