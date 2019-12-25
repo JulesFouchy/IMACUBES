@@ -87,6 +87,7 @@ int main(int argc, char *argv[]) {
 
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_MULTISAMPLE);
+		glEnable(GL_CULL_FACE);
 		Input::Initialize();
 		Display::UpdateWindowSize(window);
 		CubesGroup::Initialize();

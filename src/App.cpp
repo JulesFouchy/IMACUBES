@@ -38,7 +38,7 @@ void App::onInit() {
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/testShader.frag");
-	Locate::materialsManager().SetSelectedMaterial(0, 0);
+	Locate::materialsManager().SetSelectedMaterial(1, 0);
 
 	onViewMatrixChange();
 	onProjMatrixChange();

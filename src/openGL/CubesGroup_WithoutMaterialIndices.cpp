@@ -23,29 +23,29 @@ void CubesGroup_WithoutMaterialIndices::Initialize() {
 		-0.5f,  0.5f,  0.5f,
 		// Back face
 		-0.5f, -0.5f, -0.5f,
-		 0.5f, -0.5f, -0.5f,
-		 0.5f,  0.5f, -0.5f,
 		-0.5f,  0.5f, -0.5f,
+		 0.5f,  0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
 		// Top face
 		-0.5f,  0.5f, -0.5f,
+		-0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f,  0.5f,
+		 0.5f,  0.5f, -0.5f,
+		// Bot face 
+		-0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f, -0.5f,
+		 0.5f, -0.5f,  0.5f,
+		-0.5f, -0.5f,  0.5f,
+		// Left face 
+		-0.5f, -0.5f, -0.5f,
+		-0.5f, -0.5f,  0.5f,
+		-0.5f,  0.5f,  0.5f,
+		-0.5f,  0.5f, -0.5f,
+		// Right face 
+		 0.5f, -0.5f, -0.5f,
 		 0.5f,  0.5f, -0.5f,
 		 0.5f,  0.5f,  0.5f,
-		-0.5f,  0.5f,  0.5f,
-		// Bot face 
-		-0.5f,  -0.5f, -0.5f,
-		 0.5f,  -0.5f, -0.5f,
-		 0.5f,  -0.5f,  0.5f,
-		-0.5f,  -0.5f,  0.5f,
-		// Left face 
-		-0.5f,  -0.5f, -0.5f,
-		-0.5f,   0.5f, -0.5f,
-		-0.5f,   0.5f,  0.5f,
-		-0.5f,  -0.5f,  0.5f,
-		// Right face 
-		 0.5f,  -0.5f, -0.5f,
-		 0.5f,   0.5f, -0.5f,
-		 0.5f,   0.5f,  0.5f,
-		 0.5f,  -0.5f,  0.5f,
+		 0.5f, -0.5f,  0.5f,
 	};
 
 	float cubeMeshNormals[] = {
@@ -115,9 +115,9 @@ void CubesGroup_WithoutMaterialIndices::Initialize() {
 		15, 12,
 		// Laterals
 		8, 12,
-		9, 13,
+		9, 15,
 		10, 14,
-		11, 15
+		11, 13
 	};
 	// gen buffers
 	GLCall(glGenBuffers(1, &m_cubeMeshPositionsVBO_ID));
