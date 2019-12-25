@@ -7,6 +7,7 @@ void App::ImGui_DebugWindow() {
 	ImGui::Begin("Debug");
 	ImGui::Checkbox("Show Demo Window", &m_bShowImGUIDemoWindow);
 	ImGui::Text("Application average %.1f FPS", ImGui::GetIO().Framerate);
+	ImGui::ColorPicker3("Background color", (float*)&m_clearColor);
 	ImGui::End();
 }
 

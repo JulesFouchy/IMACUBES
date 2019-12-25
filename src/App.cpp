@@ -21,6 +21,7 @@
 
 App::App(SDL_Window* window)
 	: m_cubesMap(100, 100, 100), m_cursor(), m_camera(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2)),
+	  m_clearColor(0.4f, 0.6f, 0.95f), m_ambiantLight("Ambiant Light 1"), m_pointLight(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2), "PointLight 1"),
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
 {
@@ -59,6 +60,14 @@ void App::onLoopIteration() {
 	ImGui_DebugWindow();
 	//_ImGui_Settings();
 	//_ImGui_Camera();
+	ImGui::Begin("Ambiant");
+	m_ambiantLight.ImGui_Sliders();
+	ImGui::End();	
+	ImGui::Begin("Point");
+	m_pointLight.ImGui_Sliders();
+	ImGui::End();
+	m_ambiantLight.setUniforms("u_ambiant", m_lightUniforms);
+	m_pointLight.setUniforms("u_point", m_lightUniforms);
 	if (m_bShowImGUIDemoWindow) // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		ImGui::ShowDemoWindow(&m_bShowImGUIDemoWindow);
 	ImGui_MainMenuBar();
@@ -75,7 +84,7 @@ void App::onLoopIteration() {
 
 
 void App::drawScene() {
-	GLCall(glClearColor(0.4f, 0.6f, 0.95f, 1.0f));
+	GLCall(glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, 1.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	Locate::materialsManager().draw();
 }

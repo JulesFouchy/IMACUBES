@@ -9,8 +9,8 @@ struct MaterialParameters{
 	vec3 borderColor; // default  0 0 0 
 	float borderLength; // default 0.1 min 0 max 0.3
 	float borderRampEnd; // default 0.5 min 0 max 0.5
-	float k; // default 0. min 0. max 2.
-	float K; // default 0. min 0. max 6.
+	float k; // default 0 min 0 max 2
+	float K; // default 0 min 0 max 6
 };
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------

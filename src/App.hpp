@@ -13,6 +13,9 @@
 #include "Cursor/Cursor.hpp"
 #include "GUI/PopupWindow/SaveView.hpp"
 
+#include "Light/Light.hpp"
+#include "Light/PointLight.hpp"
+
 
 class App {
 friend class Locate;
@@ -45,6 +48,9 @@ private:
 	size_t m_cursorShaderLID;
 	UniformUpdateList m_cameraUniforms;
 	UniformUpdateList m_lightUniforms;
+	glm::vec3 m_clearColor;
+	Light m_ambiantLight;
+	PointLight m_pointLight;
 	Camera m_camera;
 	HistoriesManager m_histories;
 	PopupWindow_SaveView m_saveViewWindow;
