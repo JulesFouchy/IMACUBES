@@ -115,7 +115,9 @@ std::string Shader::parseFile(const std::string& filepath) {
 	std::string line = "";
 	while (getline(stream, line)) {
 		// Look for '#include'
-		if (line.find("#include") != std::string::npos) { // TODO check that the line isn't commented out
+		size_t includePos = line.find("#include");
+		size_t commPos = line.find("//");
+		if (includePos != std::string::npos && includePos < commPos) { // TODO check that the line isn't commented out
 			size_t pos = 0;
 			MyString::GetNextWord(line, &pos);
 			std::string filepathToInclude = MyString::GetNextWord(line, &pos, " ,;()|\t\"");
