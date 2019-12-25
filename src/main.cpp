@@ -42,6 +42,8 @@ int main(int argc, char *argv[]) {
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 		SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+		//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+		//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
 		SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
 
 		window = SDL_CreateWindow(
@@ -84,6 +86,7 @@ int main(int argc, char *argv[]) {
 		// ------ Initialize our own classes
 
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_MULTISAMPLE);
 		Input::Initialize();
 		Display::UpdateWindowSize(window);
 		CubesGroup::Initialize();

@@ -9,12 +9,24 @@
 
 #include <stb_image/stb_image_write.h>
 
-SaveBuffer::SaveBuffer(int width, int height)
+SaveBuffer::SaveBuffer(int width, int height, bool bCreateAttachments)
 	: m_width(width), m_height(height), m_BPP(4), m_GLpixelFormat(GL_RGBA)
 {	
 	// Gen and Bind FrameBuffer
 	GLCall(glGenFramebuffers(1, &m_frameBufferId));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId));
+	// Create Attachments
+	if (bCreateAttachments) {
+		createAttachments(width, height);
+	// Check for completeness
+		if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+			spdlog::error("[SaveBuffer::SaveBuffer] Framebuffer is not complete!");
+	}
+	// Unbind FrameBuffer
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+}
+
+void SaveBuffer::createAttachments(int width, int height) {
 	// Color RenderBuffer
 	GLCall(glGenRenderbuffers(1, &m_colorRenderBufferID));
 	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, m_colorRenderBufferID));
@@ -25,11 +37,6 @@ SaveBuffer::SaveBuffer(int width, int height)
 	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferID));
 	GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height));
 	GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBufferID));
-	// Unbind FrameBuffer
-	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-	// Check for completeness
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		spdlog::error("Framebuffer is not complete!");
 }
 
 SaveBuffer::~SaveBuffer() {
@@ -60,14 +67,10 @@ void SaveBuffer::save(const std::string& filePath) {
 	if (!filePath.empty()) {
 		spdlog::info("[SaveBuffer::save] Saving as " + filePath);
 		// Get pixels
-		unsigned int width = m_width;
-		unsigned int height = m_height;
-		unsigned int BPP = m_BPP;
-		unsigned char* data = new unsigned char[width * height * BPP];
-		GLCall(glReadPixels(0, 0, width, height, m_GLpixelFormat, GL_UNSIGNED_BYTE, data));
+		unsigned char* data = getPixelsPtr();
 		// Save
 		stbi_flip_vertically_on_write(1);
-		stbi_write_png(filePath.c_str(), width, height, BPP, data, 0);
+		stbi_write_png(filePath.c_str(), m_width, m_height, m_BPP, data, 0);
 		// Cleanup
 		delete[] data;
 		//
@@ -76,4 +79,11 @@ void SaveBuffer::save(const std::string& filePath) {
 	else {
 		spdlog::warn("[SaveBuffer::Save] invalid file path : |{}|", filePath);
 	}
+}
+
+unsigned char* SaveBuffer::getPixelsPtr() {
+	// Make sure you have bound the framebuffer beforehand
+	unsigned char* data = new unsigned char[m_width * m_height * m_BPP];
+	GLCall(glReadPixels(0, 0, m_width, m_height, m_GLpixelFormat, GL_UNSIGNED_BYTE, data));
+	return data;
 }
