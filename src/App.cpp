@@ -21,7 +21,7 @@
 
 App::App(SDL_Window* window)
 	: m_cubesMap(100, 100, 100), m_cursor(), m_camera(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2)),
-	  m_clearColor(0.0f, 0.066f, 0.18f), m_ambiantLight("Ambiant Light 1"), m_pointLight(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2), "PointLight 1"), m_directionalLight(glm::vec3(0., -1, 0), "Directional Light 1"),
+	  m_clearColor(0.0f, 0.066f, 0.18f), m_ambiantLight("Ambiant Light 1"), m_pointLight(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2), "PointLight 1"), m_directionalLight(glm::vec3(-49., -173, 167), "Directional Light 1"),
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
 {
@@ -93,7 +93,7 @@ void App::drawScene() {
 	Locate::materialsManager().draw();
 }
 
-void App::placeCursorJustBeforeHoveredCube(){
+void App::placeCursorAtHoveredCube(){
 	Ray ray = m_camera.getRayGoingThroughMousePos();
 	if (!m_cubesMap.isPositionInsideWorld(ray.origin)) {
 		float t = CubeMaths::IntersectionRayWorldborder(ray);
@@ -112,7 +112,10 @@ void App::placeCursorJustBeforeHoveredCube(){
 			prevIpos = iPos;
 	}
 	if (m_cubesMap.isIDvalid(prevIpos)) {
-		m_cursor.setPosition(prevIpos);
+		m_cursor.setCubeJustBeforePosition(prevIpos);
+	}
+	if (m_cubesMap.isIDvalid(iPos)) {
+		m_cursor.setPosition(iPos);
 	}
 }
 
@@ -128,7 +131,7 @@ void App::onEvent(const SDL_Event& e) {
 
 	case SDL_MOUSEMOTION:
 		if (!ImGui::GetIO().WantCaptureMouse)
-			placeCursorJustBeforeHoveredCube();
+			placeCursorAtHoveredCube();
 		break;
 
 	case SDL_MOUSEWHEEL:
@@ -142,15 +145,15 @@ void App::onEvent(const SDL_Event& e) {
 				m_camera.onWheelDown();
 			else if (e.button.button == SDL_BUTTON_LEFT) {
 				Locate::history(HistoryType::Cubes).beginUndoGroup();
-					m_cubesMap.addCube(m_cursor.getPosition());
+					m_cubesMap.addCube(m_cursor.getCubeJustBeforePosition());
 				Locate::history(HistoryType::Cubes).endUndoGroup();
-				placeCursorJustBeforeHoveredCube();
+				placeCursorAtHoveredCube();
 			}
 			else {
 				Locate::history(HistoryType::Cubes).beginUndoGroup();
 					m_cubesMap.removeCube(m_cursor.getPosition());
 				Locate::history(HistoryType::Cubes).endUndoGroup();
-				placeCursorJustBeforeHoveredCube();
+				placeCursorAtHoveredCube();
 			}
 		}
 		break;

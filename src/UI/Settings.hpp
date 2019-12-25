@@ -13,4 +13,6 @@ struct Settings {
 	static const float DEFAULT_CAMERA_FIELD_OF_VIEW;
 	static float               CAMERA_FIELD_OF_VIEW;
 
+	// Cursor visual
+	static bool SHOW_CURSOR_THROUGH_CUBES;
 };

@@ -58,6 +58,7 @@ void App::ImGui_MainMenuBar() {
 				_ImGui_CameraControls();
 				ImGui::EndMenu();
 			}
+			ImGui::Checkbox("Show cursor through cubes", &Settings::SHOW_CURSOR_THROUGH_CUBES);
 			ImGui::EndMenu();
 		}
 		// Histories

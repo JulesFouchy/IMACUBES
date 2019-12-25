@@ -28,7 +28,7 @@ public:
 	void onLoopIteration();
 
 	void drawScene();
-	void placeCursorJustBeforeHoveredCube();
+	void placeCursorAtHoveredCube();
 
 	void onViewMatrixChange();
 	void onProjMatrixChange();
