@@ -21,8 +21,8 @@ void Cursor::draw() {
 void Cursor::setPosition(const glm::ivec3& newPos) {
 	if (Locate::cubesMap().isPositionInsideWorld(newPos)) {
 		m_position = newPos;
-		//m_selectedCubes.removeAllCubes();
-		//m_selectedCubes.addCube_NoExistenceCheck(m_position);
+		m_selectedCubes.removeAllCubes();
+		m_selectedCubes.addCube_NoExistenceCheck(m_position);
 	}
 	else
 		spdlog::warn("[Cursor::setPosition] trying to position it outside of world's boundaries");
@@ -31,8 +31,8 @@ void Cursor::setPosition(const glm::ivec3& newPos) {
 void Cursor::setCubeJustBeforePosition(const glm::ivec3& newPos) {
 	if (Locate::cubesMap().isPositionInsideWorld(newPos)) {
 		m_cubeJustBeforePosition = newPos;
-		m_selectedCubes.removeAllCubes();
-		m_selectedCubes.addCube_NoExistenceCheck(m_cubeJustBeforePosition);
+		//m_selectedCubes.removeAllCubes();
+		//m_selectedCubes.addCube_NoExistenceCheck(m_cubeJustBeforePosition);
 	}
 	else
 		spdlog::warn("[Cursor::setCubeJustBeforePosition] trying to position it outside of world's boundaries");
