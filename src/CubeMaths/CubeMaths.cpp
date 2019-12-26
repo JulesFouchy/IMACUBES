@@ -21,9 +21,9 @@ float CubeMaths::IntersectionRayCube_WROIC(Ray ray, glm::vec3 cubePos) { // Ray 
 }
 
 float CubeMaths::IntersectionRayWorldborder(Ray ray) {
-	float coordValues[6] = { Locate::cubesMap().minX() - 0.5f, Locate::cubesMap().maxX() + 0.5f,
-							 Locate::cubesMap().minY() - 0.5f, Locate::cubesMap().maxY() + 0.5f,
-							 Locate::cubesMap().minZ() - 0.5f, Locate::cubesMap().maxZ() + 0.5f };
+	float coordValues[6] = { Locate::cubesMap().minValidX() - 0.5f, Locate::cubesMap().maxValidX() + 0.5f,
+							 Locate::cubesMap().minValidY() - 0.5f, Locate::cubesMap().maxValidY() + 0.5f,
+							 Locate::cubesMap().minValidZ() - 0.5f, Locate::cubesMap().maxValidZ() + 0.5f };
 	float actualT = std::numeric_limits<float>::infinity();
 	for (int coord = 0; coord < 3; ++coord) {
 		for (int side = 0; side < 2; ++side) {

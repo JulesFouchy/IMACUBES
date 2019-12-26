@@ -29,7 +29,6 @@ App::App(SDL_Window* window)
 }
 
 void App::onInit() {
-	spdlog::info("{} {} {} {} {} {} ", m_cubesMap.minX(), m_cubesMap.maxX(), m_cubesMap.minY(), m_cubesMap.maxY(), m_cubesMap.minZ(), m_cubesMap.maxZ());
 	// ----------------PLAYGROUND!------------------
 
 	m_cursorShaderLID = m_shaders.LoadShader(MyFile::rootDir+"/res/shaders/_cursor.vert", MyFile::rootDir + "/res/shaders/_cursor.frag");

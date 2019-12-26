@@ -12,29 +12,29 @@ public:
 	CubesMap(int width, int height, int depth);
 	~CubesMap() = default;
 
-	void addCube(glm::ivec3 pos, bool bPushActionInHistory = true); // Dont forget to call history.beginUndoGroup() if you want to push the action in history !
-	void removeCube(glm::ivec3 pos, bool bPushActionInHistory = true);
+	void addCube(const glm::ivec3& pos, bool bPushActionInHistory = true); // Dont forget to call history.beginUndoGroup() if you want to push the action in history !
+	void removeCube(const glm::ivec3& pos, bool bPushActionInHistory = true);
 
-	inline bool cubeExists(glm::ivec3 pos) { return getMaterialLocationOf(pos).isValid(); }
+	inline bool cubeExists(const glm::ivec3& pos) const { return getMaterialLocationOf(pos).isValid(); }
 
-	inline int width() { return m_width; }
-	inline int height() { return m_height; }
-	inline int depth() { return m_depth; }
+	inline int width() const { return m_width; }
+	inline int height() const { return m_height; }
+	inline int depth() const { return m_depth; }
+	inline int minValidX() const { return -m_width/2; }
+	inline int maxValidX() const { return m_width - m_width/2 - 1; }
+	inline int minValidY() const { return -m_height/2; }
+	inline int maxValidY() const { return m_height - m_height/2 - 1; }
+	inline int minValidZ() const { return -m_depth/2; }
+	inline int maxValidZ() const { return m_depth - m_depth/2 - 1; }
 
-	bool isPositionInsideWorld(const glm::vec3& pos);
+	int index1Dfrom3D(const glm::ivec3& id3D) const;
+	bool isID3Dvalid(const glm::ivec3& id3D) const;
+	bool isPositionInsideWorld(const glm::vec3& pos) const;
 
-public: //TODO should be private
-	int minX() const;
-	int maxX() const;
-	int minY() const;
-	int maxY() const;
-	int minZ() const;
-	int maxZ() const;
-	int index1Dfrom3D(glm::ivec3 id3D) const;
-	bool isID3Dvalid(glm::ivec3 id3D) const;
+private:
 	inline const MaterialLocation& getMaterialLocationOf(glm::ivec3 id3D) const { return m_cubesLocations[index1Dfrom3D(id3D)]; }
 	void setMaterialLocation(glm::ivec3 id3D, const MaterialLocation& matLoc, bool bPushActionInHistory = true);
-	inline MaterialsManager& getMaterialsManager() { return m_materialsManager;	}
+	inline MaterialsManager& getMaterialsManager() { return m_materialsManager; }
 
 private:
 	int m_width;
