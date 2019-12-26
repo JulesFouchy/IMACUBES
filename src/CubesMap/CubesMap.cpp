@@ -2,13 +2,13 @@
 
 #include "Locator/Locate.hpp"
 
-CubesMap::CubesMap(size_t width, size_t height, size_t depth)
+CubesMap::CubesMap(int width, int height, int depth)
 	: m_width(width), m_height(height), m_depth(depth), m_cubesLocations(m_width * m_height * m_depth, MaterialLocation(-1, -1))
 {
 
 }
 
-void CubesMap::addCube(glm::ivec3 id3D, bool bPushActionInHistory) {
+void CubesMap::addCube(const glm::ivec3& id3D, bool bPushActionInHistory) {
 	// Dont forget to call history.beginUndoGroup() if you want to push the action in history !
 	const MaterialLocation& currentMatLoc = getMaterialLocationOf(id3D);
 	if (currentMatLoc.isValid())
@@ -17,20 +17,24 @@ void CubesMap::addCube(glm::ivec3 id3D, bool bPushActionInHistory) {
 	setMaterialLocation(id3D, newMatLoc, bPushActionInHistory);
 }
 
-void CubesMap::removeCube(glm::ivec3 id3D, bool bPushActionInHistory) {
+void CubesMap::removeCube(const glm::ivec3& id3D, bool bPushActionInHistory) {
 	const MaterialLocation& currentMatLoc = getMaterialLocationOf(id3D);
 	if (currentMatLoc.isValid())
 		m_materialsManager.removeCube(currentMatLoc.shaderID, id3D, bPushActionInHistory);
 	setMaterialLocation(id3D, MaterialLocation(-1,-1), bPushActionInHistory);
 }
 
-size_t CubesMap::index1Dfrom3D(glm::ivec3 id3D) const {
-	assert(isIDvalid(id3D));
-	return id3D.x + id3D.y * m_width + id3D.z * m_width * m_height;
+int CubesMap::index1Dfrom3D(const glm::ivec3& id3D) const {
+	assert(isID3Dvalid(id3D));
+	return (id3D.x+m_width/2) + (id3D.y+m_height/2) * m_width + (id3D.z+m_depth/2) * m_width * m_height;
 }
 
-bool CubesMap::isIDvalid(glm::ivec3 id3D) const {
-	return id3D.x > -1 && id3D.x < m_width && id3D.y>-1 && id3D.y < m_height && id3D.z>-1 && id3D.z < m_depth;
+bool CubesMap::isID3Dvalid(const glm::ivec3& id3D) const {
+	return id3D.x >= minValidX() && id3D.x <= maxValidX()  && id3D.y>= minValidY() && id3D.y <= maxValidY() && id3D.z>= minValidZ() && id3D.z <= maxValidZ();
+}
+
+bool CubesMap::isPositionInsideWorld(const glm::vec3& pos) const {
+	return pos.x > minValidX() - 0.5f && pos.x < maxValidX() + 0.5f && pos.y > minValidY() - 0.5f && pos.y < maxValidY() + 0.5f && pos.z > minValidZ() - 0.5f && pos.z < maxValidZ() + 0.5f;
 }
 
 void CubesMap::setMaterialLocation(glm::ivec3 id3D, const MaterialLocation& matLoc, bool bPushActionInHistory){
