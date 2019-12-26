@@ -20,7 +20,7 @@
 
 
 App::App(SDL_Window* window)
-	: m_cubesMap(7, 7, 7), m_cursor(), m_camera(glm::vec3(0.0f)),
+	: m_cubesMap(101, 101, 101), m_cursor(), m_camera(glm::vec3(0.0f)),
 	  m_clearColor(0.0f, 0.066f, 0.18f), m_ambiantLight("Ambiant Light 1"), m_pointLight(glm::vec3(0.0f), "PointLight 1"), m_directionalLight(glm::vec3(-49., -173, 167), "Directional Light 1"),
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
@@ -115,14 +115,13 @@ void App::placeCursorAtHoveredCube(){
 	if (m_cubesMap.isID3Dvalid(prevIpos)) {
 		m_cursor.setCubeJustBeforePosition(prevIpos);
 	}
-	else {
-		spdlog::error("fail");
-	}
 	if (m_cubesMap.isID3Dvalid(iPos)) {
 		m_cursor.setPosition(iPos);
 	}
 	else {
-		spdlog::error("22fail22");
+		if (m_cubesMap.isID3Dvalid(prevIpos)) {
+			m_cursor.setPosition(prevIpos);
+		}
 	}
 }
 
