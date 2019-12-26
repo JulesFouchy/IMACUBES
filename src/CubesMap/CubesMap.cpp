@@ -2,7 +2,7 @@
 
 #include "Locator/Locate.hpp"
 
-CubesMap::CubesMap(size_t width, size_t height, size_t depth)
+CubesMap::CubesMap(int width, int height, int depth)
 	: m_width(width), m_height(height), m_depth(depth), m_cubesLocations(m_width * m_height * m_depth, MaterialLocation(-1, -1))
 {
 
@@ -24,13 +24,36 @@ void CubesMap::removeCube(glm::ivec3 id3D, bool bPushActionInHistory) {
 	setMaterialLocation(id3D, MaterialLocation(-1,-1), bPushActionInHistory);
 }
 
-size_t CubesMap::index1Dfrom3D(glm::ivec3 id3D) const {
-	assert(isIDvalid(id3D));
-	return id3D.x + id3D.y * m_width + id3D.z * m_width * m_height;
+bool CubesMap::isPositionInsideWorld(const glm::vec3& pos) { 
+	return pos.x > minX() - 0.5f && pos.x < maxX() + 0.5f && pos.y > minY() - 0.5f && pos.y < maxY() + 0.5f && pos.z > minZ() - 0.5f && pos.z < maxZ() + 0.5f;
 }
 
-bool CubesMap::isIDvalid(glm::ivec3 id3D) const {
-	return id3D.x > -1 && id3D.x < m_width && id3D.y>-1 && id3D.y < m_height && id3D.z>-1 && id3D.z < m_depth;
+int CubesMap::minX() const{
+	return -m_width / 2;
+}
+int CubesMap::maxX() const{
+	return m_width - m_width / 2 - 1;
+}
+int CubesMap::minY() const{
+	return -m_height / 2;
+}
+int CubesMap::maxY() const {
+	return m_height - m_height / 2 - 1;
+}
+int CubesMap::minZ() const {
+	return -m_depth/ 2;
+}
+int CubesMap::maxZ() const {
+	return m_depth - m_depth / 2 - 1;
+}
+
+int CubesMap::index1Dfrom3D(glm::ivec3 id3D) const {
+	assert(isID3Dvalid(id3D));
+	return (id3D.x+m_width/2) + (id3D.y+m_height/2) * m_width + (id3D.z+m_depth/2) * m_width * m_height;
+}
+
+bool CubesMap::isID3Dvalid(glm::ivec3 id3D) const {
+	return id3D.x >= minX() && id3D.x <= maxX()  && id3D.y>= minY() && id3D.y <= maxY() && id3D.z>= minZ() && id3D.z <= maxZ();
 }
 
 void CubesMap::setMaterialLocation(glm::ivec3 id3D, const MaterialLocation& matLoc, bool bPushActionInHistory){

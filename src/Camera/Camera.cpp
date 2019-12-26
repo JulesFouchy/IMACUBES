@@ -7,8 +7,6 @@
 
 #include "Debugging/Log.hpp"
 
-#include "Locator/Locate.hpp"
-
 #include <imgui/imgui.h>
 
 Camera::Camera(const glm::vec3& lookedAtPoint)
@@ -41,7 +39,7 @@ Ray Camera::getRayGoingThroughMousePos() {
 
 void Camera::resetTransform() {
 	m_sphereCoord = SphericalCoordinates(34.0f, 0.0f, 0.28f);
-	m_lookedAtPoint = glm::vec3(Locate::cubesMap().width()/2.0f, Locate::cubesMap().height() / 2.0f, Locate::cubesMap().depth() / 2.0f);
+	m_lookedAtPoint = glm::vec3(0.0f);
 	m_bMustRecomputeTransformMatrix = true;
 }
 

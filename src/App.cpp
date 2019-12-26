@@ -20,8 +20,8 @@
 
 
 App::App(SDL_Window* window)
-	: m_cubesMap(100, 100, 100), m_cursor(), m_camera(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2)),
-	  m_clearColor(0.0f, 0.066f, 0.18f), m_ambiantLight("Ambiant Light 1"), m_pointLight(glm::vec3(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2), "PointLight 1"), m_directionalLight(glm::vec3(-49., -173, 167), "Directional Light 1"),
+	: m_cubesMap(7, 7, 7), m_cursor(), m_camera(glm::vec3(0.0f)),
+	  m_clearColor(0.0f, 0.066f, 0.18f), m_ambiantLight("Ambiant Light 1"), m_pointLight(glm::vec3(0.0f), "PointLight 1"), m_directionalLight(glm::vec3(-49., -173, 167), "Directional Light 1"),
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
 {
@@ -29,12 +29,13 @@ App::App(SDL_Window* window)
 }
 
 void App::onInit() {
+	spdlog::info("{} {} {} {} {} {} ", m_cubesMap.minX(), m_cubesMap.maxX(), m_cubesMap.minY(), m_cubesMap.maxY(), m_cubesMap.minZ(), m_cubesMap.maxZ());
 	// ----------------PLAYGROUND!------------------
 
 	m_cursorShaderLID = m_shaders.LoadShader(MyFile::rootDir+"/res/shaders/_cursor.vert", MyFile::rootDir + "/res/shaders/_cursor.frag");
 	m_cameraUniforms.addSubscriber(m_cursorShaderLID);
 
-	m_cursor = Cursor(m_cubesMap.width()/2, m_cubesMap.height()/2, m_cubesMap.depth()/2);
+	m_cursor = Cursor(0, 0, 0);
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/testShader.frag");
@@ -44,9 +45,9 @@ void App::onInit() {
 	onProjMatrixChange();
 
 	Locate::history(HistoryType::Cubes).beginUndoGroup();
-	for (int x = m_cubesMap.width()*0.2; x < m_cubesMap.width()*0.8; ++x) {
-		for (int z = m_cubesMap.depth()*0.2; z < m_cubesMap.depth()*0.8; ++z) {
-			for (int y = std::max((int)m_cubesMap.height()/2 - 5, 0); y < m_cubesMap.height()/2; ++y) {
+	for (int x = -m_cubesMap.width()*0.3; x < m_cubesMap.width()*0.3; ++x) {
+		for (int z = -m_cubesMap.depth()*0.3; z < m_cubesMap.depth()*0.3; ++z) {
+			for (int y = std::max(-(int)m_cubesMap.height()/2, -5); y < 0; ++y) {
 				m_cubesMap.addCube(glm::ivec3(x, y, z));
 			}
 		}
@@ -104,18 +105,24 @@ void App::placeCursorAtHoveredCube(){
 	}
 	glm::ivec3 iPos = CubeMaths::CubeContaining(ray.origin);
 	glm::ivec3 prevIpos = iPos;
-	while (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos)) {
+	while (m_cubesMap.isID3Dvalid(iPos) && !m_cubesMap.cubeExists(iPos)) {
 		float t = CubeMaths::IntersectionRayCube_WROIC(ray, iPos);
 		ray.origin += (t + 0.01f) * ray.direction;
 		iPos = CubeMaths::CubeContaining(ray.origin);
-		if (m_cubesMap.isIDvalid(iPos) && !m_cubesMap.cubeExists(iPos))
+		if (m_cubesMap.isID3Dvalid(iPos) && !m_cubesMap.cubeExists(iPos))
 			prevIpos = iPos;
 	}
-	if (m_cubesMap.isIDvalid(prevIpos)) {
+	if (m_cubesMap.isID3Dvalid(prevIpos)) {
 		m_cursor.setCubeJustBeforePosition(prevIpos);
 	}
-	if (m_cubesMap.isIDvalid(iPos)) {
+	else {
+		spdlog::error("fail");
+	}
+	if (m_cubesMap.isID3Dvalid(iPos)) {
 		m_cursor.setPosition(iPos);
+	}
+	else {
+		spdlog::error("22fail22");
 	}
 }
 
