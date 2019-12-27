@@ -13,6 +13,7 @@ public:
 	virtual void setUniforms(const std::string& uniformName, UniformUpdateList & uniformsList);
 	virtual void ImGui_Sliders();
 	inline const std::string& getName() const { return m_name; }
+	inline void setName(const std::string& newName) { m_name = newName; }
 
 private:
 	std::string m_name;

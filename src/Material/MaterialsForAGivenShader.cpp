@@ -62,27 +62,24 @@ Shader& MaterialsForAGivenShader::shader() {
 }
 
 void MaterialsForAGivenShader::ImGui_ListOfMaterials(){
-	ImGui::PushID((int)this);
-		// Shader name
-		ImGui::TextColored(ImVec4(54/255.0f, 158 / 255.0f, 61 / 255.0f,1.0), m_name.c_str()); ImGui::SameLine();
-		// Add material
-		if (ImGui::Button("Add Material")) {
-			addMaterial();
+	// Shader name
+	ImGui::TextColored(ImVec4(54/255.0f, 158 / 255.0f, 61 / 255.0f,1.0), m_name.c_str()); ImGui::SameLine();
+	// Add material
+	if (ImGui::Button("Add Material")) {
+		addMaterial();
+	}
+	// Materials GUI
+	for (Material& mat : m_materials) {
+		ImGui::PushID((int)&mat);
+		bool isSelected = Locate::materialsManager().SelectedMaterialLocation().materialID == mat.getIndex() && Locate::materialsManager().SelectedMaterialLocation().shaderID == m_shaderIndex;
+		// Name of other materials
+		if (ImGui::Selectable(mat.getName().c_str(), isSelected)) {
+			Locate::materialsManager().SetSelectedMaterial(m_shaderIndex, mat.getIndex());
 		}
-		// Materials GUI
-		for (Material& mat : m_materials) {
-			ImGui::PushID((int)&mat);
-			bool isSelected = Locate::materialsManager().SelectedMaterialLocation().materialID == mat.getIndex() && Locate::materialsManager().SelectedMaterialLocation().shaderID == m_shaderIndex;
-			// Name of other materials
-			if (ImGui::Selectable(mat.getName().c_str(), isSelected)) {
-				Locate::materialsManager().SetSelectedMaterial(m_shaderIndex, mat.getIndex());
-			}
-			//
-			ImGui::Separator();
-			ImGui::PopID();
-		}
-	//
-	ImGui::PopID();
+		//
+		ImGui::Separator();
+		ImGui::PopID();
+	}
 }
 
 void MaterialsForAGivenShader::setUniforms() {

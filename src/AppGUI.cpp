@@ -101,8 +101,8 @@ void App::ImGui_RightSideWindow() {
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
 	ImGui::Begin("RightSideWindow", NULL, flags);
-	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 
+	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
 	{
 		if (ImGui::BeginTabItem("Materials"))
@@ -112,20 +112,28 @@ void App::ImGui_RightSideWindow() {
 			Locate::materialsManager().ImGui_ListOfShadersAndMaterials();
 			ImGui::EndChild();
 			ImGui::EndTabItem();
+
+
+			ImGui::TextColored(ImVec4(1.0f, 0.9f, 0.9f, 1.0f), "Selected item");
+			ImGui::BeginChild("Selected item", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.60));
+			Locate::materialsManager().ImGui_SelectedMaterialsParameters();
+			ImGui::EndChild();
 		}
 		if (ImGui::BeginTabItem("Lights"))
 		{
+			m_lightsManager.ImGui_AddLightOfSelectedTypeButton();
 			ImGui::BeginChild("Items selection", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.30));
-			ImGui::Text("coucou");
+			m_lightsManager.ImGui_LightsList();
 			ImGui::EndChild();
 			ImGui::EndTabItem();
+
+			ImGui::TextColored(ImVec4(1.0f, 0.9f, 0.9f, 1.0f), "Selected item");
+			ImGui::BeginChild("Selected item", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.60));
+			m_lightsManager.ImGui_SelectedLightSliders();
+			ImGui::EndChild();
 		}
 		ImGui::EndTabBar();
 	}
-	ImGui::TextColored(ImVec4(1.0f, 0.9f, 0.9f, 1.0f), "Selected item");
-	ImGui::BeginChild("Selected item", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.60));
-	Locate::materialsManager().ImGui_SelectedMaterialsParameters();
-	ImGui::EndChild();
 	ImGui::PopStyleVar();
 	ImGui::SetWindowSize(ImVec2(ImGui::GetWindowWidth(), Display::GetHeight() - 18));
 	ImGui::SetWindowPos(ImVec2(Display::GetWidth() - ImGui::GetWindowWidth(), 18), true);

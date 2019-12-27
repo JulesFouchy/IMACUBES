@@ -2,7 +2,7 @@
 
 #include <imgui/imgui.h>
 
-DirectionalLight::DirectionalLight(const glm::vec3& direction, const std::string& name, const glm::vec3& color, float intensity)
+DirectionalLight::DirectionalLight(const glm::vec3& direction, const glm::vec3& color, float intensity, const std::string& name)
 	: Light(name, color, intensity), m_direction(direction)
 {}
 

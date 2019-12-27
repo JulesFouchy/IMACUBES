@@ -4,7 +4,7 @@
 
 class PointLight : public Light {
 public:
-	PointLight(const glm::vec3& position, const std::string& name = "PointLight", const glm::vec3& color = glm::vec3(1.0f), float intensity = 5.0f);
+	PointLight(const glm::vec3& position, const glm::vec3& color, float intensity, const std::string& name = "PointLight");
 	~PointLight() = default;
 
 	void setUniforms(const std::string& uniformName, UniformUpdateList& uniformsList) override;

@@ -4,7 +4,7 @@
 
 class DirectionalLight : public Light {
 public:
-	DirectionalLight(const glm::vec3& direction, const std::string& name = "DirectionalLight", const glm::vec3& color = glm::vec3(1.0f), float intensity = 1.0f);
+	DirectionalLight(const glm::vec3& direction, const glm::vec3& color, float intensity, const std::string& name = "DirectionalLight");
 	~DirectionalLight() = default;
 
 	void setUniforms(const std::string& uniformName, UniformUpdateList& uniformsList) override;

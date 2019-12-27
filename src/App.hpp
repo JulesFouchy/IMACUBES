@@ -13,9 +13,7 @@
 #include "Cursor/Cursor.hpp"
 #include "GUI/PopupWindow/SaveView.hpp"
 
-#include "Light/Light.hpp"
-#include "Light/PointLight.hpp"
-#include "Light/DirectionalLight.hpp"
+#include "Light/LightsManager.hpp"
 
 
 class App {
@@ -51,9 +49,7 @@ private:
 	UniformUpdateList m_cameraUniforms;
 	UniformUpdateList m_lightUniforms;
 	glm::vec3 m_clearColor;
-	Light m_ambiantLight;
-	PointLight m_pointLight;
-	DirectionalLight m_directionalLight;
+	LightsManager m_lightsManager;
 	Camera m_camera;
 	HistoriesManager m_histories;
 	PopupWindow_SaveView m_saveViewWindow;
