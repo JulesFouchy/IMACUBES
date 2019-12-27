@@ -37,3 +37,8 @@ void Cursor::setCubeJustBeforePosition(const glm::ivec3& newPos) {
 	else
 		spdlog::warn("[Cursor::setCubeJustBeforePosition] trying to position it outside of world's boundaries");
 }
+
+void Cursor::translate(const glm::ivec3& dl) {
+	setPosition(getPosition() + dl);
+	setCubeJustBeforePosition(getCubeJustBeforePosition() + dl);
+}

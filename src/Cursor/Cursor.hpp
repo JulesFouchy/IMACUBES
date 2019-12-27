@@ -16,6 +16,7 @@ public:
 	inline const glm::ivec3& getCubeJustBeforePosition() const { return m_cubeJustBeforePosition; }
 	void setPosition(const glm::ivec3& newPos);
 	void setCubeJustBeforePosition(const glm::ivec3& newPos);
+	void translate(const glm::ivec3& dl);
 
 private:
 	glm::ivec3 m_position;
