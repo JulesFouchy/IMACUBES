@@ -12,19 +12,23 @@ public:
 	~MaterialsManager() = default;
 
 	void draw();
-	void ImGui_Menu();
+	void ImGui_ListOfShadersAndMaterials();
+	void ImGui_SelectedMaterialsParameters();
 
-	inline void addShader(const std::string& vertexFilepath, const std::string& fragmentFilepath) { m_shadersList.emplace_back(vertexFilepath, fragmentFilepath, m_shaderCount++); }
+	void addShader(const std::string& vertexFilepath, const std::string& fragmentFilepath);
 
-	MaterialLocation addCube(glm::vec3 pos, bool bPushActionInHistory = true); // returns the location where the cube was added (i.e. m_selectedMaterial)
+	MaterialLocation addCube(glm::vec3 pos, bool bPushActionInHistory = true); // returns the location where the cube was added (i.e. m_selectedMaterialLocation)
 	void removeCube(int shaderID, glm::vec3 pos, bool bPushActionInHistory = true);
 
 	inline std::vector<MaterialsForAGivenShader>& Shaders() { return m_shadersList; }
-	inline const MaterialLocation& SelectedMaterial() { return m_selectedMaterial; }
-	inline void SetSelectedMaterial(int shaderID, int matID) { m_selectedMaterial = { shaderID, matID }; }
+	inline const MaterialLocation& SelectedMaterialLocation() { return m_selectedMaterialLocation; }
+	
+	inline void SetSelectedMaterial(int shaderID, int matID) { m_selectedMaterialLocation = { shaderID, matID }; }
+private:
+	inline Material& SelectedMaterial() { return Shaders()[SelectedMaterialLocation().shaderID].m_materials[SelectedMaterialLocation().materialID]; }
 private:
 	std::vector<MaterialsForAGivenShader> m_shadersList;
 	int m_shaderCount;
 
-	MaterialLocation m_selectedMaterial;
+	MaterialLocation m_selectedMaterialLocation;
 };

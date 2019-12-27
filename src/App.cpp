@@ -75,6 +75,7 @@ void App::onLoopIteration() {
 	if (m_bShowImGUIDemoWindow) // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		ImGui::ShowDemoWindow(&m_bShowImGUIDemoWindow);
 	ImGui_MainMenuBar();
+	ImGui_RightSideWindow();
 
 	// ----------------PLAYGROUND!------------------
 	m_camera.update(1.0f / 60.0f);
@@ -82,7 +83,6 @@ void App::onLoopIteration() {
 	drawScene();
 	m_shaders[m_cursorShaderLID].bind();
 	m_cursor.draw();
-	Locate::materialsManager().ImGui_Menu();
 	m_saveViewWindow.Show_IfOpen();
 }
 
@@ -187,9 +187,9 @@ void App::onEvent(const SDL_Event& e) {
 			}
 			else {
 				if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
-					Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterial().shaderID].reloadShader();
-					m_cameraUniforms.setUniformsFor(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterial().shaderID].shaderLID());
-					m_lightUniforms.setUniformsFor(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterial().shaderID].shaderLID());
+					Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].reloadShader();
+					m_cameraUniforms.setUniformsFor(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
+					m_lightUniforms.setUniformsFor(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
 				}
 				if (e.key.keysym.sym == 'z') {
 					m_cursor.setPosition(glm::ivec3(0, 1, 0) + m_cursor.getPosition());

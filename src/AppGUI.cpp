@@ -92,3 +92,25 @@ void App::ImGui_MainMenuBar() {
 		ImGui::EndMainMenuBar();
 	}
 }
+
+void App::ImGui_RightSideWindow() {
+	ImGuiWindowFlags flags =
+		ImGuiWindowFlags_NoMove |
+		ImGuiWindowFlags_NoCollapse |
+		ImGuiWindowFlags_NoTitleBar;
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+	ImGui::Begin("RightSideWindow", NULL, flags);
+	ImGui::TextWrapped("Materials");
+	ImGui::BeginChild("Materials", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight()*0.33));
+		Locate::materialsManager().ImGui_ListOfShadersAndMaterials();
+	ImGui::EndChild(); 
+	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
+	ImGui::BeginChild("Selected item", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.67));
+	Locate::materialsManager().ImGui_SelectedMaterialsParameters();
+	ImGui::EndChild();
+	ImGui::PopStyleVar();
+	ImGui::SetWindowSize(ImVec2(ImGui::GetWindowWidth(), Display::GetHeight() - 18));
+	ImGui::SetWindowPos(ImVec2(Display::GetWidth() - ImGui::GetWindowWidth(), 18), true);
+	ImGui::End();
+	ImGui::PopStyleVar();
+}

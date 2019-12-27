@@ -5,8 +5,10 @@
 #include "GUI/FileBrowser.hpp"
 #include "Helper/File.hpp"
 
+#include "imgui/misc/cpp/imgui_stdlib.h"
+
 MaterialsManager::MaterialsManager()
-	: m_shaderCount(0), m_selectedMaterial(0, 0)
+	: m_shaderCount(0), m_selectedMaterialLocation(0, 0)
 {
 }
 
@@ -16,22 +18,26 @@ void MaterialsManager::draw() {
 	}
 }
 
-void MaterialsManager::ImGui_Menu() {
-	ImGui::Begin("Materials");
+void MaterialsManager::ImGui_ListOfShadersAndMaterials() {
 	if (ImGui::Button("Add shader")) {
 		addShader(MyFile::rootDir + "/res/shaders/_default.vert", FileBrowser::openfilename(" frag (*.frag)\0*.frag;*.FRAG\0All Files (*.*)\0*.*\0"));
 	}
 	for (MaterialsForAGivenShader& shader : m_shadersList) {
-		shader.ImGui_Menu();
+		shader.ImGui_ListOfMaterials();
 	}
-	ImGui::End();
+}
+
+void MaterialsManager::ImGui_SelectedMaterialsParameters() {
+	Material& mat = SelectedMaterial();
+	ImGui::InputText("", mat.getNamePointer());
+	mat.ImGui_Sliders();
 }
 
 MaterialLocation MaterialsManager::addCube(glm::vec3 pos, bool bPushActionInHistory) {
 	if (bPushActionInHistory) {
 		glm::vec3 _pos = pos;
-		int _shaderID = m_selectedMaterial.shaderID;
-		int _materialID = m_selectedMaterial.materialID;
+		int _shaderID = m_selectedMaterialLocation.shaderID;
+		int _materialID = m_selectedMaterialLocation.materialID;
 		Locate::history(HistoryType::Cubes).addAction(Action(
 			// DO action
 			[this, _pos, _shaderID, _materialID]()
@@ -45,8 +51,8 @@ MaterialLocation MaterialsManager::addCube(glm::vec3 pos, bool bPushActionInHist
 		}
 		));
 	}
-	Shaders()[m_selectedMaterial.shaderID].m_cubes.addCube(m_selectedMaterial.materialID, pos);
-	return m_selectedMaterial;
+	Shaders()[m_selectedMaterialLocation.shaderID].m_cubes.addCube(m_selectedMaterialLocation.materialID, pos);
+	return m_selectedMaterialLocation;
 }
 
 void MaterialsManager::removeCube(int shaderID, glm::vec3 pos, bool bPushActionInHistory) {
@@ -68,4 +74,9 @@ void MaterialsManager::removeCube(int shaderID, glm::vec3 pos, bool bPushActionI
 		));
 	}
 	Shaders()[shaderID].m_cubes.removeCube(pos);
+}
+
+void MaterialsManager::addShader(const std::string& vertexFilepath, const std::string& fragmentFilepath) {
+	if(fragmentFilepath.compare(""))
+		m_shadersList.emplace_back(vertexFilepath, fragmentFilepath, m_shaderCount++);
 }

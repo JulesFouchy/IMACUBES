@@ -6,8 +6,6 @@
 #include "Debugging/Log.hpp"
 #include "OpenGL/Uniform/UniformDescriptionFactory.hpp"
 
-#include "imgui/misc/cpp/imgui_stdlib.h"
-
 #include "Locator/Locate.hpp"
 
 MaterialsForAGivenShader::MaterialsForAGivenShader(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex)
@@ -63,7 +61,7 @@ Shader& MaterialsForAGivenShader::shader() {
 	return Locate::shaderLibrary()[m_shaderLID];
 }
 
-void MaterialsForAGivenShader::ImGui_Menu(){
+void MaterialsForAGivenShader::ImGui_ListOfMaterials(){
 	ImGui::PushID((int)this);
 		// Shader name
 		ImGui::TextColored(ImVec4(54/255.0f, 158 / 255.0f, 61 / 255.0f,1.0), m_name.c_str()); ImGui::SameLine();
@@ -74,14 +72,7 @@ void MaterialsForAGivenShader::ImGui_Menu(){
 		// Materials GUI
 		for (Material& mat : m_materials) {
 			ImGui::PushID((int)&mat);
-			// Sliders of selected material
-			bool isSelected = Locate::materialsManager().SelectedMaterial().materialID == mat.getIndex() && Locate::materialsManager().SelectedMaterial().shaderID == m_shaderIndex;
-			if (isSelected) {
-				ImGui::Begin("Current material");
-				ImGui::InputText("", mat.getNamePointer());
-				mat.ImGui_Sliders();
-				ImGui::End();
-			}
+			bool isSelected = Locate::materialsManager().SelectedMaterialLocation().materialID == mat.getIndex() && Locate::materialsManager().SelectedMaterialLocation().shaderID == m_shaderIndex;
 			// Name of other materials
 			if (ImGui::Selectable(mat.getName().c_str(), isSelected)) {
 				Locate::materialsManager().SetSelectedMaterial(m_shaderIndex, mat.getIndex());

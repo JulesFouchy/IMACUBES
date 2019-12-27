@@ -40,6 +40,7 @@ public:
 	void _ImGui_CameraControls();
 	void _ImGui_CameraView();
 	void ImGui_MainMenuBar();
+	void ImGui_RightSideWindow();
 	// --------------------------------------
 
 private:

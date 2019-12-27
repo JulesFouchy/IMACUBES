@@ -21,7 +21,7 @@ public:
 
 	void reloadShader();
 
-	void ImGui_Menu();
+	void ImGui_ListOfMaterials();
 
 	Shader& shader();
 	inline size_t shaderLID() { return m_shaderLID; }
