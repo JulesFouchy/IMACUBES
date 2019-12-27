@@ -22,8 +22,8 @@ public:
 
 	void addPointLight(const glm::vec3& position, const glm::vec3& color = glm::vec3(1.0f), float intensity = 5.0f);
 	void addDirectionalLight(const glm::vec3& direction, const glm::vec3& color = glm::vec3(1.0f), float intensity = 1.0f);
-	void duplicatePointLight();
-	void duplicateDirectionalLight();
+	void duplicateSelectedPointLight();
+	void duplicateSelectedDirectionalLight();
 
 	void setUniforms(UniformUpdateList& list);
 

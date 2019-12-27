@@ -4,6 +4,8 @@
 
 #include "Debugging/Log.hpp"
 
+#include "UI/Settings.hpp"
+
 LightsManager::LightsManager()
 	: m_selectedLightType(LightType::Directional), m_selectedPointIndex(0), m_selectedDirectionalIndex(0),
 	  m_ambiantLight("Ambiant Light")
@@ -13,28 +15,40 @@ LightsManager::LightsManager()
 }
 
 void LightsManager::addPointLight(const glm::vec3& position, const glm::vec3& color, float intensity) {
-	m_pointLights.emplace_back(position, color, intensity, "PointLight" + std::to_string(m_pointLights.size()));
+	if (m_pointLights.size() < Settings::MAX_NB_OF_LIGHTS_OF_A_GIVEN_TYPE)
+		m_pointLights.emplace_back(position, color, intensity, "PointLight" + std::to_string(m_pointLights.size()));
+	else
+		spdlog::warn("Sorry you can't have more than {} lights of a given type :/", Settings::MAX_NB_OF_LIGHTS_OF_A_GIVEN_TYPE);
 }
 
 void LightsManager::addDirectionalLight(const glm::vec3& direction, const glm::vec3& color, float intensity) {
-	m_directionalLights.emplace_back(direction, color, intensity, "DirectionalLight" + std::to_string(m_directionalLights.size()));
+	if (m_directionalLights.size() < Settings::MAX_NB_OF_LIGHTS_OF_A_GIVEN_TYPE)
+		m_directionalLights.emplace_back(direction, color, intensity, "DirectionalLight" + std::to_string(m_directionalLights.size()));
+	else
+		spdlog::warn("Sorry you can't have more than {} lights of a given type :/", Settings::MAX_NB_OF_LIGHTS_OF_A_GIVEN_TYPE);
 }
 
-void LightsManager::duplicatePointLight() {
-	m_pointLights.push_back(m_pointLights[m_selectedPointIndex]);
-	m_pointLights.back().setName("PointLight" + std::to_string(m_pointLights.size() - 1));
+void LightsManager::duplicateSelectedPointLight() {
+	const PointLight& light = m_pointLights[m_selectedPointIndex];
+	addPointLight(light.m_position, light.m_color, light.m_intensity);
 }
 
-void LightsManager::duplicateDirectionalLight() {
-	m_directionalLights.push_back(m_directionalLights[m_selectedDirectionalIndex]);
-	m_directionalLights.back().setName("DirectionalLight" + std::to_string(m_directionalLights.size() - 1));
+void LightsManager::duplicateSelectedDirectionalLight() {
+	const DirectionalLight& light = m_directionalLights[m_selectedDirectionalIndex];
+	addDirectionalLight(light.m_direction, light.m_color, light.m_intensity);
 }
 
 void LightsManager::setUniforms(UniformUpdateList& list) {
-	// TODO send all the lights in the vector
+	// Ambiant
 	m_ambiantLight.setUniforms("u_ambiant", list);
-	m_pointLights[0].setUniforms("u_point", list);
-	m_directionalLights[0].setUniforms("u_directional", list);
+	// Points
+	list.setUniform("u_nbOfPointLights", (int)m_pointLights.size());
+	for(int i = 0; i < m_pointLights.size(); ++i)
+		m_pointLights[i].setUniforms("u_points["+std::to_string(i)+"]", list);
+	// Directionals
+	list.setUniform("u_nbOfDirectionalLights", (int)m_directionalLights.size());
+	for (int i = 0; i < m_directionalLights.size(); ++i)
+		m_directionalLights[i].setUniforms("u_directionals[" + std::to_string(i) + "]", list);
 }
 
 
@@ -78,10 +92,10 @@ void LightsManager::ImGui_AddLightOfSelectedTypeButton() {
 		switch (m_selectedLightType)
 		{
 		case LightType::Point:
-			return duplicatePointLight();
+			return duplicateSelectedPointLight();
 			break;
 		case LightType::Directional:
-			return duplicateDirectionalLight();
+			return duplicateSelectedDirectionalLight();
 			break;
 		default:
 			break;

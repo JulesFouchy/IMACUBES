@@ -3,6 +3,7 @@
 #include "Light.hpp"
 
 class DirectionalLight : public Light {
+friend class LightsManager;
 public:
 	DirectionalLight(const glm::vec3& direction, const glm::vec3& color, float intensity, const std::string& name = "DirectionalLight");
 	~DirectionalLight() = default;

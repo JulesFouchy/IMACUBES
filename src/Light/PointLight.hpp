@@ -3,6 +3,7 @@
 #include "Light.hpp"
 
 class PointLight : public Light {
+friend class LightsManager;
 public:
 	PointLight(const glm::vec3& position, const glm::vec3& color, float intensity, const std::string& name = "PointLight");
 	~PointLight() = default;
