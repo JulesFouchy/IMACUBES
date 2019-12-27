@@ -12,6 +12,7 @@ double gaussian(glm::vec3 a, glm::vec3 b);
 Eigen::VectorXd calculOmega(const std::vector<glm::vec3>& anchorPts, const Eigen::VectorXd& valuesAtAnchorPts);
 
 class RBF{
+public:
 	RBF(std::vector<glm::vec3> anchorPts, Eigen::VectorXd valuesAtAnchorPts) {
 		omega = calculOmega(anchorPts, valuesAtAnchorPts);
 	}

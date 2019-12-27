@@ -12,7 +12,7 @@
 #include "App.hpp"
 
 
-using namespace std;
-
 //definition du constructeur
 Tool::Tool(){}
+
+

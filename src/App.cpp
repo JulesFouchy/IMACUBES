@@ -77,12 +77,15 @@ void App::onLoopIteration() {
 	ImGui_MainMenuBar();
 	ImGui_RightSideWindow();
 
+
 	// ----------------PLAYGROUND!------------------
 	m_camera.update(1.0f / 60.0f);
 	onViewMatrixChange();
 	drawScene();
 	m_shaders[m_cursorShaderLID].bind();
 	m_cursor.draw();
+	m_toolrbf.showGUI();
+	Locate::materialsManager().ImGui_Menu();
 	m_saveViewWindow.Show_IfOpen();
 }
 
@@ -149,10 +152,12 @@ void App::onEvent(const SDL_Event& e) {
 			if (e.button.button == SDL_BUTTON_MIDDLE)
 				m_camera.onWheelDown();
 			else if (e.button.button == SDL_BUTTON_LEFT) {
-				Locate::history(HistoryType::Cubes).beginUndoGroup();
-					m_cubesMap.addCube(m_cursor.getCubeJustBeforePosition());
-				Locate::history(HistoryType::Cubes).endUndoGroup();
-				placeCursorAtHoveredCube();
+				//Locate::history(HistoryType::Cubes).beginUndoGroup();
+				//	m_cubesMap.addCube(m_cursor.getCubeJustBeforePosition());
+				//Locate::history(HistoryType::Cubes).endUndoGroup();
+				//placeCursorAtHoveredCube();
+
+				m_toolrbf.onLeftClick(m_cursor);
 			}
 			else {
 				Locate::history(HistoryType::Cubes).beginUndoGroup();
@@ -278,7 +283,7 @@ void App::_loopIteration() {
 	SDL_GL_SwapWindow(m_window);
 }
 
-void App::handleSDLevents() {
+void App::handleSDLevents() {
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
 		ImGui_ImplSDL2_ProcessEvent(&e);

@@ -17,6 +17,8 @@
 #include "Light/PointLight.hpp"
 #include "Light/DirectionalLight.hpp"
 
+#include "Tools/Tool_RBF.hpp"
+
 
 class App {
 friend class Locate;
@@ -54,6 +56,7 @@ private:
 	Light m_ambiantLight;
 	PointLight m_pointLight;
 	DirectionalLight m_directionalLight;
+	Tool_RBF m_toolrbf;
 	Camera m_camera;
 	HistoriesManager m_histories;
 	PopupWindow_SaveView m_saveViewWindow;
