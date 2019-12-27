@@ -183,22 +183,22 @@ void App::onEvent(const SDL_Event& e) {
 					m_lightUniforms.setUniformsFor(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
 				}
 				if (e.key.keysym.sym == 'z') {
-					m_cursor.setPosition(glm::ivec3(0, 1, 0) + m_cursor.getPosition());
+					m_cursor.setPosition(glm::ivec3(0, 0, -1) + m_cursor.getPosition());
 				}
 				else if (e.key.keysym.sym == 's') {
-					m_cursor.setPosition(glm::ivec3(0, -1, 0) + m_cursor.getPosition());
-				}
-				else if (e.key.keysym.sym == 'q') {
-					m_cursor.setPosition(glm::ivec3(1, 0, 0) + m_cursor.getPosition());
-				}
-				else if (e.key.keysym.sym == 'd') {
-					m_cursor.setPosition(glm::ivec3(-1, 0, 0) + m_cursor.getPosition());
-				}
-				else if (e.key.keysym.sym == 'w') {
 					m_cursor.setPosition(glm::ivec3(0, 0, 1) + m_cursor.getPosition());
 				}
+				else if (e.key.keysym.sym == 'q') {
+					m_cursor.setPosition(glm::ivec3(-1, 0, 0) + m_cursor.getPosition());
+				}
+				else if (e.key.keysym.sym == 'd') {
+					m_cursor.setPosition(glm::ivec3(1, 0, 0) + m_cursor.getPosition());
+				}
+				else if (e.key.keysym.sym == 'w') {
+					m_cursor.setPosition(glm::ivec3(0, -1, 0) + m_cursor.getPosition());
+				}
 				else if (e.key.keysym.sym == 'x') {
-					m_cursor.setPosition(glm::ivec3(0, 0, -1) + m_cursor.getPosition());
+					m_cursor.setPosition(glm::ivec3(0, 1, 0) + m_cursor.getPosition());
 				}
 				else if (e.key.keysym.sym == 'c') {
 					m_camera.setLookedAtPoint(m_cursor.getPosition());
