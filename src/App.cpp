@@ -204,6 +204,9 @@ void App::onEvent(const SDL_Event& e) {
 					m_camera.setLookedAtPoint(m_cursor.getPosition());
 					onViewMatrixChange();
 				}
+				else if (e.key.keysym.sym == 'p') {
+					m_lightsManager.trySetSelectedPointLightPosition(m_cursor.getCubeJustBeforePosition());
+				}
 			}
 		}
 		break;

@@ -32,6 +32,7 @@ public:
 	void ImGui_AddLightOfSelectedTypeButton();
 
 	Light* selectedLight();
+	void trySetSelectedPointLightPosition(const glm::vec3& position);
 
 private:
 	LightType m_selectedLightType;

@@ -124,3 +124,8 @@ Light* LightsManager::selectedLight() {
 		break;
 	}
 }
+
+void LightsManager::trySetSelectedPointLightPosition(const glm::vec3& position) {
+	if (m_selectedLightType == LightType::Point)
+		m_pointLights[m_selectedPointIndex].setPosition(position);
+}
