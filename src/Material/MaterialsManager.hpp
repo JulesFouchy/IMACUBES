@@ -14,6 +14,7 @@ public:
 	void draw();
 	void ImGui_ListOfShadersAndMaterials();
 	void ImGui_SelectedMaterialsParameters();
+	void ImGui_AddShaderButton();
 
 	void addShader(const std::string& vertexFilepath, const std::string& fragmentFilepath);
 

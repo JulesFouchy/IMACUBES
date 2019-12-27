@@ -99,13 +99,31 @@ void App::ImGui_RightSideWindow() {
 		ImGuiWindowFlags_NoCollapse |
 		ImGuiWindowFlags_NoTitleBar;
 	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-	ImGui::Begin("RightSideWindow", NULL, flags);
-	ImGui::TextWrapped("Materials");
-	ImGui::BeginChild("Materials", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight()*0.33));
-		Locate::materialsManager().ImGui_ListOfShadersAndMaterials();
-	ImGui::EndChild(); 
 	ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, 5.0f);
-	ImGui::BeginChild("Selected item", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.67));
+	ImGui::Begin("RightSideWindow", NULL, flags);
+	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+
+	if (ImGui::BeginTabBar("MyTabBar", tab_bar_flags))
+	{
+		if (ImGui::BeginTabItem("Materials"))
+		{
+			Locate::materialsManager().ImGui_AddShaderButton();
+			ImGui::BeginChild("Items selection", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.30));
+			Locate::materialsManager().ImGui_ListOfShadersAndMaterials();
+			ImGui::EndChild();
+			ImGui::EndTabItem();
+		}
+		if (ImGui::BeginTabItem("Lights"))
+		{
+			ImGui::BeginChild("Items selection", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.30));
+			ImGui::Text("coucou");
+			ImGui::EndChild();
+			ImGui::EndTabItem();
+		}
+		ImGui::EndTabBar();
+	}
+	ImGui::TextColored(ImVec4(1.0f, 0.9f, 0.9f, 1.0f), "Selected item");
+	ImGui::BeginChild("Selected item", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.60));
 	Locate::materialsManager().ImGui_SelectedMaterialsParameters();
 	ImGui::EndChild();
 	ImGui::PopStyleVar();

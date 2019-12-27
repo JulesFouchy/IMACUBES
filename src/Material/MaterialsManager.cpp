@@ -19,9 +19,6 @@ void MaterialsManager::draw() {
 }
 
 void MaterialsManager::ImGui_ListOfShadersAndMaterials() {
-	if (ImGui::Button("Add shader")) {
-		addShader(MyFile::rootDir + "/res/shaders/_default.vert", FileBrowser::openfilename(" frag (*.frag)\0*.frag;*.FRAG\0All Files (*.*)\0*.*\0"));
-	}
 	for (MaterialsForAGivenShader& shader : m_shadersList) {
 		shader.ImGui_ListOfMaterials();
 	}
@@ -31,6 +28,12 @@ void MaterialsManager::ImGui_SelectedMaterialsParameters() {
 	Material& mat = SelectedMaterial();
 	ImGui::InputText("", mat.getNamePointer());
 	mat.ImGui_Sliders();
+}
+
+void MaterialsManager::ImGui_AddShaderButton() {
+	if (ImGui::Button("Add shader")) {
+		addShader(MyFile::rootDir + "/res/shaders/_default.vert", FileBrowser::openfilename(" frag (*.frag)\0*.frag;*.FRAG\0All Files (*.*)\0*.*\0"));
+	}
 }
 
 MaterialLocation MaterialsManager::addCube(glm::vec3 pos, bool bPushActionInHistory) {
