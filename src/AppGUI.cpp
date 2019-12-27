@@ -109,6 +109,7 @@ void App::ImGui_RightSideWindow() {
 	{
 		if (ImGui::BeginTabItem("Materials"))
 		{
+			Locate::materialsManager().ImGui_AddMaterialToSelectedShaderButton(); ImGui::SameLine();
 			Locate::materialsManager().ImGui_AddShaderButton();
 			ImGui::BeginChild("Items selection", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.30));
 			Locate::materialsManager().ImGui_ListOfShadersAndMaterials();

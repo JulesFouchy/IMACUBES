@@ -62,12 +62,6 @@ Shader& MaterialsForAGivenShader::shader() {
 }
 
 void MaterialsForAGivenShader::ImGui_ListOfMaterials(){
-	// Shader name
-	ImGui::TextColored(ImVec4(54/255.0f, 158 / 255.0f, 61 / 255.0f,1.0), m_name.c_str()); ImGui::SameLine();
-	// Add material
-	if (ImGui::Button("Add Material")) {
-		addMaterial();
-	}
 	// Materials GUI
 	for (Material& mat : m_materials) {
 		ImGui::PushID((int)&mat);

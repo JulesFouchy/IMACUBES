@@ -15,6 +15,7 @@ public:
 	void ImGui_ListOfShadersAndMaterials();
 	void ImGui_SelectedMaterialsParameters();
 	void ImGui_AddShaderButton();
+	void ImGui_AddMaterialToSelectedShaderButton();
 
 	void addShader(const std::string& vertexFilepath, const std::string& fragmentFilepath);
 
@@ -26,7 +27,8 @@ public:
 	
 	inline void SetSelectedMaterial(int shaderID, int matID) { m_selectedMaterialLocation = { shaderID, matID }; }
 private:
-	inline Material& SelectedMaterial() { return Shaders()[SelectedMaterialLocation().shaderID].m_materials[SelectedMaterialLocation().materialID]; }
+	inline MaterialsForAGivenShader& SelectedShader() { return Shaders()[SelectedMaterialLocation().shaderID]; }
+	inline Material& SelectedMaterial() { return SelectedShader().m_materials[SelectedMaterialLocation().materialID]; }
 private:
 	std::vector<MaterialsForAGivenShader> m_shadersList;
 	int m_shaderCount;

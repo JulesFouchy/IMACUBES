@@ -19,8 +19,17 @@ void MaterialsManager::draw() {
 }
 
 void MaterialsManager::ImGui_ListOfShadersAndMaterials() {
-	for (MaterialsForAGivenShader& shader : m_shadersList) {
-		shader.ImGui_ListOfMaterials();
+	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
+	if (ImGui::BeginTabBar("MAterialsTabBar", tab_bar_flags))
+	{
+		for (MaterialsForAGivenShader& shader : m_shadersList) {
+			if (ImGui::BeginTabItem(shader.m_name.c_str()))
+			{
+				shader.ImGui_ListOfMaterials();
+				ImGui::EndTabItem();
+			}
+		}
+		ImGui::EndTabBar();
 	}
 }
 
@@ -33,6 +42,12 @@ void MaterialsManager::ImGui_SelectedMaterialsParameters() {
 void MaterialsManager::ImGui_AddShaderButton() {
 	if (ImGui::Button("Add shader")) {
 		addShader(MyFile::rootDir + "/res/shaders/_default.vert", FileBrowser::openfilename(" frag (*.frag)\0*.frag;*.FRAG\0All Files (*.*)\0*.*\0"));
+	}
+}
+
+void MaterialsManager::ImGui_AddMaterialToSelectedShaderButton() {
+	if (ImGui::Button("Add Material")) {
+		SelectedShader().addMaterial();
 	}
 }
 
