@@ -3,6 +3,8 @@
 #include "UI/Settings.hpp"
 #include "Locator/Locate.hpp"
 
+#include "imgui/misc/cpp/imgui_stdlib.h"
+
 void App::ImGui_DebugWindow() {
 	ImGui::Begin("Debug");
 	ImGui::Checkbox("Show Demo Window", &m_bShowImGUIDemoWindow);
@@ -114,7 +116,6 @@ void App::ImGui_RightSideWindow() {
 			ImGui::EndTabItem();
 
 
-			ImGui::TextColored(ImVec4(1.0f, 0.9f, 0.9f, 1.0f), "Selected item");
 			ImGui::BeginChild("Selected item", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.60));
 			Locate::materialsManager().ImGui_SelectedMaterialsParameters();
 			ImGui::EndChild();
@@ -127,7 +128,7 @@ void App::ImGui_RightSideWindow() {
 			ImGui::EndChild();
 			ImGui::EndTabItem();
 
-			ImGui::TextColored(ImVec4(1.0f, 0.9f, 0.9f, 1.0f), "Selected item");
+			ImGui::InputText("", m_lightsManager.selectedLight()->getNamePtr());
 			ImGui::BeginChild("Selected item", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.60));
 			m_lightsManager.ImGui_SelectedLightSliders();
 			ImGui::EndChild();

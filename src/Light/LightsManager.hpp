@@ -31,7 +31,6 @@ public:
 	void ImGui_SelectedLightSliders();
 	void ImGui_AddLightOfSelectedTypeButton();
 
-private:
 	Light* selectedLight();
 
 private:
