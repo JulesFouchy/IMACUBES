@@ -63,6 +63,7 @@ void App::onLoopIteration() {
 	ImGui_MainMenuBar();
 	ImGui_RightSideWindow();
 
+
 	// ----------------PLAYGROUND!------------------
 	m_camera.update(1.0f / 60.0f);
 	m_lightsManager.setUniforms(m_lightUniforms);
@@ -70,6 +71,7 @@ void App::onLoopIteration() {
 	drawScene();
 	m_shaders[m_cursorShaderLID].bind();
 	m_cursor.draw();
+	m_toolrbf.showGUI();
 	m_saveViewWindow.Show_IfOpen();
 }
 
@@ -136,10 +138,12 @@ void App::onEvent(const SDL_Event& e) {
 			if (e.button.button == SDL_BUTTON_MIDDLE)
 				m_camera.onWheelDown();
 			else if (e.button.button == SDL_BUTTON_LEFT) {
-				Locate::history(HistoryType::Cubes).beginUndoGroup();
-					m_cubesMap.addCube(m_cursor.getCubeJustBeforePosition());
-				Locate::history(HistoryType::Cubes).endUndoGroup();
-				placeCursorAtHoveredCube();
+				//Locate::history(HistoryType::Cubes).beginUndoGroup();
+				//	m_cubesMap.addCube(m_cursor.getCubeJustBeforePosition());
+				//Locate::history(HistoryType::Cubes).endUndoGroup();
+				//placeCursorAtHoveredCube();
+
+				m_toolrbf.onLeftClick(m_cursor);
 			}
 			else {
 				Locate::history(HistoryType::Cubes).beginUndoGroup();

@@ -15,6 +15,8 @@
 
 #include "Light/LightsManager.hpp"
 
+#include "Tools/Tool_RBF.hpp"
+
 
 class App {
 friend class Locate;
@@ -50,6 +52,7 @@ private:
 	UniformUpdateList m_lightUniforms;
 	glm::vec3 m_clearColor;
 	LightsManager m_lightsManager;
+	Tool_RBF m_toolrbf;
 	Camera m_camera;
 	HistoriesManager m_histories;
 	PopupWindow_SaveView m_saveViewWindow;
