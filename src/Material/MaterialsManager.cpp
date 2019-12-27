@@ -8,7 +8,7 @@
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
 MaterialsManager::MaterialsManager()
-	: m_shaderCount(0), m_selectedMaterialLocation(0, 0)
+	: m_shaderCount(0), m_selectedShaderID(0)
 {
 }
 
@@ -22,12 +22,15 @@ void MaterialsManager::ImGui_ListOfShadersAndMaterials() {
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	if (ImGui::BeginTabBar("MAterialsTabBar", tab_bar_flags))
 	{
+		int k = 0;
 		for (MaterialsForAGivenShader& shader : m_shadersList) {
 			if (ImGui::BeginTabItem(shader.m_name.c_str()))
 			{
 				shader.ImGui_ListOfMaterials();
+				m_selectedShaderID = k;
 				ImGui::EndTabItem();
 			}
+			k++;
 		}
 		ImGui::EndTabBar();
 	}
@@ -54,8 +57,8 @@ void MaterialsManager::ImGui_AddMaterialToSelectedShaderButton() {
 MaterialLocation MaterialsManager::addCube(glm::vec3 pos, bool bPushActionInHistory) {
 	if (bPushActionInHistory) {
 		glm::vec3 _pos = pos;
-		int _shaderID = m_selectedMaterialLocation.shaderID;
-		int _materialID = m_selectedMaterialLocation.materialID;
+		int _shaderID = m_selectedShaderID;
+		int _materialID = m_selectedMaterialIDforThisShaderID[m_selectedShaderID];
 		Locate::history(HistoryType::Cubes).addAction(Action(
 			// DO action
 			[this, _pos, _shaderID, _materialID]()
@@ -69,8 +72,8 @@ MaterialLocation MaterialsManager::addCube(glm::vec3 pos, bool bPushActionInHist
 		}
 		));
 	}
-	Shaders()[m_selectedMaterialLocation.shaderID].m_cubes.addCube(m_selectedMaterialLocation.materialID, pos);
-	return m_selectedMaterialLocation;
+	Shaders()[m_selectedShaderID].m_cubes.addCube(m_selectedMaterialIDforThisShaderID[m_selectedShaderID], pos);
+	return SelectedMaterialLocation();
 }
 
 void MaterialsManager::removeCube(int shaderID, glm::vec3 pos, bool bPushActionInHistory) {
@@ -95,6 +98,8 @@ void MaterialsManager::removeCube(int shaderID, glm::vec3 pos, bool bPushActionI
 }
 
 void MaterialsManager::addShader(const std::string& vertexFilepath, const std::string& fragmentFilepath) {
-	if(fragmentFilepath.compare(""))
+	if (fragmentFilepath.compare("")) {
 		m_shadersList.emplace_back(vertexFilepath, fragmentFilepath, m_shaderCount++);
+		m_selectedMaterialIDforThisShaderID[(int)m_shadersList.size() - 1] = 0;
+	}
 }

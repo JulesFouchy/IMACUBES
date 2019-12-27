@@ -3,6 +3,7 @@
 #include "MaterialsForAGivenShader.hpp"
 #include "MaterialLocation.hpp"
 #include <vector>
+#include <unordered_map>
 
 #include "glm/glm.hpp"
 
@@ -23,15 +24,18 @@ public:
 	void removeCube(int shaderID, glm::vec3 pos, bool bPushActionInHistory = true);
 
 	inline std::vector<MaterialsForAGivenShader>& Shaders() { return m_shadersList; }
-	inline const MaterialLocation& SelectedMaterialLocation() { return m_selectedMaterialLocation; }
+	inline const MaterialLocation SelectedMaterialLocation() { return MaterialLocation(m_selectedShaderID, m_selectedMaterialIDforThisShaderID[m_selectedShaderID]); }
 	
-	inline void SetSelectedMaterial(int shaderID, int matID) { m_selectedMaterialLocation = { shaderID, matID }; }
+	inline void SetSelectedMaterial(int shaderID, int matID) { m_selectedShaderID = shaderID; m_selectedMaterialIDforThisShaderID[shaderID] = matID; }
+
 private:
 	inline MaterialsForAGivenShader& SelectedShader() { return Shaders()[SelectedMaterialLocation().shaderID]; }
 	inline Material& SelectedMaterial() { return SelectedShader().m_materials[SelectedMaterialLocation().materialID]; }
+
 private:
 	std::vector<MaterialsForAGivenShader> m_shadersList;
 	int m_shaderCount;
 
-	MaterialLocation m_selectedMaterialLocation;
+	int m_selectedShaderID;
+	std::unordered_map<int, int > m_selectedMaterialIDforThisShaderID;
 };
