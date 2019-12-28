@@ -10,7 +10,7 @@ LightsManager::LightsManager()
 	: m_selectedLightType(LightType::Directional), m_selectedPointIndex(0), m_selectedDirectionalIndex(0),
 	  m_ambiantLight("Ambiant Light")
 {
-	addPointLight(glm::vec3(0.0f));
+	addPointLight(glm::vec3(0.0f), glm::vec3(1.0f), 0.0f);
 	addDirectionalLight(glm::vec3(-49., -173, 167));
 }
 
