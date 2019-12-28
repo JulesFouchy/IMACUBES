@@ -14,6 +14,12 @@ PopupWindow_SaveView::PopupWindow_SaveView()
 	  m_filepathPicker(" PNG (*.png)\0*.png;*.PNG\0All Files (*.*)\0*.*\0"),
 	  m_nbSamplesForMSAA(4)
 {
+	std::string filepath = MyFile::rootDir + "/imgOut/image1.png";
+	int k = 2;
+	while (MyFile::Exists(filepath)) {
+		filepath = MyFile::rootDir + "/imgOut/image"+std::to_string(k++)+".png";
+	}
+	m_filepathPicker.setFilepath(filepath);
 }
 
 void PopupWindow_SaveView::Open() {
