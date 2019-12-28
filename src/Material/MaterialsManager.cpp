@@ -20,13 +20,15 @@ void MaterialsManager::draw() {
 
 void MaterialsManager::ImGui_ListOfShadersAndMaterials() {
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
-	if (ImGui::BeginTabBar("MAterialsTabBar", tab_bar_flags))
+	if (ImGui::BeginTabBar("MaterialsTabBar", tab_bar_flags))
 	{
 		int k = 0;
 		for (MaterialsForAGivenShader& shader : m_shadersList) {
 			if (ImGui::BeginTabItem(shader.m_name.c_str()))
 			{
-				shader.ImGui_ListOfMaterials();
+				ImGui::BeginChild("Child window---", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.30));
+					shader.ImGui_ListOfMaterials();
+				ImGui::EndChild();
 				m_selectedShaderID = k;
 				ImGui::EndTabItem();
 			}
