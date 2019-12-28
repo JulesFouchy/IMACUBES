@@ -16,6 +16,7 @@ struct Settings {
 	// Cursor visual
 	static bool SHOW_CURSOR_THROUGH_CUBES;
 
-	// Lights
+	// OpenGL limitations
 	static const int MAX_NB_OF_LIGHTS_OF_A_GIVEN_TYPE;
+	static const int MAX_NB_OF_MATERIALS_FOR_A_GIVEN_SHADER;
 };

@@ -5,6 +5,7 @@
 
 #include "Debugging/Log.hpp"
 #include "OpenGL/Uniform/UniformDescriptionFactory.hpp"
+#include "UI/Settings.hpp"
 
 #include "Locator/Locate.hpp"
 
@@ -47,8 +48,12 @@ void MaterialsForAGivenShader::draw() {
 }
 
 void MaterialsForAGivenShader::addMaterial() {
-	m_materials.emplace_back(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(shader().getFragmentFilepath())) + std::to_string(m_materials.size()), m_structLayout, m_shaderIndex, (int)m_materials.size());
-	Locate::materialsManager().SetSelectedMaterial(m_shaderIndex, (int)m_materials.size() - 1);
+	if (m_materials.size() < Settings::MAX_NB_OF_MATERIALS_FOR_A_GIVEN_SHADER) {
+		m_materials.emplace_back(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(shader().getFragmentFilepath())) + std::to_string(m_materials.size()), m_structLayout, m_shaderIndex, (int)m_materials.size());
+		Locate::materialsManager().SetSelectedMaterial(m_shaderIndex, (int)m_materials.size() - 1);
+	}
+	else
+		spdlog::warn("Sorry you can't have more than {} materials for a given shader :/", Settings::MAX_NB_OF_MATERIALS_FOR_A_GIVEN_SHADER);
 }
 
 void MaterialsForAGivenShader::reloadShader() {
