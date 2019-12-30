@@ -20,7 +20,6 @@ public:
 private:
 	std::string m_name;
 
-	glm::vec3 m_color;
-	//UniformConcrete<glm::vec3> m_color;
-	float m_intensity;
+	UniformConcrete<glm::vec3> m_color;
+	UniformConcrete<float> m_intensity;
 };

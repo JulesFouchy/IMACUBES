@@ -16,6 +16,12 @@ void UniformConcrete<int>::ImGui_Slider() {
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
 }
+void UniformConcrete<int>::ImGui_Drag(float speed) {
+	ImGui::PushID((int)&m_value);
+	ImGui::DragInt(getName().c_str(), &value(), speed);
+	ImGui::PopID();
+	pushChangeInHistory_IfNecessary();
+}
 
 /*------------------------------------
 ------------------FLOAT---------------
@@ -27,6 +33,12 @@ void UniformConcrete<float>::sendTo(Shader& shader, const std::string& name) {
 void UniformConcrete<float>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
 	ImGui::SliderFloat(getName().c_str(), &value(), m_minValue, m_maxValue);
+	ImGui::PopID();
+	pushChangeInHistory_IfNecessary();
+}
+void UniformConcrete<float>::ImGui_Drag(float speed) {
+	ImGui::PushID((int)&m_value);
+	ImGui::DragFloat(getName().c_str(), &value(), speed);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
 }
@@ -44,6 +56,12 @@ void UniformConcrete<glm::vec2>::ImGui_Slider() {
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
 }
+void UniformConcrete<glm::vec2>::ImGui_Drag(float speed) {
+	ImGui::PushID((int)&m_value);
+	ImGui::DragFloat2(getName().c_str(), glm::value_ptr(value()), speed);
+	ImGui::PopID();
+	pushChangeInHistory_IfNecessary();
+}
 
 /*------------------------------------
 ------------------VEC3----------------
@@ -58,6 +76,12 @@ void UniformConcrete<glm::vec3>::ImGui_Slider() {
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
 }
+void UniformConcrete<glm::vec3>::ImGui_Drag(float speed) {
+	ImGui::PushID((int)&m_value);
+	ImGui::DragFloat3(getName().c_str(), glm::value_ptr(value()), speed);
+	ImGui::PopID();
+	pushChangeInHistory_IfNecessary();
+}
 
 /*------------------------------------
 ------------------VEC4----------------
@@ -69,6 +93,12 @@ void UniformConcrete<glm::vec4>::sendTo(Shader& shader, const std::string& name)
 void UniformConcrete<glm::vec4>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
 	ImGui::ColorPicker4(getName().c_str(), glm::value_ptr(value()));
+	ImGui::PopID();
+	pushChangeInHistory_IfNecessary();
+}
+void UniformConcrete<glm::vec4>::ImGui_Drag(float speed) {
+	ImGui::PushID((int)&m_value);
+	ImGui::DragFloat4(getName().c_str(), glm::value_ptr(value()), speed);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
 }

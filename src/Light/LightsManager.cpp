@@ -30,12 +30,12 @@ void LightsManager::addDirectionalLight(float angleUp, float angleGround, const 
 
 void LightsManager::duplicateSelectedPointLight() {
 	const PointLight& light = m_pointLights[m_selectedPointIndex];
-	addPointLight(light.m_position, light.m_color, light.m_intensity);
+	addPointLight(light.m_position, light.m_color.getValue(), light.m_intensity.getValue());
 }
 
 void LightsManager::duplicateSelectedDirectionalLight() {
 	const DirectionalLight& light = m_directionalLights[m_selectedDirectionalIndex];
-	addDirectionalLight(light.m_direction.getAngleGround(), light.m_direction.getAngleUp(), light.m_color, light.m_intensity);
+	addDirectionalLight(light.m_direction.getAngleGround(), light.m_direction.getAngleUp(), light.m_color.getValue(), light.m_intensity.getValue());
 }
 
 void LightsManager::setUniforms(UniformUpdateList& list) {

@@ -19,7 +19,7 @@ public:
 	}
 
 	Uniform* createUniformPtr() override {
-		return new UniformConcrete<T>(historyType, defaultValue, minValue, maxValue, name);
+		return new UniformConcrete<T>(name, historyType, defaultValue, minValue, maxValue);
 	}
 
 	void updateThisUniform(Uniform* uniform) override {

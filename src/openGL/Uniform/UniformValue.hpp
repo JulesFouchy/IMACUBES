@@ -19,6 +19,7 @@ public:
 
 	void send(const std::string& uniformName, Shader& shader) override;
 	inline T& get() { return m_value; }
+	inline const T& get() const { return m_value; }
 
 private:
 	T m_value;

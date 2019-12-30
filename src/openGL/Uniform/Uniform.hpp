@@ -15,8 +15,8 @@
 
 class Uniform {
 public:
-	Uniform(HistoryType historyType, const std::string& name = "")
-		: m_historyType(historyType), m_name(name) {}
+	Uniform(const std::string& name, HistoryType historyType)
+		: m_name(name), m_historyType(historyType) {}
 
 	~Uniform() = default;
 
@@ -25,6 +25,7 @@ public:
 	inline  void sendTo(size_t shaderLID) { sendTo(shaderLID, getName()); }
 
 	virtual void ImGui_Slider() = 0;
+	virtual void ImGui_Drag(float speed) = 0;
 
 	virtual Uniform* createPtrWithSameData() = 0;
 
@@ -34,6 +35,6 @@ protected:
 	inline static Shader& GetShader(size_t shaderLID) { return Locate::shaderLibrary()[shaderLID]; }
 
 protected:
-	HistoryType m_historyType;
 	std::string m_name;
+	HistoryType m_historyType;
 };
