@@ -6,7 +6,7 @@
 
 namespace UniformDescriptionFactory {
 	// public :
-	UniformDescription* FromShaderLine(const std::string& line);
+	UniformDescription* FromShaderLine(const std::string& line, HistoryType historyType);
 
 	// private :
 	namespace { // anonymous namespace to make functions private
@@ -14,7 +14,7 @@ namespace UniformDescriptionFactory {
 		T ReadValue(const std::string& str, size_t* currentPosPtr);
 
 		template <typename T>
-		UniformDescription* ReadNameAndValuesAndCreateUniformDescriptionOfType(const std::string& line, size_t posEndType) {
+		UniformDescription* ReadNameAndValuesAndCreateUniformDescriptionOfType(const std::string& line, size_t posEndType, HistoryType historyType) {
 			// Get name
 			size_t posBeginName = MyString::BeginningOfNextWord(line, posEndType);
 			size_t posEndName = MyString::EndOfNextWord(line, posBeginName);
@@ -43,7 +43,7 @@ namespace UniformDescriptionFactory {
 				}
 			}
 			// Return uniform
-			return new UniformDescriptionConcrete<T>(s_name, initialValue, minValue, maxValue);
+			return new UniformDescriptionConcrete<T>(s_name, historyType, initialValue, minValue, maxValue);
 		}
 	}
 }

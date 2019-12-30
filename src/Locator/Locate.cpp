@@ -2,6 +2,13 @@
 
 #include "App.hpp"
 
+#include "Material/MaterialsManager.hpp"
+#include "History/History.hpp"
+#include "History/HistoryTypes.hpp"
+#include "CubesMap/CubesMap.hpp"
+#include "OpenGL/ShaderLibrary.hpp"
+#include "OpenGL/Uniform/UniformUpdateList.hpp"
+
 MaterialsManager& Locate::materialsManager() {
 	return App::Get().m_cubesMap.getMaterialsManager();
 }

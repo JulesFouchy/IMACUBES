@@ -13,6 +13,7 @@ struct MaterialParameters{
 	float distortOutScale; // default 2.346 min 0 max 60
 	vec3 SkyColor; // default 0 0 0
 	vec3 StarColor; // default 0.355f, 0.670f, 1.000f
+	float test; // default 1. min 0 max 2
 };
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------

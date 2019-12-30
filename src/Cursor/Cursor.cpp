@@ -1,6 +1,9 @@
 #include "Cursor.hpp"
 
 #include "Locator/Locate.hpp"
+#include "CubesMap/CubesMap.hpp"
+
+#include "Debugging/Log.hpp"
 
 #include "UI/Settings.hpp"
 

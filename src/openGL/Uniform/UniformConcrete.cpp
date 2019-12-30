@@ -1,20 +1,18 @@
-#include "Uniform_ForMaterialSystemConcrete.hpp"
+#include "UniformConcrete.hpp"
 
-#include "glm/glm.hpp"
-#include "glm/gtc/type_ptr.hpp"
-
-#include "Locator/Locate.hpp"
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 /*------------------------------------
 ------------------INT-----------------
 --------------------------------------*/
 template <>
-void UniformConcrete<int>::set(int structIndex) {
-	getShader().setUniform1i(getNameFull(structIndex), m_value);
+void UniformConcrete<int>::sendTo(Shader& shader, const std::string& name) {
+	shader.setUniform1i(name, value());
 }
 void UniformConcrete<int>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	ImGui::SliderInt(getNameInsideStruct().c_str(), &m_value, m_minValue, m_maxValue);
+	ImGui::SliderInt(getName().c_str(), &value(), m_minValue, m_maxValue);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
 }
@@ -23,12 +21,12 @@ void UniformConcrete<int>::ImGui_Slider() {
 ------------------FLOAT---------------
 --------------------------------------*/
 template <>
-void UniformConcrete<float>::set(int structIndex) {
-	getShader().setUniform1f(getNameFull(structIndex), m_value);
+void UniformConcrete<float>::sendTo(Shader& shader, const std::string& name) {
+	shader.setUniform1f(name, value());
 }
 void UniformConcrete<float>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	ImGui::SliderFloat(getNameInsideStruct().c_str(), &m_value, m_minValue, m_maxValue);
+	ImGui::SliderFloat(getName().c_str(), &value(), m_minValue, m_maxValue);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
 }
@@ -37,12 +35,12 @@ void UniformConcrete<float>::ImGui_Slider() {
 ------------------VEC2----------------
 --------------------------------------*/
 template <>
-void UniformConcrete<glm::vec2>::set(int structIndex) {
-	getShader().setUniform2f(getNameFull(structIndex), m_value);
+void UniformConcrete<glm::vec2>::sendTo(Shader& shader, const std::string& name) {
+	shader.setUniform2f(name, value());
 }
 void UniformConcrete<glm::vec2>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	ImGui::SliderFloat2(getNameInsideStruct().c_str(), glm::value_ptr(m_value), m_minValue.x, m_maxValue.x);
+	ImGui::SliderFloat2(getName().c_str(), glm::value_ptr(value()), m_minValue.x, m_maxValue.x);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
 }
@@ -51,12 +49,12 @@ void UniformConcrete<glm::vec2>::ImGui_Slider() {
 ------------------VEC3----------------
 --------------------------------------*/
 template <>
-void UniformConcrete<glm::vec3>::set(int structIndex) {
-	getShader().setUniform3f(getNameFull(structIndex), m_value);
+void UniformConcrete<glm::vec3>::sendTo(Shader& shader, const std::string& name) {
+	shader.setUniform3f(name, value());
 }
 void UniformConcrete<glm::vec3>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	ImGui::ColorPicker3(getNameInsideStruct().c_str(), glm::value_ptr(m_value));
+	ImGui::ColorPicker3(getName().c_str(), glm::value_ptr(value()));
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
 }
@@ -65,12 +63,12 @@ void UniformConcrete<glm::vec3>::ImGui_Slider() {
 ------------------VEC4----------------
 --------------------------------------*/
 template <>
-void UniformConcrete<glm::vec4>::set(int structIndex) {
-	getShader().setUniform4f(getNameFull(structIndex), m_value);
+void UniformConcrete<glm::vec4>::sendTo(Shader& shader, const std::string& name) {
+	shader.setUniform4f(name, value());
 }
 void UniformConcrete<glm::vec4>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	ImGui::ColorPicker4(getNameInsideStruct().c_str(), glm::value_ptr(m_value));
+	ImGui::ColorPicker4(getName().c_str(), glm::value_ptr(value()));
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
 }

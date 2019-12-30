@@ -1,6 +1,6 @@
 #pragma once
 
-#include "OpenGL/Uniform/Uniform_ForMaterialSystem.hpp"
+#include "OpenGL/Uniform/Uniform.hpp"
 #include "OpenGL/Uniform/UniformDescription.hpp"
 
 #include <string>
@@ -25,8 +25,10 @@ private:
 	void addUniformToStruct(UniformDescription* uniformDescription);
 	void updateUniformInsideStruct(int uniformIndex, UniformDescription* uniformDescription);
 
+	inline std::string uniformFullName(const std::string& uniformName) { return "params[" + std::to_string(m_materialIndex) + "]." + uniformName; }
+
 private:
-	std::vector<Uniform_ForMaterialSystem*> m_uniformsStruct;
+	std::vector<Uniform*> m_uniformsStruct;
 	int m_shaderIndex;
 	int m_materialIndex;
 	std::string m_name;

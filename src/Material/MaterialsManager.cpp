@@ -1,10 +1,12 @@
 #include "MaterialsManager.hpp"
 
 #include "Locator/Locate.hpp"
+#include "History/History.hpp"
 
 #include "GUI/FileBrowser.hpp"
 #include "Helper/File.hpp"
 
+#include <imgui/imgui.h>
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
 MaterialsManager::MaterialsManager()
