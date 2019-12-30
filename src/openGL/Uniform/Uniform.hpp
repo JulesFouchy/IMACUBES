@@ -15,8 +15,8 @@
 
 class Uniform {
 public:
-	Uniform(const std::string& name, HistoryType historyType)
-		: m_name(name), m_historyType(historyType) {}
+	Uniform(HistoryType historyType, const std::string& name = "")
+		: m_historyType(historyType), m_name(name) {}
 
 	~Uniform() = default;
 
@@ -34,6 +34,6 @@ protected:
 	inline static Shader& GetShader(size_t shaderLID) { return Locate::shaderLibrary()[shaderLID]; }
 
 protected:
-	std::string m_name;
 	HistoryType m_historyType;
+	std::string m_name;
 };

@@ -13,8 +13,8 @@ class UniformConcrete : public Uniform {
 	template <typename T>
 	friend class UniformDescriptionConcrete;
 public:
-	UniformConcrete(const std::string& name, HistoryType historyType, T value, T minValue, T maxValue)
-		: Uniform(name, historyType), m_value(value), m_valueBeforeEditingStarted(value), m_minValue(minValue), m_maxValue(maxValue) {}
+	UniformConcrete(HistoryType historyType, T value, T minValue = T(0), T maxValue = T(1), const std::string& name = "")
+		: Uniform(historyType, name), m_value(value), m_valueBeforeEditingStarted(value), m_minValue(minValue), m_maxValue(maxValue) {}
 
 	~UniformConcrete() = default;
 
@@ -23,7 +23,7 @@ public:
 	void ImGui_Slider() override;
 
 	Uniform* createPtrWithSameData() override {
-		return new UniformConcrete<T>(getName(), m_historyType, value(), m_minValue, m_maxValue);
+		return new UniformConcrete<T>(m_historyType, value(), m_minValue, m_maxValue, getName());
 	}
 
 	inline T& value() { return m_value.get(); }
