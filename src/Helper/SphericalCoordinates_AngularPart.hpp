@@ -9,6 +9,8 @@ struct SphericalCoordinates_AngularPart {
 	{}
 
 	bool _ImGui_CoordinatesSliders();
+	bool _ImGui_AngleUpSlider();
+	bool _ImGui_AngleGroundSlider();
 
 	inline float& angleGround() { m_bMustRecomputeXYZ = true;  return m_angleGround; }
 	inline float& angleUp()     { m_bMustRecomputeXYZ = true;  return m_angleUp; }

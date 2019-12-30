@@ -13,8 +13,18 @@ void SphericalCoordinates_AngularPart::computeXYZ() {
 }
 
 bool SphericalCoordinates_AngularPart::_ImGui_CoordinatesSliders() {
+	return _ImGui_AngleUpSlider() || _ImGui_AngleGroundSlider();
+}
+
+bool SphericalCoordinates_AngularPart::_ImGui_AngleUpSlider() {
 	bool modifs = ImGui::SliderAngle("Angle Up", &angleUp(), -180, 0);
-	modifs |=     ImGui::SliderAngle("Angle Ground", &angleGround());
+	if (modifs)
+		m_bMustRecomputeXYZ = true;
+	return modifs;
+}
+
+bool SphericalCoordinates_AngularPart::_ImGui_AngleGroundSlider() {
+	bool modifs = ImGui::SliderAngle("Angle Ground", &angleGround());
 	if (modifs)
 		m_bMustRecomputeXYZ = true;
 	return modifs;

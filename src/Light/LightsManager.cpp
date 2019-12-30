@@ -35,7 +35,7 @@ void LightsManager::duplicateSelectedPointLight() {
 
 void LightsManager::duplicateSelectedDirectionalLight() {
 	const DirectionalLight& light = m_directionalLights[m_selectedDirectionalIndex];
-	addDirectionalLight(light.m_direction.getAngleGround(), light.m_direction.getAngleUp(), light.m_color.getValue(), light.m_intensity.getValue());
+	addDirectionalLight(light.m_direction.getValue().getAngleGround(), light.m_direction.getValue().getAngleUp(), light.m_color.getValue(), light.m_intensity.getValue());
 }
 
 void LightsManager::setUniforms(UniformUpdateList& list) {

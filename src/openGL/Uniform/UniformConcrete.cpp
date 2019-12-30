@@ -3,6 +3,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "Helper/SphericalCoordinates_AngularPart.hpp"
+
 /*------------------------------------
 ------------------INT-----------------
 --------------------------------------*/
@@ -101,4 +103,23 @@ void UniformConcrete<glm::vec4>::ImGui_Drag(float speed) {
 	ImGui::DragFloat4(getName().c_str(), glm::value_ptr(value()), speed);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
+}
+
+/*------------------------------------
+---SphericalCoordinates_AngularPart---
+--------------------------------------*/
+template <>
+void UniformConcrete<SphericalCoordinates_AngularPart>::sendTo(Shader& shader, const std::string& name) {
+	shader.setUniform2f(name, glm::vec2(value().angleUp(), value().angleGround()));
+}
+void UniformConcrete<SphericalCoordinates_AngularPart>::ImGui_Slider() {
+	ImGui::PushID((int)&m_value);
+	value()._ImGui_AngleUpSlider();
+	pushChangeInHistory_IfNecessary();
+	value()._ImGui_AngleGroundSlider();
+	pushChangeInHistory_IfNecessary();
+	ImGui::PopID();
+}
+void UniformConcrete<SphericalCoordinates_AngularPart>::ImGui_Drag(float speed) {
+	ImGui_Slider();
 }
