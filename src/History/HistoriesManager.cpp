@@ -5,8 +5,9 @@
 HistoriesManager::HistoriesManager()
 	: m_activeHistoryIndex(0)
 {
-	m_histories.emplace_back("Uniforms");
+	m_histories.emplace_back("Materials");
 	m_histories.emplace_back("Cubes");
+	m_histories.emplace_back("Lights");
 }
 
 void HistoriesManager::_ImGui_ActiveHistory() {

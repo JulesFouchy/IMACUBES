@@ -30,7 +30,7 @@ public:
 private:
 	void pushChangeInHistory_IfNecessary() {
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
-			History& history = Locate::history(HistoryType::Uniforms);
+			History& history = Locate::history(HistoryType::Materials);
 			history.beginUndoGroup();
 			T val = m_value;
 			T prevVal = m_valueBeforeEditingStarted;

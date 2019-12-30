@@ -1,6 +1,7 @@
 #pragma once
 
 enum class HistoryType {
-	Uniforms,
-	Cubes
+	Materials,
+	Cubes,
+	Lights
 };
