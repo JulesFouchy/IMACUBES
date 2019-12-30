@@ -5,6 +5,8 @@
 #include "Tools/Tool_RBF.hpp"
 #include "Locator/Locate.hpp"
 
+#include "CubesMap/BoundingBox.hpp"
+
 
 PopupWindow_RBF::PopupWindow_RBF(Tool_RBF* parent)
 	: PopupWindow("RBF_Tool"), m_parent(parent)
@@ -34,10 +36,9 @@ void PopupWindow_RBF::Show() {
 }
 
 void PopupWindow_RBF::OnConfirmation() {
-	//pseudo
-
 	//RBF rbf(m_parent->m_anchorPts, m_parent->m_valuesAtAnchorPts);
-	//for( const glm::vec3& : Locate::cubesMap())
-
-
+	BoundingBox worldBB;
+	for (const glm::ivec3& pos : worldBB) {
+		//spdlog::info("{} {} {}", pos.x, pos.y, pos.z);
+	}
 }
