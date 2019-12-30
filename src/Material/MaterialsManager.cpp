@@ -1,10 +1,12 @@
 #include "MaterialsManager.hpp"
 
 #include "Locator/Locate.hpp"
+#include "History/History.hpp"
 
 #include "GUI/FileBrowser.hpp"
 #include "Helper/File.hpp"
 
+#include <imgui/imgui.h>
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
 MaterialsManager::MaterialsManager()
@@ -56,7 +58,7 @@ void MaterialsManager::ImGui_AddMaterialToSelectedShaderButton() {
 	}
 }
 
-MaterialLocation MaterialsManager::addCube(glm::vec3 pos, bool bPushActionInHistory) {
+MaterialLocation MaterialsManager::addCube(const glm::ivec3& pos, bool bPushActionInHistory) {
 	if (bPushActionInHistory) {
 		glm::vec3 _pos = pos;
 		int _shaderID = m_selectedShaderID;
@@ -78,11 +80,11 @@ MaterialLocation MaterialsManager::addCube(glm::vec3 pos, bool bPushActionInHist
 	return SelectedMaterialLocation();
 }
 
-void MaterialsManager::removeCube(int shaderID, glm::vec3 pos, bool bPushActionInHistory) {
+void MaterialsManager::removeCube(int shaderID, const glm::ivec3& pos, bool bPushActionInHistory) {
 	if (bPushActionInHistory) {
 		int _shaderID = shaderID;
 		int _materialID = Shaders()[shaderID].m_cubes.getCubeMaterialID(pos);
-		glm::vec3 _pos = pos;
+		glm::ivec3 _pos = pos;
 		Locate::history(HistoryType::Cubes).addAction(Action(
 			// DO action
 			[this, _shaderID, _pos]()

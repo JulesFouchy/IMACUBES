@@ -1,6 +1,7 @@
 #include "CubeMaths.hpp"
 
 #include "Locator/Locate.hpp"
+#include "CubesMap/CubesMap.hpp"
 
 #include <limits>
 

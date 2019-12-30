@@ -2,6 +2,8 @@
 
 #include "UniformDescription.hpp"
 
+#include "UniformConcrete.hpp"
+
 template <typename T>
 class UniformDescriptionConcrete : public UniformDescription {
 public:
@@ -9,15 +11,15 @@ public:
 	T minValue;
 	T maxValue;
 
-	UniformDescriptionConcrete(const std::string& name, T defaultValue, T minValue, T maxValue)
-		: UniformDescription(name), defaultValue(defaultValue), minValue(minValue), maxValue(maxValue) {}
+	UniformDescriptionConcrete(const std::string& name, HistoryType historyType, T defaultValue, T minValue, T maxValue)
+		: UniformDescription(name, historyType), defaultValue(defaultValue), minValue(minValue), maxValue(maxValue) {}
 
-	UniformDescriptionConcrete* createPtrWithSameData() override {
-		return new UniformDescriptionConcrete(name, defaultValue, minValue, maxValue);
+	UniformDescription* createPtrWithSameData() override {
+		return new UniformDescriptionConcrete(name, historyType, defaultValue, minValue, maxValue);
 	}
 
-	Uniform* createUniformPtr(int shaderIndex) override {
-		return new UniformConcrete<T>(shaderIndex, name, defaultValue, minValue, maxValue);
+	Uniform* createUniformPtr() override {
+		return new UniformConcrete<T>(name, historyType, defaultValue, minValue, maxValue);
 	}
 
 	void updateThisUniform(Uniform* uniform) override {

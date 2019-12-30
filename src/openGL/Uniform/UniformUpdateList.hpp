@@ -1,8 +1,8 @@
 #pragma once
 
 #include "UniformValue.hpp"
-#include "Shader.hpp"
-#include "ShaderLibrary.hpp"
+#include "OpenGL/Shader.hpp"
+#include "OpenGL/ShaderLibrary.hpp"
 
 #include <vector>
 #include <unordered_map>
@@ -14,7 +14,7 @@ public:
 	~UniformUpdateList() = default;
 
 	void addSubscriber(size_t shaderLID);
-	void setUniformsFor(size_t shaderLID);
+	void sendUniformsTo(size_t shaderLID);
 
 	template <typename T>
 	void setUniform(const std::string& uniformName, const T& value) {

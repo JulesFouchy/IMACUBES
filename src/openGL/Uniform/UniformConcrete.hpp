@@ -1,38 +1,39 @@
 #pragma once
 
 #include "Uniform.hpp"
+#include "UniformValue.hpp"
 
-#include <string>
-#include <tuple>
-#include "Debugging/Log.hpp"
-#include "imgui.h"
+#include "Locator/Locate.hpp"
+#include "History/History.hpp"
+
+#include <imgui/imgui.h>
 
 template <typename T>
 class UniformConcrete : public Uniform {
-friend class UniformDescription;
-template <typename T>
-friend class UniformDescriptionConcrete;
+	template <typename T>
+	friend class UniformDescriptionConcrete;
 public:
-	UniformConcrete() = default;
-	UniformConcrete(int shaderIndex, const std::string& nameInsideStruct, T value, T minValue, T maxValue)
-		: Uniform(shaderIndex, nameInsideStruct), m_value(value), m_valueBeforeEditingStarted(value), m_minValue(minValue), m_maxValue(maxValue)
-	{}
+	UniformConcrete(const std::string& name, HistoryType historyType, T value, T minValue, T maxValue)
+		: Uniform(name, historyType), m_value(value), m_valueBeforeEditingStarted(value), m_minValue(minValue), m_maxValue(maxValue) {}
 
-	void set(int structIndex) override;
+	~UniformConcrete() = default;
+
+	void sendTo(Shader& shader, const std::string& name) override;
 
 	void ImGui_Slider() override;
 
 	Uniform* createPtrWithSameData() override {
-		return new UniformConcrete<T>(m_shaderIndex, getNameInsideStruct(), m_value, m_minValue, m_maxValue);
+		return new UniformConcrete<T>(getName(), m_historyType, value(), m_minValue, m_maxValue);
 	}
 
-	inline T& value() { return m_value; }
+	inline T& value() { return m_value.get(); }
+
 private:
 	void pushChangeInHistory_IfNecessary() {
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
-			History& history = Locate::history(HistoryType::Materials);
+			History& history = Locate::history(m_historyType);
 			history.beginUndoGroup();
-			T val = m_value;
+			T val = value();
 			T prevVal = m_valueBeforeEditingStarted;
 			history.addAction(Action(
 				// DO action
@@ -47,11 +48,12 @@ private:
 			}
 			));
 			history.endUndoGroup();
-			m_valueBeforeEditingStarted = m_value; // ready for next edit
+			m_valueBeforeEditingStarted = value(); // ready for next edit
 		}
 	}
-private:
-	T m_value;
+
+protected:
+	UniformValueConcrete<T> m_value;	
 	T m_valueBeforeEditingStarted;
 	T m_minValue;
 	T m_maxValue;

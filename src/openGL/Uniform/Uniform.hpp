@@ -1,32 +1,39 @@
 #pragma once
 
-#include <glad/glad.h>
+#pragma once
+
 #include <string>
 
 #include "OpenGL/Shader.hpp"
+#include "OpenGL/ShaderLibrary.hpp"
 
-#include "Debugging/Log.hpp"
+#include "Locator/Locate.hpp"
 
-#include "Material/MaterialsLocator.hpp"
+#include "History/HistoryTypes.hpp"
+
+#include "UniformValue.hpp"
 
 class Uniform {
-friend class UniformDescription;
 public:
-	Uniform(int shaderIndex, const std::string& nameInsideStruct)
-		: m_shaderIndex(shaderIndex), m_nameInsideStruct(nameInsideStruct)
-	{}
+	Uniform(const std::string& name, HistoryType historyType)
+		: m_name(name), m_historyType(historyType) {}
+
 	~Uniform() = default;
 
-	virtual void set(int structIndex) = 0;
-	
+	virtual void sendTo(Shader& shader, const std::string& name) = 0;
+	inline  void sendTo(size_t shaderLID, const std::string& name) { sendTo(GetShader(shaderLID), name); }
+	inline  void sendTo(size_t shaderLID) { sendTo(shaderLID, getName()); }
+
 	virtual void ImGui_Slider() = 0;
 
 	virtual Uniform* createPtrWithSameData() = 0;
 
-	inline Shader& getShader() { return MaterialsLocator::GetShader(m_shaderIndex); }
-	inline const std::string getNameFull(int structIndex) const { return std::string("params[") + std::to_string(structIndex) + std::string("].") + m_nameInsideStruct; }
-	inline const std::string& getNameInsideStruct() const { return m_nameInsideStruct; }
+	inline const std::string& getName() const { return m_name; }
+
 protected:
-	int m_shaderIndex;
-	std::string m_nameInsideStruct;
+	inline static Shader& GetShader(size_t shaderLID) { return Locate::shaderLibrary()[shaderLID]; }
+
+protected:
+	std::string m_name;
+	HistoryType m_historyType;
 };

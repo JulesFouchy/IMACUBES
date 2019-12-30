@@ -4,10 +4,10 @@
 
 void UniformUpdateList::addSubscriber(size_t shaderLID) {
 	m_subscribersLIDs.push_back(shaderLID);
-	setUniformsFor(shaderLID);
+	sendUniformsTo(shaderLID);
 }
 
-void UniformUpdateList::setUniformsFor(size_t shaderLID) {
+void UniformUpdateList::sendUniformsTo(size_t shaderLID) {
 	Locate::shaderLibrary()[shaderLID].bind();
 	for (auto& uniform : m_uniforms)
 		uniform.second->set(uniform.first, Locate::shaderLibrary()[shaderLID]);

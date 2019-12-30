@@ -25,6 +25,8 @@ private:
 	void addUniformToStruct(UniformDescription* uniformDescription);
 	void updateUniformInsideStruct(int uniformIndex, UniformDescription* uniformDescription);
 
+	inline std::string uniformFullName(const std::string& uniformName) { return "params[" + std::to_string(m_materialIndex) + "]." + uniformName; }
+
 private:
 	std::vector<Uniform*> m_uniformsStruct;
 	int m_shaderIndex;

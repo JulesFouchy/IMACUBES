@@ -2,6 +2,8 @@
 
 #include "Debugging/Log.hpp"
 
+#include "MaterialsLocator.hpp"
+
 Material::Material(const std::string& name, const std::vector<UniformDescription*>& structLayout, int shaderIndex, int materialIndex)
 	: m_shaderIndex(shaderIndex), m_materialIndex(materialIndex), m_name(name)
 {
@@ -35,7 +37,7 @@ void Material::updateLayout(const std::vector<UniformDescription*>& structLayout
 
 void Material::setUniforms() {
 	for (Uniform* uni : m_uniformsStruct) {
-		uni->set(m_materialIndex);
+		uni->sendTo(MaterialsLocator::GetShader(m_shaderIndex), uniformFullName(uni->getName()));
 	}
 }
 
@@ -47,14 +49,14 @@ void Material::ImGui_Sliders() {
 
 int Material::findUniform(const std::string& name) {
 	for (int k = 0; k < m_uniformsStruct.size(); ++k) {
-		if (!m_uniformsStruct[k]->getNameInsideStruct().compare(name))
+		if (!m_uniformsStruct[k]->getName().compare(name))
 			return k;
 	}
 	return -1;
 }
 
 void Material::addUniformToStruct(UniformDescription* uniformDescription) {
-	m_uniformsStruct.push_back(uniformDescription->createUniformPtr(m_shaderIndex));
+	m_uniformsStruct.push_back(uniformDescription->createUniformPtr());
 }
 
 void Material::updateUniformInsideStruct(int uniformIndex, UniformDescription* uniformDescription) {

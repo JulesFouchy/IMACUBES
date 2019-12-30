@@ -37,7 +37,7 @@ void App::onInit() {
 	m_cursor = Cursor(0, 0, 0);
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
-	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/testShader.frag");
+	//Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/testShader.frag");
 	Locate::materialsManager().SetSelectedMaterial(1, 0);
 
 	onViewMatrixChange();
@@ -179,8 +179,8 @@ void App::onEvent(const SDL_Event& e) {
 			else {
 				if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
 					Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].reloadShader();
-					m_cameraUniforms.setUniformsFor(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
-					m_lightUniforms.setUniformsFor(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
+					m_cameraUniforms.sendUniformsTo(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
+					m_lightUniforms.sendUniformsTo(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
 				}
 				if (e.key.keysym.sym == 'z') {
 					m_cursor.translate(glm::ivec3(0, 0, -1));

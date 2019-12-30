@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Material/MaterialsManager.hpp"
-#include "History/History.hpp"
-#include "History/HistoryTypes.hpp"
-#include "CubesMap/CubesMap.hpp"
-#include "OpenGL/ShaderLibrary.hpp"
-#include "OpenGL/UniformUpdateList.hpp"
+class MaterialsManager;
+class History;
+enum class HistoryType;
+class CubesMap;
+class ShaderLibrary;
+class UniformUpdateList;
 
 class Locate {
 public:

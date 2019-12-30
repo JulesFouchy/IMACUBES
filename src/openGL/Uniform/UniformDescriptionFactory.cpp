@@ -8,26 +8,26 @@
 
 namespace UniformDescriptionFactory {
 
-	UniformDescription* FromShaderLine(const std::string& line) {
+	UniformDescription* FromShaderLine(const std::string& line, HistoryType historyType) {
 		// Get type
 		size_t currentPos = 0;
 		OpenGLType type = GLType::FromString(MyString::GetNextWord(line, &currentPos));
 		switch (type)
 		{
 		case OpenGLType::Int:
-			return ReadNameAndValuesAndCreateUniformDescriptionOfType<int>(line, currentPos);
+			return ReadNameAndValuesAndCreateUniformDescriptionOfType<int>(line, currentPos, historyType);
 			break;
 		case OpenGLType::Float:
-			return ReadNameAndValuesAndCreateUniformDescriptionOfType<float>(line, currentPos);
+			return ReadNameAndValuesAndCreateUniformDescriptionOfType<float>(line, currentPos, historyType);
 			break;
 		case OpenGLType::Vec2:
-			return ReadNameAndValuesAndCreateUniformDescriptionOfType<glm::vec2>(line, currentPos);
+			return ReadNameAndValuesAndCreateUniformDescriptionOfType<glm::vec2>(line, currentPos, historyType);
 			break;
 		case OpenGLType::Vec3:
-			return ReadNameAndValuesAndCreateUniformDescriptionOfType<glm::vec3>(line, currentPos);
+			return ReadNameAndValuesAndCreateUniformDescriptionOfType<glm::vec3>(line, currentPos, historyType);
 			break;
 		case OpenGLType::Vec4:
-			return ReadNameAndValuesAndCreateUniformDescriptionOfType<glm::vec4>(line, currentPos);
+			return ReadNameAndValuesAndCreateUniformDescriptionOfType<glm::vec4>(line, currentPos, historyType);
 			break;
 		default:
 			spdlog::warn("[UniformDescriptionFactory::FromShaderLine] Unknown OpenGL type : {}", (int)type);

@@ -4,7 +4,7 @@
 #include "PointLight.hpp"
 #include "DirectionalLight.hpp"
 
-#include "OpenGL/UniformUpdateList.hpp"
+#include "OpenGL/Uniform/UniformUpdateList.hpp"
 
 #include <vector>
 #include <glm/glm.hpp>

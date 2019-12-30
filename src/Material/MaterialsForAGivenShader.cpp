@@ -8,6 +8,8 @@
 #include "UI/Settings.hpp"
 
 #include "Locator/Locate.hpp"
+#include "OpenGL/Uniform/UniformUpdateList.hpp"
+#include "MaterialsManager.hpp"
 
 MaterialsForAGivenShader::MaterialsForAGivenShader(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex)
 	: m_shaderLID(Locate::shaderLibrary().LoadShader(vertexFilepath, fragmentFilepath)), 
@@ -98,7 +100,7 @@ void MaterialsForAGivenShader::parseShaderAndCreateUniformDescriptions(const std
 			if (line.find("struct MaterialParameters") != std::string::npos) { // TODO check that the line isn't commented out
 				std::getline(file, line);
 				while (line.find("}") == std::string::npos) {
-					m_structLayout.push_back(UniformDescriptionFactory::FromShaderLine(line));
+					m_structLayout.push_back(UniformDescriptionFactory::FromShaderLine(line, HistoryType::Materials));
 					// Go to next line
 					std::getline(file, line);
 				}

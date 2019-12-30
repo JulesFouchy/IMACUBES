@@ -1,6 +1,7 @@
 #include "CubesMap.hpp"
 
 #include "Locator/Locate.hpp"
+#include "History/History.hpp"
 
 CubesMap::CubesMap(int width, int height, int depth)
 	: m_width(width), m_height(height), m_depth(depth), m_cubesLocations(m_width * m_height * m_depth, MaterialLocation(-1, -1))

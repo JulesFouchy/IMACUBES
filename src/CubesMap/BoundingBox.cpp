@@ -1,6 +1,7 @@
 #include "BoundingBox.hpp"
 
 #include "Locator/Locate.hpp"
+#include "CubesMap/CubesMap.hpp"
 
 BoundingBox::BoundingBox()
 	: m_minValidX(Locate::cubesMap().minValidX()), m_maxValidX(Locate::cubesMap().maxValidX()),

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Shader.hpp"
+#include "OpenGL/Shader.hpp"
 
 class UniformValue {
 public:
@@ -17,7 +17,8 @@ public:
 		: m_value(value)
 	{}
 
-	void set(const std::string& uniforName, Shader& shader) override;
+	void set(const std::string& uniformName, Shader& shader) override;
+	inline T& get() { return m_value; }
 
 private:
 	T m_value;

@@ -4,6 +4,7 @@
 #include "Debugging/Log.hpp"
 
 #include "Locator/Locate.hpp"
+#include "CubesMap/CubesMap.hpp"
 
 #include "CubeMaths/CubeMaths.hpp"
 
