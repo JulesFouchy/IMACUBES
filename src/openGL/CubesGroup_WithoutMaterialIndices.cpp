@@ -215,9 +215,18 @@ CubesGroup_WithoutMaterialIndices::CubesGroup_WithoutMaterialIndices()
 }
 
 CubesGroup_WithoutMaterialIndices::CubesGroup_WithoutMaterialIndices(const CubesGroup_WithoutMaterialIndices& other)
-	: m_positions(other.m_positions), m_indicesMap(other.m_indicesMap),bMustUpdateGPU(true)
+	: m_positions(other.m_positions), m_indicesMap(other.m_indicesMap), bMustUpdateGPU(true)
 {
 	createOpenGLStuffs();
+}
+
+CubesGroup_WithoutMaterialIndices::CubesGroup_WithoutMaterialIndices(CubesGroup_WithoutMaterialIndices&& other) noexcept
+	: m_positions(std::move(other.m_positions)), m_indicesMap(std::move(other.m_indicesMap)), bMustUpdateGPU(other.bMustUpdateGPU)
+{
+	m_vaoID = other.m_vaoID;
+	other.m_vaoID = 0;
+	m_cubesPositionsVBO_ID = other.m_cubesPositionsVBO_ID;
+	other.m_cubesPositionsVBO_ID = 0;
 }
 
 void CubesGroup_WithoutMaterialIndices::createOpenGLStuffs() {

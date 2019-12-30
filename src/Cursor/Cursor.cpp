@@ -7,10 +7,6 @@
 
 #include "UI/Settings.hpp"
 
-Cursor::Cursor(int x, int y, int z) {
-	setPosition(glm::ivec3(x, y, z));
-}
-
 void Cursor::draw() {
 	if (Settings::SHOW_CURSOR_THROUGH_CUBES) {
 		glDisable(GL_DEPTH_TEST);

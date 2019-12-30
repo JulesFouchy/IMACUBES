@@ -6,6 +6,7 @@ class CubesGroup : public CubesGroup_WithoutMaterialIndices {
 public:
 	CubesGroup();
 	CubesGroup(const CubesGroup& other);
+	CubesGroup(CubesGroup&& other) noexcept;
 	~CubesGroup();
 
 	void addCube(int materialID, const glm::ivec3& position);

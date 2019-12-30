@@ -20,7 +20,7 @@
 
 
 App::App(SDL_Window* window)
-	: m_cubesMap(101, 101, 101), m_cursor(), m_camera(glm::vec3(0.0f)),
+	: m_cubesMap(101, 101, 101), m_camera(glm::vec3(0.0f)),
 	  m_clearColor(0.0f, 0.066f, 0.18f), m_lightsManager(),
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
@@ -34,7 +34,6 @@ void App::onInit() {
 	m_cursorShaderLID = m_shaders.LoadShader(MyFile::rootDir+"/res/shaders/_cursor.vert", MyFile::rootDir + "/res/shaders/_cursor.frag");
 	m_cameraUniforms.addSubscriber(m_cursorShaderLID);
 
-	m_cursor = Cursor(0, 0, 0);
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
 	//Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/testShader.frag");

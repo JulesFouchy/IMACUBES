@@ -15,6 +15,13 @@ CubesGroup::CubesGroup(const CubesGroup& other)
 	createOpenGLStuffsRelativeToMaterialIndices();
 }
 
+CubesGroup::CubesGroup(CubesGroup&& other) noexcept
+	: CubesGroup_WithoutMaterialIndices(std::move(other)), m_materialIndices(std::move(other.m_materialIndices))
+{
+	m_cubesMaterialIndicesVBO_ID = other.m_cubesMaterialIndicesVBO_ID;
+	other.m_cubesMaterialIndicesVBO_ID = 0;
+}
+
 void CubesGroup::createOpenGLStuffs() {
 	CubesGroup_WithoutMaterialIndices::createOpenGLStuffs();
 	createOpenGLStuffsRelativeToMaterialIndices();

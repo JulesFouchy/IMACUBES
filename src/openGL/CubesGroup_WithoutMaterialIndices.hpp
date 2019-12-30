@@ -11,6 +11,7 @@ public:
 	static void ShutDown();
 	CubesGroup_WithoutMaterialIndices();
 	CubesGroup_WithoutMaterialIndices(const CubesGroup_WithoutMaterialIndices& other);
+	CubesGroup_WithoutMaterialIndices(CubesGroup_WithoutMaterialIndices&& other) noexcept;
 	virtual ~CubesGroup_WithoutMaterialIndices();
 
 
