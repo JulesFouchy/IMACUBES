@@ -6,7 +6,7 @@
 #include "OpenGL/CubesGroup.hpp"
 #include "OpenGL/Shader.hpp"
 #include "OpenGL/ShaderLibrary.hpp"
-#include "OpenGL/UniformUpdateList.hpp"
+#include "OpenGL/Uniform/UniformUpdateList.hpp"
 #include "Camera/Camera.hpp"
 #include "History/HistoriesManager.hpp"
 #include "CubesMap/CubesMap.hpp"

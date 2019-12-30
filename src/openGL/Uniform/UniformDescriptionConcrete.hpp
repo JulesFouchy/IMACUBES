@@ -16,11 +16,11 @@ public:
 		return new UniformDescriptionConcrete(name, defaultValue, minValue, maxValue);
 	}
 
-	Uniform* createUniformPtr(int shaderIndex) override {
+	Uniform_ForMaterialSystem* createUniformPtr(int shaderIndex) override {
 		return new UniformConcrete<T>(shaderIndex, name, defaultValue, minValue, maxValue);
 	}
 
-	void updateThisUniform(Uniform* uniform) override {
+	void updateThisUniform(Uniform_ForMaterialSystem* uniform) override {
 		((UniformConcrete<T>*) uniform)->m_minValue = minValue;
 		((UniformConcrete<T>*) uniform)->m_maxValue = maxValue;
 	}

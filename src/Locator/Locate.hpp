@@ -5,7 +5,7 @@
 #include "History/HistoryTypes.hpp"
 #include "CubesMap/CubesMap.hpp"
 #include "OpenGL/ShaderLibrary.hpp"
-#include "OpenGL/UniformUpdateList.hpp"
+#include "OpenGL/Uniform/UniformUpdateList.hpp"
 
 class Locate {
 public:

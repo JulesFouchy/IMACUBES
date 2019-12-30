@@ -11,12 +11,12 @@ Material::Material(const std::string& name, const std::vector<UniformDescription
 Material::Material(const Material& other)
 	: m_shaderIndex(other.m_shaderIndex), m_materialIndex(other.m_materialIndex), m_name(other.m_name)
 {
-	for (Uniform* uni : other.m_uniformsStruct)
+	for (Uniform_ForMaterialSystem* uni : other.m_uniformsStruct)
 		m_uniformsStruct.push_back(uni->createPtrWithSameData());
 }
 
 Material::~Material() {
-	for (Uniform* ptr : m_uniformsStruct) {
+	for (Uniform_ForMaterialSystem* ptr : m_uniformsStruct) {
 		delete ptr;
 	}
 }
@@ -34,13 +34,13 @@ void Material::updateLayout(const std::vector<UniformDescription*>& structLayout
 }
 
 void Material::setUniforms() {
-	for (Uniform* uni : m_uniformsStruct) {
+	for (Uniform_ForMaterialSystem* uni : m_uniformsStruct) {
 		uni->set(m_materialIndex);
 	}
 }
 
 void Material::ImGui_Sliders() {
-	for (Uniform* uni : m_uniformsStruct) {
+	for (Uniform_ForMaterialSystem* uni : m_uniformsStruct) {
 		uni->ImGui_Slider();
 	}
 }

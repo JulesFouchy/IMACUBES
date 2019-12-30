@@ -9,19 +9,19 @@
 
 #include "Material/MaterialsLocator.hpp"
 
-class Uniform {
+class Uniform_ForMaterialSystem {
 friend class UniformDescription;
 public:
-	Uniform(int shaderIndex, const std::string& nameInsideStruct)
+	Uniform_ForMaterialSystem(int shaderIndex, const std::string& nameInsideStruct)
 		: m_shaderIndex(shaderIndex), m_nameInsideStruct(nameInsideStruct)
 	{}
-	~Uniform() = default;
+	~Uniform_ForMaterialSystem() = default;
 
 	virtual void set(int structIndex) = 0;
 	
 	virtual void ImGui_Slider() = 0;
 
-	virtual Uniform* createPtrWithSameData() = 0;
+	virtual Uniform_ForMaterialSystem* createPtrWithSameData() = 0;
 
 	inline Shader& getShader() { return MaterialsLocator::GetShader(m_shaderIndex); }
 	inline const std::string getNameFull(int structIndex) const { return std::string("params[") + std::to_string(structIndex) + std::string("].") + m_nameInsideStruct; }

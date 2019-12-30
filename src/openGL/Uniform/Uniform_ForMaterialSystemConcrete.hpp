@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Uniform.hpp"
+#include "Uniform_ForMaterialSystem.hpp"
 
 #include <string>
 #include <tuple>
@@ -8,21 +8,21 @@
 #include "imgui.h"
 
 template <typename T>
-class UniformConcrete : public Uniform {
+class UniformConcrete : public Uniform_ForMaterialSystem {
 friend class UniformDescription;
 template <typename T>
 friend class UniformDescriptionConcrete;
 public:
 	UniformConcrete() = default;
 	UniformConcrete(int shaderIndex, const std::string& nameInsideStruct, T value, T minValue, T maxValue)
-		: Uniform(shaderIndex, nameInsideStruct), m_value(value), m_valueBeforeEditingStarted(value), m_minValue(minValue), m_maxValue(maxValue)
+		: Uniform_ForMaterialSystem(shaderIndex, nameInsideStruct), m_value(value), m_valueBeforeEditingStarted(value), m_minValue(minValue), m_maxValue(maxValue)
 	{}
 
 	void set(int structIndex) override;
 
 	void ImGui_Slider() override;
 
-	Uniform* createPtrWithSameData() override {
+	Uniform_ForMaterialSystem* createPtrWithSameData() override {
 		return new UniformConcrete<T>(m_shaderIndex, getNameInsideStruct(), m_value, m_minValue, m_maxValue);
 	}
 

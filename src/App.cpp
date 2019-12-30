@@ -179,8 +179,8 @@ void App::onEvent(const SDL_Event& e) {
 			else {
 				if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
 					Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].reloadShader();
-					m_cameraUniforms.setUniformsFor(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
-					m_lightUniforms.setUniformsFor(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
+					m_cameraUniforms.sendUniformsTo(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
+					m_lightUniforms.sendUniformsTo(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
 				}
 				if (e.key.keysym.sym == 'z') {
 					m_cursor.translate(glm::ivec3(0, 0, -1));

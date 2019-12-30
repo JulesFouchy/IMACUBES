@@ -1,7 +1,7 @@
 #pragma once
 
 #include "OpenGL/OpenGLTypes.hpp"
-#include "OpenGL/Uniform/UniformConcrete.hpp"
+#include "OpenGL/Uniform/Uniform_ForMaterialSystemConcrete.hpp"
 #include <string>
 
 class UniformDescription {
@@ -12,6 +12,6 @@ public:
 		: name(name) {}
 
 	virtual UniformDescription* createPtrWithSameData() = 0;
-	virtual Uniform* createUniformPtr(int shaderIndex) = 0;
-	virtual void updateThisUniform(Uniform* uniform) = 0;
+	virtual Uniform_ForMaterialSystem* createUniformPtr(int shaderIndex) = 0;
+	virtual void updateThisUniform(Uniform_ForMaterialSystem* uniform) = 0;
 };

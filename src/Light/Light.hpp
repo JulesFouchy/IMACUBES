@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <string>
 
-#include "OpenGL/UniformUpdateList.hpp"
+#include "OpenGL/Uniform/UniformUpdateList.hpp"
 
 class Light {
 friend class LightsManager;
