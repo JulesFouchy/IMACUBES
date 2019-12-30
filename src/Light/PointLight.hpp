@@ -10,10 +10,10 @@ public:
 
 	void setUniforms(const std::string& uniformName, UniformUpdateList& uniformsList) override;
 
-	inline void setPosition(const glm::vec3& position) { m_position = position; }
+	inline void setPosition(const glm::vec3& position) { m_position.value() = position; }
 
 	void ImGui_Sliders() override;
 
 private:
-	glm::vec3 m_position;
+	UniformConcrete<glm::vec3> m_position;
 };

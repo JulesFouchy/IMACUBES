@@ -30,7 +30,7 @@ void LightsManager::addDirectionalLight(float angleUp, float angleGround, const 
 
 void LightsManager::duplicateSelectedPointLight() {
 	const PointLight& light = m_pointLights[m_selectedPointIndex];
-	addPointLight(light.m_position, light.m_color.getValue(), light.m_intensity.getValue());
+	addPointLight(light.m_position.getValue(), light.m_color.getValue(), light.m_intensity.getValue());
 }
 
 void LightsManager::duplicateSelectedDirectionalLight() {

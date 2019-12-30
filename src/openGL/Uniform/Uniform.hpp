@@ -25,7 +25,7 @@ public:
 	inline  void sendTo(size_t shaderLID) { sendTo(shaderLID, getName()); }
 
 	virtual void ImGui_Slider() = 0;
-	virtual void ImGui_Drag(float speed) = 0;
+	virtual void ImGui_Drag(float speed = 1.0f) = 0;
 
 	virtual Uniform* createPtrWithSameData() = 0;
 

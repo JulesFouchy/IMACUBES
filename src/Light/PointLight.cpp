@@ -3,16 +3,16 @@
 #include <imgui/imgui.h>
 
 PointLight::PointLight(const glm::vec3& position, const glm::vec3& color, float intensity, const std::string& name)
-	: Light(name, color, intensity), m_position(position)
+	: Light(name, color, intensity), m_position("Position", HistoryType::Lights, position)
 {}
 
 void PointLight::setUniforms(const std::string & uniformName, UniformUpdateList & uniformsList) {
 	Light::setUniforms(uniformName, uniformsList);
-	uniformsList.setUniform(uniformName + ".position", m_position);
+	uniformsList.setUniform(uniformName + ".position", m_position.getValue());
 }
 
 void PointLight::ImGui_Sliders() {
 	Light::ImGui_Sliders();
 	ImGui::Separator();
-	ImGui::DragFloat3("Position", (float*)&m_position);
+	m_position.ImGui_Drag(0.2f);
 }

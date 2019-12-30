@@ -21,7 +21,7 @@ public:
 	void sendTo(Shader& shader, const std::string& name) override;
 
 	void ImGui_Slider() override;
-	void ImGui_Drag(float speed) override;
+	void ImGui_Drag(float speed = 1.0f) override;
 
 	Uniform* createPtrWithSameData() override {
 		return new UniformConcrete<T>(getName(), m_historyType, value(), m_minValue, m_maxValue);
