@@ -215,7 +215,7 @@ CubesGroup_WithoutMaterialIndices::CubesGroup_WithoutMaterialIndices()
 }
 
 CubesGroup_WithoutMaterialIndices::CubesGroup_WithoutMaterialIndices(const CubesGroup_WithoutMaterialIndices& other)
-	: m_positions(other.m_positions), bMustUpdateGPU(true)
+	: m_positions(other.m_positions), m_indicesMap(other.m_indicesMap),bMustUpdateGPU(true)
 {
 	createOpenGLStuffs();
 }
