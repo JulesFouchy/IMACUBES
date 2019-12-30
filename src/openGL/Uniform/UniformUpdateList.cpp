@@ -10,7 +10,7 @@ void UniformUpdateList::addSubscriber(size_t shaderLID) {
 void UniformUpdateList::sendUniformsTo(size_t shaderLID) {
 	Locate::shaderLibrary()[shaderLID].bind();
 	for (auto& uniform : m_uniforms)
-		uniform.second->set(uniform.first, Locate::shaderLibrary()[shaderLID]);
+		uniform.second->send(uniform.first, Locate::shaderLibrary()[shaderLID]);
 }
 
 
@@ -18,6 +18,6 @@ void UniformUpdateList::updateSubscribersUniform(const std::string& uniformName)
 	std::unique_ptr<UniformValue>& uniVal = m_uniforms[uniformName];
 	for (size_t shaderLID : m_subscribersLIDs) {
 		Locate::shaderLibrary()[shaderLID].bind();
-		uniVal->set(uniformName, Locate::shaderLibrary()[shaderLID]);
+		uniVal->send(uniformName, Locate::shaderLibrary()[shaderLID]);
 	}
 }
