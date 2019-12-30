@@ -20,8 +20,8 @@ public:
 
 	void addShader(const std::string& vertexFilepath, const std::string& fragmentFilepath);
 
-	MaterialLocation addCube(glm::vec3 pos, bool bPushActionInHistory = true); // returns the location where the cube was added (i.e. m_selectedMaterialLocation)
-	void removeCube(int shaderID, glm::vec3 pos, bool bPushActionInHistory = true);
+	MaterialLocation addCube(const glm::ivec3& pos, bool bPushActionInHistory = true); // returns the location where the cube was added (i.e. m_selectedMaterialLocation)
+	void removeCube(int shaderID, const glm::ivec3& pos, bool bPushActionInHistory = true);
 
 	inline std::vector<MaterialsForAGivenShader>& Shaders() { return m_shadersList; }
 	inline const MaterialLocation SelectedMaterialLocation() { return MaterialLocation(m_selectedShaderID, m_selectedMaterialIDforThisShaderID[m_selectedShaderID]); }
