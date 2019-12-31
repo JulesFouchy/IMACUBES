@@ -14,5 +14,5 @@ public:
 	void onWheelUp() override;
 
 private:
-	glm::vec3 m_initialTranslation;
+	glm::vec3 m_initialLookedAtPoint;
 };
