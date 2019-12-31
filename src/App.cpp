@@ -113,10 +113,11 @@ void App::placeCursorAtHoveredCube(){
 }
 
 void App::onViewMatrixChange(){
-	m_cameraUniforms.setUniform<glm::mat4>("u_viewMat", m_camera.getViewMatrix());
+	m_cameraUniforms.setUniform<glm::mat4>("u_ViewMat", m_camera.getViewMatrix());
+	m_cameraUniforms.setUniform<glm::vec3>("u_CamPosInWorld", m_camera.getPosition());
 }
 void App::onProjMatrixChange() {
-	m_cameraUniforms.setUniform<glm::mat4>("u_projMat", m_camera.getProjMatrix());
+	m_cameraUniforms.setUniform<glm::mat4>("u_ProjMat", m_camera.getProjMatrix());
 }
 
 void App::onEvent(const SDL_Event& e) {

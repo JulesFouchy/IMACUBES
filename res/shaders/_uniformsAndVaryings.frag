@@ -8,7 +8,6 @@ flat in vec3 vNormal;
 in vec2 vTexCoord;
 flat in int vFaceID;
 flat in int vMaterialIndex;
-
-uniform vec3 camPosInWorld;
+in vec3 vCamPosInWorld;
 
 uniform MaterialParameters params[16];
