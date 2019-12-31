@@ -1,11 +1,11 @@
 #version 330 core 
  
-in vec3 vObjectPos;
+in vec3 vPosInObject;
 
 void main() {
 	vec3 color;
 	float nbBands = 2;
-	float t = vObjectPos.x + vObjectPos.y + vObjectPos.z + 1.5;
+	float t = vPosInObject.x + vPosInObject.y + vPosInObject.z + 1.5;
 	t*= nbBands;
 	if ( mod(t,1.) < 0.5)
 		color = vec3(0.2);

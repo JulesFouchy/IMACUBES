@@ -2,11 +2,13 @@
 //? struct MaterialParameters{ float empty; };
 // To learn more about these funny comments, see https://marketplace.visualstudio.com/items?itemName=DanielScherzer.GLSL
 
-in vec3 vObjectPos; 
-in vec3 vWorldPos;
+in vec3 vPosInObject; 
+in vec3 vPosInWorld;
 flat in vec3 vNormal;
 in vec2 vTexCoord;
 flat in int vFaceID;
 flat in int vMaterialIndex;
+
+uniform vec3 camPosInWorld;
 
 uniform MaterialParameters params[16];

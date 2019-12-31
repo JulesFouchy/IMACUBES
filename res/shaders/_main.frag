@@ -32,11 +32,13 @@ void main() {
 	vec3 lightColorIntensity = u_ambiant.color * u_ambiant.intensity;
 	// Point
 	for( int i = 0; i < u_nbOfPointLights; ++i){
-		float d = dot(normalize(u_points[i].position - vWorldPos), vNormal);
-		lightColorIntensity += (d > 0 ? d : 0) * u_points[i].color * u_points[i].intensity / length(vWorldPos - u_points[i].position) / length(vWorldPos - u_points[i].position);
+		float d = dot(normalize(u_points[i].position - vPosInWorld), vNormal);
+		// Diffuse
+		lightColorIntensity += (d > 0 ? d : 0) * u_points[i].color * u_points[i].intensity / length(vPosInWorld - u_points[i].position) / length(vPosInWorld - u_points[i].position);
 	}
 	// Directional
 	for( int i = 0; i < u_nbOfDirectionalLights; ++i){
+		// Diffuse
 		lightColorIntensity += u_directionals[i].color * u_directionals[i].intensity * max(-dot(u_directionals[i].direction, vNormal),0.);
 	}
 	//

@@ -33,9 +33,9 @@ float ramp(float d){
 
 vec3 albedo(){
 	MaterialParameters u_ = params[vMaterialIndex];
-	float x = ramp(abs(vObjectPos.x));
-	float y = ramp(abs(vObjectPos.y));
-	float z = ramp(abs(vObjectPos.z));
+	float x = ramp(abs(vPosInObject.x));
+	float y = ramp(abs(vPosInObject.y));
+	float z = ramp(abs(vPosInObject.z));
 	float t = smin(smin(smax(x,y,u_.K), smax(x,z,u_.K), u_.k), smax(y,z,u_.K),u_.k) ;
 	vec3 color = u_.color * t + u_.borderColor * (1.-t);
 	return color;
