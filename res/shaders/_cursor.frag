@@ -11,5 +11,5 @@ void main() {
 		color = vec3(0.2);
 	else
 		color = vec3(0.8);
-	gl_FragColor = vec4(color,1.0); 
+	gl_FragColor = vec4(color,1.0);
 }
