@@ -28,21 +28,38 @@ uniform DirectionalLight[16] u_directionals;
 uniform int u_nbOfDirectionalLights;
 
 void main() {
+	vec3 camRayReflection = normalize(reflect(vPosInWorld-vCamPosInWorld, vNormal));
 	// Ambiant
-	vec3 lightColorIntensity = u_ambiant.color * u_ambiant.intensity;
+	vec3 lightColorDiffuse = u_ambiant.color * u_ambiant.intensity;
+	vec3 lightColorSpecular = vec3(0.0);
 	// Point
 	for( int i = 0; i < u_nbOfPointLights; ++i){
-		float dist = length(u_points[i].position - vPosInWorld);
-		float dp = dot((u_points[i].position - vPosInWorld)/dist, vNormal);
+		vec3 lightCol = u_points[i].color * u_points[i].intensity;
+		float distSq = dot(u_points[i].position - vPosInWorld, u_points[i].position - vPosInWorld);
+		float dist = sqrt(distSq);
+		vec3 lightDir = (vPosInWorld - u_points[i].position)/dist;
 		// Diffuse
-		lightColorIntensity += max(dp,0) * u_points[i].color * u_points[i].intensity / (dist*dist);
+		float dpDiffuse = -dot(vNormal, lightDir);
+		if( dpDiffuse > 0.0 )
+			lightColorDiffuse += dpDiffuse / distSq * lightCol;
+		// Specular
+		float dpSpecular = -dot(camRayReflection, lightDir);
+		if( dpSpecular > 0.0 )
+			lightColorSpecular += pow(dpSpecular, 32.0) / distSq * lightCol;
 	}
 	// Directional
 	for( int i = 0; i < u_nbOfDirectionalLights; ++i){
+		vec3 lightCol = u_directionals[i].color * u_directionals[i].intensity;
 		// Diffuse
-		lightColorIntensity += u_directionals[i].color * u_directionals[i].intensity * max(-dot(u_directionals[i].direction, vNormal),0.);
+		float dpDiffuse = -dot(vNormal, u_directionals[i].direction);
+		if( dpDiffuse > 0.0)
+			lightColorDiffuse += dpDiffuse * lightCol;
+		// Specular
+		float dpSpecular = -dot(camRayReflection, u_directionals[i].direction);
+		if( dpSpecular > 0.0 )
+			lightColorSpecular += pow(dpSpecular, 32.0) * lightCol;
 	}
 	//
-	vec3 lightColor = min(lightColorIntensity, 1.0);
+	vec3 lightColor = min(lightColorDiffuse, 1.0) + lightColorSpecular;
 	gl_FragColor = vec4(albedo() * lightColor,1.0);
 }
