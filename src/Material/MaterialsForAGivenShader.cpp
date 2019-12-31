@@ -45,7 +45,7 @@ MaterialsForAGivenShader::~MaterialsForAGivenShader() {
 
 void MaterialsForAGivenShader::draw() {
 	shader().bind();
-	setUniforms(); // TODO only update uniform on material change
+	sendUniforms(); // TODO only update uniform on material change
 	m_cubes.draw();
 }
 
@@ -83,9 +83,9 @@ void MaterialsForAGivenShader::ImGui_ListOfMaterials(){
 	}
 }
 
-void MaterialsForAGivenShader::setUniforms() {
+void MaterialsForAGivenShader::sendUniforms() {
 	for (Material& mat : m_materials) {
-		mat.setUniforms();
+		mat.sendUniforms();
 	}
 }
 

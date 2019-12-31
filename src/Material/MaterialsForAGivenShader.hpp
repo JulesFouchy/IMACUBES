@@ -27,7 +27,7 @@ public:
 	inline size_t shaderLID() { return m_shaderLID; }
 
 private:
-	void setUniforms();
+	void sendUniforms();
 
 	void parseShaderAndCreateUniformDescriptions(const std::string& fragmentFilepath);
 	void updateMaterialsLayout();

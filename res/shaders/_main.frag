@@ -29,6 +29,7 @@ uniform int u_nbOfDirectionalLights;
 
 void main() {
 	vec3 camRayReflection = normalize(reflect(vPosInWorld-vCamPosInWorld, vNormal));
+	LightingProperties matLightProp = lightingProperties[vMaterialIndex];
 	// Ambiant
 	vec3 lightColorDiffuse = u_ambiant.color * u_ambiant.intensity;
 	vec3 lightColorSpecular = vec3(0.0);
@@ -45,7 +46,7 @@ void main() {
 		// Specular
 		float dpSpecular = -dot(camRayReflection, lightDir);
 		if( dpSpecular > 0.0 )
-			lightColorSpecular += pow(dpSpecular, 32.0) / distSq * lightCol;
+			lightColorSpecular += matLightProp.Specular_strength * pow(dpSpecular, matLightProp.Shininess) / distSq * lightCol;
 	}
 	// Directional
 	for( int i = 0; i < u_nbOfDirectionalLights; ++i){
@@ -57,7 +58,7 @@ void main() {
 		// Specular
 		float dpSpecular = -dot(camRayReflection, u_directionals[i].direction);
 		if( dpSpecular > 0.0 )
-			lightColorSpecular += pow(dpSpecular, 32.0) * lightCol;
+			lightColorSpecular += matLightProp.Specular_strength * pow(dpSpecular, matLightProp.Shininess) * lightCol;
 	}
 	//
 	vec3 lightColor = min(lightColorDiffuse, 1.0) + lightColorSpecular;

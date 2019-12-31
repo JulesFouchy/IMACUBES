@@ -12,7 +12,7 @@ public:
 	~Material();
 
 	void updateLayout(const std::vector<UniformDescription*>& structLayout);
-	void setUniforms();
+	void sendUniforms();
 
 	void ImGui_Sliders();
 
@@ -25,10 +25,12 @@ private:
 	void addUniformToStruct(UniformDescription* uniformDescription);
 	void updateUniformInsideStruct(int uniformIndex, UniformDescription* uniformDescription);
 
-	inline std::string uniformFullName(const std::string& uniformName) { return "params[" + std::to_string(m_materialIndex) + "]." + uniformName; }
+	inline std::string uniformParamsName(const std::string& uniformName) { return "params[" + std::to_string(m_materialIndex) + "]." + uniformName; }
+	inline std::string uniformLightPropName(const std::string& uniformName) { return "lightingProperties[" + std::to_string(m_materialIndex) + "]." + uniformName; }
 
 private:
 	std::vector<Uniform*> m_uniformsStruct;
+	std::vector<Uniform*> m_lightingProperties;
 	int m_shaderIndex;
 	int m_materialIndex;
 	std::string m_name;

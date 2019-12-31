@@ -10,4 +10,10 @@ flat in int vFaceID;
 flat in int vMaterialIndex;
 in vec3 vCamPosInWorld;
 
+struct LightingProperties{
+	float Specular_strength;
+	float Shininess;
+};
+
 uniform MaterialParameters params[16];
+uniform LightingProperties lightingProperties[16];
