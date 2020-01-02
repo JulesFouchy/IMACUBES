@@ -20,8 +20,11 @@ public:
 	void drawScene();
 	void geometryPass();
 	void lightingPass();
-	void drawFullScreenQuad();
 	void save(int width, int height, const std::string& filepath, int nbSamplesForMSAA = 4);
+
+	void blur(Texture2D& texture, float inverseOffset);
+
+	void drawFullScreenQuad();
 
 	void onWindowResize();
 
@@ -40,6 +43,7 @@ private:
 	SDL_Window* m_window;
 
 	RectVAO m_fullScreenRect;
+	size_t m_blurShaderLID;
 
 	UniformUpdateList m_cameraUniforms;
 	UniformUpdateList m_lightUniforms;
