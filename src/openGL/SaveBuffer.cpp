@@ -4,7 +4,8 @@
 
 #include "Debugging/Log.hpp"
 #include "Debugging/gl-exception.h"
-#include "Helper/Display.hpp"
+#include "Locator/Locate.hpp"
+#include "Renderer/Renderer.hpp"
 #include "Helper/String.hpp"
 
 #include <stb_image/stb_image_write.h>

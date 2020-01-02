@@ -3,7 +3,6 @@
 #include "glm/glm.hpp"
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "Helper/Display.hpp"
 #include "Helper/SphericalCoordinates.hpp"
 #include "Helper/Ray.hpp"
 
@@ -23,6 +22,7 @@ friend class CameraControlState_Rotation;
 friend class CameraControlState_Translation; 
 public:
 	Camera(const glm::vec3& lookedAtPoint);
+	void initAfterApp();
 	~Camera() = default;
 
 	inline const glm::mat4& getViewMatrix() { if(m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_inverseTransformMatrix; }

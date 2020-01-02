@@ -6,6 +6,7 @@ enum class HistoryType;
 class CubesMap;
 class ShaderLibrary;
 class UniformUpdateList;
+class Renderer;
 
 class Locate {
 public:
@@ -15,4 +16,5 @@ public:
 	static ShaderLibrary& shaderLibrary();
 	static UniformUpdateList& cameraUniforms();
 	static UniformUpdateList& lightUniforms();
+	static Renderer& renderer();
 };

@@ -8,6 +8,7 @@
 #include "CubesMap/CubesMap.hpp"
 #include "OpenGL/ShaderLibrary.hpp"
 #include "OpenGL/Uniform/UniformUpdateList.hpp"
+#include "Renderer/Renderer.hpp"
 
 MaterialsManager& Locate::materialsManager() {
 	return App::Get().m_cubesMap.getMaterialsManager();
@@ -31,4 +32,8 @@ UniformUpdateList& Locate::cameraUniforms() {
 
 UniformUpdateList& Locate::lightUniforms() {
 	return App::Get().m_lightUniforms;
+}
+
+Renderer& Locate::renderer() {
+	return App::Get().m_renderer;
 }

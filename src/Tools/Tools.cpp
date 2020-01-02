@@ -4,7 +4,6 @@
 
 #include <imgui/imgui.h>
 #include "GUI/MoreImGui.hpp"
-#include "Helper/Display.hpp"
 #include "Helper/File.hpp"
 #include "OpenGL/SaveBufferMultisampled.hpp"
 

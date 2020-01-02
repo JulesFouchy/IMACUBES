@@ -9,7 +9,6 @@
 #include "Debugging/ImGuiLog.hpp"
 #include "Debugging/gl-exception.h"
 
-#include "Helper/Display.hpp"
 #include "Helper/File.hpp"
 #include "UI/Input.hpp"
 #include "Locator/Locate.hpp"
@@ -20,7 +19,8 @@
 
 
 App::App(SDL_Window* window)
-	: m_cubesMap(101, 101, 101), m_camera(glm::vec3(0.0f)),
+	: m_renderer(window),
+	  m_cubesMap(51, 51, 51), m_camera(glm::vec3(0.0f)),
 	  m_clearColor(0.0f, 0.066f, 0.18f), m_lightsManager(),
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
@@ -31,6 +31,7 @@ App::App(SDL_Window* window)
 void App::onInit() {
 	// ----------------PLAYGROUND!------------------
 
+	m_camera.initAfterApp();
 	m_cursorShaderLID = m_shaders.LoadShader(MyFile::rootDir+"/res/shaders/_cursor.vert", MyFile::rootDir + "/res/shaders/_cursor.frag");
 	m_cameraUniforms.addSubscriber(m_cursorShaderLID);
 
@@ -221,7 +222,7 @@ void App::onEvent(const SDL_Event& e) {
 		switch (e.window.event) {
 		case SDL_WINDOWEVENT_RESIZED:
 			// get new width and height and update the viewport
-			Display::UpdateWindowSize(m_window);
+			m_renderer.onWindowResize();
 			// Update camera's ratio
 			m_camera.mustRecomputeProjectionMatrix();
 			onProjMatrixChange();

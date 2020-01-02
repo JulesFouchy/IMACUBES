@@ -2,7 +2,8 @@
 
 #include <imgui/imgui.h>
 #include "GUI/MoreImGui.hpp"
-#include "Helper/Display.hpp"
+#include "Locator/Locate.hpp"
+#include "Renderer/Renderer.hpp"
 #include "Helper/File.hpp"
 #include "OpenGL/SaveBufferMultisampled.hpp"
 
@@ -24,11 +25,11 @@ PopupWindow_SaveView::PopupWindow_SaveView()
 
 void PopupWindow_SaveView::Open() {
 	PopupWindow::Open();
-	m_widthHeightRatioPicker.setRatio(Display::GetRatio());
+	m_widthHeightRatioPicker.setRatio(Locate::renderer().GetRatio());
 }
 
 void PopupWindow_SaveView::Show() {
-	m_widthHeightRatioPicker.setRatio(Display::GetRatio()); // update ratio each frame in case of resizing while this window is open
+	m_widthHeightRatioPicker.setRatio(Locate::renderer().GetRatio()); // update ratio each frame in case of resizing while this window is open
 	BeginWindow();
 	//
 	m_widthHeightRatioPicker.ShowWidthHeight();

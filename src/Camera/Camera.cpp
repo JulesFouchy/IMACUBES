@@ -3,6 +3,9 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+#include "Locator/Locate.hpp"
+#include "Renderer/Renderer.hpp"
+
 #include "Helper/Maths.hpp"
 
 #include "Debugging/Log.hpp"
@@ -11,9 +14,12 @@
 
 Camera::Camera(const glm::vec3& lookedAtPoint)
 	: m_projectionMatrix(1.0f), m_fieldOfViewInRadians(Settings::CAMERA_FIELD_OF_VIEW), m_bMustRecomputeProjectionMatrix(true),
-	  m_transformMatrix(1.0f), m_inverseTransformMatrix(1.0f), m_sphereCoord(34.0f, 0.0f, 0.28f), m_lookedAtPoint(lookedAtPoint), m_bMustRecomputeTransformMatrix(true),
-	  m_controlState(std::make_unique<CameraControlState_Rest>(this))
+	  m_transformMatrix(1.0f), m_inverseTransformMatrix(1.0f), m_sphereCoord(34.0f, 0.0f, 0.28f), m_lookedAtPoint(lookedAtPoint), m_bMustRecomputeTransformMatrix(true)
 {
+}
+
+void Camera::initAfterApp() {
+	m_controlState = std::make_unique<CameraControlState_Rest>(this);
 }
 
 void Camera::computeTransformMatrixAndItsInverse() {
@@ -25,14 +31,14 @@ void Camera::computeTransformMatrixAndItsInverse() {
 }
 
 void Camera::computeProjectionMatrix() {
-	m_projectionMatrix = glm::infinitePerspective(m_fieldOfViewInRadians, Display::GetRatio(), 0.1f);
+	m_projectionMatrix = glm::infinitePerspective(m_fieldOfViewInRadians, Locate::renderer().GetRatio(), 0.1f);
 
 	m_bMustRecomputeProjectionMatrix = false;
 }
 
 Ray Camera::getRayGoingThroughMousePos() {
 	glm::vec3 pos = getPosition();
-	glm::vec3 mousePos = glm::unProject(glm::vec3(Input::MousePositionInPixels(), 0.0f), getViewMatrix(), getProjMatrix(), glm::vec4(0.0f, 0.0f, Display::GetWidth(), Display::GetHeight()));
+	glm::vec3 mousePos = glm::unProject(glm::vec3(Input::MousePositionInPixels(), 0.0f), getViewMatrix(), getProjMatrix(), glm::vec4(0.0f, 0.0f, Locate::renderer().GetWidth(), Locate::renderer().GetHeight()));
 	glm::vec3 dir = glm::normalize(mousePos - pos);
 	return Ray(pos, dir);
 }

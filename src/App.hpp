@@ -12,10 +12,9 @@
 #include "CubesMap/CubesMap.hpp"
 #include "Cursor/Cursor.hpp"
 #include "GUI/PopupWindow/SaveView.hpp"
-
 #include "Light/LightsManager.hpp"
-
 #include "Tools/Tool_RBF.hpp"
+#include "Renderer/Renderer.hpp"
 
 
 class App {
@@ -44,6 +43,7 @@ public:
 	// --------------------------------------
 
 private:
+	Renderer m_renderer;
 	CubesMap m_cubesMap;
 	Cursor m_cursor;
 	ShaderLibrary m_shaders;

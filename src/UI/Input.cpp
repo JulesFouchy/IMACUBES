@@ -1,6 +1,7 @@
 #include "Input.hpp"
 
-#include "Helper/Display.hpp"
+#include "Locator/Locate.hpp"
+#include "Renderer/Renderer.hpp"
 
 #include "Debugging/Log.hpp"
 
@@ -18,7 +19,7 @@ glm::vec2 Input::MousePositionInInches() {
 glm::vec2 Input::MousePositionInPixels() {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
-	return glm::vec2(x, Display::GetHeight() - y);
+	return glm::vec2(x, Locate::renderer().GetHeight() - y);
 }
 
 bool Input::KeyIsDown(Key key) {
