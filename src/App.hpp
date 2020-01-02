@@ -6,7 +6,6 @@
 #include "OpenGL/CubesGroup.hpp"
 #include "OpenGL/Shader.hpp"
 #include "OpenGL/ShaderLibrary.hpp"
-#include "OpenGL/Uniform/UniformUpdateList.hpp"
 #include "Camera/Camera.hpp"
 #include "History/HistoriesManager.hpp"
 #include "CubesMap/CubesMap.hpp"
@@ -26,7 +25,6 @@ public:
 	void onInit();
 	void onLoopIteration();
 
-	void drawScene();
 	void placeCursorAtHoveredCube();
 
 	void onViewMatrixChange();
@@ -48,9 +46,6 @@ private:
 	Cursor m_cursor;
 	ShaderLibrary m_shaders;
 	size_t m_cursorShaderLID;
-	UniformUpdateList m_cameraUniforms;
-	UniformUpdateList m_lightUniforms;
-	glm::vec3 m_clearColor;
 	LightsManager m_lightsManager;
 	Tool_RBF m_toolrbf;
 	Camera m_camera;

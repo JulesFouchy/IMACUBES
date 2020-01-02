@@ -9,10 +9,7 @@ enum CoordinateSystem {
 
 class RectVAO {
 public:
-	RectVAO() = default;
-	RectVAO(float aspectRatio, CoordinateSystem coordSystem);
-	void initialize(float minX, float maxX, float minY, float maxY, float aspectRatio, CoordinateSystem coordSystem);
-	void initialize(float aspectRatio, CoordinateSystem coordSystem);
+	RectVAO(float minXScreenSpace, float maxXScreenSpace, float minYScreenSpace, float maxYScreenSpace);
 	~RectVAO();
 
 	void binddrawunbind();

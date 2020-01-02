@@ -12,7 +12,8 @@ size_t Texture2D::showFullScreen_ShaderLID;
 std::vector<bool> Texture2D::isSlotUsed;
 
 Texture2D::Texture2D(GLint GLpixelInternalFormat, GLenum GLpixelFormat, GLenum GLpixelType, GLint interpolationMode)
-	: m_bytesPerPixel(BytesPerPixel(GLpixelFormat)), m_GLpixelInternalFormat(GLpixelInternalFormat), m_GLpixelFormat(GLpixelFormat), m_GLpixelType(GLpixelType)
+	: m_bytesPerPixel(BytesPerPixel(GLpixelFormat)), m_GLpixelInternalFormat(GLpixelInternalFormat), m_GLpixelFormat(GLpixelFormat), m_GLpixelType(GLpixelType),
+	  m_textureSlot(-1)
 {
 	// Gen texture
 	GLCall(glGenTextures(1, &m_textureID));
@@ -33,6 +34,9 @@ void Texture2D::initialize(int width, int height, unsigned char* pixels) {
 	GLCall(glTexImage2D(GL_TEXTURE_2D, 0, m_GLpixelInternalFormat, m_width, m_height, 0, m_GLpixelFormat, m_GLpixelType, pixels));
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
+void Texture2D::setSize(int width, int height) {
+	initialize(width, height, nullptr);
+}
 
 void Texture2D::ClassInitialization() {
 	for (int i = 0; i < MAX_NB_TEXTURES; ++i)
@@ -51,7 +55,7 @@ void Texture2D::showFullScreen() {
 	Locate::shaderLibrary()[showFullScreen_ShaderLID].bind();
 	Locate::shaderLibrary()[showFullScreen_ShaderLID].setUniform1i("u_TextureSlot", getSlot());
 	// Draw call
-	Locate::renderer().drawFullScreen();
+	Locate::renderer().drawFullScreenQuad();
 	// Unbind texture
 	detachAndUnbind();
 }
