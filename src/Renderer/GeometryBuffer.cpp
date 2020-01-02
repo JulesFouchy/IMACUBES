@@ -54,3 +54,11 @@ GeometryBuffer::~GeometryBuffer() {
 	GLCall(glDeleteRenderbuffers(1, &m_depthRenderBufferID));
 	GLCall(glDeleteFramebuffers(1, &m_frameBufferID));
 }
+
+void GeometryBuffer::bind() {
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
+}
+
+void GeometryBuffer::unbind() {
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+}

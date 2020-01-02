@@ -12,7 +12,8 @@ size_t Texture2D::showFullScreen_ShaderLID;
 std::vector<bool> Texture2D::isSlotUsed;
 
 Texture2D::Texture2D(GLint GLpixelInternalFormat, GLenum GLpixelFormat, GLenum GLpixelType, GLint interpolationMode)
-	: m_bytesPerPixel(BytesPerPixel(GLpixelFormat)), m_GLpixelInternalFormat(GLpixelInternalFormat), m_GLpixelFormat(GLpixelFormat), m_GLpixelType(GLpixelType)
+	: m_bytesPerPixel(BytesPerPixel(GLpixelFormat)), m_GLpixelInternalFormat(GLpixelInternalFormat), m_GLpixelFormat(GLpixelFormat), m_GLpixelType(GLpixelType),
+	  m_textureSlot(-1)
 {
 	// Gen texture
 	GLCall(glGenTextures(1, &m_textureID));
