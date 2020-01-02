@@ -7,9 +7,9 @@
 #include "Locator/Locate.hpp"
 
 GeometryBuffer::GeometryBuffer()
-	: m_positionTexture               (GL_RGB16F,  GL_RGB,  GL_FLOAT,         GL_NEAREST),
-	  m_normalShininessTexture        (GL_RGBA16F, GL_RGBA, GL_FLOAT,         GL_NEAREST),
-	  m_albedoSpecularintensityTexture(GL_RGBA,    GL_RGBA, GL_UNSIGNED_BYTE, GL_NEAREST)
+	: m_positionTexture               (GL_RGB16F,  GL_RGB,  GL_FLOAT, GL_NEAREST),
+	  m_normalShininessTexture        (GL_RGBA16F, GL_RGBA, GL_FLOAT, GL_NEAREST),
+	  m_albedoSpecularintensityTexture(GL_RGBA16F, GL_RGBA, GL_FLOAT, GL_NEAREST)
 {
 	// Gen and Bind Framebuffer
 	GLCall(glGenFramebuffers(1, &m_frameBufferID));

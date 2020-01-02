@@ -39,7 +39,7 @@ void PopupWindow_SaveView::Show() {
 	//
 	ConfirmationButton(); ImGui::SameLine();
 	//
-	static int item_current = 1;
+	static int item_current = 0;
 	ImGui::SetNextItemWidth(50.0f);
 	ImGui::Combo("Samples", &item_current, " 1\0 4\0 16\0\0");
 	switch (item_current) {
@@ -56,7 +56,7 @@ void PopupWindow_SaveView::Show() {
 		m_nbSamplesForMSAA = -1;
 		break;
 	}
-	ImGui::SameLine(); ImGui::HelpMarker("Number of samples used by Multi Sampling to reduce aliasing");
+	ImGui::SameLine(); ImGui::HelpMarker("Number of samples used by Multi Sampling to reduce aliasing\n Note : MSAA is currently broken because we use Deferred Rendering");
 	EndWindow();
 }
 
