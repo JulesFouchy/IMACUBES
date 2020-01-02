@@ -9,7 +9,11 @@ public:
 	virtual ~SaveBuffer();
 
 	void bind();
+	void bind_WithoutSettingViewport();
+	void setViewport();
 	void unbind();
+	void unbind_WithoutRestoringViewport();
+	void restoreViewport();
 
 	void clear(); // Make sure you have bound the framebuffer beforehand
 	void save(const std::string& filePath);  // Make sure you have bound the framebuffer beforehand

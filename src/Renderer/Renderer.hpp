@@ -6,6 +6,8 @@
 #include "GeometryBuffer.hpp"
 #include "OpenGL/Uniform/UniformUpdateList.hpp"
 
+#include <string>
+
 struct SDL_Window;
 
 class Renderer {
@@ -16,7 +18,10 @@ public:
 	~Renderer() = default;
 
 	void drawScene();
-	void drawFullScreen();
+	void geometryPass();
+	void lightingPass();
+	void drawFullScreenQuad();
+	void save(int width, int height, const std::string& filepath, int nbSamplesForMSAA = 4);
 
 	void onWindowResize();
 

@@ -5,7 +5,6 @@
 #include "Locator/Locate.hpp"
 #include "Renderer/Renderer.hpp"
 #include "Helper/File.hpp"
-#include "OpenGL/SaveBufferMultisampled.hpp"
 
 PopupWindow_SaveView::PopupWindow_SaveView()
 	: PopupWindow_WithConfirmationWarning("Saving current view"),
@@ -62,13 +61,11 @@ void PopupWindow_SaveView::Show() {
 }
 
 void PopupWindow_SaveView::OnConfirmation() {
-	SaveBufferMultisampled saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight(), m_nbSamplesForMSAA);
-	//SaveBuffer saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight());
-	saveBuffer.bind();
-	saveBuffer.clear();
-	Locate::renderer().drawScene();
-	saveBuffer.save(m_filepathPicker.getFilepath());
-	saveBuffer.unbind();
+	Locate::renderer().save(m_widthHeightRatioPicker.getWidth(),
+		                    m_widthHeightRatioPicker.getHeight(), 
+		                    m_filepathPicker.getFilepath(),
+		                    m_nbSamplesForMSAA
+	);
 }
 
 bool PopupWindow_SaveView::WarnIf() {

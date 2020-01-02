@@ -55,7 +55,7 @@ void Texture2D::showFullScreen() {
 	Locate::shaderLibrary()[showFullScreen_ShaderLID].bind();
 	Locate::shaderLibrary()[showFullScreen_ShaderLID].setUniform1i("u_TextureSlot", getSlot());
 	// Draw call
-	Locate::renderer().drawFullScreen();
+	Locate::renderer().drawFullScreenQuad();
 	// Unbind texture
 	detachAndUnbind();
 }

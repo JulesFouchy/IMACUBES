@@ -47,13 +47,30 @@ SaveBuffer::~SaveBuffer() {
 }
 
 void SaveBuffer::bind() {
+	bind_WithoutSettingViewport();
+	setViewport();
+}
+
+void SaveBuffer::bind_WithoutSettingViewport() {
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId));
+}
+
+void SaveBuffer::setViewport() {
 	GLCall(glGetIntegerv(GL_VIEWPORT, m_prevViewportSettings)); // Store viewport settings to restore them when unbinding
 	GLCall(glViewport(0, 0, m_width, m_height));
 }
 
 void SaveBuffer::unbind() {
+	unbind_WithoutRestoringViewport();
+	restoreViewport();
+}
+
+
+void SaveBuffer::unbind_WithoutRestoringViewport() {
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+}
+
+void SaveBuffer::restoreViewport() {
 	GLCall(glViewport(m_prevViewportSettings[0], m_prevViewportSettings[1], m_prevViewportSettings[2], m_prevViewportSettings[3]));
 }
 

@@ -9,6 +9,8 @@
 #include "Material/MaterialsManager.hpp"
 #include "OpenGL/ShaderLibrary.hpp"
 
+#include "OpenGL/SaveBufferMultisampled.hpp"
+
 #include "Helper/File.hpp"
 
 Renderer::Renderer(SDL_Window* window)
@@ -24,14 +26,20 @@ void Renderer::initAfterApp() {
 }
 
 void Renderer::drawScene() {
+	geometryPass();
+	lightingPass();
+}
+
+void Renderer::geometryPass() {
 	m_gBuffer.bind();
 	GLCall(glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, 1.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	Locate::materialsManager().draw();
 	m_gBuffer.unbind();
+}
 
+void Renderer::lightingPass() {
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
-
 	// Attach textures
 	m_gBuffer.positionTexture().attachToSlotAndBind();
 	m_gBuffer.normalShininessTexture().attachToSlotAndBind();
@@ -42,14 +50,27 @@ void Renderer::drawScene() {
 	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gNormalShininess", m_gBuffer.normalShininessTexture().getSlot());
 	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gAlbedoSpec", m_gBuffer.albedoSpecularintensityTexture().getSlot());
 	// Draw
-	drawFullScreen();
+	drawFullScreenQuad();
 	// Detach textures
 	m_gBuffer.albedoSpecularintensityTexture().detachAndUnbind();
 	m_gBuffer.normalShininessTexture().detachAndUnbind();
 	m_gBuffer.positionTexture().detachAndUnbind();
 }
 
-void Renderer::drawFullScreen() {
+void Renderer::save(int width, int height, const std::string& filepath, int nbSamplesForMSAA) {
+	SaveBufferMultisampled saveBuffer(width, height, nbSamplesForMSAA);
+	m_gBuffer.setSize(width, height);
+	saveBuffer.setViewport();
+	geometryPass();
+	saveBuffer.bind_WithoutSettingViewport();
+	saveBuffer.clear();
+	lightingPass();
+	saveBuffer.save(filepath);
+	saveBuffer.unbind();
+	m_gBuffer.setSize(m_windowWidth, m_windowHeight);
+}
+
+void Renderer::drawFullScreenQuad() {
 	m_fullScreenRect.binddrawunbind();
 }
 
