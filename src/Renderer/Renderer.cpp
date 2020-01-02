@@ -16,7 +16,6 @@ Renderer::Renderer(SDL_Window* window)
 	  m_clearColor(0.0f, 0.066f, 0.18f)
 {
 	onWindowResize();
-	m_gBuffer.initialize(m_windowWidth, m_windowHeight);
 }
 
 void Renderer::initAfterApp() {
@@ -57,7 +56,11 @@ void Renderer::drawFullScreen() {
 void Renderer::onWindowResize() {
 	int w, h;
 	SDL_GetWindowSize(m_window, &w, &h);
-	glViewport(0, 0, w, h);
+	// Update width and height
 	m_windowWidth = w;
 	m_windowHeight = h;
+	// Update viewport
+	glViewport(0, 0, w, h);
+	// Update geometry buffer
+	m_gBuffer.setSize(w, h);
 }

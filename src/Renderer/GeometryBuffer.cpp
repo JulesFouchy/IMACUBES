@@ -27,28 +27,29 @@ GeometryBuffer::GeometryBuffer()
 		//
 	unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
 	GLCall(glDrawBuffers(3, attachments));
+	// Depth buffer
+	GLCall(glGenRenderbuffers(1, &m_depthRenderBufferID));
 	// Unbind
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
-void GeometryBuffer::initialize(int width, int height) {
+void GeometryBuffer::setSize(int width, int height) {
 	m_width = width;
 	m_height = height;
-	// Bind 
-	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
-	// Initialize textures
+	// Resize textures
 	m_positionTexture.initialize(width, height);
 	m_normalShininessTexture.initialize(width, height);
 	m_albedoSpecularintensityTexture.initialize(width, height);
-	// Depth buffer
-	GLCall(glGenRenderbuffers(1, &m_depthRenderBufferID));
+	// Resize depth buffer
 	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferID));
 	GLCall(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height));
+		// Reattach
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
 	GLCall(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderBufferID));
-	// Check for completeness
+	// Check for completeness 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		spdlog::error("[SaveBuffer::SaveBuffer] Framebuffer is not complete!");
-	// Unbind
+		spdlog::error("[GeometryBuffer::setSize] Framebuffer is not complete!");
+	// Unbind 
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 

@@ -5,7 +5,7 @@
 class GeometryBuffer {
 public:
 	GeometryBuffer();
-	void initialize(int width, int height);
+	void setSize(int width, int height);
 	~GeometryBuffer();
 
 	void bind();
