@@ -57,5 +57,5 @@ private:
 	bool m_bDenoiseNormals;
 	float m_denoiseNormalSamplingInverseOffset;
 
-	glm::vec3 m_clearColor;
+	glm::vec4 m_clearColor;
 };

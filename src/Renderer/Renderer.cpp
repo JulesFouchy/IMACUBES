@@ -18,7 +18,7 @@
 Renderer::Renderer(SDL_Window* window)
 	: m_window(window), m_fullScreenRect(-1.0f, 1.0f, -1.0f, 1.0f),
 	  m_bDenoiseNormals(true), m_denoiseNormalSamplingInverseOffset(2100.0f),
-	  m_clearColor(0.0f, 0.066f, 0.18f)
+	  m_clearColor(0.0f, 0.066f, 0.18f, 1.0f)
 {
 	onWindowResize();
 }
@@ -64,7 +64,7 @@ void Renderer::lightingPass() {
 }
 
 void Renderer::renderOnScreenPass() {
-	GLCall(glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, 1.0f));
+	GLCall(glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	lightingPass();
 }
@@ -112,7 +112,7 @@ void Renderer::onWindowResize() {
 
 void Renderer::ImGui_Menu() {
 	if (ImGui::BeginMenu("Background Color")) {
-		ImGui::ColorPicker3("Background color", (float*)&m_clearColor);
+		ImGui::ColorPicker4("Background color", (float*)&m_clearColor);
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Denoise normals")) {
