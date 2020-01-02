@@ -32,6 +32,8 @@ GeometryBuffer::GeometryBuffer()
 }
 
 void GeometryBuffer::initialize(int width, int height) {
+	m_width = width;
+	m_height = height;
 	// Bind 
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
 	// Initialize textures
@@ -61,4 +63,11 @@ void GeometryBuffer::bind() {
 
 void GeometryBuffer::unbind() {
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+}
+
+void GeometryBuffer::copyDepthTo(unsigned int frameBufferID) {
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, m_frameBufferID);
+	glBindFramebuffer(GL_DRAW_FRAMEBUFFER, frameBufferID);
+	glBlitFramebuffer(0, 0, m_width, m_height, 0, 0, m_width, m_height, GL_DEPTH_BUFFER_BIT, GL_NEAREST);
+	glBindFramebuffer(GL_FRAMEBUFFER, frameBufferID);
 }

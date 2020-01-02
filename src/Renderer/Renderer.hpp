@@ -9,6 +9,7 @@
 struct SDL_Window;
 
 class Renderer {
+friend class App;
 public:
 	Renderer(SDL_Window* window);
 	void initAfterApp();
