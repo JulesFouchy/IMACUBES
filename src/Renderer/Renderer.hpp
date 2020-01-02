@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 #include "OpenGL/RectVAO.hpp"
 #include "GeometryBuffer.hpp"
 
@@ -10,13 +12,16 @@ public:
 	Renderer(SDL_Window* window);
 	~Renderer() = default;
 
+	void drawScene();
 	void drawFullScreen();
+
+	void onWindowResize();
 
 	inline float getWidth() { return m_windowWidth; }
 	inline float getHeight() { return m_windowHeight; }
 	inline float getRatio() { return m_windowWidth / m_windowHeight; }
 
-	void onWindowResize();
+	inline float* clearColorPtr() { return (float*) &m_clearColor; }
 
 private:
 	float m_windowWidth;
@@ -26,4 +31,5 @@ private:
 	RectVAO m_fullScreenRect;
 
 	GeometryBuffer m_gBuffer;
+	glm::vec3 m_clearColor;
 };

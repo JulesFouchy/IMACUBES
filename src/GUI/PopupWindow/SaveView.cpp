@@ -7,8 +7,6 @@
 #include "Helper/File.hpp"
 #include "OpenGL/SaveBufferMultisampled.hpp"
 
-#include "App.hpp"
-
 PopupWindow_SaveView::PopupWindow_SaveView()
 	: PopupWindow_WithConfirmationWarning("Saving current view"),
 	  m_widthHeightRatioPicker(),
@@ -68,7 +66,7 @@ void PopupWindow_SaveView::OnConfirmation() {
 	//SaveBuffer saveBuffer(m_widthHeightRatioPicker.getWidth(), m_widthHeightRatioPicker.getHeight());
 	saveBuffer.bind();
 	saveBuffer.clear();
-	App::Get().drawScene();
+	Locate::renderer().drawScene();
 	saveBuffer.save(m_filepathPicker.getFilepath());
 	saveBuffer.unbind();
 }

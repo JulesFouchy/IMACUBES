@@ -16,8 +16,6 @@ flat out int vMaterialIndex;
 
 uniform mat4 u_ProjMat;
 uniform mat4 u_ViewMat;
-uniform vec3 u_CamPosInWorld;
-out vec3 vCamPosInWorld;
 
 void main() {
 	vPosInObject = vertexPosition;
@@ -26,7 +24,5 @@ void main() {
 	vTexCoord = texCoord;
 	vFaceID = faceID;
 	vMaterialIndex = materialIndex;
-	vCamPosInWorld = u_CamPosInWorld;
 	gl_Position = u_ProjMat * u_ViewMat * vec4(vPosInWorld, 1.0);
-
 }

@@ -21,7 +21,7 @@
 App::App(SDL_Window* window)
 	: m_renderer(window),
 	  m_cubesMap(51, 51, 51), m_camera(glm::vec3(0.0f)),
-	  m_clearColor(0.0f, 0.066f, 0.18f), m_lightsManager(),
+	  m_lightsManager(),
 	  m_bShowImGUIDemoWindow(false),
 	  m_window(window), m_running(true)
 {
@@ -35,9 +35,9 @@ void App::onInit() {
 	m_cursorShaderLID = m_shaders.LoadShader(MyFile::rootDir+"/res/shaders/_cursor.vert", MyFile::rootDir + "/res/shaders/_cursor.frag");
 	m_cameraUniforms.addSubscriber(m_cursorShaderLID);
 
-	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
-	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
-	//Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_default.vert", MyFile::rootDir+"/res/shaders/testShader.frag");
+	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
+	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
+	//Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/testShader.frag");
 	Locate::materialsManager().SetSelectedMaterial(1, 0);
 
 	onViewMatrixChange();
@@ -68,18 +68,11 @@ void App::onLoopIteration() {
 	m_camera.update(1.0f / 60.0f);
 	m_lightsManager.setUniforms(m_lightUniforms);
 	onViewMatrixChange();
-	drawScene();
+	m_renderer.drawScene();
 	m_shaders[m_cursorShaderLID].bind();
 	m_cursor.draw();
 	m_toolrbf.showGUI();
 	m_saveViewWindow.Show_IfOpen();
-}
-
-
-void App::drawScene() {
-	GLCall(glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, 1.0f));
-	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-	Locate::materialsManager().draw();
 }
 
 void App::placeCursorAtHoveredCube(){

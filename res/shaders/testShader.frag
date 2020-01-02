@@ -19,7 +19,7 @@ struct MaterialParameters{
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
 
-#include "_uniformsAndVaryings.frag"
+#include "_geometryPass_uniformsAndVaryings.frag"
 // Check the above-included file to know all the informations available (including position in World and Object spaces etc.)
 
 //----------------------------------------------------------------------------------------
@@ -42,4 +42,4 @@ vec3 albedo() {
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
 
-#include "_main.frag"
+#include "_geometryPass_main.frag"

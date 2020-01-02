@@ -48,7 +48,7 @@ void MaterialsManager::ImGui_SelectedMaterialsParameters() {
 
 void MaterialsManager::ImGui_AddShaderButton() {
 	if (ImGui::Button("Add shader")) {
-		addShader(MyFile::rootDir + "/res/shaders/_default.vert", FileBrowser::openfilename(" frag (*.frag)\0*.frag;*.FRAG\0All Files (*.*)\0*.*\0"));
+		addShader(MyFile::rootDir + "/res/shaders/_geometryPass.vert", FileBrowser::openfilename(" frag (*.frag)\0*.frag;*.FRAG\0All Files (*.*)\0*.*\0"));
 	}
 }
 

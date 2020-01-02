@@ -50,7 +50,6 @@ private:
 	size_t m_cursorShaderLID;
 	UniformUpdateList m_cameraUniforms;
 	UniformUpdateList m_lightUniforms;
-	glm::vec3 m_clearColor;
 	LightsManager m_lightsManager;
 	Tool_RBF m_toolrbf;
 	Camera m_camera;
