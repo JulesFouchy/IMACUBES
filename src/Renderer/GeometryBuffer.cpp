@@ -6,16 +6,12 @@
 #include "Renderer/Renderer.hpp"
 #include "Locator/Locate.hpp"
 
-GeometryBuffer::GeometryBuffer(int width, int height)
+GeometryBuffer::GeometryBuffer()
 	: m_positionTexture               (GL_RGB16F,  GL_RGB,  GL_FLOAT,         GL_NEAREST),
 	  m_normalShininessTexture        (GL_RGBA16F, GL_RGBA, GL_FLOAT,         GL_NEAREST),
 	  m_albedoSpecularintensityTexture(GL_RGBA,    GL_RGBA, GL_UNSIGNED_BYTE, GL_NEAREST)
 {
-	// Initialize textures
-	m_positionTexture.initialize(width, height);
-	m_normalShininessTexture.initialize(width, height);
-	m_albedoSpecularintensityTexture.initialize(width, height);
-	// Gen Framebuffer
+	// Gen and Bind Framebuffer
 	GLCall(glGenFramebuffers(1, &m_frameBufferID));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
 	// Texture attachments
@@ -31,6 +27,17 @@ GeometryBuffer::GeometryBuffer(int width, int height)
 		//
 	unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
 	GLCall(glDrawBuffers(3, attachments));
+	// Unbind
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+}
+
+void GeometryBuffer::initialize(int width, int height) {
+	// Bind 
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
+	// Initialize textures
+	m_positionTexture.initialize(width, height);
+	m_normalShininessTexture.initialize(width, height);
+	m_albedoSpecularintensityTexture.initialize(width, height);
 	// Depth buffer
 	GLCall(glGenRenderbuffers(1, &m_depthRenderBufferID));
 	GLCall(glBindRenderbuffer(GL_RENDERBUFFER, m_depthRenderBufferID));
@@ -39,6 +46,8 @@ GeometryBuffer::GeometryBuffer(int width, int height)
 	// Check for completeness
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		spdlog::error("[SaveBuffer::SaveBuffer] Framebuffer is not complete!");
+	// Unbind
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
 GeometryBuffer::~GeometryBuffer() {

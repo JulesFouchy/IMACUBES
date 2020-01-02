@@ -25,11 +25,11 @@ PopupWindow_SaveView::PopupWindow_SaveView()
 
 void PopupWindow_SaveView::Open() {
 	PopupWindow::Open();
-	m_widthHeightRatioPicker.setRatio(Locate::renderer().GetRatio());
+	m_widthHeightRatioPicker.setRatio(Locate::renderer().getRatio());
 }
 
 void PopupWindow_SaveView::Show() {
-	m_widthHeightRatioPicker.setRatio(Locate::renderer().GetRatio()); // update ratio each frame in case of resizing while this window is open
+	m_widthHeightRatioPicker.setRatio(Locate::renderer().getRatio()); // update ratio each frame in case of resizing while this window is open
 	BeginWindow();
 	//
 	m_widthHeightRatioPicker.ShowWidthHeight();

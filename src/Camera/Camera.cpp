@@ -31,14 +31,14 @@ void Camera::computeTransformMatrixAndItsInverse() {
 }
 
 void Camera::computeProjectionMatrix() {
-	m_projectionMatrix = glm::infinitePerspective(m_fieldOfViewInRadians, Locate::renderer().GetRatio(), 0.1f);
+	m_projectionMatrix = glm::infinitePerspective(m_fieldOfViewInRadians, Locate::renderer().getRatio(), 0.1f);
 
 	m_bMustRecomputeProjectionMatrix = false;
 }
 
 Ray Camera::getRayGoingThroughMousePos() {
 	glm::vec3 pos = getPosition();
-	glm::vec3 mousePos = glm::unProject(glm::vec3(Input::MousePositionInPixels(), 0.0f), getViewMatrix(), getProjMatrix(), glm::vec4(0.0f, 0.0f, Locate::renderer().GetWidth(), Locate::renderer().GetHeight()));
+	glm::vec3 mousePos = glm::unProject(glm::vec3(Input::MousePositionInPixels(), 0.0f), getViewMatrix(), getProjMatrix(), glm::vec4(0.0f, 0.0f, Locate::renderer().getWidth(), Locate::renderer().getHeight()));
 	glm::vec3 dir = glm::normalize(mousePos - pos);
 	return Ray(pos, dir);
 }

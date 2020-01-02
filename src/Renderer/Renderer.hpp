@@ -1,6 +1,7 @@
 #pragma once
 
 #include "OpenGL/RectVAO.hpp"
+#include "GeometryBuffer.hpp"
 
 struct SDL_Window;
 
@@ -11,9 +12,9 @@ public:
 
 	void drawFullScreen();
 
-	inline float GetWidth() { return m_windowWidth; }
-	inline float GetHeight() { return m_windowHeight; }
-	inline float GetRatio() { return m_windowWidth / m_windowHeight; }
+	inline float getWidth() { return m_windowWidth; }
+	inline float getHeight() { return m_windowHeight; }
+	inline float getRatio() { return m_windowWidth / m_windowHeight; }
 
 	void onWindowResize();
 
@@ -23,4 +24,6 @@ private:
 	SDL_Window* m_window;
 
 	RectVAO m_fullScreenRect;
+
+	GeometryBuffer m_gBuffer;
 };

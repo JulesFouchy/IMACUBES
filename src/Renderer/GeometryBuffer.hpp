@@ -4,7 +4,8 @@
 
 class GeometryBuffer {
 public:
-	GeometryBuffer(int width, int height);
+	GeometryBuffer();
+	void initialize(int width, int height);
 	~GeometryBuffer();
 
 private:

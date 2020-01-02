@@ -90,10 +90,10 @@ int main(int argc, char *argv[]) {
 		glEnable(GL_CULL_FACE);
 		Input::Initialize();
 		CubesGroup::Initialize();
+		App::Initialize(window);
+		Texture2D::ClassInitialization();
 
 		// ------ Actual App
-
-		App::Initialize(window);
 		App::Get().onInit();
 		while (App::Get().isRunning()) {
 			App::Get()._loopIteration();

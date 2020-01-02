@@ -19,7 +19,7 @@ glm::vec2 Input::MousePositionInInches() {
 glm::vec2 Input::MousePositionInPixels() {
 	int x, y;
 	SDL_GetMouseState(&x, &y);
-	return glm::vec2(x, Locate::renderer().GetHeight() - y);
+	return glm::vec2(x, Locate::renderer().getHeight() - y);
 }
 
 bool Input::KeyIsDown(Key key) {

@@ -7,7 +7,8 @@ Renderer::Renderer(SDL_Window* window)
 	: m_window(window)
 {
 	onWindowResize();
-	m_fullScreenRect.initialize(GetRatio(), ZERO_TO_ONE__ZERO_TO_ONE);
+	m_fullScreenRect.initialize(getRatio(), ZERO_TO_ONE__ZERO_TO_ONE);
+	m_gBuffer.initialize(m_windowWidth, m_windowHeight);
 }
 
 void Renderer::drawFullScreen() {

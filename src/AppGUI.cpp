@@ -135,8 +135,8 @@ void App::ImGui_RightSideWindow() {
 		ImGui::EndTabBar();
 	}
 	ImGui::PopStyleVar();
-	ImGui::SetWindowSize(ImVec2(ImGui::GetWindowWidth(), m_renderer.GetHeight() - 18));
-	ImGui::SetWindowPos(ImVec2(m_renderer.GetWidth() - ImGui::GetWindowWidth(), 18), true);
+	ImGui::SetWindowSize(ImVec2(ImGui::GetWindowWidth(), m_renderer.getHeight() - 18));
+	ImGui::SetWindowPos(ImVec2(m_renderer.getWidth() - ImGui::GetWindowWidth(), 18), true);
 	ImGui::End();
 	ImGui::PopStyleVar();
 }
