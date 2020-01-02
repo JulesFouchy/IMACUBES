@@ -9,6 +9,15 @@
 
 #include <string>
 
+enum class WhatToRender {
+	FinalImage,
+	AlbedoMap,
+	NormalMap,
+	PositionMap,
+	SpecularIntensityMap,
+	ShininessMap,
+};
+
 struct SDL_Window;
 
 class Renderer {
@@ -51,6 +60,7 @@ private:
 
 	GeometryBuffer m_gBuffer;
 	size_t m_lightingPassShaderLID;
+	WhatToRender m_whatToRender;
 
 	FrameBuffer m_postProcessBuffer;
 	size_t m_denoiseNormalsShaderLID;

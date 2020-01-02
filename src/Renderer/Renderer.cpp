@@ -8,6 +8,7 @@
 #include "Locator/Locate.hpp"
 #include "Material/MaterialsManager.hpp"
 #include "OpenGL/ShaderLibrary.hpp"
+#include "CubesMap/CubesMap.hpp"
 
 #include "OpenGL/SaveBufferMultisampled.hpp"
 
@@ -17,6 +18,7 @@
 
 Renderer::Renderer(SDL_Window* window)
 	: m_window(window), m_fullScreenRect(-1.0f, 1.0f, -1.0f, 1.0f),
+	  m_whatToRender(WhatToRender::FinalImage),
 	  m_bDenoiseNormals(true), m_denoiseNormalSamplingInverseOffset(2100.0f),
 	  m_clearColor(0.0f, 0.066f, 0.18f, 1.0f)
 {
@@ -66,7 +68,29 @@ void Renderer::lightingPass() {
 void Renderer::renderOnScreenPass() {
 	GLCall(glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-	lightingPass();
+	switch (m_whatToRender)
+	{
+	case WhatToRender::FinalImage:
+		lightingPass();
+		break;
+	case WhatToRender::AlbedoMap:
+		m_gBuffer.albedoTexture().showFullScreen(PixelFormat::RGB);
+		break;
+	case WhatToRender::NormalMap:
+		m_gBuffer.normalShininessTexture().showFullScreen(PixelFormat::RGB, 2.0f/0.67f, 1.0f - 0.67f/2.0f);
+		break;
+	case WhatToRender::PositionMap:
+		m_gBuffer.positionSpecularintensityTexture().showFullScreen(PixelFormat::RGB, std::max(std::max(Locate::cubesMap().width(), Locate::cubesMap().height()), Locate::cubesMap().depth()), 0.5f);
+		break;
+	case WhatToRender::SpecularIntensityMap:
+		m_gBuffer.positionSpecularintensityTexture().showFullScreen(PixelFormat::A);
+		break;
+	case WhatToRender::ShininessMap:
+		m_gBuffer.normalShininessTexture().showFullScreen(PixelFormat::A, 128.0f);
+		break;
+	default:
+		break;
+	}
 }
 
 void Renderer::save(int width, int height, const std::string& filepath, int nbSamplesForMSAA) {
@@ -118,6 +142,14 @@ void Renderer::ImGui_Menu() {
 	if (ImGui::BeginMenu("Denoise normals")) {
 		ImGui::Checkbox("Active", &m_bDenoiseNormals);
 		ImGui::SliderFloat("Sampling inverse offset", &m_denoiseNormalSamplingInverseOffset, 1500.0f, 3000.0f);
+		ImGui::EndMenu();
+	}
+	if (ImGui::BeginMenu("Render : ")) {
+		int item_current = (int)m_whatToRender;
+		ImGui::PushID((int)&m_whatToRender);
+		ImGui::Combo("", &item_current, " Final Image\0 Albedo Map\0 Normal Map\0 Position Map\0 Specular Intensity Map\0 Shininess Map\0\0");
+		ImGui::PopID();
+		m_whatToRender = (WhatToRender)item_current;
 		ImGui::EndMenu();
 	}
 }

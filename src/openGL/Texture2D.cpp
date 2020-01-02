@@ -8,7 +8,8 @@
 #include "Debugging/Log.hpp"
 #include "Debugging/gl-exception.h"
 
-size_t Texture2D::showFullScreen_ShaderLID;
+size_t Texture2D::showFullScreenRGB_ShaderLID;
+size_t Texture2D::showFullScreenAlpha_ShaderLID;
 std::vector<bool> Texture2D::isSlotUsed;
 
 Texture2D::Texture2D(GLint GLpixelInternalFormat, GLenum GLpixelFormat, GLenum GLpixelType, GLint interpolationMode)
@@ -41,19 +42,35 @@ void Texture2D::setSize(int width, int height) {
 void Texture2D::ClassInitialization() {
 	for (int i = 0; i < MAX_NB_TEXTURES; ++i)
 		isSlotUsed.push_back(false);
-	showFullScreen_ShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir+"/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_texture.frag");
+	showFullScreenRGB_ShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir+"/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_textureRGB.frag");
+	showFullScreenAlpha_ShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_textureAlpha.frag");
 }
 
 Texture2D::~Texture2D() {
 	GLCall(glDeleteTextures(1, &m_textureID));
 }
 
-void Texture2D::showFullScreen() {
+void Texture2D::showFullScreen(PixelFormat channelsToShow, float divideColorBy, float translateColorBy) {
 	// Bind texture
 	attachToSlotAndBind();
 	// Shader
-	Locate::shaderLibrary()[showFullScreen_ShaderLID].bind();
-	Locate::shaderLibrary()[showFullScreen_ShaderLID].setUniform1i("u_TextureSlot", getSlot());
+	size_t shaderLID = 0;
+	switch (channelsToShow)
+	{
+	case PixelFormat::RGB:
+		shaderLID = showFullScreenRGB_ShaderLID;
+		break;
+	case PixelFormat::A:
+		shaderLID = showFullScreenAlpha_ShaderLID;
+		break;
+	default:
+		spdlog::warn("[Texture2D::showFullScreen] unknown Pixel Format : {}", (int)channelsToShow);
+		break;
+	}
+	Locate::shaderLibrary()[shaderLID].bind();
+	Locate::shaderLibrary()[shaderLID].setUniform1i("u_TextureSlot", getSlot());
+	Locate::shaderLibrary()[shaderLID].setUniform1f("u_DivideColorBy", divideColorBy);
+	Locate::shaderLibrary()[shaderLID].setUniform1f("u_TranslateColorBy", translateColorBy);
 	// Draw call
 	Locate::renderer().drawFullScreenQuad();
 	// Unbind texture
