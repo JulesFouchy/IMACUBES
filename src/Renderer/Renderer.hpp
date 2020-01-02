@@ -5,6 +5,7 @@
 #include "OpenGL/RectVAO.hpp"
 #include "GeometryBuffer.hpp"
 #include "OpenGL/Uniform/UniformUpdateList.hpp"
+#include "OpenGL/FrameBuffer.hpp"
 
 #include <string>
 
@@ -22,7 +23,7 @@ public:
 	void lightingPass();
 	void save(int width, int height, const std::string& filepath, int nbSamplesForMSAA = 4);
 
-	void blur(Texture2D& texture, float inverseOffset);
+	void denoiseNormals(Texture2D& texture, float samplingInverseOffset);
 
 	void drawFullScreenQuad();
 
@@ -51,8 +52,9 @@ private:
 	GeometryBuffer m_gBuffer;
 	size_t m_lightingPassShaderLID;
 
+	FrameBuffer m_postProcessBuffer;
 	bool m_bDenoiseNormals;
-	float m_denoiseNormalSampleInverseOffset;
+	float m_denoiseNormalSamplingInverseOffset;
 
 	glm::vec3 m_clearColor;
 };

@@ -11,13 +11,13 @@
 
 #include "OpenGL/SaveBufferMultisampled.hpp"
 
-#include "OpenGL/FrameBuffer.hpp"
-
 #include "Helper/File.hpp"
+
+#include <imgui/imgui.h>
 
 Renderer::Renderer(SDL_Window* window)
 	: m_window(window), m_fullScreenRect(-1.0f, 1.0f, -1.0f, 1.0f),
-	  m_bDenoiseNormals(true), m_denoiseNormalSampleInverseOffset(2100.0f),
+	  m_bDenoiseNormals(true), m_denoiseNormalSamplingInverseOffset(2100.0f),
 	  m_clearColor(0.0f, 0.066f, 0.18f)
 {
 	onWindowResize();
@@ -26,10 +26,9 @@ Renderer::Renderer(SDL_Window* window)
 void Renderer::initAfterApp() {
 	m_lightingPassShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_lightingPass.vert", MyFile::rootDir + "/res/shaders/_lightingPass.frag");
 	m_lightUniforms.addSubscriber(m_lightingPassShaderLID);
-	m_blurShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_removeIsolatedNoiseOnTexture.frag");
+	m_blurShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_denoiseNormals.frag");
 }
 
-#include <imgui/imgui.h>
 void Renderer::drawScene() {
 	geometryPass();
 	lightingPass();
@@ -42,7 +41,7 @@ void Renderer::geometryPass() {
 	Locate::materialsManager().draw();
 	m_gBuffer.unbind();
 	if (m_bDenoiseNormals) {
-		blur(m_gBuffer.normalShininessTexture(), m_denoiseNormalSampleInverseOffset);
+		denoiseNormals(m_gBuffer.normalShininessTexture(), m_denoiseNormalSamplingInverseOffset);
 	}
 }
 
@@ -83,15 +82,15 @@ void Renderer::save(int width, int height, const std::string& filepath, int nbSa
 	m_gBuffer.setSize(m_windowWidth, m_windowHeight);
 }
 
-void Renderer::blur(Texture2D& texture, float inverseOffset) {
-	FrameBuffer postProcessBuffer(texture);
+void Renderer::denoiseNormals(Texture2D& texture, float samplingInverseOffset) {
+	m_postProcessBuffer.attachTexture(texture);
 	texture.attachToSlotAndBind();
 	Locate::shaderLibrary()[m_blurShaderLID].bind();
 	Locate::shaderLibrary()[m_blurShaderLID].setUniform1i("u_TextureSlot", texture.getSlot());
-	Locate::shaderLibrary()[m_blurShaderLID].setUniform1f("inverseOffset", inverseOffset);
-	postProcessBuffer.bind();
+	Locate::shaderLibrary()[m_blurShaderLID].setUniform1f("inverseOffset", samplingInverseOffset);
+	m_postProcessBuffer.bind();
 	drawFullScreenQuad();
-	postProcessBuffer.unbind();
+	m_postProcessBuffer.unbind();
 	texture.detachAndUnbind();
 }
 
@@ -118,7 +117,7 @@ void Renderer::ImGui_Menu() {
 	}
 	if (ImGui::BeginMenu("Denoise normals")) {
 		ImGui::Checkbox("Active", &m_bDenoiseNormals);
-		ImGui::SliderFloat("Sampling inverse offset", &m_denoiseNormalSampleInverseOffset, 1500.0f, 3000.0f);
+		ImGui::SliderFloat("Sampling inverse offset", &m_denoiseNormalSamplingInverseOffset, 1500.0f, 3000.0f);
 		ImGui::EndMenu();
 	}
 }

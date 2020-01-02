@@ -4,7 +4,7 @@
 
 class FrameBuffer {
 public:
-	FrameBuffer() = default;
+	FrameBuffer();
 	FrameBuffer(Texture2D& texture);
 	~FrameBuffer();
 
@@ -21,7 +21,7 @@ public:
 
 protected:
 	GLuint m_frameBufferId;
-	Texture2D& m_texture;
+	Texture2D* m_texture;
 
 	int m_prevViewportSettings[4];
 };

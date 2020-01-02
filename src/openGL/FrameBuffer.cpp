@@ -5,22 +5,25 @@
 #include "Debugging/Log.hpp"
 #include "Debugging/gl-exception.h"
 
-FrameBuffer::FrameBuffer(Texture2D& texture)
-	: m_texture(texture)
+FrameBuffer::FrameBuffer()
 {
 	// Gen FrameBuffer
 	GLCall(glGenFramebuffers(1, &m_frameBufferId));
-	// Attach Texture
-	attachTexture(m_texture);
+}
+
+FrameBuffer::FrameBuffer(Texture2D& texture)
+	: FrameBuffer()
+{
+	attachTexture(texture);
 }
 
 void FrameBuffer::attachTexture(Texture2D& texture) {
-	m_texture = texture;
+	m_texture = &texture;
 	// Bind Framebuffer
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferId));
 	// Bind and Attach texture
-	m_texture.bind();
-	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture.getID(), 0));
+	m_texture->bind();
+	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture->getID(), 0));
 	// Unbind FrameBuffer
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
@@ -40,7 +43,7 @@ void FrameBuffer::bind_WithoutSettingViewport() {
 
 void FrameBuffer::setViewport() {
 	GLCall(glGetIntegerv(GL_VIEWPORT, m_prevViewportSettings)); // Store viewport settings to restore them when unbinding
-	GLCall(glViewport(0, 0, m_texture.getWidth(), m_texture.getHeight()));
+	GLCall(glViewport(0, 0, m_texture->getWidth(), m_texture->getHeight()));
 }
 
 void FrameBuffer::unbind() {
