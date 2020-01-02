@@ -31,9 +31,10 @@ App::App(SDL_Window* window)
 void App::onInit() {
 	// ----------------PLAYGROUND!------------------
 
+	m_renderer.initAfterApp();
 	m_camera.initAfterApp();
 	m_cursorShaderLID = m_shaders.LoadShader(MyFile::rootDir+"/res/shaders/_cursor.vert", MyFile::rootDir + "/res/shaders/_cursor.frag");
-	m_cameraUniforms.addSubscriber(m_cursorShaderLID);
+	m_renderer.cameraUniforms().addSubscriber(m_cursorShaderLID);
 
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
@@ -66,7 +67,7 @@ void App::onLoopIteration() {
 
 	// ----------------PLAYGROUND!------------------
 	m_camera.update(1.0f / 60.0f);
-	m_lightsManager.setUniforms(m_lightUniforms);
+	m_lightsManager.setUniforms(m_renderer.lightUniforms());
 	onViewMatrixChange();
 	m_renderer.drawScene();
 	m_shaders[m_cursorShaderLID].bind();
@@ -107,11 +108,11 @@ void App::placeCursorAtHoveredCube(){
 }
 
 void App::onViewMatrixChange(){
-	m_cameraUniforms.setUniform<glm::mat4>("u_ViewMat", m_camera.getViewMatrix());
-	m_cameraUniforms.setUniform<glm::vec3>("u_CamPosInWorld", m_camera.getPosition());
+	m_renderer.cameraUniforms().setUniform<glm::mat4>("u_ViewMat", m_camera.getViewMatrix());
+	m_renderer.lightUniforms().setUniform<glm::vec3>("u_CamPosInWorld", m_camera.getPosition());
 }
 void App::onProjMatrixChange() {
-	m_cameraUniforms.setUniform<glm::mat4>("u_ProjMat", m_camera.getProjMatrix());
+	m_renderer.cameraUniforms().setUniform<glm::mat4>("u_ProjMat", m_camera.getProjMatrix());
 }
 
 void App::onEvent(const SDL_Event& e) {
@@ -173,8 +174,7 @@ void App::onEvent(const SDL_Event& e) {
 			else {
 				if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
 					Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].reloadShader();
-					m_cameraUniforms.sendUniformsTo(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
-					m_lightUniforms.sendUniformsTo(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
+					m_renderer.cameraUniforms().sendUniformsTo(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
 				}
 				if (e.key.keysym.sym == 'z') {
 					m_cursor.translate(glm::ivec3(0, 0, -1));

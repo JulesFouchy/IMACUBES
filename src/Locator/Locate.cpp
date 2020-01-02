@@ -27,11 +27,11 @@ ShaderLibrary& Locate::shaderLibrary() {
 }
 
 UniformUpdateList& Locate::cameraUniforms() {
-	return App::Get().m_cameraUniforms;
+	return App::Get().m_renderer.cameraUniforms();
 }
 
 UniformUpdateList& Locate::lightUniforms() {
-	return App::Get().m_lightUniforms;
+	return App::Get().m_renderer.lightUniforms();
 }
 
 Renderer& Locate::renderer() {

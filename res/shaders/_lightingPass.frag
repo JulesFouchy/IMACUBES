@@ -23,11 +23,12 @@ uniform int u_nbOfPointLights;
 uniform DirectionalLight[16] u_directionals;
 uniform int u_nbOfDirectionalLights;
 
-in vec2 vTexCoords;
 uniform sampler2D gPosInWorld;
 uniform sampler2D gNormalShininess;
 uniform sampler2D gAlbedoSpec;
 uniform vec3 u_CamPosInWorld;
+
+in vec2 vTexCoords;
 
 void main(){
 	vec3 posInWorld = texture(gPosInWorld, vTexCoords).rgb;

@@ -16,7 +16,6 @@ MaterialsForAGivenShader::MaterialsForAGivenShader(const std::string& vertexFile
 	  m_cubes(), m_name(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(fragmentFilepath))), m_shaderIndex(shaderIndex)
 {
 	Locate::cameraUniforms().addSubscriber(m_shaderLID);
-	Locate::lightUniforms().addSubscriber(m_shaderLID);
 	parseShaderAndCreateUniformDescriptions(fragmentFilepath);
 	addMaterial();
 }

@@ -11,9 +11,9 @@ public:
 	void bind();
 	void unbind();
 
-	inline Texture2D& getPositionTexture() { return m_positionTexture; }
-	inline Texture2D& getNormalShininessTexture() { return m_normalShininessTexture; }
-	inline Texture2D& getAlbedoSpecularintensityTexture() { return m_albedoSpecularintensityTexture; }
+	inline Texture2D& positionTexture() { return m_positionTexture; }
+	inline Texture2D& normalShininessTexture() { return m_normalShininessTexture; }
+	inline Texture2D& albedoSpecularintensityTexture() { return m_albedoSpecularintensityTexture; }
 
 private:
 	unsigned int m_frameBufferID;
