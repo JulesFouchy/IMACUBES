@@ -21,6 +21,7 @@ public:
 	void drawScene();
 	void geometryPass();
 	void lightingPass();
+	void renderOnScreenPass();
 	void save(int width, int height, const std::string& filepath, int nbSamplesForMSAA = 4);
 
 	void denoiseNormals(Texture2D& texture, float samplingInverseOffset);
@@ -44,7 +45,6 @@ private:
 	SDL_Window* m_window;
 
 	RectVAO m_fullScreenRect;
-	size_t m_blurShaderLID;
 
 	UniformUpdateList m_cameraUniforms;
 	UniformUpdateList m_lightUniforms;
@@ -53,6 +53,7 @@ private:
 	size_t m_lightingPassShaderLID;
 
 	FrameBuffer m_postProcessBuffer;
+	size_t m_denoiseNormalsShaderLID;
 	bool m_bDenoiseNormals;
 	float m_denoiseNormalSamplingInverseOffset;
 

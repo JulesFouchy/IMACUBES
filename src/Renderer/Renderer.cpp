@@ -26,12 +26,12 @@ Renderer::Renderer(SDL_Window* window)
 void Renderer::initAfterApp() {
 	m_lightingPassShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_lightingPass.vert", MyFile::rootDir + "/res/shaders/_lightingPass.frag");
 	m_lightUniforms.addSubscriber(m_lightingPassShaderLID);
-	m_blurShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_denoiseNormals.frag");
+	m_denoiseNormalsShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_denoiseNormals.frag");
 }
 
 void Renderer::drawScene() {
 	geometryPass();
-	lightingPass();
+	renderOnScreenPass();
 }
 
 void Renderer::geometryPass() {
@@ -46,27 +46,27 @@ void Renderer::geometryPass() {
 }
 
 void Renderer::lightingPass() {
+	// Attach textures
+	m_gBuffer.positionSpecularintensityTexture().attachToSlotAndBind();
+	m_gBuffer.normalShininessTexture().attachToSlotAndBind();
+	m_gBuffer.albedoTexture().attachToSlotAndBind();
+	// Send texture slots
+	Locate::shaderLibrary()[m_lightingPassShaderLID].bind();
+	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gPosInWorld_SpecularIntensity", m_gBuffer.positionSpecularintensityTexture().getSlot());
+	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gNormalShininess", m_gBuffer.normalShininessTexture().getSlot());
+	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gAlbedo", m_gBuffer.albedoTexture().getSlot());
+	// Draw
+	drawFullScreenQuad();
+	// Detach textures
+	m_gBuffer.albedoTexture().detachAndUnbind();
+	m_gBuffer.normalShininessTexture().detachAndUnbind();
+	m_gBuffer.positionSpecularintensityTexture().detachAndUnbind();
+}
+
+void Renderer::renderOnScreenPass() {
 	GLCall(glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, 0.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-	//if(bShowNormals)
-	//	m_gBuffer.normalShininessTexture().showFullScreen();
-	//else {
-		// Attach textures
-		m_gBuffer.positionSpecularintensityTexture().attachToSlotAndBind();
-		m_gBuffer.normalShininessTexture().attachToSlotAndBind();
-		m_gBuffer.albedoTexture().attachToSlotAndBind();
-		// Send texture slots
-		Locate::shaderLibrary()[m_lightingPassShaderLID].bind();
-		Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gPosInWorld_SpecularIntensity", m_gBuffer.positionSpecularintensityTexture().getSlot());
-		Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gNormalShininess", m_gBuffer.normalShininessTexture().getSlot());
-		Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gAlbedo", m_gBuffer.albedoTexture().getSlot());
-		// Draw
-		drawFullScreenQuad();
-		// Detach textures
-		m_gBuffer.albedoTexture().detachAndUnbind();
-		m_gBuffer.normalShininessTexture().detachAndUnbind();
-		m_gBuffer.positionSpecularintensityTexture().detachAndUnbind();
-	//}
+	lightingPass();
 }
 
 void Renderer::save(int width, int height, const std::string& filepath, int nbSamplesForMSAA) {
@@ -76,7 +76,7 @@ void Renderer::save(int width, int height, const std::string& filepath, int nbSa
 	geometryPass();
 	saveBuffer.bind_WithoutSettingViewport();
 	saveBuffer.clear();
-	lightingPass();
+	renderOnScreenPass();
 	saveBuffer.save(filepath);
 	saveBuffer.unbind();
 	m_gBuffer.setSize(m_windowWidth, m_windowHeight);
@@ -85,9 +85,9 @@ void Renderer::save(int width, int height, const std::string& filepath, int nbSa
 void Renderer::denoiseNormals(Texture2D& texture, float samplingInverseOffset) {
 	m_postProcessBuffer.attachTexture(texture);
 	texture.attachToSlotAndBind();
-	Locate::shaderLibrary()[m_blurShaderLID].bind();
-	Locate::shaderLibrary()[m_blurShaderLID].setUniform1i("u_TextureSlot", texture.getSlot());
-	Locate::shaderLibrary()[m_blurShaderLID].setUniform1f("inverseOffset", samplingInverseOffset);
+	Locate::shaderLibrary()[m_denoiseNormalsShaderLID].bind();
+	Locate::shaderLibrary()[m_denoiseNormalsShaderLID].setUniform1i("u_TextureSlot", texture.getSlot());
+	Locate::shaderLibrary()[m_denoiseNormalsShaderLID].setUniform1f("inverseOffset", samplingInverseOffset);
 	m_postProcessBuffer.bind();
 	drawFullScreenQuad();
 	m_postProcessBuffer.unbind();
