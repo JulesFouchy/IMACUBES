@@ -13,16 +13,16 @@ public:
 
 	void copyDepthTo(unsigned int frameBufferID);
 
-	inline Texture2D& positionTexture() { return m_positionTexture; }
+	inline Texture2D& positionSpecularintensityTexture() { return m_positionSpecularintensityTexture; }
 	inline Texture2D& normalShininessTexture() { return m_normalShininessTexture; }
-	inline Texture2D& albedoSpecularintensityTexture() { return m_albedoSpecularintensityTexture; }
+	inline Texture2D& albedoTexture() { return m_albedoTexture; }
 
 private:
 	int m_width;
 	int m_height;
 	unsigned int m_frameBufferID;
-	Texture2D m_positionTexture;
+	Texture2D m_positionSpecularintensityTexture;
 	Texture2D m_normalShininessTexture;
-	Texture2D m_albedoSpecularintensityTexture;
+	Texture2D m_albedoTexture;
 	unsigned int m_depthRenderBufferID;
 };

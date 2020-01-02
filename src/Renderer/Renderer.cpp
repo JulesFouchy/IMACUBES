@@ -27,34 +27,36 @@ void Renderer::initAfterApp() {
 
 void Renderer::drawScene() {
 	geometryPass();
+	//m_gBuffer.albedoSpecularintensityTexture().showFullScreen();
 	lightingPass();
 }
 
 void Renderer::geometryPass() {
 	m_gBuffer.bind();
-	GLCall(glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, 1.0f));
+	GLCall(glClearColor(0.0f,0.0f,0.0f,0.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	Locate::materialsManager().draw();
 	m_gBuffer.unbind();
 }
 
 void Renderer::lightingPass() {
-	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
+	GLCall(glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, 0.0f));
+	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	// Attach textures
-	m_gBuffer.positionTexture().attachToSlotAndBind();
+	m_gBuffer.positionSpecularintensityTexture().attachToSlotAndBind();
 	m_gBuffer.normalShininessTexture().attachToSlotAndBind();
-	m_gBuffer.albedoSpecularintensityTexture().attachToSlotAndBind();
+	m_gBuffer.albedoTexture().attachToSlotAndBind();
 	// Send texture slots
 	Locate::shaderLibrary()[m_lightingPassShaderLID].bind();
-	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gPosInWorld", m_gBuffer.positionTexture().getSlot());
+	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gPosInWorld_SpecularIntensity", m_gBuffer.positionSpecularintensityTexture().getSlot());
 	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gNormalShininess", m_gBuffer.normalShininessTexture().getSlot());
-	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gAlbedoSpec", m_gBuffer.albedoSpecularintensityTexture().getSlot());
+	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gAlbedo", m_gBuffer.albedoTexture().getSlot());
 	// Draw
 	drawFullScreenQuad();
 	// Detach textures
-	m_gBuffer.albedoSpecularintensityTexture().detachAndUnbind();
+	m_gBuffer.albedoTexture().detachAndUnbind();
 	m_gBuffer.normalShininessTexture().detachAndUnbind();
-	m_gBuffer.positionTexture().detachAndUnbind();
+	m_gBuffer.positionSpecularintensityTexture().detachAndUnbind();
 }
 
 void Renderer::save(int width, int height, const std::string& filepath, int nbSamplesForMSAA) {

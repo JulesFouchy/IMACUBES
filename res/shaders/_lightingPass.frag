@@ -23,19 +23,21 @@ uniform int u_nbOfPointLights;
 uniform DirectionalLight[16] u_directionals;
 uniform int u_nbOfDirectionalLights;
 
-uniform sampler2D gPosInWorld;
+uniform sampler2D gPosInWorld_SpecularIntensity;
 uniform sampler2D gNormalShininess;
-uniform sampler2D gAlbedoSpec;
+uniform sampler2D gAlbedo;
 uniform vec3 u_CamPosInWorld;
 
 in vec2 vTexCoords;
 
 void main(){
-	vec3 posInWorld = texture(gPosInWorld, vTexCoords).rgb;
-	vec3 normal = texture(gNormalShininess, vTexCoords).rgb;
-	float specularStrength = texture(gAlbedoSpec, vTexCoords).a;
+	if( texture(gAlbedo, vTexCoords).a < 0.95) // these pixels belong to the clearColor background and shouldn't be lit
+		discard;
+	vec3  posInWorld = texture(gPosInWorld_SpecularIntensity, vTexCoords).rgb;
+	vec3  normal = texture(gNormalShininess, vTexCoords).rgb;
+	float specularStrength = texture(gPosInWorld_SpecularIntensity, vTexCoords).a;
 	float shininess = texture(gNormalShininess, vTexCoords).a;
-	vec3 albedo = texture(gAlbedoSpec, vTexCoords).rgb;
+	vec3  albedo = texture(gAlbedo, vTexCoords).rgb;
 
 	vec3 camRayReflection = normalize(reflect(posInWorld-u_CamPosInWorld, normal));
 	// Ambiant
