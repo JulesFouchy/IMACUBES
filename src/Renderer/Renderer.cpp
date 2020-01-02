@@ -64,7 +64,7 @@ void Renderer::lightingPass() {
 }
 
 void Renderer::renderOnScreenPass() {
-	GLCall(glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, 0.0f));
+	GLCall(glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, 1.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	lightingPass();
 }
