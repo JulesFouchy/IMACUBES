@@ -242,6 +242,8 @@ App* App::m_instance = nullptr;
 void App::Initialize(SDL_Window* window) {
 	assert(!m_instance);
 	m_instance = new App(window);
+	if (m_instance == nullptr)
+		spdlog::error("[App::Initialize] unable to allocate enough memory !");
 }
 
 void App::ShutDown() {

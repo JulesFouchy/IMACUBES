@@ -35,7 +35,7 @@ public:
 	inline float getHeight() { return m_windowHeight; }
 	inline float getRatio() { return m_windowWidth / m_windowHeight; }
 
-	inline float* clearColorPtr() { return (float*) &m_clearColor; }
+	void ImGui_Menu();
 
 private:
 	float m_windowWidth;
@@ -50,6 +50,9 @@ private:
 
 	GeometryBuffer m_gBuffer;
 	size_t m_lightingPassShaderLID;
+
+	bool m_bDenoiseNormals;
+	float m_denoiseNormalSampleInverseOffset;
 
 	glm::vec3 m_clearColor;
 };

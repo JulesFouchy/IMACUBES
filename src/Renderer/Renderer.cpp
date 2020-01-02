@@ -17,6 +17,7 @@
 
 Renderer::Renderer(SDL_Window* window)
 	: m_window(window), m_fullScreenRect(-1.0f, 1.0f, -1.0f, 1.0f),
+	  m_bDenoiseNormals(true), m_denoiseNormalSampleInverseOffset(2100.0f),
 	  m_clearColor(0.0f, 0.066f, 0.18f)
 {
 	onWindowResize();
@@ -31,40 +32,26 @@ void Renderer::initAfterApp() {
 #include <imgui/imgui.h>
 void Renderer::drawScene() {
 	geometryPass();
-	//m_gBuffer.normalShininessTexture().showFullScreen();
 	lightingPass();
 }
 
 void Renderer::geometryPass() {
-	static bool bBlurNormals = true;
-	static float invertOffset = 2100;
-	ImGui::Begin("blur");
-	ImGui::Checkbox("Blur normals", &bBlurNormals);
-	ImGui::SliderFloat("Inverse offset", &invertOffset, 1000, 3000);
-	ImGui::End();
-
 	m_gBuffer.bind();
 	GLCall(glClearColor(0.0f,0.0f,0.0f,0.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 	Locate::materialsManager().draw();
 	m_gBuffer.unbind();
-	if (bBlurNormals) {
-		blur(m_gBuffer.normalShininessTexture(), invertOffset);
+	if (m_bDenoiseNormals) {
+		blur(m_gBuffer.normalShininessTexture(), m_denoiseNormalSampleInverseOffset);
 	}
 }
 
 void Renderer::lightingPass() {
-	static bool bShowNormals = false;
-	ImGui::Begin("show norm");
-	ImGui::Checkbox("Show normals", &bShowNormals);
-	ImGui::End();
-
-
 	GLCall(glClearColor(m_clearColor.x, m_clearColor.y, m_clearColor.z, 0.0f));
 	GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-	if(bShowNormals)
-		m_gBuffer.normalShininessTexture().showFullScreen();
-	else {
+	//if(bShowNormals)
+	//	m_gBuffer.normalShininessTexture().showFullScreen();
+	//else {
 		// Attach textures
 		m_gBuffer.positionSpecularintensityTexture().attachToSlotAndBind();
 		m_gBuffer.normalShininessTexture().attachToSlotAndBind();
@@ -80,7 +67,7 @@ void Renderer::lightingPass() {
 		m_gBuffer.albedoTexture().detachAndUnbind();
 		m_gBuffer.normalShininessTexture().detachAndUnbind();
 		m_gBuffer.positionSpecularintensityTexture().detachAndUnbind();
-	}
+	//}
 }
 
 void Renderer::save(int width, int height, const std::string& filepath, int nbSamplesForMSAA) {
@@ -122,4 +109,16 @@ void Renderer::onWindowResize() {
 	glViewport(0, 0, w, h);
 	// Update geometry buffer
 	m_gBuffer.setSize(w, h);
+}
+
+void Renderer::ImGui_Menu() {
+	if (ImGui::BeginMenu("Background Color")) {
+		ImGui::ColorPicker3("Background color", (float*)&m_clearColor);
+		ImGui::EndMenu();
+	}
+	if (ImGui::BeginMenu("Denoise normals")) {
+		ImGui::Checkbox("Active", &m_bDenoiseNormals);
+		ImGui::SliderFloat("Sampling inverse offset", &m_denoiseNormalSampleInverseOffset, 1500.0f, 3000.0f);
+		ImGui::EndMenu();
+	}
 }

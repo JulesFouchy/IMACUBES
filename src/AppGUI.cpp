@@ -9,7 +9,6 @@ void App::ImGui_DebugWindow() {
 	ImGui::Begin("Debug");
 	ImGui::Checkbox("Show Demo Window", &m_bShowImGUIDemoWindow);
 	ImGui::Text("Application average %.1f FPS", ImGui::GetIO().Framerate);
-	ImGui::ColorPicker3("Background color", m_renderer.clearColorPtr());
 	ImGui::End();
 }
 
@@ -88,6 +87,11 @@ void App::ImGui_MainMenuBar() {
 				_ImGui_CameraView();
 				ImGui::EndMenu();
 			}
+			ImGui::EndMenu();
+		}
+		// Renderer 
+		if (ImGui::BeginMenu("Renderer")) {
+			m_renderer.ImGui_Menu();
 			ImGui::EndMenu();
 		}
 		//
