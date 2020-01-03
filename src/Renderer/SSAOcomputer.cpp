@@ -22,9 +22,9 @@ void SSAOcomputer::Initialize() {
 }
 
 SSAOcomputer::SSAOcomputer()
-    : m_radius("Radius", HistoryType::Lights, 0.5f, 0.001f, 2.0f),
-      m_bias("Bias", HistoryType::Lights, 0.025f, 0.001f, 0.1f),
-      m_power("Power", HistoryType::Lights, 1.0f, 0.0f, 5.0f),
+    : m_radius("Radius", HistoryType::Lights, 0.805f, 0.001f, 2.0f),
+      m_bias("Bias", HistoryType::Lights, 0.05f, 0.001f, 0.1f),
+      m_power("Power", HistoryType::Lights, 3.273f, 0.0f, 5.0f),
       m_noiseTexture(GL_RGB16F, GL_RGB, GL_FLOAT, GL_NEAREST, GL_REPEAT),
       m_ambiantOcclusionTexture(GL_RED, GL_RGB, GL_FLOAT, GL_NEAREST)
 {
@@ -127,8 +127,6 @@ void SSAOcomputer::ImGui_Parameters() {
     m_bias.ImGui_Slider();
     m_power.ImGui_Slider();
     ImGui::SliderInt("Nb of samples", &m_kernelSize, 1, 128);
-    if (ImGui::IsItemEdited()) {
-        spdlog::info("he");
+    if (ImGui::IsItemEdited())
         setKernelSize(m_kernelSize);
-    }
 }
