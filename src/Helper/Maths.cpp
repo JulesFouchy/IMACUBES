@@ -21,3 +21,7 @@ float MyMaths::Abs(float x) {
 float MyMaths::Sign(float x) {
 	return x == 0.0f ? 0.0f : MyMaths::Abs(x) / x;
 }
+
+float MyMaths::Lerp(float a, float b, float t) {
+	return a + t * (b - a);
+}

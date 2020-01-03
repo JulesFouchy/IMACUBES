@@ -4,6 +4,7 @@
 
 #include "OpenGL/RectVAO.hpp"
 #include "GeometryBuffer.hpp"
+#include "SSAOcomputer.hpp"
 #include "OpenGL/Uniform/UniformUpdateList.hpp"
 #include "OpenGL/FrameBuffer.hpp"
 
@@ -60,6 +61,7 @@ private:
 
 	GeometryBuffer m_gBuffer;
 	size_t m_lightingPassShaderLID;
+	SSAOcomputer m_SSAOcomputer;
 	WhatToRender m_whatToRender;
 
 	FrameBuffer m_postProcessBuffer;

@@ -12,7 +12,7 @@ size_t Texture2D::showFullScreenRGB_ShaderLID;
 size_t Texture2D::showFullScreenAlpha_ShaderLID;
 std::vector<bool> Texture2D::isSlotUsed;
 
-Texture2D::Texture2D(GLint GLpixelInternalFormat, GLenum GLpixelFormat, GLenum GLpixelType, GLint interpolationMode)
+Texture2D::Texture2D(GLint GLpixelInternalFormat, GLenum GLpixelFormat, GLenum GLpixelType, GLint interpolationMode, GLint wrapMode)
 	: m_bytesPerPixel(BytesPerPixel(GLpixelFormat)), m_GLpixelInternalFormat(GLpixelInternalFormat), m_GLpixelFormat(GLpixelFormat), m_GLpixelType(GLpixelType),
 	  m_textureSlot(-1)
 {
@@ -21,12 +21,12 @@ Texture2D::Texture2D(GLint GLpixelInternalFormat, GLenum GLpixelFormat, GLenum G
 	GLCall(glBindTexture(GL_TEXTURE_2D, m_textureID));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, interpolationMode));
 	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, interpolationMode));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
-	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode));
+	GLCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode));
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-void Texture2D::initialize(int width, int height, unsigned char* pixels) {
+void Texture2D::initialize(int width, int height, void* pixels) {
 	m_width = width;
 	m_height = height;
 	m_aspectRatio = (float)m_width / m_height;
@@ -37,6 +37,9 @@ void Texture2D::initialize(int width, int height, unsigned char* pixels) {
 }
 void Texture2D::setSize(int width, int height) {
 	initialize(width, height, nullptr);
+}
+void Texture2D::setToScreenSize() {
+	setSize(Locate::renderer().getWidth(), Locate::renderer().getHeight());
 }
 
 void Texture2D::ClassInitialization() {

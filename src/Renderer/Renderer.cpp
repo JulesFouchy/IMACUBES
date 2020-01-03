@@ -132,6 +132,8 @@ void Renderer::onWindowResize() {
 	glViewport(0, 0, w, h);
 	// Update geometry buffer
 	m_gBuffer.setSize(w, h);
+	// Update SSAO buffer
+	m_SSAOcomputer.setSize(w, h);
 }
 
 void Renderer::ImGui_Menu() {
