@@ -33,6 +33,7 @@ void Renderer::initAfterApp() {
 
 void Renderer::drawScene() {
 	geometryPass();
+	m_SSAOcomputer.compute();
 	renderOnScreenPass();
 }
 
@@ -52,14 +53,17 @@ void Renderer::lightingPass() {
 	m_gBuffer.positionSpecularintensityTexture().attachToSlotAndBind();
 	m_gBuffer.normalShininessTexture().attachToSlotAndBind();
 	m_gBuffer.albedoTexture().attachToSlotAndBind();
+	m_SSAOcomputer.texture().attachToSlotAndBind();
 	// Send texture slots
 	Locate::shaderLibrary()[m_lightingPassShaderLID].bind();
 	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gPosInWorld_SpecularIntensity", m_gBuffer.positionSpecularintensityTexture().getSlot());
 	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gNormalShininess", m_gBuffer.normalShininessTexture().getSlot());
 	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gAlbedo", m_gBuffer.albedoTexture().getSlot());
+	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("u_AmbientOcclusionMap", m_SSAOcomputer.texture().getSlot());
 	// Draw
 	drawFullScreenQuad();
 	// Detach textures
+	m_SSAOcomputer.texture().detachAndUnbind();
 	m_gBuffer.albedoTexture().detachAndUnbind();
 	m_gBuffer.normalShininessTexture().detachAndUnbind();
 	m_gBuffer.positionSpecularintensityTexture().detachAndUnbind();
@@ -100,13 +104,16 @@ void Renderer::renderOnScreenPass() {
 void Renderer::save(int width, int height, const std::string& filepath, int nbSamplesForMSAA) {
 	SaveBufferMultisampled saveBuffer(width, height, nbSamplesForMSAA);
 	m_gBuffer.setSize(width, height);
+	m_SSAOcomputer.setSize(width, height);
 	saveBuffer.setViewport();
 	geometryPass();
+	m_SSAOcomputer.compute();
 	saveBuffer.bind_WithoutSettingViewport();
 	saveBuffer.clear();
 	renderOnScreenPass();
 	saveBuffer.save(filepath);
 	saveBuffer.unbind();
+	m_SSAOcomputer.setSize(m_windowWidth, m_windowHeight);
 	m_gBuffer.setSize(m_windowWidth, m_windowHeight);
 }
 
