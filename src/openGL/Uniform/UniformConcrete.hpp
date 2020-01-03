@@ -26,32 +26,43 @@ public:
 	Uniform* createPtrWithSameData() override {
 		return new UniformConcrete<T>(getName(), m_historyType, value(), m_minValue, m_maxValue);
 	}
+	void setValue(T newVal) {
+		m_valueBeforeEditingStarted = value();
+		value() = newVal;
+		pushChangeInHistory();
+		m_valueBeforeEditingStarted = newVal;
+	}
 
-	inline T& value() { return m_value.get(); }
 	inline const T& getValue() const { return m_value.get(); }
 
 private:
+	inline T& value() { return m_value.get(); }
+
 	void pushChangeInHistory_IfNecessary() {
 		if (ImGui::IsItemDeactivatedAfterEdit()) {
-			History& history = Locate::history(m_historyType);
-			history.beginUndoGroup();
-			T val = value();
-			T prevVal = m_valueBeforeEditingStarted;
-			history.addAction(Action(
-				// DO action
-				[this, val]()
-			{
-				this->m_value = val;
-			},
-				// UNDO action
-				[this, prevVal]()
-			{
-				this->m_value = prevVal;
-			}
-			));
-			history.endUndoGroup();
+			pushChangeInHistory();
 			m_valueBeforeEditingStarted = value(); // ready for next edit
 		}
+	}
+
+	void pushChangeInHistory() {
+		History& history = Locate::history(m_historyType);
+		history.beginUndoGroup();
+		T val = value();
+		T prevVal = m_valueBeforeEditingStarted;
+		history.addAction(Action(
+			// DO action
+			[this, val]()
+		{
+			this->m_value = val;
+		},
+			// UNDO action
+			[this, prevVal]()
+		{
+			this->m_value = prevVal;
+		}
+		));
+		history.endUndoGroup();
 	}
 
 protected:

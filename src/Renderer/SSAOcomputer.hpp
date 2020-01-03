@@ -26,6 +26,8 @@ private:
 
 	void setKernelSize(int newSize);
 
+	void resetSettings();
+
 private:
 	UniformConcrete<float> m_radius;
 	UniformConcrete<float> m_bias;
@@ -40,4 +42,9 @@ private:
 	Texture2D m_ambiantOcclusionTexture;
 
 	static size_t SSAOshaderLID;
+
+	static const float m_defaultRadius;
+	static const float m_defaultBias;
+	static const float m_defaultPower;
+	static const int   m_defaultKernelSize;
 };

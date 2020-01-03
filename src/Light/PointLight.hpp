@@ -10,7 +10,7 @@ public:
 
 	void setUniforms(const std::string& uniformName, UniformUpdateList& uniformsList) override;
 
-	inline void setPosition(const glm::vec3& position) { m_position.value() = position; }
+	inline void setPosition(const glm::vec3& position) { m_position.setValue(position); }
 
 	void ImGui_Sliders() override;
 

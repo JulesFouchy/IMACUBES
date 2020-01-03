@@ -14,6 +14,11 @@
 
 #include <imgui/imgui.h>
 
+const float SSAOcomputer::m_defaultRadius = 0.805f;
+const float SSAOcomputer::m_defaultBias = 0.05f;
+const float SSAOcomputer::m_defaultPower = 3.273f;
+const int   SSAOcomputer::m_defaultKernelSize = 32;
+
 size_t SSAOcomputer::SSAOshaderLID;
 
 void SSAOcomputer::Initialize() {
@@ -22,9 +27,9 @@ void SSAOcomputer::Initialize() {
 }
 
 SSAOcomputer::SSAOcomputer()
-    : m_radius("Radius", HistoryType::Lights, 0.805f, 0.001f, 2.0f),
-      m_bias("Bias", HistoryType::Lights, 0.05f, 0.001f, 0.1f),
-      m_power("Power", HistoryType::Lights, 3.273f, 0.0f, 5.0f),
+    : m_radius("Radius", HistoryType::Lights, m_defaultRadius, 0.001f, 2.0f),
+      m_bias("Bias", HistoryType::Lights, m_defaultBias, 0.001f, 0.1f),
+      m_power("Power", HistoryType::Lights, m_defaultPower, 0.0f, 5.0f),
       m_noiseTexture(GL_RGB16F, GL_RGB, GL_FLOAT, GL_NEAREST, GL_REPEAT),
       m_ambiantOcclusionTexture(GL_RED, GL_RGB, GL_FLOAT, GL_NEAREST)
 {
@@ -37,7 +42,7 @@ SSAOcomputer::SSAOcomputer()
 }
 
 void SSAOcomputer::initAfterApp() {
-    setKernelSize(32);
+    setKernelSize(m_defaultKernelSize);
 }
 
 SSAOcomputer::~SSAOcomputer() {
@@ -123,10 +128,30 @@ void SSAOcomputer::compute() {
 }
 
 void SSAOcomputer::ImGui_Parameters() {
+    // Radius
     m_radius.ImGui_Slider();
-    m_bias.ImGui_Slider();
+    if (ImGui::BeginPopupContextItem("radius reset")){
+        if (ImGui::Selectable("Reset")) m_radius.setValue(m_defaultRadius);
+        ImGui::EndPopup();
+    }
+    // Bias
+    m_bias.ImGui_Slider();    
+    if (ImGui::BeginPopupContextItem("bias reset")) {
+        if (ImGui::Selectable("Reset")) m_bias.setValue(m_defaultBias);
+        ImGui::EndPopup();
+    }
+    // Power
     m_power.ImGui_Slider();
+    if (ImGui::BeginPopupContextItem("power reset")) {
+        if (ImGui::Selectable("Reset")) m_power.setValue(m_defaultPower);
+        ImGui::EndPopup();
+    }
+    // Kernel Size
     ImGui::SliderInt("Nb of samples", &m_kernelSize, 1, 128);
     if (ImGui::IsItemEdited())
         setKernelSize(m_kernelSize);
+    if (ImGui::BeginPopupContextItem("kernel size reset")) {
+        if (ImGui::Selectable("Reset")) setKernelSize(m_defaultKernelSize);
+        ImGui::EndPopup();
+    }
 }
