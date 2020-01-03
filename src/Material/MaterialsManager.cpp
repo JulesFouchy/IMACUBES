@@ -10,7 +10,7 @@
 #include "imgui/misc/cpp/imgui_stdlib.h"
 
 MaterialsManager::MaterialsManager()
-	: m_shaderCount(0), m_selectedShaderID(0)
+	: m_shaderCount(0), m_selectedShaderID(0), m_bSelectedShaderJustChanged(false)
 {
 }
 
@@ -26,16 +26,19 @@ void MaterialsManager::ImGui_ListOfShadersAndMaterials() {
 	{
 		int k = 0;
 		for (MaterialsForAGivenShader& shader : m_shadersList) {
-			if (ImGui::BeginTabItem(shader.m_name.c_str()))
+			ImGuiTabItemFlags itemFlags = (m_bSelectedShaderJustChanged && m_selectedShaderID == k) ? ImGuiTabItemFlags_SetSelected : ImGuiTabItemFlags_None;
+			if (ImGui::BeginTabItem(shader.m_name.c_str(), nullptr, itemFlags))
 			{
 				ImGui::BeginChild("Child window---", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.30));
 					shader.ImGui_ListOfMaterials();
 				ImGui::EndChild();
-				m_selectedShaderID = k;
+				if (!m_bSelectedShaderJustChanged)
+					m_selectedShaderID = k;
 				ImGui::EndTabItem();
 			}
 			k++;
 		}
+		m_bSelectedShaderJustChanged = false;
 		ImGui::EndTabBar();
 	}
 }
@@ -106,4 +109,10 @@ void MaterialsManager::addShader(const std::string& vertexFilepath, const std::s
 		m_shadersList.emplace_back(vertexFilepath, fragmentFilepath, m_shaderCount++);
 		m_selectedMaterialIDforThisShaderID[(int)m_shadersList.size() - 1] = 0;
 	}
+}
+
+void MaterialsManager::setSelectedMaterial(int shaderID, int matID) { 
+	m_selectedShaderID = shaderID; 
+	m_selectedMaterialIDforThisShaderID[shaderID] = matID;
+	m_bSelectedShaderJustChanged = true;
 }

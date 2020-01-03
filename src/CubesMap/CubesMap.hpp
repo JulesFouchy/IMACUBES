@@ -15,7 +15,8 @@ public:
 	void addCube(const glm::ivec3& pos, bool bPushActionInHistory = true); // Dont forget to call history.beginUndoGroup() if you want to push the action in history !
 	void removeCube(const glm::ivec3& pos, bool bPushActionInHistory = true);
 
-	inline bool cubeExists(const glm::ivec3& pos) const { return getMaterialLocationOf(pos).isValid(); }
+	inline const MaterialLocation& operator[](glm::ivec3 id3D) const { return m_cubesLocations[index1Dfrom3D(id3D)]; }
+	inline bool cubeExists(const glm::ivec3& pos) const { return (*this)[pos].isValid(); }
 
 	inline int width() const { return m_width; }
 	inline int height() const { return m_height; }
@@ -31,10 +32,11 @@ public:
 	bool isID3Dvalid(const glm::ivec3& id3D) const;
 	bool isPositionInsideWorld(const glm::vec3& pos) const;
 
+
+	inline MaterialsManager& materialsManager() { return m_materialsManager; }
+
 private:
-	inline const MaterialLocation& getMaterialLocationOf(glm::ivec3 id3D) const { return m_cubesLocations[index1Dfrom3D(id3D)]; }
 	void setMaterialLocation(glm::ivec3 id3D, const MaterialLocation& matLoc, bool bPushActionInHistory = true);
-	inline MaterialsManager& getMaterialsManager() { return m_materialsManager; }
 
 private:
 	int m_width;

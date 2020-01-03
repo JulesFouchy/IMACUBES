@@ -26,7 +26,7 @@ public:
 	inline std::vector<MaterialsForAGivenShader>& Shaders() { return m_shadersList; }
 	inline const MaterialLocation SelectedMaterialLocation() { return MaterialLocation(m_selectedShaderID, m_selectedMaterialIDforThisShaderID[m_selectedShaderID]); }
 	
-	inline void SetSelectedMaterial(int shaderID, int matID) { m_selectedShaderID = shaderID; m_selectedMaterialIDforThisShaderID[shaderID] = matID; }
+	void setSelectedMaterial(int shaderID, int matID);
 
 private:
 	inline MaterialsForAGivenShader& SelectedShader() { return Shaders()[SelectedMaterialLocation().shaderID]; }
@@ -38,4 +38,5 @@ private:
 
 	int m_selectedShaderID;
 	std::unordered_map<int, int > m_selectedMaterialIDforThisShaderID;
+	bool m_bSelectedShaderJustChanged;
 };

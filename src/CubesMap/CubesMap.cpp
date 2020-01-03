@@ -11,7 +11,7 @@ CubesMap::CubesMap(int width, int height, int depth)
 
 void CubesMap::addCube(const glm::ivec3& id3D, bool bPushActionInHistory) {
 	// Dont forget to call history.beginUndoGroup() if you want to push the action in history !
-	const MaterialLocation& currentMatLoc = getMaterialLocationOf(id3D);
+	const MaterialLocation& currentMatLoc = (*this)[id3D];
 	if (currentMatLoc.isValid())
 		m_materialsManager.removeCube(currentMatLoc.shaderID, id3D, bPushActionInHistory);
 	MaterialLocation& newMatLoc = m_materialsManager.addCube(id3D, bPushActionInHistory);
@@ -19,7 +19,7 @@ void CubesMap::addCube(const glm::ivec3& id3D, bool bPushActionInHistory) {
 }
 
 void CubesMap::removeCube(const glm::ivec3& id3D, bool bPushActionInHistory) {
-	const MaterialLocation& currentMatLoc = getMaterialLocationOf(id3D);
+	const MaterialLocation& currentMatLoc = (*this)[id3D];
 	if (currentMatLoc.isValid())
 		m_materialsManager.removeCube(currentMatLoc.shaderID, id3D, bPushActionInHistory);
 	setMaterialLocation(id3D, MaterialLocation(-1,-1), bPushActionInHistory);

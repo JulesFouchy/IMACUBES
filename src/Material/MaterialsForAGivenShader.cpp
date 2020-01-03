@@ -51,7 +51,7 @@ void MaterialsForAGivenShader::draw() {
 void MaterialsForAGivenShader::addMaterial() {
 	if (m_materials.size() < Settings::MAX_NB_OF_MATERIALS_FOR_A_GIVEN_SHADER) {
 		m_materials.emplace_back(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(shader().getFragmentFilepath())) + std::to_string(m_materials.size()), m_structLayout, m_shaderIndex, (int)m_materials.size());
-		Locate::materialsManager().SetSelectedMaterial(m_shaderIndex, (int)m_materials.size() - 1);
+		Locate::materialsManager().setSelectedMaterial(m_shaderIndex, (int)m_materials.size() - 1);
 	}
 	else
 		spdlog::warn("Sorry you can't have more than {} materials for a given shader :/", Settings::MAX_NB_OF_MATERIALS_FOR_A_GIVEN_SHADER);
@@ -74,7 +74,7 @@ void MaterialsForAGivenShader::ImGui_ListOfMaterials(){
 		bool isSelected = Locate::materialsManager().SelectedMaterialLocation().materialID == mat.getIndex() && Locate::materialsManager().SelectedMaterialLocation().shaderID == m_shaderIndex;
 		// Name of other materials
 		if (ImGui::Selectable(mat.getName().c_str(), isSelected)) {
-			Locate::materialsManager().SetSelectedMaterial(m_shaderIndex, mat.getIndex());
+			Locate::materialsManager().setSelectedMaterial(m_shaderIndex, mat.getIndex());
 		}
 		//
 		ImGui::Separator();

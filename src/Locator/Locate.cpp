@@ -11,7 +11,7 @@
 #include "Renderer/Renderer.hpp"
 
 MaterialsManager& Locate::materialsManager() {
-	return App::Get().m_cubesMap.getMaterialsManager();
+	return App::Get().m_cubesMap.materialsManager();
 }
 
 History& Locate::history(HistoryType type) {

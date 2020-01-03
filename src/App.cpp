@@ -39,7 +39,7 @@ void App::onInit() {
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
 	//Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/testShader.frag");
-	Locate::materialsManager().SetSelectedMaterial(0, 0);
+	Locate::materialsManager().setSelectedMaterial(0, 0);
 
 	onViewMatrixChange();
 	onProjMatrixChange();
@@ -201,6 +201,12 @@ void App::onEvent(const SDL_Event& e) {
 				}
 				else if (e.key.keysym.sym == 'p') {
 					m_lightsManager.trySetSelectedPointLightPosition(m_cursor.getCubeJustBeforePosition());
+				}
+				else if (e.key.keysym.sym == ' ') {
+					const MaterialLocation& matLoc = m_cubesMap[m_cursor.getPosition()];
+					if (matLoc.isValid()) {
+						m_cubesMap.materialsManager().setSelectedMaterial(matLoc.shaderID, matLoc.materialID);
+					}
 				}
 			}
 		}
