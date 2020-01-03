@@ -26,8 +26,10 @@ public:
 	~Camera() = default;
 
 	inline const glm::mat4& getViewMatrix() { if(m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_inverseTransformMatrix; }
+	inline const glm::mat4& getNormalMatrix() { if(m_bMustRecomputeNormalMatrix) computeNormalMatrix(); return m_normalMatrix; }
 	inline const glm::mat4& getProjMatrix() { if(m_bMustRecomputeProjectionMatrix) computeProjectionMatrix(); return m_projectionMatrix; }
 	
+	inline void mustRecomputeTransformMatrix() { m_bMustRecomputeTransformMatrix = true; m_bMustRecomputeNormalMatrix = true; }
 	inline void mustRecomputeProjectionMatrix() { m_bMustRecomputeProjectionMatrix = true; }
 
 	inline void update(float dt) { m_controlState->update(dt); }
@@ -56,6 +58,7 @@ private:
 	inline const glm::mat4& getTransformMatrix() { if (m_bMustRecomputeTransformMatrix) computeTransformMatrixAndItsInverse(); return m_transformMatrix; }
 
 	void computeTransformMatrixAndItsInverse();
+	void computeNormalMatrix();
 	void computeProjectionMatrix();
 
 	template <typename T>
@@ -73,6 +76,9 @@ private:
 	SphericalCoordinates m_sphereCoord;
 	glm::vec3 m_lookedAtPoint;
 	bool m_bMustRecomputeTransformMatrix;
+
+	glm::mat4 m_normalMatrix;
+	bool m_bMustRecomputeNormalMatrix;
 
 	std::unique_ptr<CameraControlState> m_controlState;
 };

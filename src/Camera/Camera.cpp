@@ -14,7 +14,8 @@
 
 Camera::Camera(const glm::vec3& lookedAtPoint)
 	: m_projectionMatrix(1.0f), m_fieldOfViewInRadians(Settings::CAMERA_FIELD_OF_VIEW), m_bMustRecomputeProjectionMatrix(true),
-	  m_transformMatrix(1.0f), m_inverseTransformMatrix(1.0f), m_sphereCoord(34.0f, 0.0f, 0.28f), m_lookedAtPoint(lookedAtPoint), m_bMustRecomputeTransformMatrix(true)
+	  m_transformMatrix(1.0f), m_inverseTransformMatrix(1.0f), m_sphereCoord(34.0f, 0.0f, 0.28f), m_lookedAtPoint(lookedAtPoint), m_bMustRecomputeTransformMatrix(true),
+	  m_normalMatrix(1.0f), m_bMustRecomputeNormalMatrix(true)
 {
 }
 
@@ -28,6 +29,12 @@ void Camera::computeTransformMatrixAndItsInverse() {
 	m_transformMatrix = glm::inverse(m_inverseTransformMatrix);
 
 	m_bMustRecomputeTransformMatrix = false;
+}
+
+void Camera::computeNormalMatrix() {
+	m_normalMatrix = glm::transpose(getTransformMatrix());
+
+	m_bMustRecomputeNormalMatrix = false;
 }
 
 void Camera::computeProjectionMatrix() {
@@ -46,7 +53,7 @@ Ray Camera::getRayGoingThroughMousePos() {
 void Camera::resetTransform() {
 	m_sphereCoord = SphericalCoordinates(34.0f, 0.0f, 0.28f);
 	m_lookedAtPoint = glm::vec3(0.0f);
-	m_bMustRecomputeTransformMatrix = true;
+	mustRecomputeTransformMatrix();
 }
 
 bool Camera::ImGui_View() {
@@ -60,7 +67,8 @@ bool Camera::ImGui_View() {
 bool Camera::ImGui_Transform() {
 	bool modifs = m_sphereCoord._ImGui_CoordinatesSliders();
 	modifs |=     ImGui::DragFloat3("Looking at", (float*)&m_lookedAtPoint);
-	if (modifs)
-		m_bMustRecomputeTransformMatrix = true;
+	if (modifs) {
+		mustRecomputeTransformMatrix();
+	}
 	return modifs;
 }

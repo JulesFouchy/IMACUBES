@@ -17,7 +17,7 @@ void CameraControlState_Translation::update(float dt) {
 	glm::vec2 mouseDL = m_mouseInitialPosInInches - Input::MousePositionInInches();
 	m_camera->setLookedAtPoint(m_initialLookedAtPoint + (m_camera->getLocalX()*mouseDL.x +m_camera->getLocalY()*mouseDL.y)* Settings::CAMERA_TRANSLATION_SPEED_PER_INCH * m_camera->m_sphereCoord.getRadius());
 
-	m_camera->m_bMustRecomputeTransformMatrix = true;
+	m_camera->mustRecomputeTransformMatrix();
 }
 
 void CameraControlState_Translation::onWheelUp() {

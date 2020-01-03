@@ -92,6 +92,7 @@ int main(int argc, char *argv[]) {
 		CubesGroup::Initialize();
 		App::Initialize(window);
 		Texture2D::ClassInitialization();
+		SSAOcomputer::Initialize();
 
 		// ------ Actual App
 		App::Get().onInit();

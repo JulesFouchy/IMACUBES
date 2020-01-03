@@ -82,6 +82,9 @@ void Renderer::renderOnScreenPass() {
 	case WhatToRender::PositionMap:
 		m_gBuffer.positionSpecularintensityTexture().showFullScreen(PixelFormat::RGB, std::max(std::max(Locate::cubesMap().width(), Locate::cubesMap().height()), Locate::cubesMap().depth()), 0.5f);
 		break;
+	case WhatToRender::AmbientOcclusionMap:
+		m_SSAOcomputer.compute();
+		break;
 	case WhatToRender::SpecularIntensityMap:
 		m_gBuffer.positionSpecularintensityTexture().showFullScreen(PixelFormat::A);
 		break;
@@ -149,7 +152,7 @@ void Renderer::ImGui_Menu() {
 	if (ImGui::BeginMenu("Render : ")) {
 		int item_current = (int)m_whatToRender;
 		ImGui::PushID((int)&m_whatToRender);
-		ImGui::Combo("", &item_current, " Final Image\0 Albedo Map\0 Normal Map\0 Position Map\0 Specular Intensity Map\0 Shininess Map\0\0");
+		ImGui::Combo("", &item_current, " Final Image\0 Albedo Map\0 Normal Map\0 Position Map\0 Ambient Occlusion Map\0 Specular Intensity Map\0 Shininess Map\0\0");
 		ImGui::PopID();
 		m_whatToRender = (WhatToRender)item_current;
 		ImGui::EndMenu();

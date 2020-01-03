@@ -15,6 +15,7 @@ enum class WhatToRender {
 	AlbedoMap,
 	NormalMap,
 	PositionMap,
+	AmbientOcclusionMap,
 	SpecularIntensityMap,
 	ShininessMap,
 };
@@ -23,6 +24,7 @@ struct SDL_Window;
 
 class Renderer {
 friend class App;
+friend class SSAOcomputer;
 public:
 	Renderer(SDL_Window* window);
 	void initAfterApp();
@@ -41,6 +43,7 @@ public:
 	void onWindowResize();
 
 	inline UniformUpdateList& cameraUniforms() { return m_cameraUniforms; }
+	inline UniformUpdateList& SSAOmatrixUniforms() { return m_SSAOmatrixUniforms; }
 	inline UniformUpdateList& lightUniforms() { return m_lightUniforms; }
 
 	inline float getWidth() { return m_windowWidth; }
@@ -57,6 +60,7 @@ private:
 	RectVAO m_fullScreenRect;
 
 	UniformUpdateList m_cameraUniforms;
+	UniformUpdateList m_SSAOmatrixUniforms;
 	UniformUpdateList m_lightUniforms;
 
 	GeometryBuffer m_gBuffer;

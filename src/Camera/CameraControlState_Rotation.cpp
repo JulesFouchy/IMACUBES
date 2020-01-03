@@ -22,7 +22,7 @@ void CameraControlState_Rotation::update(float dt) {
 	m_camera->m_sphereCoord.angleGround() = m_initialAngleGround + mouseDL.x * Settings::CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH * MyMaths::TAU;
 	m_camera->m_sphereCoord.angleUp()     = m_initialAngleUp     + mouseDL.y * Settings::CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH * MyMaths::TAU;
 
-	m_camera->m_bMustRecomputeTransformMatrix = true;
+	m_camera->mustRecomputeTransformMatrix();
 }
 
 void CameraControlState_Rotation::onWheelUp() {
