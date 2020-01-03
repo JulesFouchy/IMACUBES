@@ -15,12 +15,14 @@
 #include "Material/MaterialsManager.hpp"
 #include "CubeMaths/CubeMaths.hpp"
 
+#include "CubesMap/BoundingBox.hpp"
+
 #include <algorithm>
 
 
 App::App(SDL_Window* window)
 	: m_renderer(window),
-	  m_cubesMap(51, 51, 51), m_camera(glm::vec3(0.0f)),
+	  m_cubesMap(27, 27, 27), m_camera(glm::vec3(0.0f)),
 	  m_lightsManager(),
 	  m_bShowImGUIDemoWindow(false),
 	  m_bAddTheSelectedSomething(false),
@@ -28,6 +30,80 @@ App::App(SDL_Window* window)
 {
 	spdlog::info("Root directory is {}", MyFile::rootDir);
 }
+
+bool cond(int n, int size) {
+	return n * 3 / size == 1;
+}
+
+bool menger2(glm::ivec3 pos, int x, int X, int y, int Y, int z, int Z) {
+	int xPos = (pos.x - x) * 3 / (X - x);
+	int yPos = (pos.y - y) * 3 / (Y - y);
+	int zPos = (pos.z - z) * 3 / (Z - z);
+	return !((xPos == 1 && yPos == 1) || (xPos == 1 && zPos == 1) || (zPos == 1 && yPos == 1));
+}
+
+bool menger(glm::ivec3 pos) {
+	/*int size = 27;
+	for (int n = 0; n < 2; ++n) {
+		if ((cond(pos.x, size) && cond(pos.y, size)) || (cond(pos.x, size) && cond(pos.z, size)) || (cond(pos.z, size) && cond(pos.y, size)))
+			return false;
+		else {
+			pos.x -= (pos.x * 3 / size) * (size/3);
+			pos.x /= 3;
+			pos.y -= (pos.y * 3 / size) * (size / 3);
+			pos.y /= 3;
+			pos.z -= (pos.z * 3 / size) * (size / 3);
+			pos.z /= 3;
+			size /= 3;
+		}
+	}
+	return true;*/
+	int x = 0;
+	int y = 0;
+	int z = 0;
+	int X = 27;
+	int Y = X;
+	int Z = X;
+	for (int n = 0; n < 4; ++n) {
+		if (!menger2(pos, x,X,y,Y,z,Z))
+			return false;
+		else {
+			int xPos = (pos.x - x) * 3 / (X - x);
+			int yPos = (pos.y - y) * 3 / (Y - y);
+			int zPos = (pos.z - z) * 3 / (Z - z);
+			int dl = (X - x) / 3;
+			if (xPos == 0)
+				X -= 2*dl;
+			else if (xPos == 1){
+				x += dl;
+				X -= dl;
+			}
+			else
+				x += 2 * dl;
+			if (yPos == 0)
+				Y -=2*dl;
+			else if (yPos == 1) {
+				int dl = (Y - y) / 3;
+				y += dl;
+				Y -= dl;
+			}
+			else
+				y += 2 * (Y - y) / 3;
+			if (zPos == 0)
+				Z -= 2*dl;
+			else if (zPos == 1) {
+				int dl = (Z - z) / 3;
+				z += dl;
+				Z -= dl;
+			}
+			else
+				z += 2 * (Z - z) / 3;
+		}
+	}
+	return true;
+}
+
+
 
 void App::onInit() {
 	// ----------------PLAYGROUND!------------------
@@ -46,12 +122,17 @@ void App::onInit() {
 	onProjMatrixChange();
 
 	Locate::history(HistoryType::Cubes).beginUndoGroup();
-	for (int x = -m_cubesMap.width()*0.3; x < m_cubesMap.width()*0.3; ++x) {
-		for (int z = -m_cubesMap.depth()*0.3; z < m_cubesMap.depth()*0.3; ++z) {
-			for (int y = std::max(-(int)m_cubesMap.height()/2, -5); y < 0; ++y) {
-				m_cubesMap.addCube(glm::ivec3(x, y, z));
-			}
-		}
+	//for (int x = -m_cubesMap.width()*0.3; x < m_cubesMap.width()*0.3; ++x) {
+	//	for (int z = -m_cubesMap.depth()*0.3; z < m_cubesMap.depth()*0.3; ++z) {
+	//		for (int y = std::max(-(int)m_cubesMap.height()/2, -5); y < 0; ++y) {
+	//			m_cubesMap.addCube(glm::ivec3(x, y, z));
+	//		}
+	//	}
+	//}
+	BoundingBox bbox;
+	for (const glm::ivec3& pos : bbox) {
+		if (menger(pos + glm::ivec3(27/2)))
+			m_cubesMap.addCube(pos);
 	}
 	Locate::history(HistoryType::Cubes).endUndoGroup();
 }
