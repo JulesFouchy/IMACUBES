@@ -55,8 +55,8 @@ void MaterialsManager::ImGui_AddShaderButton() {
 	}
 }
 
-void MaterialsManager::ImGui_AddMaterialToSelectedShaderButton() {
-	if (ImGui::Button("Add Material")) {
+void MaterialsManager::ImGui_AddMaterialToSelectedShaderButton(bool forcedPress) {
+	if (ImGui::Button("Add Material") || forcedPress) {
 		SelectedShader().addMaterial();
 	}
 }

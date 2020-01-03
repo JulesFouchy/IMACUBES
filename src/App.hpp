@@ -52,6 +52,7 @@ private:
 	HistoriesManager m_histories;
 	PopupWindow_SaveView m_saveViewWindow;
 	bool m_bShowImGUIDemoWindow;
+	bool m_bAddTheSelectedSomething;
 
 
 /********************

@@ -23,6 +23,7 @@ App::App(SDL_Window* window)
 	  m_cubesMap(51, 51, 51), m_camera(glm::vec3(0.0f)),
 	  m_lightsManager(),
 	  m_bShowImGUIDemoWindow(false),
+	  m_bAddTheSelectedSomething(false),
 	  m_window(window), m_running(true)
 {
 	spdlog::info("Root directory is {}", MyFile::rootDir);
@@ -206,6 +207,9 @@ void App::onEvent(const SDL_Event& e) {
 					const MaterialLocation& matLoc = m_cubesMap[m_cursor.getPosition()];
 					if (matLoc.isValid())
 						m_cubesMap.materialsManager().setSelectedMaterial(matLoc.shaderID, matLoc.materialID);
+				}
+				else if (e.key.keysym.sym == '+' || e.key.keysym.sym == '=') {
+					m_bAddTheSelectedSomething = true;
 				}
 			}
 		}

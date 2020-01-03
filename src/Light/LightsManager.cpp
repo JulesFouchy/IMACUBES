@@ -95,8 +95,8 @@ void LightsManager::ImGui_SelectedLightSliders() {
 	selectedLight()->ImGui_Sliders();
 }
 
-void LightsManager::ImGui_AddLightOfSelectedTypeButton() {
-	if (ImGui::Button("Add light")) {
+void LightsManager::ImGui_AddLightOfSelectedTypeButton(bool forcedPress) {
+	if (ImGui::Button("Add light") || forcedPress) {
 		switch (m_selectedLightType)
 		{
 		case LightType::Point:

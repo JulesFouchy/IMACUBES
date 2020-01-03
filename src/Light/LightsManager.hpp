@@ -29,7 +29,7 @@ public:
 
 	void ImGui_LightsList();
 	void ImGui_SelectedLightSliders();
-	void ImGui_AddLightOfSelectedTypeButton();
+	void ImGui_AddLightOfSelectedTypeButton(bool forcedPress = false);
 
 	Light* selectedLight();
 	void trySetSelectedPointLightPosition(const glm::vec3& position);

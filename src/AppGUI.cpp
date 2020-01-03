@@ -113,7 +113,7 @@ void App::ImGui_RightSideWindow() {
 	{
 		if (ImGui::BeginTabItem("Materials"))
 		{
-			Locate::materialsManager().ImGui_AddMaterialToSelectedShaderButton(); ImGui::SameLine();
+			Locate::materialsManager().ImGui_AddMaterialToSelectedShaderButton(m_bAddTheSelectedSomething); ImGui::SameLine();
 			Locate::materialsManager().ImGui_AddShaderButton();
 			Locate::materialsManager().ImGui_ListOfShadersAndMaterials();
 			ImGui::EndTabItem();
@@ -125,7 +125,7 @@ void App::ImGui_RightSideWindow() {
 		}
 		if (ImGui::BeginTabItem("Lights"))
 		{
-			m_lightsManager.ImGui_AddLightOfSelectedTypeButton();
+			m_lightsManager.ImGui_AddLightOfSelectedTypeButton(m_bAddTheSelectedSomething);
 			ImGui::BeginChild("Items selection", ImVec2(ImGui::GetWindowContentRegionWidth(), ImGui::GetWindowHeight() * 0.30));
 			m_lightsManager.ImGui_LightsList();
 			ImGui::EndChild();
@@ -136,6 +136,7 @@ void App::ImGui_RightSideWindow() {
 			m_lightsManager.ImGui_SelectedLightSliders();
 			ImGui::EndChild();
 		}
+		m_bAddTheSelectedSomething = false;
 		ImGui::EndTabBar();
 	}
 	ImGui::PopStyleVar();
