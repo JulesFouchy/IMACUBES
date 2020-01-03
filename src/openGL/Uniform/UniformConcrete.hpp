@@ -26,11 +26,15 @@ public:
 	Uniform* createPtrWithSameData() override {
 		return new UniformConcrete<T>(getName(), m_historyType, value(), m_minValue, m_maxValue);
 	}
-	void setValue(T newVal) {
-		m_valueBeforeEditingStarted = value();
-		value() = newVal;
-		pushChangeInHistory();
-		m_valueBeforeEditingStarted = newVal;
+	void setValue(T newVal, bool bPushChangeInHistory = true) {
+		if (bPushChangeInHistory) {
+			m_valueBeforeEditingStarted = value();
+			value() = newVal;
+			pushChangeInHistory();
+			m_valueBeforeEditingStarted = newVal;
+		}
+		else
+			value() = newVal;
 	}
 
 	inline const T& getValue() const { return m_value.get(); }

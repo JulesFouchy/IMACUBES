@@ -2,6 +2,8 @@
 
 #include <imgui/imgui.h>
 
+#include "Debugging/Log.hpp"
+
 Light::Light(const std::string& name, const glm::vec3& color, float intensity)
 	: m_name(name), m_color("Color", HistoryType::Lights, color), m_intensity("Intensity", HistoryType::Lights, intensity)
 {}
@@ -14,6 +16,7 @@ void Light::setUniforms(const std::string & uniformName, UniformUpdateList & uni
 void Light::ImGui_Sliders() {
 	m_color.ImGui_Slider();
 	m_intensity.ImGui_Drag(0.01f);
-	if (m_intensity.getValue() < 0.0f)
-		m_intensity.setValue(0.0f);
+	bool bPushChangeInHistory = ImGui::IsItemDeactivatedAfterEdit();
+	if (m_intensity.getValue() < -0.0001f)
+		m_intensity.setValue(0.0f, bPushChangeInHistory);
 }
