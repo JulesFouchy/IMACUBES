@@ -76,6 +76,7 @@ private:
 	size_t m_blurSSAOtextureShaderLID;
 	bool m_bDenoiseNormals;
 	float m_denoiseNormalSamplingInverseOffset;
+	bool m_bUseAmbientOcclusion;
 
 	glm::vec4 m_clearColor;
 };

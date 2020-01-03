@@ -20,6 +20,7 @@ Renderer::Renderer(SDL_Window* window)
 	: m_window(window), m_fullScreenRect(-1.0f, 1.0f, -1.0f, 1.0f),
 	  m_whatToRender(WhatToRender::FinalImage),
 	  m_bDenoiseNormals(true), m_denoiseNormalSamplingInverseOffset(2100.0f),
+	  m_bUseAmbientOcclusion(true),
 	  m_clearColor(0.0f, 0.066f, 0.18f, 1.0f)
 {
 	onWindowResize();
@@ -34,7 +35,8 @@ void Renderer::initAfterApp() {
 
 void Renderer::drawScene() {
 	geometryPass();
-	ssaoPass();
+	if (m_bUseAmbientOcclusion)
+		ssaoPass();
 	renderOnScreenPass();
 }
 
@@ -59,17 +61,22 @@ void Renderer::lightingPass() {
 	m_gBuffer.positionSpecularintensityTexture().attachToSlotAndBind();
 	m_gBuffer.normalShininessTexture().attachToSlotAndBind();
 	m_gBuffer.albedoTexture().attachToSlotAndBind();
-	m_SSAOcomputer.texture().attachToSlotAndBind();
+	if (m_bUseAmbientOcclusion)
+		m_SSAOcomputer.texture().attachToSlotAndBind();
 	// Send texture slots
 	Locate::shaderLibrary()[m_lightingPassShaderLID].bind();
 	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gPosInWorld_SpecularIntensity", m_gBuffer.positionSpecularintensityTexture().getSlot());
 	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gNormalShininess", m_gBuffer.normalShininessTexture().getSlot());
 	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gAlbedo", m_gBuffer.albedoTexture().getSlot());
-	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("u_AmbientOcclusionMap", m_SSAOcomputer.texture().getSlot());
+	// Ambient occlusion
+	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("u_bUseAmbientOcclusion", (int)m_bUseAmbientOcclusion);
+	if (m_bUseAmbientOcclusion)
+		Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("u_AmbientOcclusionMap", m_SSAOcomputer.texture().getSlot());
 	// Draw
 	drawFullScreenQuad();
 	// Detach textures
-	m_SSAOcomputer.texture().detachAndUnbind();
+	if (m_bUseAmbientOcclusion)
+		m_SSAOcomputer.texture().detachAndUnbind();
 	m_gBuffer.albedoTexture().detachAndUnbind();
 	m_gBuffer.normalShininessTexture().detachAndUnbind();
 	m_gBuffer.positionSpecularintensityTexture().detachAndUnbind();
@@ -110,16 +117,19 @@ void Renderer::renderOnScreenPass() {
 void Renderer::save(int width, int height, const std::string& filepath, int nbSamplesForMSAA) {
 	SaveBufferMultisampled saveBuffer(width, height, nbSamplesForMSAA);
 	m_gBuffer.setSize(width, height);
-	m_SSAOcomputer.setSize(width, height);
+	if (m_bUseAmbientOcclusion)
+		m_SSAOcomputer.setSize(width, height);
 	saveBuffer.setViewport();
 	geometryPass();
-	ssaoPass();
+	if (m_bUseAmbientOcclusion)
+		ssaoPass();
 	saveBuffer.bind_WithoutSettingViewport();
 	saveBuffer.clear();
 	renderOnScreenPass();
 	saveBuffer.save(filepath);
 	saveBuffer.unbind();
-	m_SSAOcomputer.setSize(m_windowWidth, m_windowHeight);
+	if (m_bUseAmbientOcclusion)
+		m_SSAOcomputer.setSize(m_windowWidth, m_windowHeight);
 	m_gBuffer.setSize(m_windowWidth, m_windowHeight);
 }
 
@@ -169,17 +179,21 @@ void Renderer::ImGui_Menu() {
 		ImGui::ColorPicker4("Background color", (float*)&m_clearColor);
 		ImGui::EndMenu();
 	}
-	if (ImGui::BeginMenu("Denoise normals")) {
-		ImGui::Checkbox("Active", &m_bDenoiseNormals);
-		ImGui::SliderFloat("Sampling inverse offset", &m_denoiseNormalSamplingInverseOffset, 500.0f, 3000.0f);
-		ImGui::EndMenu();
-	}
 	if (ImGui::BeginMenu("Render : ")) {
 		int item_current = (int)m_whatToRender;
 		ImGui::PushID((int)&m_whatToRender);
 		ImGui::Combo("", &item_current, " Final Image\0 Albedo Map\0 Normal Map\0 Position Map\0 Ambient Occlusion Map\0 Specular Intensity Map\0 Shininess Map\0\0");
 		ImGui::PopID();
 		m_whatToRender = (WhatToRender)item_current;
+		ImGui::EndMenu();
+	}
+	if (ImGui::BeginMenu("Denoise normals")) {
+		ImGui::Checkbox("Active", &m_bDenoiseNormals);
+		ImGui::SliderFloat("Sampling inverse offset", &m_denoiseNormalSamplingInverseOffset, 500.0f, 3000.0f);
+		ImGui::EndMenu();
+	}	
+	if (ImGui::BeginMenu("Ambient Occlusion")) {
+		ImGui::Checkbox("Active", &m_bUseAmbientOcclusion);
 		ImGui::EndMenu();
 	}
 }
