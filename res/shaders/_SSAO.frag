@@ -13,12 +13,15 @@ uniform sampler2D gNormalShininess;
 uniform sampler2D gAlbedo;
 uniform sampler2D u_NoiseMap;
 
-uniform vec3 u_SampleKernel[64];
 uniform mat4 u_ViewMat;
 uniform mat4 u_NormalMat;
 uniform mat4 u_ProjMat;
 
 uniform vec2 u_ScreenResolution;
+
+//? int #KernelSize = 32
+const int KernelSize = #KernelSize;
+uniform vec3 u_SampleKernel[#KernelSize];
 
 void main()
 {
@@ -36,7 +39,7 @@ void main()
     mat3 TBN       = mat3(tangent, bitangent, normalInView); 
 
     float occlusion = 0.0;
-    for(int i = 0; i < 64; ++i){
+    for(int i = 0; i < KernelSize; ++i){
         vec3 samplePt = posInView + TBN * u_SampleKernel[i] * u_Radius; 
         vec4 offset = vec4(samplePt, 1.0);
         offset      = u_ProjMat * offset;
@@ -48,5 +51,5 @@ void main()
         occlusion += (sampleDepth >= samplePt.z + u_Bias ? 1.0 : 0.0) * rangeCheck;
     } 
 
-    FragColor = pow(1.0 - (occlusion / 64.0), u_Power);
+    FragColor = pow(1.0 - (occlusion / KernelSize), u_Power);
 }

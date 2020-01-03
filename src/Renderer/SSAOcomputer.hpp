@@ -10,6 +10,7 @@
 class SSAOcomputer {
 public:
 	SSAOcomputer();
+	void initAfterApp();
 	~SSAOcomputer();
 	static void Initialize();
 
@@ -18,15 +19,18 @@ public:
 	void compute();
 	inline Texture2D& texture() { return m_ambiantOcclusionTexture; }
 
-	void ImGui_ParametersSliders();
+	void ImGui_Parameters();
 
 private:
 	void generateRandomThings();
+
+	void setKernelSize(int newSize);
 
 private:
 	UniformConcrete<float> m_radius;
 	UniformConcrete<float> m_bias;
 	UniformConcrete<float> m_power;
+	int m_kernelSize;
 
 	std::vector<glm::vec3> m_sampleKernel;
 	std::vector<glm::vec3> m_noiseVectors;

@@ -42,7 +42,7 @@ void Shader::bind() const {
 	glUseProgram(m_shaderId);
 }
 
-void Shader::compile() {
+void Shader::compile(const std::string& lookForInFS , const std::string& replaceWithInFS , const std::string& lookForInVS, const std::string& replaceWithInVS) {
 	spdlog::info("[Compiling Shader] " + m_vertexShaderFilepath + " & " +m_fragmentShaderFilepath);
 	if (m_shaderId == -1) {
 		m_shaderId = glCreateProgram();
@@ -51,8 +51,8 @@ void Shader::compile() {
 		(glDetachShader(m_shaderId, m_vsID));
 		(glDetachShader(m_shaderId, m_fsID));
 	}
-	m_vsID = compileShader(GL_VERTEX_SHADER, parseFile(m_vertexShaderFilepath));
-	m_fsID = compileShader(GL_FRAGMENT_SHADER, parseFile(m_fragmentShaderFilepath));
+	m_vsID = compileShader(GL_VERTEX_SHADER, parseFile(m_vertexShaderFilepath, lookForInVS, replaceWithInVS));
+	m_fsID = compileShader(GL_FRAGMENT_SHADER, parseFile(m_fragmentShaderFilepath, lookForInFS, replaceWithInFS));
 
 	(glAttachShader(m_shaderId, m_vsID));
 	(glAttachShader(m_shaderId, m_fsID));
@@ -103,7 +103,7 @@ void Shader::setUniformMat4f(const std::string& uniformName, const glm::mat4& ma
 
 /* Utilities to open files and compile shaders */
 
-std::string Shader::parseFile(const std::string& filepath) {
+std::string Shader::parseFile(const std::string& filepath, const std::string& lookFor, const std::string& replaceWith) {
 	std::ifstream stream(filepath);
 	if (!stream.is_open()) {
 		spdlog::warn("[Shader::parseFile] Failed to open file |{}|", filepath);
@@ -114,10 +114,12 @@ std::string Shader::parseFile(const std::string& filepath) {
 	std::string str = "";
 	std::string line = "";
 	while (getline(stream, line)) {
+		// Look for something to replace
+		MyString::ReplaceAll(line, lookFor, replaceWith);
 		// Look for '#include'
 		size_t includePos = line.find("#include");
 		size_t commPos = line.find("//");
-		if (includePos != std::string::npos && includePos < commPos) { // TODO check that the line isn't commented out
+		if (includePos != std::string::npos && includePos < commPos) {
 			size_t pos = 0;
 			MyString::GetNextWord(line, &pos);
 			std::string filepathToInclude = MyString::GetNextWord(line, &pos, " ,;()|\t\"");

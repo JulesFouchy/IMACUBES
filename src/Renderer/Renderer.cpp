@@ -27,6 +27,7 @@ Renderer::Renderer(SDL_Window* window)
 }
 
 void Renderer::initAfterApp() {
+	m_SSAOcomputer.initAfterApp();
 	m_lightingPassShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_lightingPass.vert", MyFile::rootDir + "/res/shaders/_lightingPass.frag");
 	m_lightUniforms.addSubscriber(m_lightingPassShaderLID);
 	m_denoiseNormalsShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_denoiseNormals.frag");
@@ -194,7 +195,7 @@ void Renderer::ImGui_Menu() {
 	}	
 	if (ImGui::BeginMenu("Ambient Occlusion")) {
 		ImGui::Checkbox("Active", &m_bUseAmbientOcclusion);
-		m_SSAOcomputer.ImGui_ParametersSliders();
+		m_SSAOcomputer.ImGui_Parameters();
 		ImGui::EndMenu();
 	}
 }

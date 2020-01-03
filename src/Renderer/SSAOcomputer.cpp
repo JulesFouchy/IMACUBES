@@ -17,7 +17,7 @@
 size_t SSAOcomputer::SSAOshaderLID;
 
 void SSAOcomputer::Initialize() {
-    SSAOshaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_SSAO.frag");
+    SSAOshaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_SSAO.frag", false);
     Locate::renderer().SSAOmatrixUniforms().addSubscriber(SSAOshaderLID);
 }
 
@@ -28,13 +28,16 @@ SSAOcomputer::SSAOcomputer()
       m_noiseTexture(GL_RGB16F, GL_RGB, GL_FLOAT, GL_NEAREST, GL_REPEAT),
       m_ambiantOcclusionTexture(GL_RED, GL_RGB, GL_FLOAT, GL_NEAREST)
 {
-    generateRandomThings();
     // Create color attachment
     glGenFramebuffers(1, &m_frameBufferID);
     glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID);
     m_ambiantOcclusionTexture.bind();
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ambiantOcclusionTexture.getID(), 0);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void SSAOcomputer::initAfterApp() {
+    setKernelSize(32);
 }
 
 SSAOcomputer::~SSAOcomputer() {
@@ -46,17 +49,20 @@ void SSAOcomputer::setSize(int width, int height) {
 }
 
 void SSAOcomputer::generateRandomThings() {
+    m_sampleKernel.clear();
+    m_noiseVectors.clear();
+    //
     std::uniform_real_distribution<float> randomFloats(0.0, 1.0);
     std::default_random_engine generator;
     // Sample kernel
-    for (int i = 0; i < 64; ++i) {
+    for (int i = 0; i < m_kernelSize; ++i) {
         glm::vec3 samplePt(
             randomFloats(generator) * 2.0f - 1.0f,
             randomFloats(generator) * 2.0f - 1.0f,
             randomFloats(generator)
         );
         samplePt *= randomFloats(generator) / glm::length(samplePt);
-        float scale = i / 64.0f;
+        float scale = i / (float)m_kernelSize;
         samplePt *= MyMaths::Lerp(0.1f, 1.0f, scale * scale);
         m_sampleKernel.push_back(samplePt);
     }
@@ -71,6 +77,13 @@ void SSAOcomputer::generateRandomThings() {
     m_noiseTexture.initialize(4, 4, m_noiseVectors.data());
 }
 
+void SSAOcomputer::setKernelSize(int newSize) {
+    m_kernelSize = newSize;
+    generateRandomThings();
+    Locate::shaderLibrary()[SSAOshaderLID].compile("#KernelSize", std::to_string(m_kernelSize));
+    Locate::renderer().SSAOmatrixUniforms().sendUniformsTo(SSAOshaderLID);
+}
+
 void SSAOcomputer::compute() {
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
     GLCall(glClearColor(0.0, 0.0, 0.0, 0.0));
@@ -80,6 +93,7 @@ void SSAOcomputer::compute() {
     m_radius.sendTo(Locate::shaderLibrary()[SSAOshaderLID], "u_Radius");
     m_bias.sendTo(Locate::shaderLibrary()[SSAOshaderLID], "u_Bias");
     m_power.sendTo(Locate::shaderLibrary()[SSAOshaderLID], "u_Power");
+    Locate::shaderLibrary()[SSAOshaderLID].setUniform1i("u_KernelSize", m_kernelSize);
     // Attach textures
         // Position map
     Locate::renderer().m_gBuffer.positionSpecularintensityTexture().attachToSlotAndBind();
@@ -94,7 +108,7 @@ void SSAOcomputer::compute() {
     m_noiseTexture.attachToSlotAndBind();
     Locate::shaderLibrary()[SSAOshaderLID].setUniform1i("u_NoiseMap", m_noiseTexture.getSlot());
     // Send sample kernel
-    for(int k = 0; k < m_sampleKernel.size(); ++k)
+    for(int k = 0; k < m_kernelSize; ++k)
         Locate::shaderLibrary()[SSAOshaderLID].setUniform3f("u_SampleKernel["+std::to_string(k)+"]", m_sampleKernel[k]);
     // Send screen resolution
     Locate::shaderLibrary()[SSAOshaderLID].setUniform2f("u_ScreenResolution", glm::vec2(m_ambiantOcclusionTexture.getWidth(), m_ambiantOcclusionTexture.getHeight()));
@@ -108,8 +122,13 @@ void SSAOcomputer::compute() {
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
-void SSAOcomputer::ImGui_ParametersSliders() {
+void SSAOcomputer::ImGui_Parameters() {
     m_radius.ImGui_Slider();
     m_bias.ImGui_Slider();
     m_power.ImGui_Slider();
+    ImGui::SliderInt("Nb of samples", &m_kernelSize, 1, 128);
+    if (ImGui::IsItemEdited()) {
+        spdlog::info("he");
+        setKernelSize(m_kernelSize);
+    }
 }
