@@ -84,6 +84,7 @@ void Renderer::renderOnScreenPass() {
 		break;
 	case WhatToRender::AmbientOcclusionMap:
 		m_SSAOcomputer.compute();
+		m_SSAOcomputer.texture().showFullScreen();
 		break;
 	case WhatToRender::SpecularIntensityMap:
 		m_gBuffer.positionSpecularintensityTexture().showFullScreen(PixelFormat::A);

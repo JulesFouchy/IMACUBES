@@ -39,7 +39,7 @@ void Camera::computeNormalMatrix() {
 
 void Camera::computeProjectionMatrix() {
 	m_projectionMatrix = glm::infinitePerspective(m_fieldOfViewInRadians, Locate::renderer().getRatio(), 0.1f);
-
+	//m_projectionMatrix = glm::perspective(m_fieldOfViewInRadians, Locate::renderer().getRatio(), 0.1f, 100.0f);
 	m_bMustRecomputeProjectionMatrix = false;
 }
 

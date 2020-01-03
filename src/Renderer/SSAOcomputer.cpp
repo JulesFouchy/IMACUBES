@@ -65,8 +65,17 @@ void SSAOcomputer::generateRandomThings() {
     m_noiseTexture.initialize(4, 4, m_noiseVectors.data());
 }
 
+#include <imgui/imgui.h>
 void SSAOcomputer::compute() {
-    //GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
+    ImGui::Begin("reload");
+    if (ImGui::Button("Reload")) {
+        Locate::shaderLibrary()[SSAOshaderLID].compile();
+        Locate::renderer().SSAOmatrixUniforms().sendUniformsTo(SSAOshaderLID);
+    }
+    ImGui::End();
+    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
+    GLCall(glClearColor(0.0, 0.0, 0.0, 0.0));
+    GLCall(glClear(GL_COLOR_BUFFER_BIT));
     Locate::shaderLibrary()[SSAOshaderLID].bind();
     // Attach textures
         // Position map
@@ -93,5 +102,5 @@ void SSAOcomputer::compute() {
     Locate::renderer().m_gBuffer.albedoTexture().detachAndUnbind();
     Locate::renderer().m_gBuffer.normalShininessTexture().detachAndUnbind();
     Locate::renderer().m_gBuffer.positionSpecularintensityTexture().detachAndUnbind();
-    //GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+    GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
