@@ -141,7 +141,7 @@ void Renderer::ImGui_Menu() {
 	}
 	if (ImGui::BeginMenu("Denoise normals")) {
 		ImGui::Checkbox("Active", &m_bDenoiseNormals);
-		ImGui::SliderFloat("Sampling inverse offset", &m_denoiseNormalSamplingInverseOffset, 1500.0f, 3000.0f);
+		ImGui::SliderFloat("Sampling inverse offset", &m_denoiseNormalSamplingInverseOffset, 500.0f, 3000.0f);
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Render : ")) {

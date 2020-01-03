@@ -204,9 +204,8 @@ void App::onEvent(const SDL_Event& e) {
 				}
 				else if (e.key.keysym.sym == ' ') {
 					const MaterialLocation& matLoc = m_cubesMap[m_cursor.getPosition()];
-					if (matLoc.isValid()) {
+					if (matLoc.isValid())
 						m_cubesMap.materialsManager().setSelectedMaterial(matLoc.shaderID, matLoc.materialID);
-					}
 				}
 			}
 		}
