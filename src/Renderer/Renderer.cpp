@@ -29,11 +29,12 @@ void Renderer::initAfterApp() {
 	m_lightingPassShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_lightingPass.vert", MyFile::rootDir + "/res/shaders/_lightingPass.frag");
 	m_lightUniforms.addSubscriber(m_lightingPassShaderLID);
 	m_denoiseNormalsShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_denoiseNormals.frag");
+	m_blurSSAOtextureShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_blur1ChannelTexture.frag");
 }
 
 void Renderer::drawScene() {
 	geometryPass();
-	m_SSAOcomputer.compute();
+	ssaoPass();
 	renderOnScreenPass();
 }
 
@@ -46,6 +47,11 @@ void Renderer::geometryPass() {
 	if (m_bDenoiseNormals) {
 		denoiseNormals(m_gBuffer.normalShininessTexture(), m_denoiseNormalSamplingInverseOffset);
 	}
+}
+
+void Renderer::ssaoPass() {
+	m_SSAOcomputer.compute();
+	blurSSAOtexture(m_SSAOcomputer.texture());
 }
 
 void Renderer::lightingPass() {
@@ -107,7 +113,7 @@ void Renderer::save(int width, int height, const std::string& filepath, int nbSa
 	m_SSAOcomputer.setSize(width, height);
 	saveBuffer.setViewport();
 	geometryPass();
-	m_SSAOcomputer.compute();
+	ssaoPass();
 	saveBuffer.bind_WithoutSettingViewport();
 	saveBuffer.clear();
 	renderOnScreenPass();
@@ -118,11 +124,22 @@ void Renderer::save(int width, int height, const std::string& filepath, int nbSa
 }
 
 void Renderer::denoiseNormals(Texture2D& texture, float samplingInverseOffset) {
+	Shader& shader = Locate::shaderLibrary()[m_denoiseNormalsShaderLID];
+	shader.bind();
+	shader.setUniform1f("inverseOffset", samplingInverseOffset);
+	drawOnTexture(texture, shader);
+}
+
+void Renderer::blurSSAOtexture(Texture2D& texture) {
+	Shader& shader = Locate::shaderLibrary()[m_blurSSAOtextureShaderLID];
+	shader.bind();
+	drawOnTexture(texture, shader);
+}
+
+void Renderer::drawOnTexture(Texture2D& texture, Shader& shader) {
 	m_postProcessBuffer.attachTexture(texture);
 	texture.attachToSlotAndBind();
-	Locate::shaderLibrary()[m_denoiseNormalsShaderLID].bind();
-	Locate::shaderLibrary()[m_denoiseNormalsShaderLID].setUniform1i("u_TextureSlot", texture.getSlot());
-	Locate::shaderLibrary()[m_denoiseNormalsShaderLID].setUniform1f("inverseOffset", samplingInverseOffset);
+	shader.setUniform1i("u_TextureSlot", texture.getSlot());
 	m_postProcessBuffer.bind();
 	drawFullScreenQuad();
 	m_postProcessBuffer.unbind();

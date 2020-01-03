@@ -32,11 +32,14 @@ public:
 
 	void drawScene();
 	void geometryPass();
+	void ssaoPass();
 	void lightingPass();
 	void renderOnScreenPass();
 	void save(int width, int height, const std::string& filepath, int nbSamplesForMSAA = 4);
 
 	void denoiseNormals(Texture2D& texture, float samplingInverseOffset);
+	void blurSSAOtexture(Texture2D& texture);
+	void drawOnTexture(Texture2D& texture, Shader& shader);
 
 	void drawFullScreenQuad();
 
@@ -70,6 +73,7 @@ private:
 
 	FrameBuffer m_postProcessBuffer;
 	size_t m_denoiseNormalsShaderLID;
+	size_t m_blurSSAOtextureShaderLID;
 	bool m_bDenoiseNormals;
 	float m_denoiseNormalSamplingInverseOffset;
 

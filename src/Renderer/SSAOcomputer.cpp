@@ -3,6 +3,7 @@
 #include <random>
 
 #include "Debugging/gl-exception.h"
+#include "Debugging/Log.hpp"
 
 #include "Helper/Maths.hpp"
 
@@ -65,14 +66,7 @@ void SSAOcomputer::generateRandomThings() {
     m_noiseTexture.initialize(4, 4, m_noiseVectors.data());
 }
 
-#include <imgui/imgui.h>
 void SSAOcomputer::compute() {
-    ImGui::Begin("reload");
-    if (ImGui::Button("Reload")) {
-        Locate::shaderLibrary()[SSAOshaderLID].compile();
-        Locate::renderer().SSAOmatrixUniforms().sendUniformsTo(SSAOshaderLID);
-    }
-    ImGui::End();
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
     GLCall(glClearColor(0.0, 0.0, 0.0, 0.0));
     GLCall(glClear(GL_COLOR_BUFFER_BIT));
