@@ -30,7 +30,7 @@ struct MaterialParameters{
  
 vec3 albedo() {
     MaterialParameters u_ = params[vMaterialIndex];
-	vec3 uv = vPosInObject + u_.Offset; 
+	vec3 uv = vPosInWorld + u_.Offset; 
 	vec3 color; 
  
 	float t = pow(u_.starIntensity * snoise(uv * u_.noiseScale + u_.distortOutScale*snoise(uv*u_.distortInScale)), u_.starIntensityPow); 
