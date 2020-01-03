@@ -39,17 +39,21 @@ void main()
     mat3 TBN       = mat3(tangent, bitangent, normalInView); 
 
     float occlusion = 0.0;
+    int nbSamplesUsed = 0;
     for(int i = 0; i < KernelSize; ++i){
         vec3 samplePt = posInView + TBN * u_SampleKernel[i] * u_Radius; 
         vec4 offset = vec4(samplePt, 1.0);
         offset      = u_ProjMat * offset;
         offset.xyz /= offset.w;
         offset.xyz  = offset.xyz * 0.5 + 0.5;
-        
-        float sampleDepth = (u_ViewMat * vec4(texture(gPosInWorldSpec, offset.xy).xyz, 1.0)).z; 
-        float rangeCheck = smoothstep(0.0, 1.0, u_Radius / abs(posInView.z - sampleDepth));
-        occlusion += (sampleDepth >= samplePt.z + u_Bias ? 1.0 : 0.0) * rangeCheck;
+
+        if (texture(gAlbedo, offset.xy).a > 0.95){   // Make sure the sample actually belongs to the rendered scene and isn't uninitialized memory
+            nbSamplesUsed++;
+            float sampleDepth = (u_ViewMat * vec4(texture(gPosInWorldSpec, offset.xy).xyz, 1.0)).z; 
+            float rangeCheck = smoothstep(0.0, 1.0, u_Radius / abs(posInView.z - sampleDepth));
+            occlusion += (sampleDepth >= samplePt.z + u_Bias ? 1.0 : 0.0) * rangeCheck;
+        }
     } 
 
-    FragColor = pow(1.0 - (occlusion / KernelSize), u_Power);
+    FragColor = pow(1.0 - (occlusion / nbSamplesUsed), u_Power);
 }
