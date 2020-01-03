@@ -12,6 +12,8 @@
 #include "Helper/File.hpp"
 #include "Renderer.hpp"
 
+#include <imgui/imgui.h>
+
 size_t SSAOcomputer::SSAOshaderLID;
 
 void SSAOcomputer::Initialize() {
@@ -20,7 +22,10 @@ void SSAOcomputer::Initialize() {
 }
 
 SSAOcomputer::SSAOcomputer()
-    : m_noiseTexture(GL_RGB16F, GL_RGB, GL_FLOAT, GL_NEAREST, GL_REPEAT),
+    : m_radius("Radius", HistoryType::Lights, 0.5f, 0.001f, 2.0f),
+      m_bias("Bias", HistoryType::Lights, 0.025f, 0.001f, 0.1f),
+      m_power("Power", HistoryType::Lights, 1.0f, 0.0f, 5.0f),
+      m_noiseTexture(GL_RGB16F, GL_RGB, GL_FLOAT, GL_NEAREST, GL_REPEAT),
       m_ambiantOcclusionTexture(GL_RED, GL_RGB, GL_FLOAT, GL_NEAREST)
 {
     generateRandomThings();
@@ -71,6 +76,10 @@ void SSAOcomputer::compute() {
     GLCall(glClearColor(0.0, 0.0, 0.0, 0.0));
     GLCall(glClear(GL_COLOR_BUFFER_BIT));
     Locate::shaderLibrary()[SSAOshaderLID].bind();
+    // Send parameters
+    m_radius.sendTo(Locate::shaderLibrary()[SSAOshaderLID], "u_Radius");
+    m_bias.sendTo(Locate::shaderLibrary()[SSAOshaderLID], "u_Bias");
+    m_power.sendTo(Locate::shaderLibrary()[SSAOshaderLID], "u_Power");
     // Attach textures
         // Position map
     Locate::renderer().m_gBuffer.positionSpecularintensityTexture().attachToSlotAndBind();
@@ -88,7 +97,7 @@ void SSAOcomputer::compute() {
     for(int k = 0; k < m_sampleKernel.size(); ++k)
         Locate::shaderLibrary()[SSAOshaderLID].setUniform3f("u_SampleKernel["+std::to_string(k)+"]", m_sampleKernel[k]);
     // Send screen resolution
-    Locate::shaderLibrary()[SSAOshaderLID].setUniform2f("u_ScreenResolution", glm::vec2(Locate::renderer().getWidth(), Locate::renderer().getHeight()));
+    Locate::shaderLibrary()[SSAOshaderLID].setUniform2f("u_ScreenResolution", glm::vec2(m_ambiantOcclusionTexture.getWidth(), m_ambiantOcclusionTexture.getHeight()));
     // Draw
     Locate::renderer().drawFullScreenQuad();
     // Detach textures
@@ -97,4 +106,10 @@ void SSAOcomputer::compute() {
     Locate::renderer().m_gBuffer.normalShininessTexture().detachAndUnbind();
     Locate::renderer().m_gBuffer.positionSpecularintensityTexture().detachAndUnbind();
     GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+}
+
+void SSAOcomputer::ImGui_ParametersSliders() {
+    m_radius.ImGui_Slider();
+    m_bias.ImGui_Slider();
+    m_power.ImGui_Slider();
 }

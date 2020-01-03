@@ -179,7 +179,7 @@ void Renderer::ImGui_Menu() {
 		ImGui::ColorPicker4("Background color", (float*)&m_clearColor);
 		ImGui::EndMenu();
 	}
-	if (ImGui::BeginMenu("Render : ")) {
+	if (ImGui::BeginMenu("Render ")) {
 		int item_current = (int)m_whatToRender;
 		ImGui::PushID((int)&m_whatToRender);
 		ImGui::Combo("", &item_current, " Final Image\0 Albedo Map\0 Normal Map\0 Position Map\0 Ambient Occlusion Map\0 Specular Intensity Map\0 Shininess Map\0\0");
@@ -194,6 +194,7 @@ void Renderer::ImGui_Menu() {
 	}	
 	if (ImGui::BeginMenu("Ambient Occlusion")) {
 		ImGui::Checkbox("Active", &m_bUseAmbientOcclusion);
+		m_SSAOcomputer.ImGui_ParametersSliders();
 		ImGui::EndMenu();
 	}
 }
