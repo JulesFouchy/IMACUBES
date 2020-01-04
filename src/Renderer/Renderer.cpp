@@ -142,7 +142,7 @@ void Renderer::save(int width, int height, const std::string& filepath, int nbSa
 	saveBuffer.clear();
 	renderOnScreenPass();
 	saveBuffer.save(filepath);
-	saveBuffer.unbind_WithoutRestoringViewport();
+	saveBuffer.unbind();
 	if (m_bUseAmbientOcclusion)
 		m_SSAOcomputer.setSize(m_windowWidth, m_windowHeight);
 	m_gBuffer.setSize(m_windowWidth, m_windowHeight);
