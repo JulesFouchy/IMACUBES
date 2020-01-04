@@ -101,7 +101,7 @@ void App::onLoopIteration() {
 
 
 	// ----------------PLAYGROUND!------------------
-	m_camera.update(1.0f / 60.0f);
+	m_camera.update();
 	m_lightsManager.setUniforms(m_shaderLibrary.uniformList(UniformList::Lights));
 	onViewMatrixChange();
 	m_renderer.drawScene();

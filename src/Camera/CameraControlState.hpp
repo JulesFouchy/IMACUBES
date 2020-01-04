@@ -12,7 +12,7 @@ public:
 		: m_camera(camera), m_mouseInitialPosInInches(Input::MousePositionInInches()) {}
 	~CameraControlState() = default;
 public:
-	virtual void update(float dt) {};
+	virtual void update() {};
 	virtual void onWheelDown() {};
 	virtual void onWheelUp() {};
 	virtual void onWheelScroll(float dl) {};

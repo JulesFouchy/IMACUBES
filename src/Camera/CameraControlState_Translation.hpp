@@ -9,7 +9,7 @@ public:
 	CameraControlState_Translation(Camera* camera);
 	~CameraControlState_Translation() = default;
 
-	void update(float dt) override;
+	void update() override;
 
 	void onWheelUp() override;
 

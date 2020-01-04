@@ -32,7 +32,7 @@ public:
 	inline void mustRecomputeTransformMatrix() { m_bMustRecomputeTransformMatrix = true; m_bMustRecomputeNormalMatrix = true; }
 	inline void mustRecomputeProjectionMatrix() { m_bMustRecomputeProjectionMatrix = true; }
 
-	inline void update(float dt) { m_controlState->update(dt); }
+	inline void update() { m_controlState->update(); }
 
 	inline void onWheelDown() { m_controlState->onWheelDown(); }
 	inline void onWheelUp()   { m_controlState->onWheelUp();   }

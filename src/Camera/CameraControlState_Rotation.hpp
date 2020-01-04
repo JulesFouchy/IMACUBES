@@ -8,7 +8,7 @@ public:
 	CameraControlState_Rotation(Camera* camera);
 	~CameraControlState_Rotation() = default;
 
-	void update(float dt) override;
+	void update() override;
 
 	void onWheelUp() override;
 
