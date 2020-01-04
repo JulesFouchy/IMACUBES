@@ -25,5 +25,6 @@ private:
 	int m_dirLightIndex;
 	Uniform<SphericalCoordinates_AngularPart> m_direction;
 
+	bool m_bCastShadows;
 	ShadowMapBuffer m_shadowMapBuffer;
 };

@@ -33,6 +33,7 @@ uniform vec3 u_CamPosInWorld;
 uniform bool u_bUseAmbientOcclusion;
 uniform sampler2D u_AmbientOcclusionMap;
 
+uniform bool u_bCastShadows[DEFINE_ME_nbDirectionalLights];
 uniform mat4 u_LightVPMatrices[DEFINE_ME_nbDirectionalLights];
 uniform sampler2D u_ShadowMaps[DEFINE_ME_nbDirectionalLights];
 uniform float u_ShadowBias;
@@ -40,23 +41,27 @@ uniform float u_ShadowBias;
 in vec2 vTexCoords;
 
 float shadow(int dirLightIndex){
-	vec4 posInLightSpace = u_LightVPMatrices[dirLightIndex] * vec4(texture(gPosInWorld_SpecularIntensity, vTexCoords).rgb, 1.0);
-	vec3 projCoords = posInLightSpace.xyz / posInLightSpace.w;
-	if(projCoords.z > 1.0) // we're outside of light's view frustum
-        return 1.0;
-	projCoords = projCoords * 0.5 + 0.5; 
+	if(u_bCastShadows[dirLightIndex]){
+		vec4 posInLightSpace = u_LightVPMatrices[dirLightIndex] * vec4(texture(gPosInWorld_SpecularIntensity, vTexCoords).rgb, 1.0);
+		vec3 projCoords = posInLightSpace.xyz / posInLightSpace.w;
+		if(projCoords.z > 1.0) // we're outside of light's view frustum
+			return 1.0;
+		projCoords = projCoords * 0.5 + 0.5; 
 
-	float currentDepth = projCoords.z;
-	float notShadow = 0.0;
-	vec2 texelSize = 1.0 / textureSize(u_ShadowMaps[dirLightIndex], 0);
-	for(int x = -1; x <= 1; ++x) {
-		for(int y = -1; y <= 1; ++y) {
-			float pcfDepth = texture(u_ShadowMaps[dirLightIndex], projCoords.xy + vec2(x, y) * texelSize).r; 
-			notShadow += currentDepth - u_ShadowBias > pcfDepth ? 1.0 : 0.0;        
-		}    
+		float currentDepth = projCoords.z;
+		float notShadow = 0.0;
+		vec2 texelSize = 1.0 / textureSize(u_ShadowMaps[dirLightIndex], 0);
+		for(int x = -1; x <= 1; ++x) {
+			for(int y = -1; y <= 1; ++y) {
+				float pcfDepth = texture(u_ShadowMaps[dirLightIndex], projCoords.xy + vec2(x, y) * texelSize).r; 
+				notShadow += currentDepth - u_ShadowBias > pcfDepth ? 1.0 : 0.0;        
+			}    
+		}
+		notShadow /= 9.0;
+		return 1.0 - notShadow;
 	}
-	notShadow /= 9.0;
-	return 1.0 - notShadow;
+	else
+		return 1.0;
 }
 
 void main(){
