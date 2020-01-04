@@ -56,8 +56,6 @@ bool menger(const glm::ivec3& pos) {
 }
 
 void App::onInit() {
-	// ----------------PLAYGROUND!------------------
-
 	m_renderer.initAfterApp();
 	m_lightsManager.initAfterApp();
 	m_camera.initAfterApp();
@@ -100,7 +98,7 @@ void App::onLoopIteration() {
 	ImGui_RightSideWindow();
 
 
-	// ----------------PLAYGROUND!------------------
+	// ------------------------------------------------
 	m_camera.update();
 	m_lightsManager.setUniforms(m_shaderLibrary.uniformList(UniformList::Lights));
 	onViewMatrixChange();
