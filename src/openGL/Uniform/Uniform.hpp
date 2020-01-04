@@ -20,8 +20,8 @@ public:
 
 	void sendTo(Shader& shader, const std::string& name) override;
 
-	void ImGui_Slider() override;
-	void ImGui_Drag(float speed = 1.0f) override;
+	bool ImGui_Slider() override;
+	bool ImGui_Drag(float speed = 1.0f) override;
 
 	UniformAbstract* createPtrWithSameData() override {
 		return new Uniform<T>(getName(), m_historyType, value(), m_minValue, m_maxValue);

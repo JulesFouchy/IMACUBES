@@ -12,17 +12,19 @@ template <>
 void Uniform<int>::sendTo(Shader& shader, const std::string& name) {
 	shader.setUniform1i(name, value());
 }
-void Uniform<int>::ImGui_Slider() {
+bool Uniform<int>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	ImGui::SliderInt(getName().c_str(), &value(), m_minValue, m_maxValue);
+	bool b = ImGui::SliderInt(getName().c_str(), &value(), m_minValue, m_maxValue);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
+	return b;
 }
-void Uniform<int>::ImGui_Drag(float speed) {
+bool Uniform<int>::ImGui_Drag(float speed) {
 	ImGui::PushID((int)&m_value);
-	ImGui::DragInt(getName().c_str(), &value(), speed);
+	bool b = ImGui::DragInt(getName().c_str(), &value(), speed);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
+	return b;
 }
 
 /*------------------------------------
@@ -32,17 +34,19 @@ template <>
 void Uniform<float>::sendTo(Shader& shader, const std::string& name) {
 	shader.setUniform1f(name, value());
 }
-void Uniform<float>::ImGui_Slider() {
+bool Uniform<float>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	ImGui::SliderFloat(getName().c_str(), &value(), m_minValue, m_maxValue);
+	bool b = ImGui::SliderFloat(getName().c_str(), &value(), m_minValue, m_maxValue);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
+	return b;
 }
-void Uniform<float>::ImGui_Drag(float speed) {
+bool Uniform<float>::ImGui_Drag(float speed) {
 	ImGui::PushID((int)&m_value);
-	ImGui::DragFloat(getName().c_str(), &value(), speed);
+	bool b = ImGui::DragFloat(getName().c_str(), &value(), speed);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
+	return b;
 }
 
 /*------------------------------------
@@ -52,17 +56,19 @@ template <>
 void Uniform<glm::vec2>::sendTo(Shader& shader, const std::string& name) {
 	shader.setUniform2f(name, value());
 }
-void Uniform<glm::vec2>::ImGui_Slider() {
+bool Uniform<glm::vec2>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	ImGui::SliderFloat2(getName().c_str(), glm::value_ptr(value()), m_minValue.x, m_maxValue.x);
+	bool b = ImGui::SliderFloat2(getName().c_str(), glm::value_ptr(value()), m_minValue.x, m_maxValue.x);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
+	return b;
 }
-void Uniform<glm::vec2>::ImGui_Drag(float speed) {
+bool Uniform<glm::vec2>::ImGui_Drag(float speed) {
 	ImGui::PushID((int)&m_value);
-	ImGui::DragFloat2(getName().c_str(), glm::value_ptr(value()), speed);
+	bool b = ImGui::DragFloat2(getName().c_str(), glm::value_ptr(value()), speed);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
+	return b;
 }
 
 /*------------------------------------
@@ -72,17 +78,19 @@ template <>
 void Uniform<glm::vec3>::sendTo(Shader& shader, const std::string& name) {
 	shader.setUniform3f(name, value());
 }
-void Uniform<glm::vec3>::ImGui_Slider() {
+bool Uniform<glm::vec3>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	ImGui::ColorPicker3(getName().c_str(), glm::value_ptr(value()));
+	bool b = ImGui::ColorPicker3(getName().c_str(), glm::value_ptr(value()));
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
+	return b;
 }
-void Uniform<glm::vec3>::ImGui_Drag(float speed) {
+bool Uniform<glm::vec3>::ImGui_Drag(float speed) {
 	ImGui::PushID((int)&m_value);
-	ImGui::DragFloat3(getName().c_str(), glm::value_ptr(value()), speed);
+	bool b = ImGui::DragFloat3(getName().c_str(), glm::value_ptr(value()), speed);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
+	return b;
 }
 
 /*------------------------------------
@@ -92,17 +100,19 @@ template <>
 void Uniform<glm::vec4>::sendTo(Shader& shader, const std::string& name) {
 	shader.setUniform4f(name, value());
 }
-void Uniform<glm::vec4>::ImGui_Slider() {
+bool Uniform<glm::vec4>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	ImGui::ColorPicker4(getName().c_str(), glm::value_ptr(value()));
+	bool b = ImGui::ColorPicker4(getName().c_str(), glm::value_ptr(value()));
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
+	return b;
 }
-void Uniform<glm::vec4>::ImGui_Drag(float speed) {
+bool Uniform<glm::vec4>::ImGui_Drag(float speed) {
 	ImGui::PushID((int)&m_value);
-	ImGui::DragFloat4(getName().c_str(), glm::value_ptr(value()), speed);
+	bool b = ImGui::DragFloat4(getName().c_str(), glm::value_ptr(value()), speed);
 	ImGui::PopID();
 	pushChangeInHistory_IfNecessary();
+	return b;
 }
 
 /*------------------------------------
@@ -112,14 +122,15 @@ template <>
 void Uniform<SphericalCoordinates_AngularPart>::sendTo(Shader& shader, const std::string& name) {
 	shader.setUniform2f(name, glm::vec2(value().angleUp(), value().angleGround()));
 }
-void Uniform<SphericalCoordinates_AngularPart>::ImGui_Slider() {
+bool Uniform<SphericalCoordinates_AngularPart>::ImGui_Slider() {
 	ImGui::PushID((int)&m_value);
-	value()._ImGui_AngleUpSlider();
+	bool b = value()._ImGui_AngleUpSlider();
 	pushChangeInHistory_IfNecessary();
-	value()._ImGui_AngleGroundSlider();
+	b |= value()._ImGui_AngleGroundSlider();
 	pushChangeInHistory_IfNecessary();
 	ImGui::PopID();
+	return b;
 }
-void Uniform<SphericalCoordinates_AngularPart>::ImGui_Drag(float speed) {
-	ImGui_Slider();
+bool Uniform<SphericalCoordinates_AngularPart>::ImGui_Drag(float speed) {
+	return ImGui_Slider();
 }

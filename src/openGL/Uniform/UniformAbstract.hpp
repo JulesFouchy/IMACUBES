@@ -24,8 +24,8 @@ public:
 	inline  void sendTo(size_t shaderLID, const std::string& name) { sendTo(GetShader(shaderLID), name); }
 	inline  void sendTo(size_t shaderLID) { sendTo(shaderLID, getName()); }
 
-	virtual void ImGui_Slider() = 0;
-	virtual void ImGui_Drag(float speed = 1.0f) = 0;
+	virtual bool ImGui_Slider() = 0;
+	virtual bool ImGui_Drag(float speed = 1.0f) = 0;
 
 	virtual UniformAbstract* createPtrWithSameData() = 0;
 

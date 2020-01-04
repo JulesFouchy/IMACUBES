@@ -18,14 +18,14 @@ void ShadowMapBuffer::Initialize() {
 
 ShadowMapBuffer::ShadowMapBuffer()
 	: m_shadowMap(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, GL_NEAREST, GL_CLAMP_TO_BORDER),
-	  m_width(1024), m_height(1024),
+	  m_resolution("Resolution", HistoryType::Lights, 2323, 1, 8192),
+	  m_bias("Bias", HistoryType::Lights, 0.004f, 0.0f, 0.03f),
 	  m_nearPlane("Near plane", HistoryType::Lights, 0.1f, 0.1f, 2.0f), 
 	  m_farPlane("Far plane", HistoryType::Lights, 22.0f, 5.0f, 100.0f),
-	  m_bias("Bias", HistoryType::Lights, 0.004f, 0.0f, 0.03f),
 	  m_cropFactor("Crop factor", HistoryType::Lights, 11.2f, 1.0f, 100.0f),
 	  m_lightDistance("Light distance", HistoryType::Lights, 9.28f, 0.0f, 100.0f)
 {
-	m_shadowMap.setSize(m_width, m_height);
+	m_shadowMap.setSize(m_resolution.getValue(), m_resolution.getValue());
 	m_shadowMap.bind();
 	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
@@ -41,10 +41,10 @@ ShadowMapBuffer::ShadowMapBuffer()
 
 ShadowMapBuffer::ShadowMapBuffer(ShadowMapBuffer&& other) noexcept
 	: m_frameBufferID(other.m_frameBufferID), m_shadowMap(std::move(other.m_shadowMap)),
-	  m_width(other.m_width), m_height(other.m_height),
+	  m_bias(other.m_bias),
+	  m_resolution(other.m_resolution),
 	  m_nearPlane(other.m_nearPlane),
 	  m_farPlane(other.m_farPlane),
-	  m_bias(other.m_bias),
 	  m_cropFactor(other.m_cropFactor),
 	  m_lightDistance(other.m_lightDistance),
 	  m_lightViewMat(other.m_lightViewMat),
@@ -101,7 +101,7 @@ void ShadowMapBuffer::computeProjMat() {
 void ShadowMapBuffer::bind() {
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
 	GLCall(glGetIntegerv(GL_VIEWPORT, m_prevViewportSettings)); // Store viewport settings to restore them when unbinding
-	GLCall(glViewport(0, 0, m_width, m_height));
+	GLCall(glViewport(0, 0, m_resolution.getValue(), m_resolution.getValue()));
 }
 
 void ShadowMapBuffer::unbind() {
@@ -111,6 +111,8 @@ void ShadowMapBuffer::unbind() {
 
 void ShadowMapBuffer::ImGui_Parameters() {
 	m_bias.ImGui_Slider();
+	if (m_resolution.ImGui_Slider())
+		m_shadowMap.setSize(m_resolution.getValue(), m_resolution.getValue());
 	m_nearPlane.ImGui_Slider();
 	m_farPlane.ImGui_Slider();
 	m_lightDistance.ImGui_Slider();
