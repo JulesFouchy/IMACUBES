@@ -22,6 +22,14 @@ float MyMaths::Sign(float x) {
 	return x == 0.0f ? 0.0f : MyMaths::Abs(x) / x;
 }
 
+float MyMaths::Log(float x, float base) {
+	return log(x) / log(base);
+}
+
+int MyMaths::LogInt(int x, int base) {
+	return round(Log(x, base));
+}
+
 float MyMaths::Lerp(float a, float b, float t) {
 	return a + t * (b - a);
 }

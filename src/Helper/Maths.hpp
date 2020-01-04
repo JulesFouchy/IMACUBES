@@ -8,6 +8,8 @@ namespace MyMaths {
 	float Pow(float x, float p);
 	float Abs(float x);
 	float Sign(float x);
+	float Log(float x, float base);
+	int LogInt(int x, int base);
 	
 	float Lerp(float a, float b, float t);
 }
