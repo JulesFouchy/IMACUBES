@@ -2,7 +2,7 @@
 
 #include "UniformDescription.hpp"
 
-#include "UniformConcrete.hpp"
+#include "Uniform.hpp"
 
 template <typename T>
 class UniformDescriptionConcrete : public UniformDescription {
@@ -18,12 +18,12 @@ public:
 		return new UniformDescriptionConcrete(name, historyType, defaultValue, minValue, maxValue);
 	}
 
-	Uniform* createUniformPtr() override {
-		return new UniformConcrete<T>(name, historyType, defaultValue, minValue, maxValue);
+	UniformAbstract* createUniformPtr() override {
+		return new Uniform<T>(name, historyType, defaultValue, minValue, maxValue);
 	}
 
-	void updateThisUniform(Uniform* uniform) override {
-		((UniformConcrete<T>*) uniform)->m_minValue = minValue;
-		((UniformConcrete<T>*) uniform)->m_maxValue = maxValue;
+	void updateThisUniform(UniformAbstract* uniform) override {
+		((Uniform<T>*) uniform)->m_minValue = minValue;
+		((Uniform<T>*) uniform)->m_maxValue = maxValue;
 	}
 };

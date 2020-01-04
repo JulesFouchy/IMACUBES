@@ -15,6 +15,6 @@ public:
 		: name(name), historyType(historyType) {}
 
 	virtual UniformDescription* createPtrWithSameData() = 0;
-	virtual Uniform* createUniformPtr() = 0;
-	virtual void updateThisUniform(Uniform* uniform) = 0;
+	virtual UniformAbstract* createUniformPtr() = 0;
+	virtual void updateThisUniform(UniformAbstract* uniform) = 0;
 };

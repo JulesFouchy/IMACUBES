@@ -15,5 +15,5 @@ public:
 	void ImGui_Sliders() override;
 
 private:
-	UniformConcrete<glm::vec3> m_position;
+	Uniform<glm::vec3> m_position;
 };

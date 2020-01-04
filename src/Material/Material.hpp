@@ -29,8 +29,8 @@ private:
 	inline std::string uniformLightPropName(const std::string& uniformName) { return "lightingProperties[" + std::to_string(m_materialIndex) + "]." + uniformName; }
 
 private:
-	std::vector<Uniform*> m_uniformsStruct;
-	std::vector<Uniform*> m_lightingProperties;
+	std::vector<UniformAbstract*> m_uniformsStruct;
+	std::vector<UniformAbstract*> m_lightingProperties;
 	int m_shaderIndex;
 	int m_materialIndex;
 	std::string m_name;

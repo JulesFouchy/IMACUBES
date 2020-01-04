@@ -1,40 +1,77 @@
 #pragma once
 
-#pragma once
-
-#include <string>
-
-#include "OpenGL/Shader.hpp"
-#include "OpenGL/ShaderLibrary.hpp"
-
-#include "Locator/Locate.hpp"
-
-#include "History/HistoryTypes.hpp"
-
+#include "UniformAbstract.hpp"
 #include "UniformValue.hpp"
 
-class Uniform {
+#include "Locator/Locate.hpp"
+#include "History/History.hpp"
+
+#include <imgui/imgui.h>
+
+template <typename T>
+class Uniform : public UniformAbstract {
+	template <typename T>
+	friend class UniformDescriptionConcrete;
 public:
-	Uniform(const std::string& name, HistoryType historyType)
-		: m_name(name), m_historyType(historyType) {}
+	Uniform(const std::string& name, HistoryType historyType, T value, T minValue = T(0), T maxValue = T(1))
+		: UniformAbstract(name, historyType), m_value(value), m_valueBeforeEditingStarted(value), m_minValue(minValue), m_maxValue(maxValue) {}
 
 	~Uniform() = default;
 
-	virtual void sendTo(Shader& shader, const std::string& name) = 0;
-	inline  void sendTo(size_t shaderLID, const std::string& name) { sendTo(GetShader(shaderLID), name); }
-	inline  void sendTo(size_t shaderLID) { sendTo(shaderLID, getName()); }
+	void sendTo(Shader& shader, const std::string& name) override;
 
-	virtual void ImGui_Slider() = 0;
-	virtual void ImGui_Drag(float speed = 1.0f) = 0;
+	void ImGui_Slider() override;
+	void ImGui_Drag(float speed = 1.0f) override;
 
-	virtual Uniform* createPtrWithSameData() = 0;
+	UniformAbstract* createPtrWithSameData() override {
+		return new Uniform<T>(getName(), m_historyType, value(), m_minValue, m_maxValue);
+	}
+	void setValue(T newVal, bool bPushChangeInHistory = true) {
+		if (bPushChangeInHistory) {
+			m_valueBeforeEditingStarted = value();
+			value() = newVal;
+			pushChangeInHistory();
+			m_valueBeforeEditingStarted = newVal;
+		}
+		else
+			value() = newVal;
+	}
 
-	inline const std::string& getName() const { return m_name; }
+	inline const T& getValue() const { return m_value.get(); }
+
+private:
+	inline T& value() { return m_value.get(); }
+
+	void pushChangeInHistory_IfNecessary() {
+		if (ImGui::IsItemDeactivatedAfterEdit()) {
+			pushChangeInHistory();
+			m_valueBeforeEditingStarted = value(); // ready for next edit
+		}
+	}
+
+	void pushChangeInHistory() {
+		History& history = Locate::history(m_historyType);
+		history.beginUndoGroup();
+		T val = value();
+		T prevVal = m_valueBeforeEditingStarted;
+		history.addAction(Action(
+			// DO action
+			[this, val]()
+		{
+			this->m_value = val;
+		},
+			// UNDO action
+			[this, prevVal]()
+		{
+			this->m_value = prevVal;
+		}
+		));
+		history.endUndoGroup();
+	}
 
 protected:
-	inline static Shader& GetShader(size_t shaderLID) { return Locate::shaderLibrary()[shaderLID]; }
-
-protected:
-	std::string m_name;
-	HistoryType m_historyType;
+	UniformValueConcrete<T> m_value;	
+	T m_valueBeforeEditingStarted;
+	T m_minValue;
+	T m_maxValue;
 };

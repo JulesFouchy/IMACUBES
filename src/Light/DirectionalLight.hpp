@@ -14,5 +14,5 @@ public:
 	void ImGui_Sliders() override;
 
 private:
-	UniformConcrete<SphericalCoordinates_AngularPart> m_direction;
+	Uniform<SphericalCoordinates_AngularPart> m_direction;
 };

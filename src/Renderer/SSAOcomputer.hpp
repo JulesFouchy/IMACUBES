@@ -5,7 +5,7 @@
 
 #include "OpenGL/Texture2D.hpp"
 
-#include "OpenGL/Uniform/UniformConcrete.hpp"
+#include "OpenGL/Uniform/Uniform.hpp"
 
 class SSAOcomputer {
 public:
@@ -26,12 +26,10 @@ private:
 
 	void setKernelSize(int newSize);
 
-	void resetSettings();
-
 private:
-	UniformConcrete<float> m_radius;
-	UniformConcrete<float> m_bias;
-	UniformConcrete<float> m_power;
+	Uniform<float> m_radius;
+	Uniform<float> m_bias;
+	Uniform<float> m_power;
 	int m_kernelSize;
 
 	std::vector<glm::vec3> m_sampleKernel;

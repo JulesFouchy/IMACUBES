@@ -4,7 +4,7 @@
 #include <string>
 
 #include "OpenGL/Uniform/UniformUpdateList.hpp"
-#include "OpenGL/Uniform/UniformConcrete.hpp"
+#include "OpenGL/Uniform/Uniform.hpp"
 
 class Light {
 friend class LightsManager;
@@ -20,6 +20,6 @@ public:
 private:
 	std::string m_name;
 
-	UniformConcrete<glm::vec3> m_color;
-	UniformConcrete<float> m_intensity;
+	Uniform<glm::vec3> m_color;
+	Uniform<float> m_intensity;
 };
