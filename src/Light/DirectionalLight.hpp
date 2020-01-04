@@ -17,6 +17,8 @@ public:
 	void setUniforms(const std::string& uniformName, UniformUpdateList& uniformsList) override;
 	void computeShadowMap();
 	Texture2D& getShadowMap();
+	void ImGui_ShadowParameters();
+
 	void ImGui_Sliders() override;
 
 private:

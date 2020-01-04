@@ -65,7 +65,7 @@ void LightsManager::detachShadowMaps() {
 
 void LightsManager::ImGui_ShadowParameters() {
 	for (DirectionalLight& dirLight : m_directionalLights)
-		dirLight.m_shadowMapBuffer.ImGui_Parameters();
+		dirLight.ImGui_ShadowParameters();
 }
 
 

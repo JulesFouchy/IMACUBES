@@ -28,6 +28,13 @@ Texture2D& DirectionalLight::getShadowMap() {
 	return m_shadowMapBuffer.texture();
 }
 
+void DirectionalLight::ImGui_ShadowParameters() {
+	if (ImGui::BeginMenu(("Dir Light " + std::to_string(m_dirLightIndex)).c_str())) {
+		m_shadowMapBuffer.ImGui_Parameters();
+		ImGui::EndMenu();
+	}
+}
+
 void DirectionalLight::ImGui_Sliders() {
 	Light::ImGui_Sliders();
 	ImGui::Separator();
