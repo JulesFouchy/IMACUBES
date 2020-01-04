@@ -17,6 +17,7 @@ public:
 	~MaterialsForAGivenShader();
 
 	void draw();
+	void draw_WithoutBindingShader();
 	void addMaterial();
 
 	void reloadShader();

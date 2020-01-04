@@ -20,6 +20,12 @@ void MaterialsManager::draw() {
 	}
 }
 
+void MaterialsManager::draw_WithoutBindingShaders() {
+	for (MaterialsForAGivenShader& shader : m_shadersList) {
+		shader.draw_WithoutBindingShader();
+	}
+}
+
 void MaterialsManager::ImGui_ListOfShadersAndMaterials() {
 	ImGuiTabBarFlags tab_bar_flags = ImGuiTabBarFlags_None;
 	if (ImGui::BeginTabBar("MaterialsTabBar", tab_bar_flags))

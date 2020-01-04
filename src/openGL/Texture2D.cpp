@@ -134,6 +134,8 @@ unsigned int Texture2D::BytesPerPixel(GLenum GLpixelFormat) {
 		return 2;
 	case GL_RED:
 		return 1;
+	case GL_DEPTH_COMPONENT:
+		return 1;
 	default:
 		spdlog::error("[Texture2D::BytesPerPixel] Unknown pixel format : {}", (int)GLpixelFormat);
 	}

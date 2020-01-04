@@ -43,6 +43,10 @@ MaterialsForAGivenShader::~MaterialsForAGivenShader() {
 void MaterialsForAGivenShader::draw() {
 	shader().bind();
 	sendUniforms(); // TODO only update uniform on material change
+	draw_WithoutBindingShader();
+}
+
+void MaterialsForAGivenShader::draw_WithoutBindingShader() {
 	m_cubes.draw();
 }
 

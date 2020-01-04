@@ -93,6 +93,7 @@ int main(int argc, char *argv[]) {
 		App::Initialize(window);
 		Texture2D::ClassInitialization();
 		SSAOcomputer::Initialize();
+		ShadowMapBuffer::Initialize();
 
 		// ------ Actual App
 		App::Get().onInit();

@@ -13,6 +13,7 @@ public:
 	~MaterialsManager() = default;
 
 	void draw();
+	void draw_WithoutBindingShaders();
 	void ImGui_ListOfShadersAndMaterials();
 	void ImGui_SelectedMaterialsParameters();
 	void ImGui_AddShaderButton();

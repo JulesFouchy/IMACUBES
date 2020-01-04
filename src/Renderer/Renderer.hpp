@@ -8,6 +8,8 @@
 #include "OpenGL/Uniform/UniformUpdateList.hpp"
 #include "OpenGL/FrameBuffer.hpp"
 
+#include "ShadowMapBuffer.hpp"
+
 #include <string>
 
 enum class WhatToRender {
@@ -16,6 +18,7 @@ enum class WhatToRender {
 	NormalMap,
 	PositionMap,
 	AmbientOcclusionMap,
+	ShadowMap,
 	SpecularIntensityMap,
 	ShininessMap,
 };
@@ -63,6 +66,8 @@ private:
 	GeometryBuffer m_gBuffer;
 	size_t m_lightingPassShaderLID;
 	SSAOcomputer m_SSAOcomputer;
+	ShadowMapBuffer m_shadowMapBuffer;
+
 	WhatToRender m_whatToRender;
 
 	FrameBuffer m_postProcessBuffer;
