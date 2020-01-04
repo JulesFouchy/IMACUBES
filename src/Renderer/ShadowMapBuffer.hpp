@@ -11,17 +11,17 @@ public:
 	ShadowMapBuffer();
 	ShadowMapBuffer(const ShadowMapBuffer& other) = delete;
 	ShadowMapBuffer(ShadowMapBuffer&& other) noexcept;
-	void initAfterApp(const glm::vec3& lightDir);
+	void initAfterApp(const glm::vec3& lightDir, int dirLightIndex);
 	~ShadowMapBuffer();
 	static void Initialize();
 
-	void compute(const glm::vec3& lightDir);
+	void compute(const glm::vec3& lightDir, int dirLightIndex);
 	inline Texture2D& texture() { return m_shadowMap; }
 
 	void ImGui_Parameters();
 
 private:
-	void computeAndSendMatrices(const glm::vec3& lightDir);
+	void computeAndSendMatrices(const glm::vec3& lightDir, int dirLightIndex);
 	void computeViewMat(const glm::vec3& lightDir);
 	void computeProjMat();
 

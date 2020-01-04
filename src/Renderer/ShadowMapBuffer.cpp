@@ -55,18 +55,18 @@ ShadowMapBuffer::ShadowMapBuffer(ShadowMapBuffer&& other) noexcept
 	other.m_frameBufferID = -1;
 }
 
-void ShadowMapBuffer::initAfterApp(const glm::vec3& lightDir) {
-	computeAndSendMatrices(lightDir);
+void ShadowMapBuffer::initAfterApp(const glm::vec3& lightDir, int dirLightIndex) {
+	computeAndSendMatrices(lightDir, dirLightIndex);
 }
 
 ShadowMapBuffer::~ShadowMapBuffer() {
 	GLCall(glDeleteFramebuffers(1, &m_frameBufferID));
 }
 
-void ShadowMapBuffer::compute(const glm::vec3& lightDir) {
+void ShadowMapBuffer::compute(const glm::vec3& lightDir, int dirLightIndex) {
 	bind();
 	//
-	computeAndSendMatrices(lightDir);
+	computeAndSendMatrices(lightDir, dirLightIndex);
 	Locate::shaderLibrary().uniformList(UniformList::Lights).setUniform<float>("u_ShadowBias", m_bias.getValue());
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
 	//GLCall(glCullFace(GL_FRONT));
@@ -77,11 +77,11 @@ void ShadowMapBuffer::compute(const glm::vec3& lightDir) {
 	unbind();
 }
 
-void ShadowMapBuffer::computeAndSendMatrices(const glm::vec3& lightDir) {
+void ShadowMapBuffer::computeAndSendMatrices(const glm::vec3& lightDir, int dirLightIndex) {
 	computeViewMat(lightDir);
 	computeProjMat();
 	m_lightVPMat = getProjMat() * getViewMat();
-	Locate::shaderLibrary().uniformList(UniformList::Lights).setUniform<glm::mat4>("u_LightVPMatrix", m_lightVPMat);
+	Locate::shaderLibrary().uniformList(UniformList::Lights).setUniform<glm::mat4>("u_LightVPMatrices["+std::to_string(dirLightIndex)+"]", m_lightVPMat);
 	Locate::shaderLibrary()[shadowMapShaderLID].bind();
 	Locate::shaderLibrary()[shadowMapShaderLID].setUniformMat4f("u_LightVPMatrix", m_lightVPMat);
 }

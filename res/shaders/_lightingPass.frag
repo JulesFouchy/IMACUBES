@@ -33,14 +33,14 @@ uniform vec3 u_CamPosInWorld;
 uniform bool u_bUseAmbientOcclusion;
 uniform sampler2D u_AmbientOcclusionMap;
 
-uniform mat4 u_LightVPMatrix;
+uniform mat4 u_LightVPMatrices[DEFINE_ME_nbDirectionalLights];
 uniform sampler2D u_ShadowMaps[DEFINE_ME_nbDirectionalLights];
 uniform float u_ShadowBias;
 
 in vec2 vTexCoords;
 
 float shadow(int dirLightIndex){
-	vec4 posInLightSpace = u_LightVPMatrix * vec4(texture(gPosInWorld_SpecularIntensity, vTexCoords).rgb, 1.0);
+	vec4 posInLightSpace = u_LightVPMatrices[dirLightIndex] * vec4(texture(gPosInWorld_SpecularIntensity, vTexCoords).rgb, 1.0);
 	vec3 projCoords = posInLightSpace.xyz / posInLightSpace.w;
 	if(projCoords.z > 1.0) // we're outside of light's view frustum
         return 1.0;

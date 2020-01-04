@@ -23,8 +23,9 @@ void LightsManager::addPointLight(const glm::vec3& position, const glm::vec3& co
 }
 
 void LightsManager::addDirectionalLight(float angleUp, float angleGround, const glm::vec3& color, float intensity) {
-	m_directionalLights.emplace_back(angleUp, angleGround, color, intensity, "DirectionalLight" + std::to_string(m_directionalLights.size()));
-	m_selectedDirectionalIndex = m_directionalLights.size() - 1;
+	int dirLightIndex = m_directionalLights.size();
+	m_directionalLights.emplace_back(dirLightIndex, angleUp, angleGround, color, intensity, "DirectionalLight" + std::to_string(m_directionalLights.size()));
+	m_selectedDirectionalIndex = dirLightIndex;
 	updateNbOfLightsInShaders();
 }
 

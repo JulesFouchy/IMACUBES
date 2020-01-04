@@ -2,14 +2,14 @@
 
 #include <imgui/imgui.h>
 
-DirectionalLight::DirectionalLight(float angleUp, float angleGround, const glm::vec3& color, float intensity, const std::string& name)
-	: Light(name, color, intensity), m_direction("", HistoryType::Lights, SphericalCoordinates_AngularPart(angleUp, angleGround))
+DirectionalLight::DirectionalLight(int dirLightIndex, float angleUp, float angleGround, const glm::vec3& color, float intensity, const std::string& name)
+	: Light(name, color, intensity), m_dirLightIndex(dirLightIndex), m_direction("", HistoryType::Lights, SphericalCoordinates_AngularPart(angleUp, angleGround))
 {
-	m_shadowMapBuffer.initAfterApp(((SphericalCoordinates_AngularPart*)&m_direction.getValue())->getXYZ());
+	m_shadowMapBuffer.initAfterApp(((SphericalCoordinates_AngularPart*)&m_direction.getValue())->getXYZ(), dirLightIndex);
 }
 
 DirectionalLight::DirectionalLight(DirectionalLight&& other) noexcept
-	: Light(other), m_direction(other.m_direction), m_shadowMapBuffer(std::move(other.m_shadowMapBuffer))
+	: Light(other), m_dirLightIndex(other.m_dirLightIndex), m_direction(other.m_direction), m_shadowMapBuffer(std::move(other.m_shadowMapBuffer))
 {
 
 }
@@ -21,7 +21,7 @@ void DirectionalLight::setUniforms(const std::string& uniformName, UniformUpdate
 }
 
 void DirectionalLight::computeShadowMap(){
-	m_shadowMapBuffer.compute(((SphericalCoordinates_AngularPart*)&m_direction.getValue())->getXYZ()); // Type pun to remove const (getXYZ is quasi const so it's OK)
+	m_shadowMapBuffer.compute(((SphericalCoordinates_AngularPart*)&m_direction.getValue())->getXYZ(), m_dirLightIndex); // Type pun to remove const (getXYZ is quasi const so it's OK)
 }
 
 Texture2D& DirectionalLight::getShadowMap() {
