@@ -7,6 +7,7 @@
 class ShadowMapBuffer {
 public:
 	ShadowMapBuffer();
+	void initAfterApp();
 	~ShadowMapBuffer();
 	static void Initialize();
 
@@ -14,7 +15,7 @@ public:
 	inline Texture2D& texture() { return m_shadowMap; }
 
 private:
-	void computeMatrices();
+	void computeAndSendMatrices();
 	void computeViewMat();
 	void computeProjMat();
 

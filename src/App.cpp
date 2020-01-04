@@ -73,18 +73,18 @@ void App::onInit() {
 	onProjMatrixChange();
 
 	Locate::history(HistoryType::Cubes).beginUndoGroup();
-	//for (int x = -m_cubesMap.width()*0.3; x < m_cubesMap.width()*0.3; ++x) {
-	//	for (int z = -m_cubesMap.depth()*0.3; z < m_cubesMap.depth()*0.3; ++z) {
-	//		for (int y = std::max(-(int)m_cubesMap.height()/2, -5); y < 0; ++y) {
-	//			m_cubesMap.addCube(glm::ivec3(x, y, z));
-	//		}
-	//	}
-	//}
-	BoundingBox bbox;
-	for (const glm::ivec3& pos : bbox) {
-		if (menger(pos + glm::ivec3(m_cubesMap.width()/2)))
-			m_cubesMap.addCube(pos);
+	for (int x = -m_cubesMap.width()*0.3; x < m_cubesMap.width()*0.3; ++x) {
+		for (int z = -m_cubesMap.depth()*0.3; z < m_cubesMap.depth()*0.3; ++z) {
+			for (int y = std::max(-(int)m_cubesMap.height()/2, -5); y < 0; ++y) {
+				m_cubesMap.addCube(glm::ivec3(x, y, z));
+			}
+		}
 	}
+	//BoundingBox bbox;
+	//for (const glm::ivec3& pos : bbox) {
+	//	if (menger(pos + glm::ivec3(m_cubesMap.width()/2)))
+	//		m_cubesMap.addCube(pos);
+	//}
 	Locate::history(HistoryType::Cubes).endUndoGroup();
 
 	spdlog::info("-----------APP STARTS-----------");

@@ -33,7 +33,19 @@ uniform vec3 u_CamPosInWorld;
 uniform bool u_bUseAmbientOcclusion;
 uniform sampler2D u_AmbientOcclusionMap;
 
+uniform mat4 u_LightVPMatrix;
+uniform sampler2D u_ShadowMap;
+
 in vec2 vTexCoords;
+
+float shadow(){
+	vec4 posInLightSpace = u_LightVPMatrix * vec4(texture(gPosInWorld_SpecularIntensity, vTexCoords).rgb, 1.0);
+	vec3 projCoords = posInLightSpace.xyz / posInLightSpace.w;
+	projCoords = projCoords * 0.5 + 0.5; 
+	float closestDepth = texture(u_ShadowMap, projCoords.xy).r;
+	float currentDepth = projCoords.z;
+	return currentDepth < closestDepth  ? 1.0 : 0.0;
+}
 
 void main(){
 	if( texture(gAlbedo, vTexCoords).a < 0.95) // these pixels belong to the clearColor background and shouldn't be lit
@@ -69,11 +81,11 @@ void main(){
 		// Diffuse
 		float dpDiffuse = -dot(normal, u_directionals[i].direction);
 		if( dpDiffuse > 0.0)
-			lightColorDiffuse += dpDiffuse * lightCol;
+			lightColorDiffuse += dpDiffuse * lightCol * shadow();
 		// Specular
 		float dpSpecular = -dot(camRayReflection, u_directionals[i].direction);
 		if( dpSpecular > 0.0 )
-			lightColorSpecular += specularStrength * pow(dpSpecular, shininess) * lightCol;
+			lightColorSpecular += specularStrength * pow(dpSpecular, shininess) * lightCol * shadow();
 	}
 	//
 	vec3 lightColor = min(lightColorDiffuse, 1.0) + lightColorSpecular;
