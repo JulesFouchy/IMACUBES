@@ -5,7 +5,6 @@
 
 #include "Debugging/Log.hpp"
 #include "OpenGL/Uniform/UniformDescriptionFactory.hpp"
-#include "UI/Settings.hpp"
 
 #include "Locator/Locate.hpp"
 #include "OpenGL/Uniform/UniformUpdateList.hpp"
@@ -48,13 +47,12 @@ void MaterialsForAGivenShader::draw() {
 	m_cubes.draw();
 }
 
+#include "Renderer/Renderer.hpp"
 void MaterialsForAGivenShader::addMaterial() {
-	if (m_materials.size() < Settings::MAX_NB_OF_MATERIALS_FOR_A_GIVEN_SHADER) {
-		m_materials.emplace_back(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(shader().getFragmentFilepath())) + std::to_string(m_materials.size()), m_structLayout, m_shaderIndex, (int)m_materials.size());
-		Locate::materialsManager().setSelectedMaterial(m_shaderIndex, (int)m_materials.size() - 1);
-	}
-	else
-		spdlog::warn("Sorry you can't have more than {} materials for a given shader :/", Settings::MAX_NB_OF_MATERIALS_FOR_A_GIVEN_SHADER);
+	m_materials.emplace_back(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(shader().getFragmentFilepath())) + std::to_string(m_materials.size()), m_structLayout, m_shaderIndex, (int)m_materials.size());
+	Locate::materialsManager().setSelectedMaterial(m_shaderIndex, (int)m_materials.size() - 1);
+	shader().compile("DEFINE_ME_nbOfMaterials", std::to_string(m_materials.size()));
+	Locate::renderer().cameraUniforms().sendUniformsTo(m_shaderLID);
 }
 
 void MaterialsForAGivenShader::reloadShader() {

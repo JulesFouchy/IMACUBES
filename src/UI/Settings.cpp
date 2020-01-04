@@ -8,8 +8,6 @@ const float Settings::DEFAULT_CAMERA_SCALE_RADIUS_PER_SCROLL = 0.9f;
 const float Settings::DEFAULT_CAMERA_FIELD_OF_VIEW = 0.79f;
 // Cursor visual
 bool Settings::SHOW_CURSOR_THROUGH_CUBES = false;
-// OpenGL limitations
-const int Settings::MAX_NB_OF_MATERIALS_FOR_A_GIVEN_SHADER = 16;
 
 //
 float Settings::CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH = DEFAULT_CAMERA_ROTATION_SPEED_IN_TURNS_PER_INCH;

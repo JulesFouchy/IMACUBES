@@ -135,7 +135,7 @@ std::string Shader::parseFile(const std::string& filepath, const std::vector<std
 			std::string filepathToInclude = MyString::GetNextWord(line, &pos, " ,;()|\t\"");
 			filepathToInclude = MyFile::rootDir + "/res/shaders/" + filepathToInclude; // make absolute path
 			spdlog::info("Including |{}|", filepathToInclude);
-			str += parseFile(filepathToInclude);
+			str += parseFile(filepathToInclude, vectLookFor, vectReplaceWith);
 		}
 		// Simply add line
 		else {

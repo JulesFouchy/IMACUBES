@@ -15,5 +15,6 @@ struct LightingProperties{
 	float Shininess;
 };
 
-uniform MaterialParameters params[16];
-uniform LightingProperties lightingProperties[16];
+//? const int DEFINE_ME_nbOfMaterials = 1;
+uniform MaterialParameters params[DEFINE_ME_nbOfMaterials];
+uniform LightingProperties lightingProperties[DEFINE_ME_nbOfMaterials];
