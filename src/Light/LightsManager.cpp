@@ -13,7 +13,7 @@ LightsManager::LightsManager()
 
 void LightsManager::initAfterApp() {
 	addPointLight(glm::vec3(0.0f), glm::vec3(1.0f), 0.0f);
-	addDirectionalLight(3.441, -1.22, glm::vec3(1.0), 0.45);
+	addDirectionalLight(3.441, -0.96, glm::vec3(1.0), 0.45);
 }
 
 void LightsManager::addPointLight(const glm::vec3& position, const glm::vec3& color, float intensity) {
