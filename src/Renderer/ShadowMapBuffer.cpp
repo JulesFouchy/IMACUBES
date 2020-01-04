@@ -17,11 +17,16 @@ void ShadowMapBuffer::Initialize() {
 }
 
 ShadowMapBuffer::ShadowMapBuffer()
-	: m_shadowMap(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, GL_NEAREST, GL_REPEAT),
+	: m_shadowMap(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, GL_NEAREST, GL_CLAMP_TO_BORDER),
 	  m_width(1024), m_height(1024),
-	  m_nearPlane(0.1f), m_farPlane(300.0f)
+	  m_nearPlane(1.0f), m_farPlane(7.5f)
 {
 	m_shadowMap.setSize(m_width, m_height);
+	m_shadowMap.bind();
+	float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+	m_shadowMap.unbind();
+	//
 	GLCall(glGenFramebuffers(1, &m_frameBufferID));
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID)); 
 	GLCall(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_shadowMap.getID(), 0));
@@ -44,7 +49,9 @@ void ShadowMapBuffer::compute() {
 	//
 	computeAndSendMatrices();
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
+	//GLCall(glCullFace(GL_FRONT));
 	Locate::materialsManager().draw_WithoutBindingShaders();
+	//GLCall(glCullFace(GL_BACK));
 	//
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	GLCall(glViewport(0, 0, Locate::renderer().getWidth(), Locate::renderer().getHeight()));
@@ -60,7 +67,7 @@ void ShadowMapBuffer::computeAndSendMatrices() {
 }
 
 void ShadowMapBuffer::computeViewMat() {
-	m_lightViewMat = glm::lookAt(glm::vec3(20.0f, 8.0f, -1.0f)*5.0f,
+	m_lightViewMat = glm::lookAt(glm::vec3(20.0f, 8.0f, -1.0f)*0.1f,
 								 glm::vec3(0.0f, 0.0f, 0.0f),
 								 glm::vec3(0.0f, 1.0f, 0.0f));
 }

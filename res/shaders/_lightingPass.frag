@@ -39,12 +39,13 @@ uniform sampler2D u_ShadowMap;
 in vec2 vTexCoords;
 
 float shadow(){
+	float bias = 0.005;
 	vec4 posInLightSpace = u_LightVPMatrix * vec4(texture(gPosInWorld_SpecularIntensity, vTexCoords).rgb, 1.0);
 	vec3 projCoords = posInLightSpace.xyz / posInLightSpace.w;
 	projCoords = projCoords * 0.5 + 0.5; 
 	float closestDepth = texture(u_ShadowMap, projCoords.xy).r;
 	float currentDepth = projCoords.z;
-	return currentDepth < closestDepth  ? 1.0 : 0.0;
+	return currentDepth < closestDepth + bias  ? 1.0 : 0.0;
 }
 
 void main(){
