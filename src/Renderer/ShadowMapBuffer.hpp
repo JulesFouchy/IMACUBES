@@ -36,9 +36,11 @@ private:
 
 	int m_width;
 	int m_height;
-	float m_nearPlane;
-	float m_farPlane;
+	Uniform<float> m_nearPlane;
+	Uniform<float> m_farPlane;
 	Uniform<float> m_bias;
+	Uniform<float> m_cropFactor;
+	Uniform<float> m_lightDistance;
 
 	glm::mat4 m_lightViewMat;
 	glm::mat4 m_lightProjMat;

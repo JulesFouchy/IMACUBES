@@ -67,6 +67,7 @@ void main(){
 	float specularStrength = texture(gPosInWorld_SpecularIntensity, vTexCoords).a;
 	float shininess = texture(gNormalShininess, vTexCoords).a;
 	vec3  albedo = texture(gAlbedo, vTexCoords).rgb;
+	float shadowVal = shadow();
 
 	vec3 camRayReflection = normalize(reflect(posInWorld-u_CamPosInWorld, normal));
 	// Ambiant
@@ -97,7 +98,7 @@ void main(){
 		// Specular
 		float dpSpecular = -dot(camRayReflection, u_directionals[i].direction);
 		if( dpSpecular > 0.0 )
-			lightColorSpecular += specularStrength * pow(dpSpecular, shininess) * lightCol * shadow();
+			lightColorSpecular += specularStrength * pow(dpSpecular, shininess) * lightCol * shadowVal;
 	}
 	//
 	vec3 lightColor = min(lightColorDiffuse, 1.0) + lightColorSpecular;

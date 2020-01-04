@@ -19,8 +19,11 @@ void ShadowMapBuffer::Initialize() {
 ShadowMapBuffer::ShadowMapBuffer()
 	: m_shadowMap(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, GL_NEAREST, GL_CLAMP_TO_BORDER),
 	  m_width(1024), m_height(1024),
-	  m_nearPlane(1.0f), m_farPlane(7.5f),
-	  m_bias("Bias", HistoryType::Lights, 0.005f, 0.0f, 0.03f)
+	  m_nearPlane("Near plane", HistoryType::Lights, 1.0f, 0.1f, 2.0f), 
+	  m_farPlane("Far plane", HistoryType::Lights, 15.0f, 5.0f, 100.0f),
+	  m_bias("Bias", HistoryType::Lights, 0.005f, 0.0f, 0.03f),
+	  m_cropFactor("Crop factor", HistoryType::Lights, 10.0f, 1.0f, 100.0f),
+	  m_lightDistance("Light distance", HistoryType::Lights, 5.0f, 0.0f, 100.0f)
 {
 	m_shadowMap.setSize(m_width, m_height);
 	m_shadowMap.bind();
@@ -68,13 +71,14 @@ void ShadowMapBuffer::computeAndSendMatrices() {
 }
 
 void ShadowMapBuffer::computeViewMat() {
-	m_lightViewMat = glm::lookAt(glm::vec3(20.0f, 8.0f, -1.0f)*0.1f,
+	m_lightViewMat = glm::lookAt(glm::normalize(glm::vec3(20.0f, 8.0f, -1.0f))*m_lightDistance.getValue(),
 								 glm::vec3(0.0f, 0.0f, 0.0f),
 								 glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 void ShadowMapBuffer::computeProjMat() {
-	m_lightProjMat = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, m_nearPlane, m_farPlane);
+	float c = m_cropFactor.getValue();
+	m_lightProjMat = glm::ortho(-c, c, -c, c, m_nearPlane.getValue(), m_farPlane.getValue());
 }
 
 
@@ -91,4 +95,8 @@ void ShadowMapBuffer::unbind() {
 
 void ShadowMapBuffer::ImGui_Parameters() {
 	m_bias.ImGui_Slider();
+	m_nearPlane.ImGui_Slider();
+	m_farPlane.ImGui_Slider();
+	m_cropFactor.ImGui_Slider();
+	m_lightDistance.ImGui_Slider();
 }
