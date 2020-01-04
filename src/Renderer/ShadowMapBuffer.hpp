@@ -4,6 +4,8 @@
 
 #include <glm/glm.hpp>
 
+#include "OpenGL/Uniform/Uniform.hpp"
+
 class ShadowMapBuffer {
 public:
 	ShadowMapBuffer();
@@ -13,6 +15,8 @@ public:
 
 	void compute();
 	inline Texture2D& texture() { return m_shadowMap; }
+
+	void ImGui_Parameters();
 
 private:
 	void computeAndSendMatrices();
@@ -34,6 +38,7 @@ private:
 	int m_height;
 	float m_nearPlane;
 	float m_farPlane;
+	Uniform<float> m_bias;
 
 	glm::mat4 m_lightViewMat;
 	glm::mat4 m_lightProjMat;

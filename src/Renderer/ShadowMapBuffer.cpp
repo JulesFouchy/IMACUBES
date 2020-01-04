@@ -19,7 +19,8 @@ void ShadowMapBuffer::Initialize() {
 ShadowMapBuffer::ShadowMapBuffer()
 	: m_shadowMap(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, GL_NEAREST, GL_CLAMP_TO_BORDER),
 	  m_width(1024), m_height(1024),
-	  m_nearPlane(1.0f), m_farPlane(7.5f)
+	  m_nearPlane(1.0f), m_farPlane(7.5f),
+	  m_bias("Bias", HistoryType::Lights, 0.005f, 0.0f, 0.03f)
 {
 	m_shadowMap.setSize(m_width, m_height);
 	m_shadowMap.bind();
@@ -47,8 +48,10 @@ void ShadowMapBuffer::compute() {
 	bind();
 	//
 	computeAndSendMatrices();
+	Locate::shaderLibrary().uniformList(UniformList::Lights).setUniform<float>("u_ShadowBias", m_bias.getValue());
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
 	//GLCall(glCullFace(GL_FRONT));
+	Locate::shaderLibrary()[shadowMapShaderLID].bind();
 	Locate::materialsManager().draw_WithoutBindingShaders();
 	//GLCall(glCullFace(GL_BACK));
 	//
@@ -84,4 +87,8 @@ void ShadowMapBuffer::bind() {
 void ShadowMapBuffer::unbind() {
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 	GLCall(glViewport(m_prevViewportSettings[0], m_prevViewportSettings[1], m_prevViewportSettings[2], m_prevViewportSettings[3]));
+}
+
+void ShadowMapBuffer::ImGui_Parameters() {
+	m_bias.ImGui_Slider();
 }

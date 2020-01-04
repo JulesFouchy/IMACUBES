@@ -218,4 +218,9 @@ void Renderer::ImGui_Menu() {
 		m_SSAOcomputer.ImGui_Parameters();
 		ImGui::EndMenu();
 	}
+	if (ImGui::BeginMenu("Shadows")) {
+		//ImGui::Checkbox("Active", &m_bUseAmbientOcclusion);
+		m_shadowMapBuffer.ImGui_Parameters();
+		ImGui::EndMenu();
+	}
 }
