@@ -19,11 +19,11 @@ void ShadowMapBuffer::Initialize() {
 ShadowMapBuffer::ShadowMapBuffer()
 	: m_shadowMap(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, GL_NEAREST, GL_CLAMP_TO_BORDER),
 	  m_width(1024), m_height(1024),
-	  m_nearPlane("Near plane", HistoryType::Lights, 1.0f, 0.1f, 2.0f), 
-	  m_farPlane("Far plane", HistoryType::Lights, 15.0f, 5.0f, 100.0f),
-	  m_bias("Bias", HistoryType::Lights, 0.005f, 0.0f, 0.03f),
-	  m_cropFactor("Crop factor", HistoryType::Lights, 10.0f, 1.0f, 100.0f),
-	  m_lightDistance("Light distance", HistoryType::Lights, 5.0f, 0.0f, 100.0f)
+	  m_nearPlane("Near plane", HistoryType::Lights, 0.1f, 0.1f, 2.0f), 
+	  m_farPlane("Far plane", HistoryType::Lights, 22.0f, 5.0f, 100.0f),
+	  m_bias("Bias", HistoryType::Lights, 0.004f, 0.0f, 0.03f),
+	  m_cropFactor("Crop factor", HistoryType::Lights, 11.2f, 1.0f, 100.0f),
+	  m_lightDistance("Light distance", HistoryType::Lights, 9.28f, 0.0f, 100.0f)
 {
 	m_shadowMap.setSize(m_width, m_height);
 	m_shadowMap.bind();
@@ -113,6 +113,6 @@ void ShadowMapBuffer::ImGui_Parameters() {
 	m_bias.ImGui_Slider();
 	m_nearPlane.ImGui_Slider();
 	m_farPlane.ImGui_Slider();
-	m_cropFactor.ImGui_Slider();
 	m_lightDistance.ImGui_Slider();
+	m_cropFactor.ImGui_Slider();
 }
