@@ -13,6 +13,8 @@ enum class PixelFormat {
 class Texture2D {
 public:
 	Texture2D(GLint GLpixelInternalFormat = GL_RGBA8, GLenum GLpixelFormat = GL_RGBA, GLenum GLpixelType = GL_UNSIGNED_BYTE, GLint interpolationMode = GL_LINEAR, GLint wrapMode = GL_CLAMP_TO_EDGE);
+	Texture2D(const Texture2D& other) = delete;
+	Texture2D(Texture2D&& other) noexcept;
 	void initialize(int width, int height, void* pixels = nullptr);
 	void setSize(int width, int height);
 	void setToScreenSize();

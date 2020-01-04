@@ -9,6 +9,8 @@
 class ShadowMapBuffer {
 public:
 	ShadowMapBuffer();
+	ShadowMapBuffer(const ShadowMapBuffer& other) = delete;
+	ShadowMapBuffer(ShadowMapBuffer&& other) noexcept;
 	void initAfterApp(const glm::vec3& lightDir);
 	~ShadowMapBuffer();
 	static void Initialize();

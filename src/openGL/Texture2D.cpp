@@ -26,6 +26,18 @@ Texture2D::Texture2D(GLint GLpixelInternalFormat, GLenum GLpixelFormat, GLenum G
 	GLCall(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
+Texture2D::Texture2D(Texture2D&& other) noexcept
+	: m_width(other.m_width), m_height(other.m_height), m_aspectRatio(other.m_aspectRatio),
+	m_bytesPerPixel(other.m_bytesPerPixel),
+	m_GLpixelInternalFormat(other.m_GLpixelInternalFormat),
+	m_GLpixelFormat(other.m_GLpixelFormat),
+	m_GLpixelType(other.m_GLpixelType),
+	m_textureID(other.m_textureID),
+	m_textureSlot(-1)
+{
+	other.m_textureID = -1;
+}
+
 void Texture2D::initialize(int width, int height, void* pixels) {
 	m_width = width;
 	m_height = height;

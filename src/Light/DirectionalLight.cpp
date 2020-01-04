@@ -8,6 +8,12 @@ DirectionalLight::DirectionalLight(float angleUp, float angleGround, const glm::
 	m_shadowMapBuffer.initAfterApp(((SphericalCoordinates_AngularPart*)&m_direction.getValue())->getXYZ());
 }
 
+DirectionalLight::DirectionalLight(DirectionalLight&& other) noexcept
+	: Light(other), m_direction(other.m_direction), m_shadowMapBuffer(std::move(other.m_shadowMapBuffer))
+{
+
+}
+
 void DirectionalLight::setUniforms(const std::string& uniformName, UniformUpdateList& uniformsList) {
 	Light::setUniforms(uniformName, uniformsList);
 	glm::vec3 dir = ((SphericalCoordinates_AngularPart*) &m_direction.getValue())->getXYZ(); // Type pun to remove const (getXYZ is quasi const so it's OK)

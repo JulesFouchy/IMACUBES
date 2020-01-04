@@ -39,6 +39,22 @@ ShadowMapBuffer::ShadowMapBuffer()
 	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
 }
 
+ShadowMapBuffer::ShadowMapBuffer(ShadowMapBuffer&& other) noexcept
+	: m_frameBufferID(other.m_frameBufferID), m_shadowMap(std::move(other.m_shadowMap)),
+	  m_width(other.m_width), m_height(other.m_height),
+	  m_nearPlane(other.m_nearPlane),
+	  m_farPlane(other.m_farPlane),
+	  m_bias(other.m_bias),
+	  m_cropFactor(other.m_cropFactor),
+	  m_lightDistance(other.m_lightDistance),
+	  m_lightViewMat(other.m_lightViewMat),
+	  m_lightProjMat(other.m_lightProjMat),
+	  m_lightVPMat(other.m_lightVPMat)
+
+{
+	other.m_frameBufferID = -1;
+}
+
 void ShadowMapBuffer::initAfterApp(const glm::vec3& lightDir) {
 	computeAndSendMatrices(lightDir);
 }

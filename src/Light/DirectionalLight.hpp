@@ -10,6 +10,8 @@ class DirectionalLight : public Light {
 friend class LightsManager;
 public:
 	DirectionalLight(float angleUp, float angleGround, const glm::vec3& color, float intensity, const std::string& name = "DirectionalLight");
+	DirectionalLight(const DirectionalLight& other) = delete;
+	DirectionalLight(DirectionalLight&& other) noexcept;
 	~DirectionalLight() = default;
 
 	void setUniforms(const std::string& uniformName, UniformUpdateList& uniformsList) override;
