@@ -39,15 +39,24 @@ uniform sampler2D u_ShadowMap;
 in vec2 vTexCoords;
 
 float shadow(){
-	float bias = 0.005;
+	float bias = 0.008;
 	vec4 posInLightSpace = u_LightVPMatrix * vec4(texture(gPosInWorld_SpecularIntensity, vTexCoords).rgb, 1.0);
 	vec3 projCoords = posInLightSpace.xyz / posInLightSpace.w;
 	if(projCoords.z > 1.0) // we're outside of light's view frustum
         return 1.0;
 	projCoords = projCoords * 0.5 + 0.5; 
-	float closestDepth = texture(u_ShadowMap, projCoords.xy).r;
+
 	float currentDepth = projCoords.z;
-	return currentDepth < closestDepth + bias  ? 1.0 : 0.0;
+	float notShadow = 0.0;
+	vec2 texelSize = 1.0 / textureSize(u_ShadowMap, 0);
+	for(int x = -1; x <= 1; ++x) {
+		for(int y = -1; y <= 1; ++y) {
+			float pcfDepth = texture(u_ShadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+			notShadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
+		}    
+	}
+	notShadow /= 9.0;
+	return 1.0 - notShadow;
 }
 
 void main(){
