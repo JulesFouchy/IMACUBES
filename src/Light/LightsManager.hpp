@@ -35,6 +35,8 @@ public:
 	Light* selectedLight();
 	void trySetSelectedPointLightPosition(const glm::vec3& position);
 
+	inline DirectionalLight& selectedDirectionalLight() { return m_directionalLights[m_selectedDirectionalIndex]; }
+
 private:
 	void updateNbOfLightsInShaders();
 

@@ -113,7 +113,7 @@ void Renderer::renderOnScreenPass() {
 		m_SSAOcomputer.texture().showFullScreen();
 		break;
 	case WhatToRender::ShadowMap:
-		//m_shadowMapBuffer.texture().showFullScreen();
+		Locate::lightsManager().selectedDirectionalLight().shadowMap().showFullScreen();
 		break;
 	case WhatToRender::SpecularIntensityMap:
 		m_gBuffer.positionSpecularintensityTexture().showFullScreen(PixelFormat::A);
@@ -201,7 +201,7 @@ void Renderer::ImGui_Menu() {
 	if (ImGui::BeginMenu("Render ")) {
 		int item_current = (int)m_whatToRender;
 		ImGui::PushID((int)&m_whatToRender);
-		ImGui::Combo("", &item_current, " Final Image\0 Albedo Map\0 Normal Map\0 Position Map\0 Ambient Occlusion Map\0 Shadow Map\0 Specular Intensity Map\0 Shininess Map\0\0");
+		ImGui::Combo("", &item_current, " Final Image\0 Albedo Map\0 Normal Map\0 Position Map\0 Ambient Occlusion Map\0 Shadow Map of selected light\0 Specular Intensity Map\0 Shininess Map\0\0");
 		ImGui::PopID();
 		m_whatToRender = (WhatToRender)item_current;
 		ImGui::EndMenu();

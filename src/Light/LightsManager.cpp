@@ -51,7 +51,7 @@ void LightsManager::computeShadowMaps() {
 void LightsManager::attachAndSendShadowMaps(Shader& shader) {
 	int k = 0;
 	for (DirectionalLight& dirLight : m_directionalLights) {
-		Texture2D& shadowMap = dirLight.getShadowMap();
+		Texture2D& shadowMap = dirLight.shadowMap();
 		shadowMap.attachToSlotAndBind();
 		shader.setUniform1i("u_ShadowMaps["+std::to_string(k)+"]", shadowMap.getSlot());
 		k++;
@@ -60,7 +60,7 @@ void LightsManager::attachAndSendShadowMaps(Shader& shader) {
 
 void LightsManager::detachShadowMaps() {
 	for (DirectionalLight& dirLight : m_directionalLights)
-		dirLight.getShadowMap().detachAndUnbind();
+		dirLight.shadowMap().detachAndUnbind();
 }
 
 void LightsManager::ImGui_ShadowParameters() {

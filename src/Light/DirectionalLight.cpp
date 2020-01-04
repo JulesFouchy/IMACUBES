@@ -24,7 +24,7 @@ void DirectionalLight::computeShadowMap(){
 	m_shadowMapBuffer.compute(((SphericalCoordinates_AngularPart*)&m_direction.getValue())->getXYZ(), m_dirLightIndex); // Type pun to remove const (getXYZ is quasi const so it's OK)
 }
 
-Texture2D& DirectionalLight::getShadowMap() {
+Texture2D& DirectionalLight::shadowMap() {
 	return m_shadowMapBuffer.texture();
 }
 
