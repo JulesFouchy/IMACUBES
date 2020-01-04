@@ -18,10 +18,12 @@ struct DirectionalLight{
 };
 
 uniform AmbiantLight u_ambiant;
-uniform PointLight[16] u_points;
-uniform int u_nbOfPointLights;
-uniform DirectionalLight[16] u_directionals;
-uniform int u_nbOfDirectionalLights;
+//? const int DEFINE_ME_nbPointLights = 1;
+uniform PointLight[DEFINE_ME_nbPointLights] u_points;
+const int nbOfPointLights = DEFINE_ME_nbPointLights;
+//? const int DEFINE_ME_nbDirectionalLights = 1;
+uniform DirectionalLight[DEFINE_ME_nbDirectionalLights] u_directionals;
+const int nbOfDirectionalLights = DEFINE_ME_nbDirectionalLights;
 
 uniform sampler2D gPosInWorld_SpecularIntensity;
 uniform sampler2D gNormalShininess;
@@ -47,7 +49,7 @@ void main(){
 	vec3 lightColorDiffuse = u_ambiant.color * u_ambiant.intensity * (u_bUseAmbientOcclusion ? texture(u_AmbientOcclusionMap, vTexCoords).r : 1.0);
 	vec3 lightColorSpecular = vec3(0.0);
 	// Point
-	for( int i = 0; i < u_nbOfPointLights; ++i){
+	for( int i = 0; i < nbOfPointLights; ++i){
 		vec3 lightCol = u_points[i].color * u_points[i].intensity;
 		float distSq = dot(u_points[i].position - posInWorld, u_points[i].position - posInWorld);
 		float dist = sqrt(distSq);
@@ -62,7 +64,7 @@ void main(){
 			lightColorSpecular += specularStrength * pow(dpSpecular, shininess) / distSq * lightCol;
 	}
 	// Directional
-	for( int i = 0; i < u_nbOfDirectionalLights; ++i){
+	for( int i = 0; i < nbOfDirectionalLights; ++i){
 		vec3 lightCol = u_directionals[i].color * u_directionals[i].intensity;
 		// Diffuse
 		float dpDiffuse = -dot(normal, u_directionals[i].direction);

@@ -28,7 +28,8 @@ Renderer::Renderer(SDL_Window* window)
 
 void Renderer::initAfterApp() {
 	m_SSAOcomputer.initAfterApp();
-	m_lightingPassShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_lightingPass.vert", MyFile::rootDir + "/res/shaders/_lightingPass.frag");
+	m_lightingPassShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_lightingPass.vert", MyFile::rootDir + "/res/shaders/_lightingPass.frag", false);
+	setNumberOfLights(0, 0); // this compiles m_lightingPassShaderLID and #defines the number of lights
 	m_lightUniforms.addSubscriber(m_lightingPassShaderLID);
 	m_denoiseNormalsShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_denoiseNormals.frag");
 	m_blurSSAOtextureShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_blur1ChannelTexture.frag");
@@ -173,6 +174,12 @@ void Renderer::onWindowResize() {
 	m_gBuffer.setSize(w, h);
 	// Update SSAO buffer
 	m_SSAOcomputer.setSize(w, h);
+}
+
+void Renderer::setNumberOfLights(int nbOfPointLights, int nbOfDirectionalLights) {
+	std::vector<std::string> replaceMe = { "DEFINE_ME_nbPointLights", "DEFINE_ME_nbDirectionalLights" };
+	std::vector<std::string> with = { std::to_string(nbOfPointLights),  std::to_string(nbOfDirectionalLights) };
+	Locate::shaderLibrary()[m_lightingPassShaderLID].compile(replaceMe, with);
 }
 
 void Renderer::ImGui_Menu() {

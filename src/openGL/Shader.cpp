@@ -42,8 +42,9 @@ void Shader::bind() const {
 	glUseProgram(m_shaderId);
 }
 
-void Shader::compile(const std::string& lookForInFS , const std::string& replaceWithInFS , const std::string& lookForInVS, const std::string& replaceWithInVS) {
-	spdlog::info("[Compiling Shader] " + m_vertexShaderFilepath + " & " +m_fragmentShaderFilepath);
+
+void Shader::compile(const std::vector<std::string>& lookForInFS, const std::vector<std::string>& replaceWithInFS, const std::vector<std::string>& lookForInVS, const std::vector<std::string>& replaceWithInVS) {
+	spdlog::info("[Compiling Shader] " + m_vertexShaderFilepath + " & " + m_fragmentShaderFilepath);
 	if (m_shaderId == -1) {
 		m_shaderId = glCreateProgram();
 	}
@@ -64,6 +65,14 @@ void Shader::compile(const std::string& lookForInFS , const std::string& replace
 
 	m_UniformLocationCache = std::unordered_map<std::string, int>(); // reset uniform locations
 	Log::separationLine();
+}
+
+void Shader::compile(const std::string& lookForInFS , const std::string& replaceWithInFS , const std::string& lookForInVS, const std::string& replaceWithInVS) {
+	std::vector<std::string> vectLookForInFS     = { lookForInFS };
+	std::vector<std::string> vectReplaceWithInFS = { replaceWithInFS };
+	std::vector<std::string> vectLookForInVS     = { lookForInVS };
+	std::vector<std::string> vectReplaceWithInVS = { replaceWithInVS };
+	compile(vectLookForInFS, vectReplaceWithInFS, vectLookForInVS, vectReplaceWithInVS);
 }
 
 //Uniforms
@@ -103,7 +112,7 @@ void Shader::setUniformMat4f(const std::string& uniformName, const glm::mat4& ma
 
 /* Utilities to open files and compile shaders */
 
-std::string Shader::parseFile(const std::string& filepath, const std::string& lookFor, const std::string& replaceWith) {
+std::string Shader::parseFile(const std::string& filepath, const std::vector<std::string>& vectLookFor, const std::vector<std::string>& vectReplaceWith) {
 	std::ifstream stream(filepath);
 	if (!stream.is_open()) {
 		spdlog::warn("[Shader::parseFile] Failed to open file |{}|", filepath);
@@ -115,7 +124,8 @@ std::string Shader::parseFile(const std::string& filepath, const std::string& lo
 	std::string line = "";
 	while (getline(stream, line)) {
 		// Look for something to replace
-		MyString::ReplaceAll(line, lookFor, replaceWith);
+		for( int k = 0; k < vectLookFor.size(); ++k)
+			MyString::ReplaceAll(line, vectLookFor[k], vectReplaceWith[k]);
 		// Look for '#include'
 		size_t includePos = line.find("#include");
 		size_t commPos = line.find("//");

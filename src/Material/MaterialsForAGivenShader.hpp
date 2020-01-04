@@ -31,6 +31,7 @@ private:
 
 	void parseShaderAndCreateUniformDescriptions(const std::string& fragmentFilepath);
 	void updateMaterialsLayout();
+
 private:
 	size_t m_shaderLID;
 	CubesGroup m_cubes;

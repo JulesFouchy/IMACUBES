@@ -49,6 +49,8 @@ public:
 	inline UniformUpdateList& SSAOmatrixUniforms() { return m_SSAOmatrixUniforms; }
 	inline UniformUpdateList& lightUniforms() { return m_lightUniforms; }
 
+	void setNumberOfLights(int nbOfPointLights, int nbOfDirectionalLights);
+
 	inline float getWidth() { return m_windowWidth; }
 	inline float getHeight() { return m_windowHeight; }
 	inline float getRatio() { return m_windowWidth / m_windowHeight; }

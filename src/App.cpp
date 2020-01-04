@@ -59,6 +59,7 @@ void App::onInit() {
 	// ----------------PLAYGROUND!------------------
 
 	m_renderer.initAfterApp();
+	m_lightsManager.initAfterApp();
 	m_camera.initAfterApp();
 	m_cursorShaderLID = m_shaders.LoadShader(MyFile::rootDir+"/res/shaders/_cursor.vert", MyFile::rootDir + "/res/shaders/_cursor.frag");
 	m_renderer.cameraUniforms().addSubscriber(m_cursorShaderLID);

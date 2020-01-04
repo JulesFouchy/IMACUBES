@@ -13,7 +13,8 @@ public:
 	~Shader();
 
 	void bind() const;
-	void compile(const std::string& lookForInFS = "", const std::string& replaceWithInFS = "", const std::string& lookForInVS = "", const std::string& replaceWithInVS = "");
+	void compile(const std::vector<std::string>& lookForInFS = { "" }, const std::vector<std::string>& replaceWithInFS = { "" }, const std::vector<std::string>& lookForInVS = { "" }, const std::vector<std::string>& replaceWithInVS = { "" });
+	void compile(const std::string& lookForInFS, const std::string& replaceWithInFS, const std::string& lookForInVS = "", const std::string& replaceWithInVS = "");
 
 	inline bool createdSuccessfully() const { return m_bCreatedSuccessfully; }
 
@@ -29,7 +30,7 @@ public:
 
 private:
 	int getUniformLocation(std::string uniformName);
-	std::string parseFile(const std::string& filepath, const std::string& lookFor = "", const std::string& replaceWith = "");
+	std::string parseFile(const std::string& filepath, const std::vector<std::string>& lookFor = { "" }, const std::vector<std::string>& replaceWith = { "" });
 	unsigned int compileShader(unsigned int type, const std::string& source);
 
 private:

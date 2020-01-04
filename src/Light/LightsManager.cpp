@@ -4,32 +4,32 @@
 
 #include "Debugging/Log.hpp"
 
-#include "UI/Settings.hpp"
+#include "Renderer/Renderer.hpp"
 
 LightsManager::LightsManager()
 	: m_selectedLightType(LightType::Directional), m_selectedPointIndex(0), m_selectedDirectionalIndex(0),
 	  m_ambiantLight("Ambiant Light")
-{
+{}
+
+void LightsManager::initAfterApp() {
 	addPointLight(glm::vec3(0.0f), glm::vec3(1.0f), 0.0f);
 	addDirectionalLight(3.441, -1.22, glm::vec3(1.0), 0.45);
 }
 
 void LightsManager::addPointLight(const glm::vec3& position, const glm::vec3& color, float intensity) {
-	if (m_pointLights.size() < Settings::MAX_NB_OF_LIGHTS_OF_A_GIVEN_TYPE) {
-		m_pointLights.emplace_back(position, color, intensity, "PointLight" + std::to_string(m_pointLights.size()));
-		m_selectedPointIndex = m_pointLights.size() - 1;
-	}
-	else
-		spdlog::warn("Sorry you can't have more than {} lights of a given type :/", Settings::MAX_NB_OF_LIGHTS_OF_A_GIVEN_TYPE);
+	m_pointLights.emplace_back(position, color, intensity, "PointLight" + std::to_string(m_pointLights.size()));
+	m_selectedPointIndex = m_pointLights.size() - 1;
+	updateNbOfLightsInShaders();
 }
 
 void LightsManager::addDirectionalLight(float angleUp, float angleGround, const glm::vec3& color, float intensity) {
-	if (m_directionalLights.size() < Settings::MAX_NB_OF_LIGHTS_OF_A_GIVEN_TYPE) {
-		m_directionalLights.emplace_back(angleUp, angleGround, color, intensity, "DirectionalLight" + std::to_string(m_directionalLights.size()));
-		m_selectedDirectionalIndex = m_directionalLights.size() - 1;
-	}
-	else
-		spdlog::warn("Sorry you can't have more than {} lights of a given type :/", Settings::MAX_NB_OF_LIGHTS_OF_A_GIVEN_TYPE);
+	m_directionalLights.emplace_back(angleUp, angleGround, color, intensity, "DirectionalLight" + std::to_string(m_directionalLights.size()));
+	m_selectedDirectionalIndex = m_directionalLights.size() - 1;
+	updateNbOfLightsInShaders();
+}
+
+void LightsManager::updateNbOfLightsInShaders() {
+	Locate::renderer().setNumberOfLights(m_pointLights.size(), m_directionalLights.size());
 }
 
 void LightsManager::duplicateSelectedPointLight() {

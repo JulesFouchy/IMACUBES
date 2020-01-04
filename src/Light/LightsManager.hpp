@@ -3,22 +3,18 @@
 #include "Light.hpp"
 #include "PointLight.hpp"
 #include "DirectionalLight.hpp"
+#include "LightTypes.hpp"
 
 #include "OpenGL/Uniform/UniformUpdateList.hpp"
 
 #include <vector>
 #include <glm/glm.hpp>
 
-enum class LightType {
-	Ambiant,
-	Point,
-	Directional
-};
-
 class LightsManager {
 public:
 	LightsManager();
 	~LightsManager() = default;
+	void initAfterApp();
 
 	void addPointLight(const glm::vec3& position, const glm::vec3& color = glm::vec3(1.0f), float intensity = 5.0f);
 	void addDirectionalLight(float angleUp, float angleGround, const glm::vec3& color = glm::vec3(1.0f), float intensity = 1.0f);
@@ -33,6 +29,9 @@ public:
 
 	Light* selectedLight();
 	void trySetSelectedPointLightPosition(const glm::vec3& position);
+
+private:
+	void updateNbOfLightsInShaders();
 
 private:
 	LightType m_selectedLightType;
