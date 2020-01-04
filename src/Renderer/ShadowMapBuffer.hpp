@@ -9,18 +9,18 @@
 class ShadowMapBuffer {
 public:
 	ShadowMapBuffer();
-	void initAfterApp();
+	void initAfterApp(const glm::vec3& lightDir);
 	~ShadowMapBuffer();
 	static void Initialize();
 
-	void compute();
+	void compute(const glm::vec3& lightDir);
 	inline Texture2D& texture() { return m_shadowMap; }
 
 	void ImGui_Parameters();
 
 private:
-	void computeAndSendMatrices();
-	void computeViewMat();
+	void computeAndSendMatrices(const glm::vec3& lightDir);
+	void computeViewMat(const glm::vec3& lightDir);
 	void computeProjMat();
 
 	inline const glm::mat4& getViewMat()     { return m_lightViewMat;}

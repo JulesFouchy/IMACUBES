@@ -6,6 +6,7 @@ enum class HistoryType;
 class CubesMap;
 class ShaderLibrary;
 class Renderer;
+class LightsManager;
 
 class Locate {
 public:
@@ -14,4 +15,5 @@ public:
 	static CubesMap& cubesMap();
 	static ShaderLibrary& shaderLibrary();
 	static Renderer& renderer();
+	static LightsManager& lightsManager();
 };

@@ -42,6 +42,32 @@ void LightsManager::duplicateSelectedDirectionalLight() {
 	addDirectionalLight(light.m_direction.getValue().getAngleGround(), light.m_direction.getValue().getAngleUp(), light.m_color.getValue(), light.m_intensity.getValue());
 }
 
+void LightsManager::computeShadowMaps() {
+	for (DirectionalLight& dirLight : m_directionalLights)
+		dirLight.computeShadowMap();
+}
+
+void LightsManager::attachAndSendShadowMaps(Shader& shader) {
+	int k = 0;
+	for (DirectionalLight& dirLight : m_directionalLights) {
+		Texture2D& shadowMap = dirLight.getShadowMap();
+		shadowMap.attachToSlotAndBind();
+		shader.setUniform1i("u_ShadowMaps["+std::to_string(k)+"]", shadowMap.getSlot());
+		k++;
+	}
+}
+
+void LightsManager::detachShadowMaps() {
+	for (DirectionalLight& dirLight : m_directionalLights)
+		dirLight.getShadowMap().detachAndUnbind();
+}
+
+void LightsManager::ImGui_ShadowParameters() {
+	for (DirectionalLight& dirLight : m_directionalLights)
+		dirLight.m_shadowMapBuffer.ImGui_Parameters();
+}
+
+
 void LightsManager::setUniforms(UniformUpdateList& list) {
 	// Ambiant
 	m_ambiantLight.setUniforms("u_ambiant", list);

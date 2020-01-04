@@ -4,6 +4,8 @@
 
 #include "Helper/SphericalCoordinates_AngularPart.hpp"
 
+#include "Renderer/ShadowMapBuffer.hpp"
+
 class DirectionalLight : public Light {
 friend class LightsManager;
 public:
@@ -11,8 +13,12 @@ public:
 	~DirectionalLight() = default;
 
 	void setUniforms(const std::string& uniformName, UniformUpdateList& uniformsList) override;
+	void computeShadowMap();
+	Texture2D& getShadowMap();
 	void ImGui_Sliders() override;
 
 private:
 	Uniform<SphericalCoordinates_AngularPart> m_direction;
+
+	ShadowMapBuffer m_shadowMapBuffer;
 };

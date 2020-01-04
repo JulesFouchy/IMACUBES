@@ -21,6 +21,11 @@ public:
 	void duplicateSelectedPointLight();
 	void duplicateSelectedDirectionalLight();
 
+	void computeShadowMaps();
+	void attachAndSendShadowMaps(Shader& shader);
+	void detachShadowMaps();
+	void ImGui_ShadowParameters();
+
 	void setUniforms(UniformUpdateList& list);
 
 	void ImGui_LightsList();

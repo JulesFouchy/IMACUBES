@@ -67,7 +67,6 @@ private:
 	GeometryBuffer m_gBuffer;
 	size_t m_lightingPassShaderLID;
 	SSAOcomputer m_SSAOcomputer;
-	ShadowMapBuffer m_shadowMapBuffer;
 
 	WhatToRender m_whatToRender;
 

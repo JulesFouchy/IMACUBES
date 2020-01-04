@@ -9,6 +9,7 @@
 #include "Material/MaterialsManager.hpp"
 #include "OpenGL/ShaderLibrary.hpp"
 #include "CubesMap/CubesMap.hpp"
+#include "Light/LightsManager.hpp"
 
 #include "OpenGL/SaveBufferMultisampled.hpp"
 
@@ -28,7 +29,6 @@ Renderer::Renderer(SDL_Window* window)
 
 void Renderer::initAfterApp() {
 	m_SSAOcomputer.initAfterApp();
-	m_shadowMapBuffer.initAfterApp();
 	m_lightingPassShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_lightingPass.vert", MyFile::rootDir + "/res/shaders/_lightingPass.frag", false);
 	setNumberOfLights(0, 0); // this compiles m_lightingPassShaderLID and #defines the number of lights
 	Locate::shaderLibrary().addSubscriberToList(m_lightingPassShaderLID, UniformList::Lights);
@@ -61,12 +61,11 @@ void Renderer::ssaoPass() {
 }
 
 void Renderer::shadowPass() {
-	m_shadowMapBuffer.compute();
+	Locate::lightsManager().computeShadowMaps();
 }
 
 void Renderer::lightingPass() {
 	// Attach textures
-	m_shadowMapBuffer.texture().attachToSlotAndBind();
 	m_gBuffer.positionSpecularintensityTexture().attachToSlotAndBind();
 	m_gBuffer.normalShininessTexture().attachToSlotAndBind();
 	m_gBuffer.albedoTexture().attachToSlotAndBind();
@@ -74,7 +73,7 @@ void Renderer::lightingPass() {
 		m_SSAOcomputer.texture().attachToSlotAndBind();
 	// Send texture slots
 	Locate::shaderLibrary()[m_lightingPassShaderLID].bind();
-	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("u_ShadowMap", m_shadowMapBuffer.texture().getSlot());
+	Locate::lightsManager().attachAndSendShadowMaps(Locate::shaderLibrary()[m_lightingPassShaderLID]);
 	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gPosInWorld_SpecularIntensity", m_gBuffer.positionSpecularintensityTexture().getSlot());
 	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gNormalShininess", m_gBuffer.normalShininessTexture().getSlot());
 	Locate::shaderLibrary()[m_lightingPassShaderLID].setUniform1i("gAlbedo", m_gBuffer.albedoTexture().getSlot());
@@ -90,7 +89,7 @@ void Renderer::lightingPass() {
 	m_gBuffer.albedoTexture().detachAndUnbind();
 	m_gBuffer.normalShininessTexture().detachAndUnbind();
 	m_gBuffer.positionSpecularintensityTexture().detachAndUnbind();
-	m_shadowMapBuffer.texture().detachAndUnbind();
+	Locate::lightsManager().detachShadowMaps();
 }
 
 void Renderer::renderOnScreenPass() {
@@ -114,8 +113,7 @@ void Renderer::renderOnScreenPass() {
 		m_SSAOcomputer.texture().showFullScreen();
 		break;
 	case WhatToRender::ShadowMap:
-		m_shadowMapBuffer.compute();
-		m_shadowMapBuffer.texture().showFullScreen();
+		//m_shadowMapBuffer.texture().showFullScreen();
 		break;
 	case WhatToRender::SpecularIntensityMap:
 		m_gBuffer.positionSpecularintensityTexture().showFullScreen(PixelFormat::A);
@@ -220,7 +218,7 @@ void Renderer::ImGui_Menu() {
 	}
 	if (ImGui::BeginMenu("Shadows")) {
 		//ImGui::Checkbox("Active", &m_bUseAmbientOcclusion);
-		m_shadowMapBuffer.ImGui_Parameters();
+		Locate::lightsManager().ImGui_ShadowParameters();
 		ImGui::EndMenu();
 	}
 }

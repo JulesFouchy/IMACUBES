@@ -9,6 +9,7 @@
 #include "OpenGL/ShaderLibrary.hpp"
 #include "OpenGL/Uniform/UniformUpdateList.hpp"
 #include "Renderer/Renderer.hpp"
+#include "Light/LightsManager.hpp"
 
 MaterialsManager& Locate::materialsManager() {
 	return App::Get().m_cubesMap.materialsManager();
@@ -28,4 +29,8 @@ ShaderLibrary& Locate::shaderLibrary() {
 
 Renderer& Locate::renderer() {
 	return App::Get().m_renderer;
+}
+
+LightsManager& Locate::lightsManager() {
+	return App::Get().m_lightsManager;
 }

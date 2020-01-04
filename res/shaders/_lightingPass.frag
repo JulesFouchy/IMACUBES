@@ -34,12 +34,12 @@ uniform bool u_bUseAmbientOcclusion;
 uniform sampler2D u_AmbientOcclusionMap;
 
 uniform mat4 u_LightVPMatrix;
-uniform sampler2D u_ShadowMap;
+uniform sampler2D u_ShadowMaps[DEFINE_ME_nbDirectionalLights];
 uniform float u_ShadowBias;
 
 in vec2 vTexCoords;
 
-float shadow(){
+float shadow(int dirLightIndex){
 	vec4 posInLightSpace = u_LightVPMatrix * vec4(texture(gPosInWorld_SpecularIntensity, vTexCoords).rgb, 1.0);
 	vec3 projCoords = posInLightSpace.xyz / posInLightSpace.w;
 	if(projCoords.z > 1.0) // we're outside of light's view frustum
@@ -48,10 +48,10 @@ float shadow(){
 
 	float currentDepth = projCoords.z;
 	float notShadow = 0.0;
-	vec2 texelSize = 1.0 / textureSize(u_ShadowMap, 0);
+	vec2 texelSize = 1.0 / textureSize(u_ShadowMaps[dirLightIndex], 0);
 	for(int x = -1; x <= 1; ++x) {
 		for(int y = -1; y <= 1; ++y) {
-			float pcfDepth = texture(u_ShadowMap, projCoords.xy + vec2(x, y) * texelSize).r; 
+			float pcfDepth = texture(u_ShadowMaps[dirLightIndex], projCoords.xy + vec2(x, y) * texelSize).r; 
 			notShadow += currentDepth - u_ShadowBias > pcfDepth ? 1.0 : 0.0;        
 		}    
 	}
@@ -67,7 +67,6 @@ void main(){
 	float specularStrength = texture(gPosInWorld_SpecularIntensity, vTexCoords).a;
 	float shininess = texture(gNormalShininess, vTexCoords).a;
 	vec3  albedo = texture(gAlbedo, vTexCoords).rgb;
-	float shadowVal = shadow();
 
 	vec3 camRayReflection = normalize(reflect(posInWorld-u_CamPosInWorld, normal));
 	// Ambiant
@@ -91,10 +90,11 @@ void main(){
 	// Directional
 	for( int i = 0; i < nbOfDirectionalLights; ++i){
 		vec3 lightCol = u_directionals[i].color * u_directionals[i].intensity;
+		float shadowVal = shadow(i);
 		// Diffuse
 		float dpDiffuse = -dot(normal, u_directionals[i].direction);
 		if( dpDiffuse > 0.0)
-			lightColorDiffuse += dpDiffuse * lightCol * shadow();
+			lightColorDiffuse += dpDiffuse * lightCol * shadowVal;
 		// Specular
 		float dpSpecular = -dot(camRayReflection, u_directionals[i].direction);
 		if( dpSpecular > 0.0 )
