@@ -36,6 +36,7 @@ public:
 	void drawScene();
 	void geometryPass();
 	void ssaoPass();
+	void shadowPass();
 	void lightingPass();
 	void renderOnScreenPass();
 	void save(int width, int height, const std::string& filepath, int nbSamplesForMSAA = 4);

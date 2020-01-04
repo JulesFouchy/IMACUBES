@@ -44,8 +44,7 @@ ShadowMapBuffer::~ShadowMapBuffer() {
 }
 
 void ShadowMapBuffer::compute() {
-	GLCall(glViewport(0, 0, m_width, m_height));
-	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
+	bind();
 	//
 	computeAndSendMatrices();
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
@@ -53,8 +52,7 @@ void ShadowMapBuffer::compute() {
 	Locate::materialsManager().draw_WithoutBindingShaders();
 	//GLCall(glCullFace(GL_BACK));
 	//
-	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-	GLCall(glViewport(0, 0, Locate::renderer().getWidth(), Locate::renderer().getHeight()));
+	unbind();
 }
 
 void ShadowMapBuffer::computeAndSendMatrices() {
@@ -74,4 +72,16 @@ void ShadowMapBuffer::computeViewMat() {
 
 void ShadowMapBuffer::computeProjMat() {
 	m_lightProjMat = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, m_nearPlane, m_farPlane);
+}
+
+
+void ShadowMapBuffer::bind() {
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID));
+	GLCall(glGetIntegerv(GL_VIEWPORT, m_prevViewportSettings)); // Store viewport settings to restore them when unbinding
+	GLCall(glViewport(0, 0, m_width, m_height));
+}
+
+void ShadowMapBuffer::unbind() {
+	GLCall(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+	GLCall(glViewport(m_prevViewportSettings[0], m_prevViewportSettings[1], m_prevViewportSettings[2], m_prevViewportSettings[3]));
 }

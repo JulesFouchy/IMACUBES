@@ -23,6 +23,9 @@ private:
 	inline const glm::mat4& getProjMat()     { return m_lightProjMat;}
 	inline const glm::mat4& getViewProjMat() { return m_lightVPMat; }
 
+	void bind();
+	void unbind();
+
 private:
 	unsigned int m_frameBufferID;
 	Texture2D m_shadowMap;
@@ -37,4 +40,6 @@ private:
 	glm::mat4 m_lightVPMat;
 
 	static size_t shadowMapShaderLID;
+
+	int m_prevViewportSettings[4];
 };

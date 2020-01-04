@@ -40,6 +40,7 @@ void Renderer::drawScene() {
 	geometryPass();
 	if (m_bUseAmbientOcclusion)
 		ssaoPass();
+	shadowPass();
 	renderOnScreenPass();
 }
 
@@ -59,9 +60,11 @@ void Renderer::ssaoPass() {
 	blurSSAOtexture(m_SSAOcomputer.texture());
 }
 
-void Renderer::lightingPass() {
-	// Shadow
+void Renderer::shadowPass() {
 	m_shadowMapBuffer.compute();
+}
+
+void Renderer::lightingPass() {
 	// Attach textures
 	m_shadowMapBuffer.texture().attachToSlotAndBind();
 	m_gBuffer.positionSpecularintensityTexture().attachToSlotAndBind();
@@ -134,11 +137,12 @@ void Renderer::save(int width, int height, const std::string& filepath, int nbSa
 	geometryPass();
 	if (m_bUseAmbientOcclusion)
 		ssaoPass();
+	shadowPass();
 	saveBuffer.bind_WithoutSettingViewport();
 	saveBuffer.clear();
 	renderOnScreenPass();
 	saveBuffer.save(filepath);
-	saveBuffer.unbind();
+	saveBuffer.unbind_WithoutRestoringViewport();
 	if (m_bUseAmbientOcclusion)
 		m_SSAOcomputer.setSize(m_windowWidth, m_windowHeight);
 	m_gBuffer.setSize(m_windowWidth, m_windowHeight);
