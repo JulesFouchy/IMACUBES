@@ -11,21 +11,23 @@
 
 #include "Debugging/Log.hpp"
 
-Shader::Shader(const std::string& vertexShaderFilepath, const std::string& fragmentShaderFilepath, bool compileShader)
+Shader::Shader(const std::string& vertexShaderFilepath, const std::string& fragmentShaderFilepath, bool compileShader, const std::vector<std::string>& lookForInFS, const std::vector<std::string>& replaceWithInFS, const std::vector<std::string>& lookForInVS, const std::vector<std::string>& replaceWithInVS)
 	: m_shaderId(-1), m_vsID(-1), m_fsID(-1), m_vertexShaderFilepath(MyFile::GetFullPath(vertexShaderFilepath)), m_fragmentShaderFilepath(MyFile::GetFullPath(fragmentShaderFilepath)),
 	  m_bCreatedSuccessfully(true)
 {
 	if (compileShader) {
-		compile();
+		compile(lookForInFS, replaceWithInFS, lookForInVS, replaceWithInVS);
 	}
 }
 
-Shader::Shader(const Shader& other)
-	: m_shaderId(-1), m_vsID(other.m_vsID), m_fsID(other.m_fsID), m_vertexShaderFilepath(other.m_vertexShaderFilepath), m_fragmentShaderFilepath(other.m_fragmentShaderFilepath),
-	m_bCreatedSuccessfully(true)
-{
-	compile();
-}
+//Shader::Shader(const Shader& other)
+//	: m_shaderId(-1), m_vsID(other.m_vsID), m_fsID(other.m_fsID), m_vertexShaderFilepath(other.m_vertexShaderFilepath), m_fragmentShaderFilepath(other.m_fragmentShaderFilepath),
+//	m_bCreatedSuccessfully(true)
+//{
+//	spdlog::error("Shader copy constructor is slightly broken !!");
+//	//FIXME compile must take into account the #define !
+//	compile();
+//}
 
 Shader::Shader(Shader&& other) noexcept
 	: m_shaderId(other.m_shaderId), m_vsID(other.m_vsID), m_fsID(other.m_fsID), m_vertexShaderFilepath(other.m_vertexShaderFilepath), m_fragmentShaderFilepath(other.m_fragmentShaderFilepath),
@@ -120,15 +122,20 @@ std::string Shader::parseFile(const std::string& filepath, const std::vector<std
 		return "";
 	}
 
+	// Info
+	for (int k = 0; k < vectLookFor.size(); ++k)
+		spdlog::info("Replacing '{}' with '{}'", vectLookFor[k], vectReplaceWith[k]);
+	//
+
 	std::string str = "";
 	std::string line = "";
 	while (getline(stream, line)) {
+		size_t commPos = line.find("//");
 		// Look for something to replace
 		for( int k = 0; k < vectLookFor.size(); ++k)
 			MyString::ReplaceAll(line, vectLookFor[k], vectReplaceWith[k]);
 		// Look for '#include'
 		size_t includePos = line.find("#include");
-		size_t commPos = line.find("//");
 		if (includePos != std::string::npos && includePos < commPos) {
 			size_t pos = 0;
 			MyString::GetNextWord(line, &pos);

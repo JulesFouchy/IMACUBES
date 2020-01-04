@@ -23,7 +23,7 @@ size_t SSAOcomputer::SSAOshaderLID;
 
 void SSAOcomputer::Initialize() {
     SSAOshaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_SSAO.frag", false);
-    Locate::renderer().SSAOmatrixUniforms().addSubscriber(SSAOshaderLID);
+    Locate::shaderLibrary().addSubscriberToList(SSAOshaderLID, UniformList::SSAO);
 }
 
 SSAOcomputer::SSAOcomputer()
@@ -85,8 +85,7 @@ void SSAOcomputer::generateRandomThings() {
 void SSAOcomputer::setKernelSize(int newSize) {
     m_kernelSize = newSize;
     generateRandomThings();
-    Locate::shaderLibrary()[SSAOshaderLID].compile("#KernelSize", std::to_string(m_kernelSize));
-    Locate::renderer().SSAOmatrixUniforms().sendUniformsTo(SSAOshaderLID);
+    Locate::shaderLibrary().ReloadShader(SSAOshaderLID, { "#KernelSize" }, { std::to_string(m_kernelSize) });
 }
 
 void SSAOcomputer::compute() {

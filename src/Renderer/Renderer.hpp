@@ -45,10 +45,6 @@ public:
 
 	void onWindowResize();
 
-	inline UniformUpdateList& cameraUniforms() { return m_cameraUniforms; }
-	inline UniformUpdateList& SSAOmatrixUniforms() { return m_SSAOmatrixUniforms; }
-	inline UniformUpdateList& lightUniforms() { return m_lightUniforms; }
-
 	void setNumberOfLights(int nbOfPointLights, int nbOfDirectionalLights);
 
 	inline float getWidth() { return m_windowWidth; }
@@ -63,10 +59,6 @@ private:
 	SDL_Window* m_window;
 
 	RectVAO m_fullScreenRect;
-
-	UniformUpdateList m_cameraUniforms;
-	UniformUpdateList m_SSAOmatrixUniforms;
-	UniformUpdateList m_lightUniforms;
 
 	GeometryBuffer m_gBuffer;
 	size_t m_lightingPassShaderLID;

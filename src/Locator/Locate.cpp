@@ -23,15 +23,7 @@ CubesMap& Locate::cubesMap() {
 }
 
 ShaderLibrary& Locate::shaderLibrary() {
-	return App::Get().m_shaders;
-}
-
-UniformUpdateList& Locate::cameraUniforms() {
-	return App::Get().m_renderer.cameraUniforms();
-}
-
-UniformUpdateList& Locate::lightUniforms() {
-	return App::Get().m_renderer.lightUniforms();
+	return App::Get().m_shaderLibrary;
 }
 
 Renderer& Locate::renderer() {

@@ -61,8 +61,8 @@ void App::onInit() {
 	m_renderer.initAfterApp();
 	m_lightsManager.initAfterApp();
 	m_camera.initAfterApp();
-	m_cursorShaderLID = m_shaders.LoadShader(MyFile::rootDir+"/res/shaders/_cursor.vert", MyFile::rootDir + "/res/shaders/_cursor.frag");
-	m_renderer.cameraUniforms().addSubscriber(m_cursorShaderLID);
+	m_cursorShaderLID = m_shaderLibrary.LoadShader(MyFile::rootDir+"/res/shaders/_cursor.vert", MyFile::rootDir + "/res/shaders/_cursor.frag");
+	m_shaderLibrary.addSubscriberToList(m_cursorShaderLID, UniformList::Camera);
 
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
@@ -86,6 +86,8 @@ void App::onInit() {
 			m_cubesMap.addCube(pos);
 	}
 	Locate::history(HistoryType::Cubes).endUndoGroup();
+
+	spdlog::info("-----------APP STARTS-----------");
 }
 
 
@@ -100,11 +102,11 @@ void App::onLoopIteration() {
 
 	// ----------------PLAYGROUND!------------------
 	m_camera.update(1.0f / 60.0f);
-	m_lightsManager.setUniforms(m_renderer.lightUniforms());
+	m_lightsManager.setUniforms(m_shaderLibrary.uniformList(UniformList::Lights));
 	onViewMatrixChange();
 	m_renderer.drawScene();
 	m_renderer.m_gBuffer.copyDepthTo(0);
-	m_shaders[m_cursorShaderLID].bind();
+	m_shaderLibrary[m_cursorShaderLID].bind();
 	m_cursor.draw();
 	m_toolrbf.showGUI();
 	m_saveViewWindow.Show_IfOpen();
@@ -142,14 +144,14 @@ void App::placeCursorAtHoveredCube(){
 }
 
 void App::onViewMatrixChange(){
-	m_renderer.cameraUniforms().setUniform<glm::mat4>("u_ViewMat", m_camera.getViewMatrix());
-	m_renderer.SSAOmatrixUniforms().setUniform<glm::mat4>("u_ViewMat", m_camera.getViewMatrix());
-	m_renderer.SSAOmatrixUniforms().setUniform<glm::mat4>("u_NormalMat", m_camera.getNormalMatrix());
-	m_renderer.lightUniforms().setUniform<glm::vec3>("u_CamPosInWorld", m_camera.getPosition());
+	m_shaderLibrary.uniformList(UniformList::Camera).setUniform<glm::mat4>("u_ViewMat", m_camera.getViewMatrix());
+	m_shaderLibrary.uniformList(UniformList::SSAO).setUniform<glm::mat4>("u_ViewMat", m_camera.getViewMatrix());
+	m_shaderLibrary.uniformList(UniformList::SSAO).setUniform<glm::mat4>("u_NormalMat", m_camera.getNormalMatrix());
+	m_shaderLibrary.uniformList(UniformList::Lights).setUniform<glm::vec3>("u_CamPosInWorld", m_camera.getPosition());
 }
 void App::onProjMatrixChange() {
-	m_renderer.cameraUniforms().setUniform<glm::mat4>("u_ProjMat", m_camera.getProjMatrix());
-	m_renderer.SSAOmatrixUniforms().setUniform<glm::mat4>("u_ProjMat", m_camera.getProjMatrix());
+	m_shaderLibrary.uniformList(UniformList::Camera).setUniform<glm::mat4>("u_ProjMat", m_camera.getProjMatrix());
+	m_shaderLibrary.uniformList(UniformList::SSAO).setUniform<glm::mat4>("u_ProjMat", m_camera.getProjMatrix());
 }
 
 void App::onEvent(const SDL_Event& e) {
@@ -211,7 +213,6 @@ void App::onEvent(const SDL_Event& e) {
 			else {
 				if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
 					Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].reloadShader();
-					m_renderer.cameraUniforms().sendUniformsTo(Locate::materialsManager().Shaders()[Locate::materialsManager().SelectedMaterialLocation().shaderID].shaderLID());
 				}
 				if (e.key.keysym.sym == 'z') {
 					m_cursor.translate(glm::ivec3(0, 0, -1));

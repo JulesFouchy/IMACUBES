@@ -11,12 +11,11 @@
 #include "MaterialsManager.hpp"
 
 MaterialsForAGivenShader::MaterialsForAGivenShader(const std::string& vertexFilepath, const std::string& fragmentFilepath, int shaderIndex)
-	: m_shaderLID(Locate::shaderLibrary().LoadShader(vertexFilepath, fragmentFilepath)), 
+	: m_shaderLID(Locate::shaderLibrary().LoadShader(vertexFilepath, fragmentFilepath, false)),
 	  m_cubes(), m_name(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(fragmentFilepath))), m_shaderIndex(shaderIndex)
 {
-	Locate::cameraUniforms().addSubscriber(m_shaderLID);
-	parseShaderAndCreateUniformDescriptions(fragmentFilepath);
-	addMaterial();
+	Locate::shaderLibrary().addSubscriberToList(m_shaderLID, UniformList::Camera);
+	addMaterial(); // this compiles m_shaderLID and creates Uniforms sliders
 }
 
 MaterialsForAGivenShader::MaterialsForAGivenShader(const MaterialsForAGivenShader& other)
@@ -47,16 +46,14 @@ void MaterialsForAGivenShader::draw() {
 	m_cubes.draw();
 }
 
-#include "Renderer/Renderer.hpp"
 void MaterialsForAGivenShader::addMaterial() {
 	m_materials.emplace_back(MyString::RemoveFileExtension(MyString::RemoveFolderHierarchy(shader().getFragmentFilepath())) + std::to_string(m_materials.size()), m_structLayout, m_shaderIndex, (int)m_materials.size());
 	Locate::materialsManager().setSelectedMaterial(m_shaderIndex, (int)m_materials.size() - 1);
-	shader().compile("DEFINE_ME_nbOfMaterials", std::to_string(m_materials.size()));
-	Locate::renderer().cameraUniforms().sendUniformsTo(m_shaderLID);
+	reloadShader(); // to update the nbOfMaterials
 }
 
 void MaterialsForAGivenShader::reloadShader() {
-	shader().compile();
+	Locate::shaderLibrary().ReloadShader(m_shaderLID, { "DEFINE_ME_nbOfMaterials" }, { std::to_string(m_materials.size()) });
 	parseShaderAndCreateUniformDescriptions(shader().getFragmentFilepath());
 	updateMaterialsLayout();
 }

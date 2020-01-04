@@ -44,7 +44,7 @@ private:
 	Renderer m_renderer;
 	CubesMap m_cubesMap;
 	Cursor m_cursor;
-	ShaderLibrary m_shaders;
+	ShaderLibrary m_shaderLibrary;
 	size_t m_cursorShaderLID;
 	LightsManager m_lightsManager;
 	Tool_RBF m_toolrbf;

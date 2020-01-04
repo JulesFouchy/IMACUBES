@@ -2,7 +2,6 @@
 
 #include "UniformValue.hpp"
 #include "OpenGL/Shader.hpp"
-#include "OpenGL/ShaderLibrary.hpp"
 
 #include <vector>
 #include <unordered_map>
