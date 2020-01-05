@@ -10,6 +10,8 @@ public:
 
 	virtual void computePosition() = 0;
 
+	virtual void onWheelScroll(float dl) {}
+
 protected:
 	Cursor* m_cursor;
 };

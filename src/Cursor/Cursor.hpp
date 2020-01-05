@@ -14,6 +14,7 @@ public:
 
 	void draw();
 	inline void computePosition() { m_cursorPositioner->computePosition(); }
+	inline void onWheelScroll(float dl) { m_cursorPositioner->onWheelScroll(dl); }
 
 	inline const glm::ivec3& getPosition() const { return m_position; }
 	inline const glm::ivec3& getCubeJustBeforePosition() const { return m_cubeJustBeforePosition; }

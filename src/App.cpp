@@ -135,6 +135,9 @@ void App::onEvent(const SDL_Event& e) {
 			if (Input::KeyIsDown(CTRL)) {
 				m_toolsManager.tool().onWheelScroll(e.wheel.y);
 			}
+			else if (Input::KeyIsDown(SHIFT)) {
+				m_cursor.onWheelScroll(e.wheel.y);
+			}
 			else {
 				m_camera.onWheelScroll(e.wheel.y);
 				m_cursor.computePosition();

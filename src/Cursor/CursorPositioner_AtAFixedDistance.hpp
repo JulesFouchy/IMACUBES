@@ -9,6 +9,8 @@ public:
 
 	void computePosition() override;
 
+	void onWheelScroll(float dl) override;
+
 private:
 	float m_distance;
 };
