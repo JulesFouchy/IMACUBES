@@ -170,17 +170,11 @@ void App::onEvent(const SDL_Event& e) {
 			if (e.button.button == SDL_BUTTON_MIDDLE)
 				m_camera.onWheelDown();
 			else if (e.button.button == SDL_BUTTON_LEFT) {
-				Locate::history(HistoryType::Cubes).beginUndoGroup();
-					m_cubesMap.addCube(m_cursor.getCubeJustBeforePosition());
-				Locate::history(HistoryType::Cubes).endUndoGroup();
+				m_toolsManager.tool().onLeftClicDown(m_cursor);
 				placeCursorAtHoveredCube();
-
-				//m_toolrbf.onLeftClick(m_cursor);
 			}
 			else {
-				Locate::history(HistoryType::Cubes).beginUndoGroup();
-					m_cubesMap.removeCube(m_cursor.getPosition());
-				Locate::history(HistoryType::Cubes).endUndoGroup();
+				m_toolsManager.tool().onRightClicDown(m_cursor);
 				placeCursorAtHoveredCube();
 			}
 		}
