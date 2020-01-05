@@ -7,6 +7,7 @@ friend class BoundingBoxIterator;
 public:
 	BoundingBox(); 
 	BoundingBox(const glm::ivec3& center, int radius);
+	BoundingBox(const glm::ivec3& corner1, const glm::ivec3& corner2);
 	~BoundingBox() = default;
 
 	BoundingBoxIterator begin();

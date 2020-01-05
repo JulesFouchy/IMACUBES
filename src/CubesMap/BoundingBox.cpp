@@ -15,9 +15,13 @@ BoundingBox::BoundingBox(const glm::ivec3& center, int radius)
 	: m_minValidX(clampX(center.x - radius)), m_maxValidX(clampX(center.x + radius)),
 	  m_minValidY(clampY(center.y - radius)), m_maxValidY(clampY(center.y + radius)),
 	  m_minValidZ(clampZ(center.z - radius)), m_maxValidZ(clampZ(center.z + radius))
-{
+{}
 
-}
+BoundingBox::BoundingBox(const glm::ivec3& corner1, const glm::ivec3& corner2)
+	: m_minValidX(std::min(corner1.x, corner2.x)), m_maxValidX(std::max(corner1.x, corner2.x)),
+	  m_minValidY(std::min(corner1.y, corner2.y)), m_maxValidY(std::max(corner1.y, corner2.y)),
+	  m_minValidZ(std::min(corner1.z, corner2.z)), m_maxValidZ(std::max(corner1.z, corner2.z))
+{}
 
 BoundingBoxIterator BoundingBox::begin() {
 	return BoundingBoxIterator(*this);

@@ -7,7 +7,7 @@
 
 Tool_Sphere::Tool_Sphere()
 	: Tool_Shape(),
-	  m_center(0.0f), m_radius(5.0f)
+	  m_radius(5.0f)
 {
 }
 
