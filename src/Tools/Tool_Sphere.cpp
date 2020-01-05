@@ -21,11 +21,18 @@ void Tool_Sphere::onWheelScroll(int dl) {
 void Tool_Sphere::onLeftClicDown(const Cursor& cursor) {
 	History& history = Locate::history(HistoryType::Cubes);
 	history.beginUndoGroup();
-	generateSphere([](const glm::ivec3& pos) {Locate::cubesMap().addCube(pos); });
+	applyOnSphere([](const glm::ivec3& pos) {Locate::cubesMap().addCube(pos); });
 	history.endUndoGroup();
 }
 
-void Tool_Sphere::generateSphere(std::function<void(const glm::ivec3& pos)> addCube) {
+void Tool_Sphere::onRightClicDown(const Cursor& cursor) {
+	History& history = Locate::history(HistoryType::Cubes);
+	history.beginUndoGroup();
+	applyOnSphere([](const glm::ivec3& pos) {Locate::cubesMap().removeCube(pos); });
+	history.endUndoGroup();
+}
+
+void Tool_Sphere::applyOnSphere(std::function<void(const glm::ivec3& pos)> addCube) {
 	BoundingBox bbox(m_center, m_radius);
 	for (const glm::ivec3& pos : bbox) {
 		if( glm::length((const glm::vec3)(pos - m_center)) <= m_radius)
@@ -37,5 +44,5 @@ void Tool_Sphere::update(const Cursor& cursor) {
 	m_center = cursor.getPosition();
 	// preview
 	m_previewGroup.removeAllCubes();
-	generateSphere([this](const glm::ivec3& pos) {this->m_previewGroup.addCube_NoExistenceCheck(pos); });
+	applyOnSphere([this](const glm::ivec3& pos) {this->m_previewGroup.addCube_NoExistenceCheck(pos); });
 }

@@ -13,11 +13,12 @@ public:
 
 	void update(const Cursor& cursor) override;
 
-	void onLeftClicDown(const Cursor& cursor) override;
+	void onLeftClicDown (const Cursor& cursor) override;
+	void onRightClicDown(const Cursor& cursor) override;
 	void onWheelScroll(int dl) override;
 
 private:
-	void generateSphere(std::function<void(const glm::ivec3& pos)> addCube);
+	void applyOnSphere(std::function<void(const glm::ivec3& pos)> addCube);
 
 private:
 	glm::ivec3 m_center;
