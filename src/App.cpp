@@ -23,7 +23,7 @@
 
 App::App(SDL_Window* window)
 	: m_renderer(window),
-	  m_cubesMap(27, 27, 27), m_camera(glm::vec3(0.0f)),
+	  m_cubesMap(51, 51, 51), m_camera(glm::vec3(0.0f)),
 	  m_lightsManager(),
 	  m_bShowImGUIDemoWindow(false),
 	  m_bAddTheSelectedSomething(false),
@@ -105,6 +105,8 @@ void App::onLoopIteration() {
 	m_renderer.drawScene();
 	m_renderer.m_gBuffer.copyDepthTo(0);
 	m_shaderLibrary[m_cursorShaderLID].bind();
+	m_toolsManager.tool().update(m_cursor);
+	m_toolsManager.tool().showPreview();
 	m_cursor.draw();
 	m_toolrbf.showGUI();
 	m_saveViewWindow.Show_IfOpen();
@@ -162,7 +164,12 @@ void App::onEvent(const SDL_Event& e) {
 
 	case SDL_MOUSEWHEEL:
 		if (!ImGui::GetIO().WantCaptureMouse)
-			m_camera.onWheelScroll(e.wheel.y);
+			if (Input::KeyIsDown(CTRL)) {
+				m_toolsManager.tool().onWheelScroll(e.wheel.y);
+			}
+			else {
+				m_camera.onWheelScroll(e.wheel.y);
+			}
 		break;
 
 	case SDL_MOUSEBUTTONDOWN:

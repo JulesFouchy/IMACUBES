@@ -1,7 +1,5 @@
 #include "Tool.hpp"
 
-Tool::Tool(){
-
+void Tool::showPreview() {
+	m_previewGroup.draw();
 }
-
-
