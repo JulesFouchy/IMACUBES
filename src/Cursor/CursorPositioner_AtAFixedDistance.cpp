@@ -35,6 +35,5 @@ void CursorPositioner_AtAFixedDistance::computePosition() {
 
 void CursorPositioner_AtAFixedDistance::onWheelScroll(float dl) {
 	m_distance = std::max(m_distance + dl * Settings::CAMERA_SCALE_RADIUS_PER_SCROLL, 0.0f);
-	spdlog::info(m_distance);
 	computePosition();
 }

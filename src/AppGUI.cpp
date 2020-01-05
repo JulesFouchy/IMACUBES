@@ -93,6 +93,11 @@ void App::ImGui_MainMenuBar() {
 		if (ImGui::BeginMenu("Renderer")) {
 			m_renderer.ImGui_Menu();
 			ImGui::EndMenu();
+		}		
+		// Histories
+		if (ImGui::BeginMenu("Tools")) {
+			m_toolsManager.ImGui_SelectTool();
+			ImGui::EndMenu();
 		}
 		//
 		ImGui::EndMainMenuBar();

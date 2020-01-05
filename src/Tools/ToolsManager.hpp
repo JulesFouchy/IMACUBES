@@ -11,6 +11,8 @@ public:
 
 	inline Tool& tool() { return *m_activeTool; }
 
+	void ImGui_SelectTool();
+
 	template <typename T>
 	inline void setTool() { m_activeTool = std::make_unique<T>(); }
 
