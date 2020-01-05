@@ -36,7 +36,8 @@ uniform sampler2D u_AmbientOcclusionMap;
 uniform bool u_bCastShadows[DEFINE_ME_nbDirectionalLights];
 uniform mat4 u_LightVPMatrices[DEFINE_ME_nbDirectionalLights];
 uniform sampler2D u_ShadowMaps[DEFINE_ME_nbDirectionalLights];
-uniform float u_ShadowBias;
+uniform float u_ShadowMinBias;
+uniform float u_ShadowMaxBias;
 
 in vec2 vTexCoords;
 
@@ -51,10 +52,11 @@ float shadow(int dirLightIndex){
 		float currentDepth = projCoords.z;
 		float notShadow = 0.0;
 		vec2 texelSize = 1.0 / textureSize(u_ShadowMaps[dirLightIndex], 0);
+		float bias = max(u_ShadowMaxBias * (1.0 - dot(texture(gNormalShininess, vTexCoords).rgb, u_directionals[dirLightIndex].direction)) * 0.5, u_ShadowMinBias);
 		for(int x = -1; x <= 1; ++x) {
 			for(int y = -1; y <= 1; ++y) {
 				float pcfDepth = texture(u_ShadowMaps[dirLightIndex], projCoords.xy + vec2(x, y) * texelSize).r; 
-				notShadow += currentDepth - u_ShadowBias > pcfDepth ? 1.0 : 0.0;        
+				notShadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
 			}    
 		}
 		notShadow /= 9.0;

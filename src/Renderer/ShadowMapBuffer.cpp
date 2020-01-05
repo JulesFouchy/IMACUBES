@@ -19,7 +19,8 @@ void ShadowMapBuffer::Initialize() {
 ShadowMapBuffer::ShadowMapBuffer()
 	: m_shadowMap(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, GL_NEAREST, GL_CLAMP_TO_BORDER),
 	  m_resolution("Resolution", HistoryType::Lights, 2323, 1, 8192),
-	  m_bias("Bias", HistoryType::Lights, 0.004f, 0.0f, 0.03f),
+	  m_minBias("Min Bias", HistoryType::Lights, 0.001f, 0.0f, 0.03f),
+	  m_maxBias("Max Bias", HistoryType::Lights, 0.004f, 0.0f, 0.03f),
 	  m_nearPlane("Near plane", HistoryType::Lights, 0.1f, 0.1f, 2.0f), 
 	  m_farPlane("Far plane", HistoryType::Lights, 22.0f, 5.0f, 100.0f),
 	  m_cropFactor("Crop factor", HistoryType::Lights, 11.2f, 1.0f, 100.0f),
@@ -41,7 +42,8 @@ ShadowMapBuffer::ShadowMapBuffer()
 
 ShadowMapBuffer::ShadowMapBuffer(ShadowMapBuffer&& other) noexcept
 	: m_frameBufferID(other.m_frameBufferID), m_shadowMap(std::move(other.m_shadowMap)),
-	  m_bias(other.m_bias),
+	  m_minBias(other.m_minBias),
+	  m_maxBias(other.m_maxBias),
 	  m_resolution(other.m_resolution),
 	  m_nearPlane(other.m_nearPlane),
 	  m_farPlane(other.m_farPlane),
@@ -67,12 +69,11 @@ void ShadowMapBuffer::compute(const glm::vec3& lightDir, int dirLightIndex) {
 	bind();
 	//
 	computeAndSendMatrices(lightDir, dirLightIndex);
-	Locate::shaderLibrary().uniformList(UniformList::Lights).setUniform<float>("u_ShadowBias", m_bias.getValue());
+	Locate::shaderLibrary().uniformList(UniformList::Lights).setUniform<float>("u_ShadowMinBias", m_minBias.getValue());
+	Locate::shaderLibrary().uniformList(UniformList::Lights).setUniform<float>("u_ShadowMaxBias", m_maxBias.getValue());
 	GLCall(glClear(GL_DEPTH_BUFFER_BIT));
-	//GLCall(glCullFace(GL_FRONT));
 	Locate::shaderLibrary()[shadowMapShaderLID].bind();
 	Locate::materialsManager().draw_WithoutBindingShaders();
-	//GLCall(glCullFace(GL_BACK));
 	//
 	unbind();
 }
@@ -110,7 +111,8 @@ void ShadowMapBuffer::unbind() {
 }
 
 void ShadowMapBuffer::ImGui_Parameters() {
-	m_bias.ImGui_Slider();
+	m_minBias.ImGui_Slider();
+	m_maxBias.ImGui_Slider();
 	if (m_resolution.ImGui_Slider())
 		m_shadowMap.setSize(m_resolution.getValue(), m_resolution.getValue());
 	m_nearPlane.ImGui_Slider();

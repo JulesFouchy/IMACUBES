@@ -36,7 +36,8 @@ private:
 	unsigned int m_frameBufferID;
 	Texture2D m_shadowMap;
 
-	Uniform<float> m_bias;
+	Uniform<float> m_minBias;
+	Uniform<float> m_maxBias;
 	Uniform<int> m_resolution;
 	Uniform<float> m_nearPlane;
 	Uniform<float> m_farPlane;
