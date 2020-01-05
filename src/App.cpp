@@ -137,6 +137,7 @@ void App::onEvent(const SDL_Event& e) {
 			}
 			else {
 				m_camera.onWheelScroll(e.wheel.y);
+				m_cursor.computePosition();
 			}
 		break;
 

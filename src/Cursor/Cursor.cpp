@@ -11,7 +11,7 @@
 #include "CursorPositioner_AtAFixedDistance.hpp"
 
 Cursor::Cursor() {
-	setCursorPositioner<CursorPositioner_OnHoveredCube>();
+	setCursorPositioner<CursorPositioner_AtAFixedDistance>();
 }
 
 void Cursor::draw() {
