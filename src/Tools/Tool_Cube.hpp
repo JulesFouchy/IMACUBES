@@ -2,10 +2,10 @@
 
 #include "Tool_Shape.hpp"
 
-class Tool_Sphere : public Tool_Shape {
+class Tool_Cube : public Tool_Shape {
 public:
-	Tool_Sphere();
-	~Tool_Sphere() = default;
+	Tool_Cube();
+	~Tool_Cube() = default;
 
 	void update(const Cursor& cursor) override;
 
