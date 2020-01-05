@@ -10,8 +10,10 @@
 #include "CursorPositioner_OnHoveredCube.hpp"
 #include "CursorPositioner_AtAFixedDistance.hpp"
 
-Cursor::Cursor() {
-	setCursorPositioner<CursorPositioner_AtAFixedDistance>();
+Cursor::Cursor()
+	: m_bOnHoveredIsSelected(true)
+{
+	setCursorPositioner<CursorPositioner_OnHoveredCube>();
 }
 
 void Cursor::draw() {
@@ -47,4 +49,11 @@ void Cursor::setCubeJustBeforePosition(const glm::ivec3& newPos) {
 void Cursor::translate(const glm::ivec3& dl) {
 	setPosition(getPosition() + dl);
 	setCubeJustBeforePosition(getCubeJustBeforePosition() + dl);
+}
+
+void Cursor::switchCursorPositioner() {
+	if (m_bOnHoveredIsSelected)
+		setCursorPositioner<CursorPositioner_AtAFixedDistance>();
+	else
+		setCursorPositioner<CursorPositioner_OnHoveredCube>();
 }

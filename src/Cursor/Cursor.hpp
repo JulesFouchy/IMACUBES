@@ -16,6 +16,8 @@ public:
 	inline void computePosition() { m_cursorPositioner->computePosition(); }
 	inline void onWheelScroll(float dl) { m_cursorPositioner->onWheelScroll(dl); }
 
+	void switchCursorPositioner();
+
 	inline const glm::ivec3& getPosition() const { return m_position; }
 	inline const glm::ivec3& getCubeJustBeforePosition() const { return m_cubeJustBeforePosition; }
 	void setPosition(const glm::ivec3& newPos);
@@ -24,7 +26,7 @@ public:
 
 private:
 	template <typename T>
-	inline void setCursorPositioner() { m_cursorPositioner = std::make_unique<T>(this); }
+	inline void setCursorPositioner() { m_cursorPositioner = std::make_unique<T>(this); m_bOnHoveredIsSelected = !m_bOnHoveredIsSelected; }
 
 private:
 	glm::ivec3 m_position;
@@ -32,4 +34,5 @@ private:
 	CubesGroup_WithoutMaterialIndices m_selectedCubes;
 
 	std::unique_ptr<CursorPositioner> m_cursorPositioner;
+	bool m_bOnHoveredIsSelected;
 };
