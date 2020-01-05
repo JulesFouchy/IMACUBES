@@ -26,8 +26,6 @@ public:
 	void onInit();
 	void onLoopIteration();
 
-	void placeCursorAtHoveredCube();
-
 	void onViewMatrixChange();
 	void onProjMatrixChange();
 

@@ -13,7 +13,6 @@
 #include "UI/Input.hpp"
 #include "Locator/Locate.hpp"
 #include "Material/MaterialsManager.hpp"
-#include "CubeMaths/CubeMaths.hpp"
 
 #include "CubesMap/BoundingBox.hpp"
 #include "Helper/Maths.hpp"
@@ -112,37 +111,6 @@ void App::onLoopIteration() {
 	m_saveViewWindow.Show_IfOpen();
 }
 
-void App::placeCursorAtHoveredCube(){
-	Ray ray = m_camera.getRayGoingThroughMousePos();
-	if (!m_cubesMap.isPositionInsideWorld(ray.origin)) {
-		float t = CubeMaths::IntersectionRayWorldborder(ray);
-		if (t < std::numeric_limits<float>::infinity())
-			ray.origin += (t + 0.01f) * ray.direction;
-		else
-			return;
-	}
-	glm::ivec3 iPos = CubeMaths::CubeContaining(ray.origin);
-	glm::ivec3 prevIpos = iPos;
-	while (m_cubesMap.isID3Dvalid(iPos) && !m_cubesMap.cubeExists(iPos)) {
-		float t = CubeMaths::IntersectionRayCube_WROIC(ray, iPos);
-		ray.origin += (t + 0.01f) * ray.direction;
-		iPos = CubeMaths::CubeContaining(ray.origin);
-		if (m_cubesMap.isID3Dvalid(iPos) && !m_cubesMap.cubeExists(iPos))
-			prevIpos = iPos;
-	}
-	if (m_cubesMap.isID3Dvalid(prevIpos)) {
-		m_cursor.setCubeJustBeforePosition(prevIpos);
-	}
-	if (m_cubesMap.isID3Dvalid(iPos)) {
-		m_cursor.setPosition(iPos);
-	}
-	else {
-		if (m_cubesMap.isID3Dvalid(prevIpos)) {
-			m_cursor.setPosition(prevIpos);
-		}
-	}
-}
-
 void App::onViewMatrixChange(){
 	m_shaderLibrary.uniformList(UniformList::Camera).setUniform<glm::mat4>("u_ViewMat", m_camera.getViewMatrix());
 	m_shaderLibrary.uniformList(UniformList::SSAO).setUniform<glm::mat4>("u_ViewMat", m_camera.getViewMatrix());
@@ -159,7 +127,7 @@ void App::onEvent(const SDL_Event& e) {
 
 	case SDL_MOUSEMOTION:
 		if (!ImGui::GetIO().WantCaptureMouse)
-			placeCursorAtHoveredCube();
+			m_cursor.computePosition();
 		break;
 
 	case SDL_MOUSEWHEEL:
@@ -178,11 +146,11 @@ void App::onEvent(const SDL_Event& e) {
 				m_camera.onWheelDown();
 			else if (e.button.button == SDL_BUTTON_LEFT) {
 				m_toolsManager.tool().onLeftClicDown(m_cursor);
-				placeCursorAtHoveredCube();
+				m_cursor.computePosition();
 			}
 			else {
 				m_toolsManager.tool().onRightClicDown(m_cursor);
-				placeCursorAtHoveredCube();
+				m_cursor.computePosition();
 			}
 		}
 		break;

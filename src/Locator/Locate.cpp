@@ -10,6 +10,7 @@
 #include "OpenGL/Uniform/UniformUpdateList.hpp"
 #include "Renderer/Renderer.hpp"
 #include "Light/LightsManager.hpp"
+#include "Camera/Camera.hpp"
 
 MaterialsManager& Locate::materialsManager() {
 	return App::Get().m_cubesMap.materialsManager();
@@ -33,4 +34,8 @@ Renderer& Locate::renderer() {
 
 LightsManager& Locate::lightsManager() {
 	return App::Get().m_lightsManager;
+}
+
+Camera& Locate::camera() {
+	return App::Get().m_camera;
 }

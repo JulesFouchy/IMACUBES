@@ -7,6 +7,13 @@
 
 #include "UI/Settings.hpp"
 
+#include "CursorPositioner_OnHoveredCube.hpp"
+#include "CursorPositioner_AtAFixedDistance.hpp"
+
+Cursor::Cursor() {
+	setCursorPositioner<CursorPositioner_OnHoveredCube>();
+}
+
 void Cursor::draw() {
 	if (Settings::SHOW_CURSOR_THROUGH_CUBES) {
 		glDisable(GL_DEPTH_TEST);
