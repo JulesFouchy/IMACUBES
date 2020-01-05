@@ -104,9 +104,9 @@ void App::onLoopIteration() {
 	onViewMatrixChange();
 	m_renderer.drawScene();
 	m_renderer.m_gBuffer.copyDepthTo(0);
-	m_shaderLibrary[m_cursorShaderLID].bind();
 	m_toolsManager.tool().update(m_cursor);
 	m_toolsManager.tool().showPreview();
+	m_shaderLibrary[m_cursorShaderLID].bind();
 	m_cursor.draw();
 	m_toolrbf.showGUI();
 	m_saveViewWindow.Show_IfOpen();

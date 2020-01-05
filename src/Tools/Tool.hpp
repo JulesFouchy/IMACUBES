@@ -6,6 +6,7 @@
 class Tool {
 public:
 	Tool() = default;
+	static void Initialize();
 	~Tool() = default;
 
 	void showPreview();
@@ -17,4 +18,6 @@ public:
 
 protected:
 	CubesGroup_WithoutMaterialIndices m_previewGroup;
+private:
+	static size_t m_shaderLID;
 };

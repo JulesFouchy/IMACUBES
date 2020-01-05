@@ -94,6 +94,7 @@ int main(int argc, char *argv[]) {
 		Texture2D::ClassInitialization();
 		SSAOcomputer::Initialize();
 		ShadowMapBuffer::Initialize();
+		Tool::Initialize();
 
 		// ------ Actual App
 		App::Get().onInit();

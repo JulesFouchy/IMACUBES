@@ -6,6 +6,7 @@
 #include "History/History.hpp"
 
 #include "Helper/Maths.hpp"
+#include <algorithm>
 
 Tool_Sphere::Tool_Sphere()
 	: Tool(),
@@ -14,7 +15,7 @@ Tool_Sphere::Tool_Sphere()
 }
 
 void Tool_Sphere::onWheelScroll(int dl) {
-	m_radius += dl;
+	m_radius = std::max(m_radius + dl, 0);
 }
 
 void Tool_Sphere::onLeftClicDown(const Cursor& cursor) {
