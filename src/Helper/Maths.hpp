@@ -10,6 +10,9 @@ namespace MyMaths {
 	float Sign(float x);
 	float Log(float x, float base);
 	int LogInt(int x, int base);
+
+	int Ceil(float x);
+	int Clamp(int x, int a, int b);
 	
 	float Lerp(float a, float b, float t);
 }

@@ -3,11 +3,21 @@
 #include "Locator/Locate.hpp"
 #include "CubesMap/CubesMap.hpp"
 
+#include "Helper/Maths.hpp"
+
 BoundingBox::BoundingBox()
 	: m_minValidX(Locate::cubesMap().minValidX()), m_maxValidX(Locate::cubesMap().maxValidX()),
 	  m_minValidY(Locate::cubesMap().minValidY()), m_maxValidY(Locate::cubesMap().maxValidY()),
 	  m_minValidZ(Locate::cubesMap().minValidZ()), m_maxValidZ(Locate::cubesMap().maxValidZ())
 {}
+
+BoundingBox::BoundingBox(const glm::ivec3& center, int radius)
+	: m_minValidX(clampX(center.x - radius)), m_maxValidX(clampX(center.x + radius)),
+	  m_minValidY(clampY(center.y - radius)), m_maxValidY(clampY(center.y + radius)),
+	  m_minValidZ(clampZ(center.z - radius)), m_maxValidZ(clampZ(center.z + radius))
+{
+
+}
 
 BoundingBoxIterator BoundingBox::begin() {
 	return BoundingBoxIterator(*this);
@@ -29,4 +39,16 @@ bool BoundingBox::isZValid(int z) const {
 }
 bool BoundingBox::isCubeInside(const glm::ivec3& pos) const {
 	return isXValid(pos.x) && isYValid(pos.y) && isZValid(pos.z);
+}
+
+int BoundingBox::clampX(int x){
+	return MyMaths::Clamp(x, Locate::cubesMap().minValidX(), Locate::cubesMap().maxValidX());
+}
+
+int BoundingBox::clampY(int y){
+	return MyMaths::Clamp(y, Locate::cubesMap().minValidY(), Locate::cubesMap().maxValidY());
+}
+
+int BoundingBox::clampZ(int z) {
+	return MyMaths::Clamp(z, Locate::cubesMap().minValidZ(), Locate::cubesMap().maxValidZ());
 }

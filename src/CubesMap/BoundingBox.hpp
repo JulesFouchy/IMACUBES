@@ -6,6 +6,7 @@ class BoundingBox {
 friend class BoundingBoxIterator;
 public:
 	BoundingBox(); 
+	BoundingBox(const glm::ivec3& center, int radius);
 	~BoundingBox() = default;
 
 	BoundingBoxIterator begin();
@@ -15,6 +16,11 @@ public:
 	bool isYValid(int y) const;
 	bool isZValid(int z) const;
 	bool isCubeInside(const glm::ivec3& pos) const;
+
+private:
+	int clampX(int x);
+	int clampY(int y);
+	int clampZ(int z);
 
 private:
 	int m_minValidX;

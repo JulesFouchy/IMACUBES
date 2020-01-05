@@ -215,7 +215,6 @@ void Renderer::ImGui_Menu() {
 		ImGui::EndMenu();
 	}
 	if (ImGui::BeginMenu("Shadows")) {
-		//ImGui::Checkbox("Active", &m_bUseAmbientOcclusion);
 		Locate::lightsManager().ImGui_ShadowParameters();
 		ImGui::EndMenu();
 	}
