@@ -11,13 +11,13 @@
 #include "CursorPositioner_AtAFixedDistance.hpp"
 
 Cursor::Cursor()
-	: m_bOnHoveredIsSelected(true)
+	: m_bOnHoveredIsSelected(false)
 {
 	setCursorPositioner<CursorPositioner_OnHoveredCube>();
 }
 
 void Cursor::draw() {
-	if (Settings::SHOW_CURSOR_THROUGH_CUBES) {
+	if (!m_bOnHoveredIsSelected || Settings::SHOW_CURSOR_THROUGH_CUBES) {
 		glDisable(GL_DEPTH_TEST);
 		m_selectedCubes.drawWireframe();
 		glEnable(GL_DEPTH_TEST);
