@@ -20,7 +20,7 @@ ShadowMapBuffer::ShadowMapBuffer()
 	: m_shadowMap(GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, GL_NEAREST, GL_CLAMP_TO_BORDER),
 	  m_resolution("Resolution", HistoryType::Lights, 2323, 1, 8192),
 	  m_minBias("Min Bias", HistoryType::Lights, 0.001f, 0.0f, 0.03f),
-	  m_maxBias("Max Bias", HistoryType::Lights, 0.004f, 0.0f, 0.03f),
+	  m_maxBias("Max Bias", HistoryType::Lights, 0.007f, 0.0f, 0.03f),
 	  m_nearPlane("Near plane", HistoryType::Lights, 0.1f, 0.1f, 2.0f), 
 	  m_farPlane("Far plane", HistoryType::Lights, 22.0f, 5.0f, 100.0f),
 	  m_cropFactor("Crop factor", HistoryType::Lights, 11.2f, 1.0f, 100.0f),
