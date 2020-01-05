@@ -21,6 +21,7 @@ void Tool_Sphere::onLeftClicDown(const Cursor& cursor) {
 	}
 	else {
 		generateSphere();
+		m_bCenterSelected = false;
 	}
 }
 
@@ -29,7 +30,8 @@ void Tool_Sphere::generateSphere() {
 	BoundingBox bbox(m_center, m_radius);
 	history.beginUndoGroup();
 	for (const glm::ivec3& pos : bbox) {
-		Locate::cubesMap().addCube(pos);
+		if( glm::length((const glm::vec3)(pos - m_center)) <= m_radius)
+			Locate::cubesMap().addCube(pos);
 	}
 	history.endUndoGroup();
 }

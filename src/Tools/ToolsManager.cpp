@@ -4,5 +4,5 @@
 #include "Tool_Sphere.hpp"
 
 ToolsManager::ToolsManager() {
-	setTool<Tool_MinecraftLike>();
+	setTool<Tool_Sphere>();
 }
