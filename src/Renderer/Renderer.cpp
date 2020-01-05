@@ -20,7 +20,7 @@
 Renderer::Renderer(SDL_Window* window)
 	: m_window(window), m_fullScreenRect(-1.0f, 1.0f, -1.0f, 1.0f),
 	  m_whatToRender(WhatToRender::FinalImage),
-	  m_bDenoiseNormals(true), m_denoiseNormalSamplingInverseOffset(2100.0f),
+	  m_bDenoiseNormals(true),
 	  m_bUseAmbientOcclusion(true),
 	  m_clearColor(0.0f, 0.066f, 0.18f, 1.0f)
 {
@@ -51,7 +51,7 @@ void Renderer::geometryPass() {
 	Locate::materialsManager().draw();
 	m_gBuffer.unbind();
 	if (m_bDenoiseNormals) {
-		denoiseNormals(m_gBuffer.normalShininessTexture(), m_denoiseNormalSamplingInverseOffset);
+		denoiseNormals(m_gBuffer.normalShininessTexture());
 	}
 }
 
@@ -146,10 +146,9 @@ void Renderer::save(int width, int height, const std::string& filepath, int nbSa
 	m_gBuffer.setSize(m_windowWidth, m_windowHeight);
 }
 
-void Renderer::denoiseNormals(Texture2D& texture, float samplingInverseOffset) {
+void Renderer::denoiseNormals(Texture2D& texture) {
 	Shader& shader = Locate::shaderLibrary()[m_denoiseNormalsShaderLID];
 	shader.bind();
-	shader.setUniform1f("inverseOffset", samplingInverseOffset);
 	drawOnTexture(texture, shader);
 }
 
@@ -208,7 +207,6 @@ void Renderer::ImGui_Menu() {
 	}
 	if (ImGui::BeginMenu("Denoise normals")) {
 		ImGui::Checkbox("Active", &m_bDenoiseNormals);
-		ImGui::SliderFloat("Sampling inverse offset", &m_denoiseNormalSamplingInverseOffset, 500.0f, 3000.0f);
 		ImGui::EndMenu();
 	}	
 	if (ImGui::BeginMenu("Ambient Occlusion")) {

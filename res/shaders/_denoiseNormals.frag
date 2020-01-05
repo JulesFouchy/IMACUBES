@@ -4,20 +4,18 @@ in vec2 vTexCoords;
 
 uniform sampler2D u_TextureSlot;
 
-uniform float inverseOffset;
-
 void main() {
-	const float offset = 1.0 / inverseOffset; 
+	const vec2 texelSize = 1.0 / textureSize(u_TextureSlot, 0);
     vec2 offsets[9] = vec2[](
-        vec2(-offset,  offset), // top-left
-        vec2( 0.0,    offset), // top-center
-        vec2( offset,  offset), // top-right
-        vec2(-offset,  0.0),   // center-left
-        vec2( 0.0,    0.0),   // center-center
-        vec2( offset,  0.0),   // center-right
-        vec2(-offset, -offset), // bottom-left
-        vec2( 0.0,   -offset), // bottom-center
-        vec2( offset, -offset)  // bottom-right    
+        texelSize * vec2(-1, 1), // top-left
+        texelSize * vec2( 0, 1), // top-center
+        texelSize * vec2( 1, 1), // top-right
+        texelSize * vec2(-1, 0),   // center-left
+        texelSize * vec2( 0, 0),   // center-center
+        texelSize * vec2( 1, 0),   // center-right
+        texelSize * vec2(-1,-1), // bottom-left
+        texelSize * vec2( 0,-1), // bottom-center
+        texelSize * vec2( 1,-1)  // bottom-right    
     );
 
     int count[6] = int[](0,0,0,0,0,0);

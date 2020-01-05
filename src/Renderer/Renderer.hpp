@@ -41,7 +41,7 @@ public:
 	void renderOnScreenPass();
 	void save(int width, int height, const std::string& filepath, int nbSamplesForMSAA = 4);
 
-	void denoiseNormals(Texture2D& texture, float samplingInverseOffset);
+	void denoiseNormals(Texture2D& texture);
 	void blurSSAOtexture(Texture2D& texture);
 	void drawOnTexture(Texture2D& texture, Shader& shader);
 
@@ -74,7 +74,6 @@ private:
 	size_t m_denoiseNormalsShaderLID;
 	size_t m_blurSSAOtextureShaderLID;
 	bool m_bDenoiseNormals;
-	float m_denoiseNormalSamplingInverseOffset;
 	bool m_bUseAmbientOcclusion;
 
 	glm::vec4 m_clearColor;
