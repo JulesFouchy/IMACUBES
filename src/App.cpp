@@ -187,6 +187,7 @@ void App::onEvent(const SDL_Event& e) {
 				}
 				if (e.key.keysym.scancode == SDL_SCANCODE_TAB) {
 					m_cursor.switchCursorPositioner();
+					m_cursor.computePosition();
 				}
 				if (e.key.keysym.sym == 'z') {
 					m_cursor.translate(glm::ivec3(0, 0, -1));
