@@ -7,7 +7,7 @@ class Tool {
 public:
 	Tool() = default;
 	static void Initialize();
-	~Tool() = default;
+	virtual ~Tool() = default;
 
 	void showPreview();
 	virtual void update(const Cursor& cursor) {}
