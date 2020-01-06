@@ -7,8 +7,10 @@
 
 #include "Debugging/Log.hpp"
 
+int Tool_Shape_Radial::m_bCenterOnHoveredCube = 1;
+
 Tool_Shape_Radial::Tool_Shape_Radial()
-	: m_radiuses(5), m_bCenterOnHoveredCube(0)
+	: m_radiuses(5)
 {}
 
 void Tool_Shape_Radial::onWheelScroll(int dl) {

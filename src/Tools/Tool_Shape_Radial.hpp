@@ -22,5 +22,5 @@ protected:
 	glm::ivec3 m_direction;
 
 private:
-	int m_bCenterOnHoveredCube;
+	static int m_bCenterOnHoveredCube;
 };
