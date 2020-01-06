@@ -29,7 +29,6 @@ public:
 	
 	void setSelectedMaterial(int shaderID, int matID);
 
-private:
 	inline MaterialsForAGivenShader& SelectedShader() { return Shaders()[SelectedMaterialLocation().shaderID]; }
 	inline Material& SelectedMaterial() { return SelectedShader().m_materials[SelectedMaterialLocation().materialID]; }
 

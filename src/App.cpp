@@ -37,13 +37,14 @@ void App::onInit() {
 	m_shaderLibrary.addSubscriberToList(m_cursorShaderLID, UniformList::Camera);
 
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/FlatColor.frag");
+	Locate::materialsManager().SelectedShader().addMaterial();
 	Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/FlatColorPlusBorder.frag");
 	//Locate::materialsManager().addShader(MyFile::rootDir+"/res/shaders/_geometryPass.vert", MyFile::rootDir+"/res/shaders/testShader.frag");
-	Locate::materialsManager().setSelectedMaterial(0, 0);
 
 	onViewMatrixChange();
 	onProjMatrixChange();
 
+	Locate::materialsManager().setSelectedMaterial(0, 0);
 	Locate::history(HistoryType::Cubes).beginUndoGroup();
 	for (int x = -m_cubesMap.width()*0.3; x < m_cubesMap.width()*0.3; ++x) {
 		for (int z = -m_cubesMap.depth()*0.3; z < m_cubesMap.depth()*0.3; ++z) {
@@ -53,6 +54,7 @@ void App::onInit() {
 		}
 	}
 	Locate::history(HistoryType::Cubes).endUndoGroup();
+	Locate::materialsManager().setSelectedMaterial(0, 1);
 
 	spdlog::info("-----------APP STARTS-----------");
 }
