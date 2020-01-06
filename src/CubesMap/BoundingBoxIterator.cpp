@@ -2,7 +2,7 @@
 #include "BoundingBox.hpp"
 
 BoundingBoxIterator::BoundingBoxIterator(const BoundingBox& boundingBox)
-	: m_pos(glm::ivec3(boundingBox.m_minValidX, boundingBox.m_minValidY, boundingBox.m_minValidZ)),
+	: m_pos(boundingBox.m_minCorner),
 	  m_boundingBox(boundingBox)
 {}
 
@@ -12,16 +12,16 @@ const glm::ivec3& BoundingBoxIterator::operator*() {
 
 void BoundingBoxIterator::operator++() {
 	// increase X
-	if (m_pos.x < m_boundingBox.m_maxValidX)
+	if (m_pos.x < m_boundingBox.m_maxCorner.x)
 		m_pos.x++;
 	// carry X
 	else {
-		m_pos.x = m_boundingBox.m_minValidX;
+		m_pos.x = m_boundingBox.m_minCorner.x;
 		m_pos.y++;
 	}
 	// carry Y
-	if (m_pos.y > m_boundingBox.m_maxValidY) {
-		m_pos.y = m_boundingBox.m_minValidY;
+	if (m_pos.y > m_boundingBox.m_maxCorner.y) {
+		m_pos.y = m_boundingBox.m_minCorner.y;
 		m_pos.z++;
 	}
 	// first invalid position is : (minX, minY, maxZ+1)

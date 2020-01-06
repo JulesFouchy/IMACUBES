@@ -6,9 +6,12 @@
 #include "Helper/Maths.hpp"
 
 BoundingBox::BoundingBox()
-	: m_minValidX(Locate::cubesMap().minValidX()), m_maxValidX(Locate::cubesMap().maxValidX()),
-	  m_minValidY(Locate::cubesMap().minValidY()), m_maxValidY(Locate::cubesMap().maxValidY()),
-	  m_minValidZ(Locate::cubesMap().minValidZ()), m_maxValidZ(Locate::cubesMap().maxValidZ())
+	: m_minCorner(Locate::cubesMap().minValidX(), 
+				  Locate::cubesMap().minValidY(), 
+				  Locate::cubesMap().minValidZ()),
+	  m_maxCorner(Locate::cubesMap().maxValidX(),
+	  			  Locate::cubesMap().maxValidY(),
+	  			  Locate::cubesMap().maxValidZ())
 {
 	computeInfos();
 }
@@ -19,16 +22,20 @@ BoundingBox::BoundingBox(const glm::ivec3& v0, const glm::ivec3& v1, BboxGenerat
 	case CENTER:
 		// v0 = center
 		// v1 = radiuses
-		m_minValidX = clampX(v0.x - v1.x); m_maxValidX = clampX(v0.x + v1.x);
-		m_minValidY = clampX(v0.y - v1.y); m_maxValidY = clampX(v0.y + v1.y);
-		m_minValidZ = clampX(v0.z - v1.z); m_maxValidZ = clampX(v0.z + v1.z);
+		m_minCorner = clamp(v0 - v1);
+		m_maxCorner = clamp(v0 + v1);
 		break;
 	case CORNERS:
 		// v0 = corner0
 		// v1 = corner1
-		m_minValidX = std::min(v0.x, v1.x); m_maxValidX = std::max(v0.x, v1.x);
-		m_minValidY = std::min(v0.y, v1.y); m_maxValidY = std::max(v0.y, v1.y);
-		m_minValidZ = std::min(v0.z, v1.z); m_maxValidZ = std::max(v0.z, v1.z);
+		m_minCorner = glm::ivec3(std::min(v0.x, v1.x),
+								 std::min(v0.y, v1.y),
+								 std::min(v0.z, v1.z)
+		);
+		m_maxCorner = glm::ivec3 (std::max(v0.x, v1.x),
+								  std::max(v0.y, v1.y),
+								  std::max(v0.z, v1.z)
+		);
 		break;
 	default:
 		break;
@@ -37,14 +44,8 @@ BoundingBox::BoundingBox(const glm::ivec3& v0, const glm::ivec3& v1, BboxGenerat
 }
 
 void BoundingBox::computeInfos() {
-	m_size = glm::ivec3(m_maxValidX - m_minValidX,
-						m_maxValidY - m_minValidY,
-						m_maxValidZ - m_minValidZ
-	);
-	m_center = glm::ivec3((m_maxValidX + m_minValidX)/2,
-						  (m_maxValidY + m_minValidY)/2,
-						  (m_maxValidZ + m_minValidZ)/2
-	);
+	m_size = m_maxCorner - m_minCorner;
+	m_center = (m_minCorner + m_maxCorner) / 2;
 }
 
 BoundingBoxIterator BoundingBox::begin() {
@@ -53,18 +54,18 @@ BoundingBoxIterator BoundingBox::begin() {
 
 BoundingBoxIterator BoundingBox::end() {
 	BoundingBoxIterator it(*this);
-	it.m_pos = glm::ivec3(m_minValidX, m_minValidY, m_maxValidZ + 1);
+	it.m_pos = glm::ivec3(m_minCorner.x, m_minCorner.y, m_maxCorner.z + 1);
 	return it;
 }
 
 bool BoundingBox::isXValid(int x) const {
-	return x >= m_minValidX && x <= m_maxValidX;
+	return x >= m_minCorner.x && x <= m_maxCorner.x;
 }
 bool BoundingBox::isYValid(int y) const {
-	return y >= m_minValidY && y <= m_maxValidY;
+	return y >= m_minCorner.y && y <= m_maxCorner.y;
 }
 bool BoundingBox::isZValid(int z) const {
-	return z >= m_minValidZ && z <= m_maxValidZ;
+	return z >= m_minCorner.z && z <= m_maxCorner.z;
 }
 bool BoundingBox::isCubeInside(const glm::ivec3& pos) const {
 	return isXValid(pos.x) && isYValid(pos.y) && isZValid(pos.z);
@@ -80,4 +81,8 @@ int BoundingBox::clampY(int y){
 
 int BoundingBox::clampZ(int z) {
 	return MyMaths::Clamp(z, Locate::cubesMap().minValidZ(), Locate::cubesMap().maxValidZ());
+}
+
+glm::ivec3 BoundingBox::clamp(const glm::ivec3& v) {
+	return glm::ivec3(clampX(v.x), clampY(v.y), clampZ(v.z));
 }

@@ -14,8 +14,6 @@
 #include "Locator/Locate.hpp"
 #include "Material/MaterialsManager.hpp"
 
-#include "CubesMap/BoundingBox.hpp"
-#include "Helper/Maths.hpp"
 
 #include <algorithm>
 
@@ -29,29 +27,6 @@ App::App(SDL_Window* window)
 	  m_window(window), m_running(true)
 {
 	spdlog::info("Root directory is {}", MyFile::rootDir);
-}
-
-bool menger(const glm::ivec3& pos) {
-	int x = 0; int y = 0; int z = 0;
-	int X = Locate::cubesMap().width(); int Y = X; int Z = X;
-	int nbIter = MyMaths::LogInt(X, 3);
-	for (int n = 0; n < nbIter; ++n) {
-		int xID = (pos.x - x) * 3 / (X - x);
-		int yID = (pos.y - y) * 3 / (Y - y);
-		int zID = (pos.z - z) * 3 / (Z - z);
-		if ((xID == 1 && yID == 1) || (xID == 1 && zID == 1) || (zID == 1 && yID == 1))
-			return false;
-		else {
-			int dl = (X - x) / 3;
-			x += xID       * dl;
-			X -= (2 - xID) * dl;
-			y += yID       * dl;
-			Y -= (2 - yID) * dl;
-			z += zID       * dl;
-			Z -= (2 - zID) * dl;
-		}
-	}
-	return true;
 }
 
 void App::onInit() {
@@ -77,11 +52,6 @@ void App::onInit() {
 			}
 		}
 	}
-	//BoundingBox bbox;
-	//for (const glm::ivec3& pos : bbox) {
-	//	if (menger(pos + glm::ivec3(m_cubesMap.width()/2)))
-	//		m_cubesMap.addCube(pos);
-	//}
 	Locate::history(HistoryType::Cubes).endUndoGroup();
 
 	spdlog::info("-----------APP STARTS-----------");
