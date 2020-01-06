@@ -26,9 +26,11 @@ void History::endUndoGroup() {
 			m_index++;
 		}
 	}
+#ifndef NDEBUG
 	else {
 		spdlog::warn("Empty undo group");
 	}
+#endif
 }
 
 void History::addAction(Action action) {
