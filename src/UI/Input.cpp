@@ -44,3 +44,14 @@ bool Input::KeyIsDown(SpecialKey key) {
 		break;
 	}
 }
+
+bool Input::KeyIsDown(SDL_Scancode key) {
+	const Uint8* state = SDL_GetKeyboardState(NULL);
+	return state[key];
+}
+
+bool Input::KeyIsDown(char key) {
+	int code = (int)SDL_SCANCODE_A + int(key) - int('a');
+	if (code > -1)
+		return KeyIsDown((SDL_Scancode)code);
+}

@@ -9,6 +9,8 @@
 
 #include "Helper/Maths.hpp"
 
+#include "Debugging/Log.hpp"
+
 Tool_Sphere::Tool_Sphere()
 	: Tool_Shape(),
 	  m_radiuses(5)
@@ -43,9 +45,17 @@ void Tool_Sphere::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatT
 }
 
 void Tool_Sphere::onWheelScroll(int dl) {
-	m_radiuses.x = std::max(m_radiuses.x + dl, 0);
-	m_radiuses.y = std::max(m_radiuses.y + dl, 0);
-	m_radiuses.z = std::max(m_radiuses.z + dl, 0);
+	if (Input::KeyIsDown('x'))
+		m_radiuses.x = std::max(m_radiuses.x + dl, 0);
+	else if (Input::KeyIsDown('c'))
+		m_radiuses.z = std::max(m_radiuses.z + dl, 0);
+	else if (Input::KeyIsDown('v'))
+		m_radiuses.y = std::max(m_radiuses.y + dl, 0);
+	else {
+		m_radiuses.x = std::max(m_radiuses.x + dl, 0);
+		m_radiuses.y = std::max(m_radiuses.y + dl, 0);
+		m_radiuses.z = std::max(m_radiuses.z + dl, 0);
+	}
 }
 
 void Tool_Sphere::update(const Cursor& cursor) {

@@ -15,6 +15,8 @@ public:
 	static glm::vec2 MousePositionInPixels();
 	static glm::vec2 MousePositionInInches();
 	static bool KeyIsDown(SpecialKey key);
+	static bool KeyIsDown(char key);
+	static bool KeyIsDown(SDL_Scancode key);
 
 private:
 	static float m_horizontalDPI;

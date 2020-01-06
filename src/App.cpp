@@ -132,10 +132,10 @@ void App::onEvent(const SDL_Event& e) {
 
 	case SDL_MOUSEWHEEL:
 		if (!ImGui::GetIO().WantCaptureMouse)
-			if (Input::KeyIsDown(CTRL)) {
+			if (Input::KeyIsDown(SHIFT)) {
 				m_toolsManager.tool().onWheelScroll(e.wheel.y);
 			}
-			else if (Input::KeyIsDown(SHIFT)) {
+			else if (Input::KeyIsDown(CTRL)) {
 				m_cursor.onWheelScroll(e.wheel.y);
 			}
 			else {
@@ -180,6 +180,9 @@ void App::onEvent(const SDL_Event& e) {
 				else if (e.key.keysym.sym == 's') {
 					m_saveViewWindow.Open();
 				}
+			}
+			else if (Input::KeyIsDown(SHIFT)) {
+
 			}
 			else {
 				if (e.key.keysym.scancode == SDL_SCANCODE_F5) {
