@@ -22,9 +22,9 @@ ShadowMapBuffer::ShadowMapBuffer()
 	  m_minBias("Min Bias", HistoryType::Lights, 0.001f, 0.0f, 0.03f),
 	  m_maxBias("Max Bias", HistoryType::Lights, 0.008f, 0.0f, 0.03f),
 	  m_nearPlane("Near plane", HistoryType::Lights, 0.1f, 0.1f, 2.0f), 
-	  m_farPlane("Far plane", HistoryType::Lights, 22.0f, 5.0f, 100.0f),
-	  m_cropFactor("Crop factor", HistoryType::Lights, 11.2f, 1.0f, 100.0f),
-	  m_lightDistance("Light distance", HistoryType::Lights, 9.28f, 0.0f, 100.0f)
+	  m_farPlane("Far plane", HistoryType::Lights, 72.0f, 5.0f, 100.0f),
+	  m_cropFactor("Crop factor", HistoryType::Lights, 69.0f, 1.0f, 100.0f),
+	  m_lightDistance("Light distance", HistoryType::Lights, 40.0f, 0.0f, 100.0f)
 {
 	m_shadowMap.setSize(m_resolution.getValue(), m_resolution.getValue());
 	m_shadowMap.bind();
