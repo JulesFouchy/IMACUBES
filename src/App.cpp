@@ -214,10 +214,13 @@ void App::onEvent(const SDL_Event& e) {
 				else if (e.key.keysym.sym == 'p') {
 					m_lightsManager.trySetSelectedPointLightPosition(m_cursor.getCubeJustBeforePosition());
 				}
-				else if (e.key.keysym.sym == ' ') {
+				else if (e.key.keysym.sym == 'b') {
 					const MaterialLocation& matLoc = m_cubesMap[m_cursor.getPosition()];
 					if (matLoc.isValid())
 						m_cubesMap.materialsManager().setSelectedMaterial(matLoc.shaderID, matLoc.materialID);
+				}
+				else if (e.key.keysym.sym == ' ') {
+					m_toolsManager.tool().onKeyPressed(SPACE);
 				}
 				else if (e.key.keysym.sym == '+' || e.key.keysym.sym == '=') {
 					m_bAddTheSelectedSomething = true;

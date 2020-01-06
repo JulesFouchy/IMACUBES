@@ -5,6 +5,8 @@
 
 #include "CubesMap/BoundingBox.hpp"
 
+#include "UI/Input.hpp"
+
 Tool_Cube::Tool_Cube()
 	: Tool_Shape(),
 	m_center(0.0f), m_radius(1.0f)
@@ -25,4 +27,6 @@ void Tool_Cube::onWheelScroll(int dl) {
 void Tool_Cube::update(const Cursor& cursor) {
 	m_center = cursor.getCubeJustBeforePosition();
 	computePreview();
+	if (Input::KeyIsDown(SPACE))
+		replaceMaterials();
 }

@@ -35,6 +35,14 @@ void Tool_BoxTwoCorners::onRightClicDown(const Cursor& cursor) {
 	}
 }
 
+void Tool_BoxTwoCorners::onKeyPressed(SpecialKey key) {
+	if (key == SPACE && m_bFirstCornerSelected) {
+		replaceMaterials();
+		m_bFirstCornerSelected = false;
+		m_previewGroup.removeAllCubes();
+	}
+}
+
 void Tool_BoxTwoCorners::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
 	BoundingBox bbox(m_corner1, m_corner2);
 	for (const glm::ivec3& pos : bbox)

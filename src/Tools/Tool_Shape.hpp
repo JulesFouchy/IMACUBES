@@ -17,5 +17,6 @@ protected:
 
 	void addCubes();
 	void removeCubes();
+	void replaceMaterials();
 	void computePreview();
 };

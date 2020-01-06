@@ -18,6 +18,13 @@ void Tool_Shape::removeCubes() {
 	history.endUndoGroup();
 }
 
+void Tool_Shape::replaceMaterials() {
+	History& history = Locate::history(HistoryType::Materials);
+	history.beginUndoGroup();
+	applyOnShape([](const glm::ivec3& pos) { if(Locate::cubesMap().cubeExists(pos)) Locate::cubesMap().addCube(pos); });
+	history.endUndoGroup();
+}
+
 void Tool_Shape::computePreview() {
 	m_previewGroup.removeAllCubes();
 	applyOnShape([this](const glm::ivec3& pos) {this->m_previewGroup.addCube_NoExistenceCheck(pos); });

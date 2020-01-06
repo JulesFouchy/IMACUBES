@@ -11,6 +11,7 @@ public:
 
 	void onLeftClicDown(const Cursor& cursor) override;
 	void onRightClicDown(const Cursor& cursor) override;
+	void onKeyPressed(SpecialKey key) override;
 
 private:
 	void applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) override;

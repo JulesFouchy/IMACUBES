@@ -3,6 +3,8 @@
 #include "Cursor/Cursor.hpp"
 #include "OpenGL/CubesGroup_WithoutMaterialIndices.hpp"
 
+#include "UI/Keys.hpp"
+
 class Tool {
 public:
 	Tool() = default;
@@ -14,6 +16,7 @@ public:
 
 	virtual void onLeftClicDown (const Cursor& cursor) {}
 	virtual void onRightClicDown(const Cursor& cursor) {}
+	virtual void onKeyPressed(SpecialKey key) {}
 	virtual void onWheelScroll(int dl) {}
 
 protected:

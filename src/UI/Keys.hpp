@@ -1,13 +1,8 @@
 #pragma once
 
-//#include <variant>
-
-enum Key {
+enum SpecialKey {
 	ALT,
 	CTRL,
 	SHIFT,
-	SPACE,
-	F5
+	SPACE
 };
-
-//typedef std::variant<SpecialKey, char> Key;
