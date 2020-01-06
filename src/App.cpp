@@ -22,7 +22,7 @@
 
 App::App(SDL_Window* window)
 	: m_renderer(window),
-	  m_cubesMap(101, 101, 101), m_camera(glm::vec3(0.0f)),
+	  m_cubesMap(10, 10, 10), m_camera(glm::vec3(0.0f)),
 	  m_lightsManager(),
 	  m_bShowImGUIDemoWindow(false),
 	  m_bAddTheSelectedSomething(false),
@@ -107,7 +107,6 @@ void App::onLoopIteration() {
 	m_toolsManager.tool().showPreview();
 	m_shaderLibrary[m_cursorShaderLID].bind();
 	m_cursor.draw();
-	m_toolrbf.showGUI();
 	m_saveViewWindow.Show_IfOpen();
 }
 

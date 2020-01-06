@@ -15,3 +15,5 @@ void Tool::showPreview() {
 	Locate::shaderLibrary()[m_shaderLID].bind();
 	m_previewGroup.drawWireframe();
 }
+
+

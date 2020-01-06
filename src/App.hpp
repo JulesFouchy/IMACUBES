@@ -12,7 +12,6 @@
 #include "Cursor/Cursor.hpp"
 #include "GUI/PopupWindow/SaveView.hpp"
 #include "Light/LightsManager.hpp"
-#include "Tools/Tool_RBF.hpp" // TODO remove me
 #include "Tools/ToolsManager.hpp"
 #include "Renderer/Renderer.hpp"
 
@@ -46,7 +45,6 @@ private:
 	ShaderLibrary m_shaderLibrary;
 	size_t m_cursorShaderLID;
 	LightsManager m_lightsManager;
-	Tool_RBF m_toolrbf; // TODO remove me
 	ToolsManager m_toolsManager;
 	Camera m_camera;
 	HistoriesManager m_histories;
