@@ -14,6 +14,9 @@ public:
 	void onKeyPressed(SpecialKey key) override;
 
 protected:
+	void computeBoundingBox();
+
+protected:
 	glm::ivec3 m_corner1;
 	glm::ivec3 m_corner2;
 	bool m_bFirstCornerSelected;

@@ -12,6 +12,9 @@ public:
 	void onWheelScroll(int dl) override;
 
 protected:
+	void computeBoundingBox();
+
+protected:
 	glm::ivec3 m_center;
 	glm::ivec3 m_radiuses;
 };

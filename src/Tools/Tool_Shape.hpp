@@ -4,6 +4,8 @@
 
 #include <functional>
 
+#include "CubesMap/BoundingBox.hpp"
+
 class Tool_Shape : public Tool {
 public:
 	Tool_Shape() = default;
@@ -19,4 +21,7 @@ protected:
 	void removeCubes();
 	void replaceMaterials();
 	void computePreview();
+
+protected:
+	BoundingBox m_bbox;
 };

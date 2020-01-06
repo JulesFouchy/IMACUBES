@@ -27,3 +27,7 @@ void Tool_Shape_Radial::update(const Cursor& cursor) {
 	if (Input::KeyIsDown(SPACE))
 		replaceMaterials();
 }
+
+void Tool_Shape_Radial::computeBoundingBox() {
+	m_bbox = BoundingBox(m_center, m_radiuses, CENTER);
+}

@@ -38,3 +38,7 @@ void Tool_Shape_TwoCorners::onKeyPressed(SpecialKey key) {
 		m_previewGroup.removeAllCubes();
 	}
 }
+
+void Tool_Shape_TwoCorners::computeBoundingBox() {
+	m_bbox = BoundingBox(m_corner1, m_corner2, CORNERS);
+}

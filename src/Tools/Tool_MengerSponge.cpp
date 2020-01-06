@@ -1,7 +1,6 @@
 #include "Tool_MengerSponge.hpp"
 
 #include "Helper/Maths.hpp"
-#include "CubesMap/BoundingBox.hpp"
 
 #include "Debugging/Log.hpp"
 
@@ -11,9 +10,9 @@ Tool_MengerSponge::Tool_MengerSponge()
 }
 
 void Tool_MengerSponge::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
-	BoundingBox bbox(m_center, m_radiuses, CENTER);
-	for (const glm::ivec3& pos : bbox) {
-		if (menger(pos-bbox.minCorner()))
+	computeBoundingBox();
+	for (const glm::ivec3& pos : m_bbox) {
+		if (menger(pos-m_bbox.minCorner()))
 			whatToDoWithPos(pos);
 	}
 }
