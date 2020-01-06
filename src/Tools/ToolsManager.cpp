@@ -9,6 +9,8 @@
 
 #include <imgui/imgui.h>
 
+#include "Debugging/Log.hpp"
+
 ToolsManager::ToolsManager() {
 	setTool<Tool_MinecraftLike>();
 }
@@ -43,4 +45,5 @@ void ToolsManager::ImGui_SelectTool() {
 		}
 	}
 	ImGui::PopID();
+	m_activeTool->ImGui_Menu();
 }

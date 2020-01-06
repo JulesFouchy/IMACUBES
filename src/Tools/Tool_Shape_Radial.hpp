@@ -11,6 +11,8 @@ public:
 
 	void onWheelScroll(int dl) override;
 
+	void ImGui_Menu() override;
+
 protected:
 	void computeBoundingBox();
 
@@ -18,4 +20,7 @@ protected:
 	glm::ivec3 m_center;
 	glm::ivec3 m_radiuses;
 	glm::ivec3 m_direction;
+
+private:
+	int m_bCenterOnHoveredCube;
 };

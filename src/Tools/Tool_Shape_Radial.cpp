@@ -3,8 +3,12 @@
 #include "UI/Input.hpp"
 #include <algorithm>
 
+#include <imgui/imgui.h>
+
+#include "Debugging/Log.hpp"
+
 Tool_Shape_Radial::Tool_Shape_Radial()
-	: m_radiuses(5)
+	: m_radiuses(5), m_bCenterOnHoveredCube(0)
 {}
 
 void Tool_Shape_Radial::onWheelScroll(int dl) {
@@ -23,7 +27,7 @@ void Tool_Shape_Radial::onWheelScroll(int dl) {
 
 void Tool_Shape_Radial::update(const Cursor& cursor) {
 	m_center = cursor.getCubeJustBeforePosition();
-	m_direction = cursor.getCubeJustBeforePosition() - cursor.getPosition();
+	m_direction = m_bCenterOnHoveredCube ? glm::ivec3(0) : cursor.getCubeJustBeforePosition() - cursor.getPosition();
 	computePreview();
 	if (Input::KeyIsDown(SPACE))
 		replaceMaterials();
@@ -31,4 +35,11 @@ void Tool_Shape_Radial::update(const Cursor& cursor) {
 
 void Tool_Shape_Radial::computeBoundingBox() {
 	m_bbox = BoundingBox(m_center + m_direction * m_radiuses, m_radiuses, CENTER);
+}
+
+void Tool_Shape_Radial::ImGui_Menu() {
+	Tool_Shape::ImGui_Menu();
+	ImGui::PushID((int)this);
+	ImGui::Combo("", &m_bCenterOnHoveredCube, " Kiss hovered cube\0 Center on hovered cube\0\0");
+	ImGui::PopID();
 }

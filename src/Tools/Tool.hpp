@@ -19,6 +19,8 @@ public:
 	virtual void onKeyPressed(SpecialKey key) {}
 	virtual void onWheelScroll(int dl) {}
 
+	virtual void ImGui_Menu() {}
+
 protected:
 	CubesGroup_WithoutMaterialIndices m_previewGroup;
 private:
