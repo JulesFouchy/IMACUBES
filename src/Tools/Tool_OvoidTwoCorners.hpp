@@ -1,23 +1,12 @@
 #pragma once
 
-#include "Tool_Shape.hpp"
+#include "Tool_Shape_TwoCorners.hpp"
 
-class Tool_OvoidTwoCorners : public Tool_Shape {
+class Tool_OvoidTwoCorners : public Tool_Shape_TwoCorners {
 public:
-	Tool_OvoidTwoCorners();
+	Tool_OvoidTwoCorners() = default;
 	~Tool_OvoidTwoCorners() = default;
-
-	void update(const Cursor& cursor) override;
-
-	void onLeftClicDown(const Cursor& cursor) override;
-	void onRightClicDown(const Cursor& cursor) override;
-	void onKeyPressed(SpecialKey key) override;
 
 private:
 	void applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) override;
-
-private:
-	glm::ivec3 m_corner1;
-	glm::ivec3 m_corner2;
-	bool m_bFirstCornerSelected;
 };
