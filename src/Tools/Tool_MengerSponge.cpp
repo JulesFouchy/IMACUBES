@@ -4,10 +4,7 @@
 
 #include "Debugging/Log.hpp"
 
-Tool_MengerSponge::Tool_MengerSponge()
-{
-	m_radiuses = glm::ivec3(13);
-}
+#include <imgui/imgui.h>
 
 void Tool_MengerSponge::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
 	computeBoundingBox();
@@ -44,4 +41,30 @@ bool Tool_MengerSponge::menger(const glm::ivec3& pos) {
 		}
 	}
 	return true;
+}
+
+void Tool_MengerSponge::ImGui_Menu() {
+	Tool_Shape_Radial::ImGui_Menu();
+	static int perfectRadiuseID = 1;
+	if (ImGui::BeginPopupContextItem("Set perfect radius"))
+	{
+		const char* listbox_items[] = { "4", "13", "40" };
+		if (ImGui::ListBox("Set radius", &perfectRadiuseID, listbox_items, 3)) {
+			switch (perfectRadiuseID)
+			{
+			case 0:
+				m_radiuses = glm::ivec3(4);
+				break;
+			case 1:
+				m_radiuses = glm::ivec3(13);
+				break;
+			case 2:
+				m_radiuses = glm::ivec3(40);
+				break;
+			default:
+				break;
+			}
+		}
+		ImGui::EndPopup();
+	}
 }

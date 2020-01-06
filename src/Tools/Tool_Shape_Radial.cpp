@@ -5,6 +5,8 @@
 
 #include <imgui/imgui.h>
 
+#include <limits>
+
 #include "Debugging/Log.hpp"
 
 int Tool_Shape_Radial::m_bCenterOnHoveredCube = 1;
@@ -44,4 +46,5 @@ void Tool_Shape_Radial::ImGui_Menu() {
 	ImGui::PushID((int)this);
 	ImGui::Combo("", &m_bCenterOnHoveredCube, " Kiss hovered cube\0 Center on hovered cube\0\0");
 	ImGui::PopID();
+	ImGui::DragInt3("Radiuses", &m_radiuses.x, 1.0f, 0, std::numeric_limits<int>::max()/2);
 }
