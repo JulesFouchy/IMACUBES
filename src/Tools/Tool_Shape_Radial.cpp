@@ -23,11 +23,12 @@ void Tool_Shape_Radial::onWheelScroll(int dl) {
 
 void Tool_Shape_Radial::update(const Cursor& cursor) {
 	m_center = cursor.getCubeJustBeforePosition();
+	m_direction = cursor.getCubeJustBeforePosition() - cursor.getPosition();
 	computePreview();
 	if (Input::KeyIsDown(SPACE))
 		replaceMaterials();
 }
 
 void Tool_Shape_Radial::computeBoundingBox() {
-	m_bbox = BoundingBox(m_center, m_radiuses, CENTER);
+	m_bbox = BoundingBox(m_center + m_direction * m_radiuses, m_radiuses, CENTER);
 }

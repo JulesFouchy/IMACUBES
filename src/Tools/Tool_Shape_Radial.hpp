@@ -17,4 +17,5 @@ protected:
 protected:
 	glm::ivec3 m_center;
 	glm::ivec3 m_radiuses;
+	glm::ivec3 m_direction;
 };
