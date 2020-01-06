@@ -38,6 +38,7 @@ namespace UniformDescriptionFactory {
 						maxValue = ReadValue<T>(line, &currentPos);
 					}
 					else {
+						if (!arg.empty())
 						spdlog::warn("[UniformDescriptionFactory::ReadNameAndValuesAndCreateUniformOfType] Unknown argument : '{}'", arg);
 					}
 				}
