@@ -3,7 +3,7 @@
 #include <imgui/imgui.h>
 
 PointLight::PointLight(const glm::vec3& position, const glm::vec3& color, float intensity, const std::string& name)
-	: Light(name, color, intensity), m_position("Position", HistoryType::Lights, position)
+	: Light(name, color, intensity, 10.0f), m_position("Position", HistoryType::Lights, position)
 {}
 
 void PointLight::setUniforms(const std::string & uniformName, UniformUpdateList & uniformsList) {
