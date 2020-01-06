@@ -21,7 +21,7 @@ void Tool_Shape::removeCubes() {
 void Tool_Shape::replaceMaterials() {
 	History& history = Locate::history(HistoryType::Materials);
 	history.beginUndoGroup();
-	applyOnShape([](const glm::ivec3& pos) { if(Locate::cubesMap().cubeExists(pos)) Locate::cubesMap().addCube(pos); });
+	applyOnShape([](const glm::ivec3& pos) { if(Locate::cubesMap().cubeExists(pos)) Locate::cubesMap().addCube(pos, true, HistoryType::Materials); });
 	history.endUndoGroup();
 }
 

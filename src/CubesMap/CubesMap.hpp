@@ -3,6 +3,8 @@
 #include "Material/MaterialLocation.hpp"
 #include "Material/MaterialsManager.hpp"
 
+#include "History/HistoryTypes.hpp"
+
 #include <glm/glm.hpp>
 #include <vector>
 
@@ -12,8 +14,8 @@ public:
 	CubesMap(int width, int height, int depth);
 	~CubesMap() = default;
 
-	void addCube(const glm::ivec3& pos, bool bPushActionInHistory = true); // Dont forget to call history.beginUndoGroup() if you want to push the action in history !
-	void removeCube(const glm::ivec3& pos, bool bPushActionInHistory = true);
+	void addCube(const glm::ivec3& pos, bool bPushActionInHistory = true, HistoryType type = HistoryType::Cubes); // Dont forget to call history.beginUndoGroup() if you want to push the action in history !
+	void removeCube(const glm::ivec3& pos, bool bPushActionInHistory = true, HistoryType type = HistoryType::Cubes);
 
 	inline const MaterialLocation& operator[](glm::ivec3 id3D) const { return m_cubesLocations[index1Dfrom3D(id3D)]; }
 	inline bool cubeExists(const glm::ivec3& pos) const { return (*this)[pos].isValid(); }
@@ -36,7 +38,7 @@ public:
 	inline MaterialsManager& materialsManager() { return m_materialsManager; }
 
 private:
-	void setMaterialLocation(glm::ivec3 id3D, const MaterialLocation& matLoc, bool bPushActionInHistory = true);
+	void setMaterialLocation(glm::ivec3 id3D, const MaterialLocation& matLoc, bool bPushActionInHistory = true, HistoryType type = HistoryType::Cubes);
 
 private:
 	int m_width;

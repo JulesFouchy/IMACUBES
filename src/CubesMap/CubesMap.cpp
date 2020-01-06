@@ -9,20 +9,20 @@ CubesMap::CubesMap(int width, int height, int depth)
 
 }
 
-void CubesMap::addCube(const glm::ivec3& id3D, bool bPushActionInHistory) {
+void CubesMap::addCube(const glm::ivec3& id3D, bool bPushActionInHistory, HistoryType type) {
 	// Dont forget to call history.beginUndoGroup() if you want to push the action in history !
 	const MaterialLocation& currentMatLoc = (*this)[id3D];
 	if (currentMatLoc.isValid())
-		m_materialsManager.removeCube(currentMatLoc.shaderID, id3D, bPushActionInHistory);
-	MaterialLocation& newMatLoc = m_materialsManager.addCube(id3D, bPushActionInHistory);
-	setMaterialLocation(id3D, newMatLoc, bPushActionInHistory);
+		m_materialsManager.removeCube(currentMatLoc.shaderID, id3D, bPushActionInHistory, type);
+	MaterialLocation& newMatLoc = m_materialsManager.addCube(id3D, bPushActionInHistory, type);
+	setMaterialLocation(id3D, newMatLoc, bPushActionInHistory, type);
 }
 
-void CubesMap::removeCube(const glm::ivec3& id3D, bool bPushActionInHistory) {
+void CubesMap::removeCube(const glm::ivec3& id3D, bool bPushActionInHistory, HistoryType type) {
 	const MaterialLocation& currentMatLoc = (*this)[id3D];
 	if (currentMatLoc.isValid())
-		m_materialsManager.removeCube(currentMatLoc.shaderID, id3D, bPushActionInHistory);
-	setMaterialLocation(id3D, MaterialLocation(-1,-1), bPushActionInHistory);
+		m_materialsManager.removeCube(currentMatLoc.shaderID, id3D, bPushActionInHistory, type);
+	setMaterialLocation(id3D, MaterialLocation(-1,-1), bPushActionInHistory, type);
 }
 
 int CubesMap::index1Dfrom3D(const glm::ivec3& id3D) const {
@@ -38,11 +38,11 @@ bool CubesMap::isPositionInsideWorld(const glm::vec3& pos) const {
 	return pos.x > minValidX() - 0.5f && pos.x < maxValidX() + 0.5f && pos.y > minValidY() - 0.5f && pos.y < maxValidY() + 0.5f && pos.z > minValidZ() - 0.5f && pos.z < maxValidZ() + 0.5f;
 }
 
-void CubesMap::setMaterialLocation(glm::ivec3 id3D, const MaterialLocation& matLoc, bool bPushActionInHistory){
+void CubesMap::setMaterialLocation(glm::ivec3 id3D, const MaterialLocation& matLoc, bool bPushActionInHistory, HistoryType type){
 	if (bPushActionInHistory) {
 		MaterialLocation prevLoc = m_cubesLocations[index1Dfrom3D(id3D)];
 		MaterialLocation newLoc = matLoc;
-		Locate::history(HistoryType::Cubes).addAction(Action(
+		Locate::history(type).addAction(Action(
 			// DO action
 			[this, newLoc, id3D]()
 		{

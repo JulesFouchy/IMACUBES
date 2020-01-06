@@ -67,12 +67,12 @@ void MaterialsManager::ImGui_AddMaterialToSelectedShaderButton(bool forcedPress)
 	}
 }
 
-MaterialLocation MaterialsManager::addCube(const glm::ivec3& pos, bool bPushActionInHistory) {
+MaterialLocation MaterialsManager::addCube(const glm::ivec3& pos, bool bPushActionInHistory, HistoryType type) {
 	if (bPushActionInHistory) {
 		glm::vec3 _pos = pos;
 		int _shaderID = m_selectedShaderID;
 		int _materialID = m_selectedMaterialIDforThisShaderID[m_selectedShaderID];
-		Locate::history(HistoryType::Cubes).addAction(Action(
+		Locate::history(type).addAction(Action(
 			// DO action
 			[this, _pos, _shaderID, _materialID]()
 		{
@@ -89,12 +89,12 @@ MaterialLocation MaterialsManager::addCube(const glm::ivec3& pos, bool bPushActi
 	return SelectedMaterialLocation();
 }
 
-void MaterialsManager::removeCube(int shaderID, const glm::ivec3& pos, bool bPushActionInHistory) {
+void MaterialsManager::removeCube(int shaderID, const glm::ivec3& pos, bool bPushActionInHistory, HistoryType type) {
 	if (bPushActionInHistory) {
 		int _shaderID = shaderID;
 		int _materialID = Shaders()[shaderID].m_cubes.getCubeMaterialID(pos);
 		glm::ivec3 _pos = pos;
-		Locate::history(HistoryType::Cubes).addAction(Action(
+		Locate::history(type).addAction(Action(
 			// DO action
 			[this, _shaderID, _pos]()
 		{
