@@ -32,8 +32,10 @@ void Cursor::setPosition(const glm::ivec3& newPos) {
 		m_selectedCubes.removeAllCubes();
 		m_selectedCubes.addCube_NoExistenceCheck(m_position);
 	}
+#ifndef NDEBUG
 	else
 		spdlog::warn("[Cursor::setPosition] trying to position it outside of world's boundaries");
+#endif
 }
 
 void Cursor::setCubeJustBeforePosition(const glm::ivec3& newPos) {
@@ -42,8 +44,10 @@ void Cursor::setCubeJustBeforePosition(const glm::ivec3& newPos) {
 		//m_selectedCubes.removeAllCubes();
 		//m_selectedCubes.addCube_NoExistenceCheck(m_cubeJustBeforePosition);
 	}
+#ifndef NDEBUG
 	else
 		spdlog::warn("[Cursor::setCubeJustBeforePosition] trying to position it outside of world's boundaries");
+#endif
 }
 
 void Cursor::translate(const glm::ivec3& dl) {
