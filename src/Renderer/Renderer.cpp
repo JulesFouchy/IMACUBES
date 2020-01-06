@@ -30,7 +30,7 @@ Renderer::Renderer(SDL_Window* window)
 void Renderer::initAfterApp() {
 	m_SSAOcomputer.initAfterApp();
 	m_lightingPassShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_lightingPass.vert", MyFile::rootDir + "/res/shaders/_lightingPass.frag", false);
-	setNumberOfLights(0, 0); // this compiles m_lightingPassShaderLID and #defines the number of lights
+	setNumberOfLights(1, 1); // this compiles m_lightingPassShaderLID and #defines the number of lights
 	Locate::shaderLibrary().addSubscriberToList(m_lightingPassShaderLID, UniformList::Lights);
 	m_denoiseNormalsShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_denoiseNormals.frag");
 	m_blurSSAOtextureShaderLID = Locate::shaderLibrary().LoadShader(MyFile::rootDir + "/res/shaders/_texture.vert", MyFile::rootDir + "/res/shaders/_blur1ChannelTexture.frag");

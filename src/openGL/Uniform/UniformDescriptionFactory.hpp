@@ -39,7 +39,7 @@ namespace UniformDescriptionFactory {
 					}
 					else {
 						if (!arg.empty())
-						spdlog::warn("[UniformDescriptionFactory::ReadNameAndValuesAndCreateUniformOfType] Unknown argument : '{}'", arg);
+							spdlog::warn("[UniformDescriptionFactory::ReadNameAndValuesAndCreateUniformOfType] Unknown argument : '{}'", arg);
 					}
 				}
 			}

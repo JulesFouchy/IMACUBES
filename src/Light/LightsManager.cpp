@@ -30,7 +30,7 @@ void LightsManager::addDirectionalLight(float angleUp, float angleGround, const 
 }
 
 void LightsManager::updateNbOfLightsInShaders() {
-	Locate::renderer().setNumberOfLights(m_pointLights.size(), m_directionalLights.size());
+	Locate::renderer().setNumberOfLights(std::max(m_pointLights.size(), (size_t)1), std::max(m_directionalLights.size(), (size_t)1));
 }
 
 void LightsManager::duplicateSelectedPointLight() {
