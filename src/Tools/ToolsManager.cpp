@@ -4,6 +4,7 @@
 #include "Tool_Cube.hpp"
 #include "Tool_BoxTwoCorners.hpp"
 #include "Tool_Sphere.hpp"
+#include "Tool_OvoidTwoCorners.hpp"
 
 #include <imgui/imgui.h>
 
@@ -12,7 +13,7 @@ ToolsManager::ToolsManager() {
 }
 
 void ToolsManager::ImGui_SelectTool() {
-	const char* listbox_items[] = { "Minecraft", "Cube", "Box two corners", "Sphere" };
+	const char* listbox_items[] = { "Minecraft", "Cube", "Box two corners", "Sphere", "Ovoid two corners" };
 	static int listbox_item_current = 0;
 	ImGui::PushID((int)&m_activeTool);
 	if (ImGui::ListBox("", &listbox_item_current, listbox_items, IM_ARRAYSIZE(listbox_items))) {
@@ -29,6 +30,9 @@ void ToolsManager::ImGui_SelectTool() {
 			break;
 		case 3:
 			setTool<Tool_Sphere>();
+			break;
+		case 4:
+			setTool<Tool_OvoidTwoCorners>();
 			break;
 		default:
 			break;
