@@ -16,5 +16,5 @@ private:
 
 private:
 	glm::ivec3 m_center;
-	int m_radius;
+	glm::ivec3 m_radiuses;
 };

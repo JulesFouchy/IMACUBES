@@ -4,6 +4,8 @@
 
 #include "Debugging/Log.hpp"
 
+#include "Helper/Maths.hpp"
+
 Tool_OvoidTwoCorners::Tool_OvoidTwoCorners()
 	: m_bFirstCornerSelected(false)
 {}
@@ -44,7 +46,7 @@ void Tool_OvoidTwoCorners::onKeyPressed(SpecialKey key) {
 }
 
 void Tool_OvoidTwoCorners::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
-	BoundingBox bbox(m_corner1, m_corner2);
+	BoundingBox bbox(m_corner1, m_corner2, CORNERS);
 	int nbDimensions = (bbox.size().x != 0 ? 1 : 0)
 					 + (bbox.size().y != 0 ? 1 : 0)
 					 + (bbox.size().z != 0 ? 1 : 0);
@@ -60,7 +62,7 @@ void Tool_OvoidTwoCorners::applyOnShape(std::function<void(const glm::ivec3 & po
 		else if (bbox.size().y == 0) { c0 = 0; c1 = 2; }
 		else                         { c0 = 0; c1 = 1; }
 		for (const glm::ivec3& pos : bbox) {
-			if (normalizedDistance2D(pos, bbox.center(), bbox.size(), c0, c1) <= 0.5f)
+			if (MyMaths::NormalizedDistance2D(pos, bbox.center(), bbox.size(), c0, c1) <= 0.5f)
 				whatToDoWithPos(pos);
 		}
 	}
@@ -68,11 +70,4 @@ void Tool_OvoidTwoCorners::applyOnShape(std::function<void(const glm::ivec3 & po
 		for (const glm::ivec3& pos : bbox)
 			whatToDoWithPos(pos);
 	}
-}
-
-float Tool_OvoidTwoCorners::normalizedDistance2D(const glm::ivec3& v0, const glm::ivec3& v1, const glm::ivec3& size, int c0, int c1) {
-	glm::vec2 a0 = glm::vec2(v0[c0], v0[c1]);
-	glm::vec2 a1 = glm::vec2(v1[c0], v1[c1]);
-	glm::vec2 size2D = glm::vec2(size[c0], size[c1]);
-	return glm::length((a0 - a1)/size2D);
 }

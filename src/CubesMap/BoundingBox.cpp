@@ -13,19 +13,26 @@ BoundingBox::BoundingBox()
 	computeInfos();
 }
 
-BoundingBox::BoundingBox(const glm::ivec3& center, int radius)
-	: m_minValidX(clampX(center.x - radius)), m_maxValidX(clampX(center.x + radius)),
-	  m_minValidY(clampY(center.y - radius)), m_maxValidY(clampY(center.y + radius)),
-	  m_minValidZ(clampZ(center.z - radius)), m_maxValidZ(clampZ(center.z + radius))
-{
-	computeInfos();
-}
-
-BoundingBox::BoundingBox(const glm::ivec3& corner1, const glm::ivec3& corner2)
-	: m_minValidX(std::min(corner1.x, corner2.x)), m_maxValidX(std::max(corner1.x, corner2.x)),
-	  m_minValidY(std::min(corner1.y, corner2.y)), m_maxValidY(std::max(corner1.y, corner2.y)),
-	  m_minValidZ(std::min(corner1.z, corner2.z)), m_maxValidZ(std::max(corner1.z, corner2.z))
-{
+BoundingBox::BoundingBox(const glm::ivec3& v0, const glm::ivec3& v1, BboxGenerationMode mode) {
+	switch (mode)
+	{
+	case CENTER:
+		// v0 = center
+		// v1 = radiuses
+		m_minValidX = clampX(v0.x - v1.x); m_maxValidX = clampX(v0.x + v1.x);
+		m_minValidY = clampX(v0.y - v1.y); m_maxValidY = clampX(v0.y + v1.y);
+		m_minValidZ = clampX(v0.z - v1.z); m_maxValidZ = clampX(v0.z + v1.z);
+		break;
+	case CORNERS:
+		// v0 = corner0
+		// v1 = corner1
+		m_minValidX = std::min(v0.x, v1.x); m_maxValidX = std::max(v0.x, v1.x);
+		m_minValidY = std::min(v0.y, v1.y); m_maxValidY = std::max(v0.y, v1.y);
+		m_minValidZ = std::min(v0.z, v1.z); m_maxValidZ = std::max(v0.z, v1.z);
+		break;
+	default:
+		break;
+	}
 	computeInfos();
 }
 

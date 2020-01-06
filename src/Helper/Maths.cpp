@@ -47,3 +47,10 @@ int MyMaths::Clamp(int x, int a, int b) {
 float MyMaths::Lerp(float a, float b, float t) {
 	return a + t * (b - a);
 }
+
+float MyMaths::NormalizedDistance2D(const glm::ivec3& v0, const glm::ivec3& v1, const glm::ivec3& size, int c0, int c1) {
+	glm::vec2 a0 = glm::vec2(v0[c0], v0[c1]);
+	glm::vec2 a1 = glm::vec2(v1[c0], v1[c1]);
+	glm::vec2 size2D = glm::vec2(size[c0], size[c1]);
+	return glm::length((a0 - a1) / size2D);
+}

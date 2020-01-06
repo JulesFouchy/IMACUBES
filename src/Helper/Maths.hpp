@@ -1,5 +1,7 @@
 #pragma once
 
+#include <glm/glm.hpp>
+
 namespace MyMaths {
 	const float TAU = 6.283185307179586476925286766559f;
 
@@ -15,4 +17,6 @@ namespace MyMaths {
 	int Clamp(int x, int a, int b);
 	
 	float Lerp(float a, float b, float t);
+
+	float NormalizedDistance2D(const glm::ivec3& v0, const glm::ivec3& v1, const glm::ivec3& size, int c0, int c1);
 }

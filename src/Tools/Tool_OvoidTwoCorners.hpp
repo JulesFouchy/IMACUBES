@@ -16,8 +16,6 @@ public:
 private:
 	void applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) override;
 
-	float normalizedDistance2D(const glm::ivec3& v0, const glm::ivec3& v1, const glm::ivec3& size, int c0, int c1);
-
 private:
 	glm::ivec3 m_corner1;
 	glm::ivec3 m_corner2;

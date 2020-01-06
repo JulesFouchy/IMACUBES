@@ -2,12 +2,16 @@
 
 #include "BoundingBoxIterator.hpp"
 
+enum BboxGenerationMode {
+	CENTER,
+	CORNERS
+};
+
 class BoundingBox {
 friend class BoundingBoxIterator;
 public:
 	BoundingBox(); 
-	BoundingBox(const glm::ivec3& center, int radius);
-	BoundingBox(const glm::ivec3& corner1, const glm::ivec3& corner2);
+	BoundingBox(const glm::ivec3& v0, const glm::ivec3& v1, BboxGenerationMode mode);
 	~BoundingBox() = default;
 
 	BoundingBoxIterator begin();

@@ -9,19 +9,21 @@
 
 Tool_Cube::Tool_Cube()
 	: Tool_Shape(),
-	m_center(0.0f), m_radius(1.0f)
+	m_radiuses(5)
 {
 }
 
 void Tool_Cube::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
-	BoundingBox bbox(m_center, m_radius);
+	BoundingBox bbox(m_center, m_radiuses, CENTER);
 	for (const glm::ivec3& pos : bbox) {
 		whatToDoWithPos(pos);
 	}
 }
 
 void Tool_Cube::onWheelScroll(int dl) {
-	m_radius = std::max(m_radius + dl, 0);
+	m_radiuses.x = std::max(m_radiuses.x + dl, 0);
+	m_radiuses.y = std::max(m_radiuses.y + dl, 0);
+	m_radiuses.z = std::max(m_radiuses.z + dl, 0);
 }
 
 void Tool_Cube::update(const Cursor& cursor) {
