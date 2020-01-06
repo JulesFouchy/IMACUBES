@@ -92,6 +92,17 @@ void LightsManager::ImGui_LightsList() {
 			m_selectedLightType = LightType::Ambiant;
 			ImGui::EndTabItem();
 		}
+		if (ImGui::BeginTabItem("Directional"))
+		{
+			m_selectedLightType = LightType::Directional;
+			for (int k = 0; k < m_directionalLights.size(); ++k) {
+				ImGui::PushID(-k - 1);
+				if (ImGui::Selectable(m_directionalLights[k].getName().c_str(), m_selectedDirectionalIndex == k))
+					m_selectedDirectionalIndex = k;
+				ImGui::PopID();
+			}
+			ImGui::EndTabItem();
+		}
 		if (ImGui::BeginTabItem("Point"))
 		{
 			m_selectedLightType = LightType::Point;
@@ -99,17 +110,6 @@ void LightsManager::ImGui_LightsList() {
 				ImGui::PushID(k);
 				if (ImGui::Selectable(m_pointLights[k].getName().c_str(), m_selectedPointIndex == k ))
 					m_selectedPointIndex = k;
-				ImGui::PopID();
-			}
-			ImGui::EndTabItem();
-		}
-		if (ImGui::BeginTabItem("Directional"))
-		{
-			m_selectedLightType = LightType::Directional;
-			for (int k = 0; k < m_directionalLights.size(); ++k) {
-				ImGui::PushID(-k-1);
-				if (ImGui::Selectable(m_directionalLights[k].getName().c_str(), m_selectedDirectionalIndex == k))
-					m_selectedDirectionalIndex = k;
 				ImGui::PopID();
 			}
 			ImGui::EndTabItem();
