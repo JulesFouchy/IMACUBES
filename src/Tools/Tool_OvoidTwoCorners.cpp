@@ -1,7 +1,5 @@
 #include "Tool_OvoidTwoCorners.hpp"
 
-#include "Helper/Maths.hpp"
-
 void Tool_OvoidTwoCorners::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
 	computeBoundingBox();
 	for (const glm::ivec3& pos : m_bbox) {
