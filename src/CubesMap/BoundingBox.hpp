@@ -23,12 +23,12 @@ public:
 	bool isZValid(int z) const;
 	bool isCubeInside(const glm::ivec3& pos) const;
 
-	inline const glm::ivec3& minCorner() { return m_minCorner; }
-	inline const glm::ivec3& maxCorner() { return m_maxCorner; }
+	inline const glm::ivec3& minCorner() const { return m_minCorner; }
+	inline const glm::ivec3& maxCorner() const { return m_maxCorner; }
 
-	inline const glm::ivec3& size() { return m_size; }
-	inline const glm::ivec3& center() { return m_center; }
-	inline const glm::vec3& centerFloat() { return m_centerFloat; }
+	inline const glm::ivec3& size() const { return m_size; }
+	inline const glm::ivec3& center() const { return m_center; }
+	inline const glm::vec3& centerFloat() const { return m_centerFloat; }
 
 private:
 	void computeInfos();

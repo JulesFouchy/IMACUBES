@@ -31,7 +31,7 @@ void Tool_Shape_Radial::onWheelScroll(int dl) {
 
 void Tool_Shape_Radial::update(const Cursor& cursor) {
 	m_center = cursor.getCubeJustBeforePosition();
-	m_direction = m_bCenterOnHoveredCube ? glm::ivec3(0) : cursor.getCubeJustBeforePosition() - cursor.getPosition();
+	m_direction = m_bCenterOnHoveredCube ? glm::ivec3(0) : cursor.getNormal();
 	computePreview();
 	if (Input::KeyIsDown(SPACE))
 		replaceMaterials();

@@ -31,6 +31,7 @@ void CursorPositioner_AtAFixedDistance::computePosition() {
 
 	m_cursor->setCubeJustBeforePosition(pos);
 	m_cursor->setPosition(pos);
+	m_cursor->m_normalOfHoveredFace = glm::ivec3(0);
 }
 
 void CursorPositioner_AtAFixedDistance::onWheelScroll(float dl) {

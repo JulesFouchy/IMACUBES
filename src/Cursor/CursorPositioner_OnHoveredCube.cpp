@@ -28,19 +28,27 @@ void CursorPositioner_OnHoveredCube::computePosition() {
 	while (cubesMap.isID3Dvalid(iPos) && !cubesMap.cubeExists(iPos)) {
 		float t = CubeMaths::IntersectionRayCube_WROIC(ray, iPos);
 		ray.origin += (t + 0.01f) * ray.direction;
+		prevIpos = iPos;
 		iPos = CubeMaths::CubeContaining(ray.origin);
-		if (cubesMap.isID3Dvalid(iPos) && !cubesMap.cubeExists(iPos))
-			prevIpos = iPos;
 	}
-	if (cubesMap.isID3Dvalid(prevIpos)) {
-		m_cursor->setCubeJustBeforePosition(prevIpos);
-	}
+	m_cursor->setCubeJustBeforePosition(prevIpos);
 	if (cubesMap.isID3Dvalid(iPos)) {
 		m_cursor->setPosition(iPos);
+		m_cursor->m_normalOfHoveredFace = prevIpos - iPos;
 	}
 	else {
-		if (cubesMap.isID3Dvalid(prevIpos)) {
-			m_cursor->setPosition(prevIpos);
-		}
+		m_cursor->setPosition(prevIpos);
+		if(iPos.x < cubesMap.minValidX())
+			m_cursor->m_normalOfHoveredFace = glm::ivec3(1, 0, 0);
+		else if (iPos.x > cubesMap.maxValidX())
+			m_cursor->m_normalOfHoveredFace = glm::ivec3(-1, 0, 0);
+		else if (iPos.y < cubesMap.minValidY())
+			m_cursor->m_normalOfHoveredFace = glm::ivec3(0, 1, 0);
+		else if (iPos.y > cubesMap.maxValidY())
+			m_cursor->m_normalOfHoveredFace = glm::ivec3(0, -1, 0);
+		else if (iPos.z < cubesMap.minValidZ())
+			m_cursor->m_normalOfHoveredFace = glm::ivec3(0, 0, 1);
+		else if (iPos.z > cubesMap.maxValidZ())
+			m_cursor->m_normalOfHoveredFace = glm::ivec3(0, 0, -1);
 	}
 }

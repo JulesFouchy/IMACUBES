@@ -41,8 +41,6 @@ void Cursor::setPosition(const glm::ivec3& newPos) {
 void Cursor::setCubeJustBeforePosition(const glm::ivec3& newPos) {
 	if (Locate::cubesMap().isID3Dvalid(newPos)) {
 		m_cubeJustBeforePosition = newPos;
-		//m_selectedCubes.removeAllCubes();
-		//m_selectedCubes.addCube_NoExistenceCheck(m_cubeJustBeforePosition);
 	}
 #ifndef NDEBUG
 	else

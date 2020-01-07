@@ -8,10 +8,11 @@
 
 void Tool_MengerSponge::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
 	computeBoundingBox();
-	for (const glm::ivec3& pos : m_bbox) {
-		if (menger(pos-m_bbox.minCorner()))
-			whatToDoWithPos(pos);
-	}
+	mengerSponge(m_bbox, whatToDoWithPos);
+	//for (const glm::ivec3& pos : m_bbox) {
+	//	if (menger(pos-m_bbox.minCorner()))
+	//		whatToDoWithPos(pos);
+	//}
 }
 
 bool Tool_MengerSponge::menger(const glm::ivec3& pos) {
@@ -41,6 +42,26 @@ bool Tool_MengerSponge::menger(const glm::ivec3& pos) {
 		}
 	}*/
 	return true;
+}
+
+
+void Tool_MengerSponge::mengerSponge(const BoundingBox& bbox, std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
+	Log::log((glm::vec3)bbox.size());
+	if (bbox.size() == glm::ivec3(1)) {
+		whatToDoWithPos(bbox.minCorner());
+	}
+	else {
+		glm::ivec3 dlToCorner0 = bbox.size() / 3 - glm::ivec3(1) + (bbox.size() % 3)/2 * glm::ivec3(1);
+		glm::ivec3 dlToCorner1 = bbox.size() / 3 - glm::ivec3(1) + bbox.size() % 3 % 2 * glm::ivec3(1);
+		glm::ivec3 dlToCorner2 = bbox.size() / 3 - glm::ivec3(1) + (bbox.size() % 3)/2 * glm::ivec3(1);
+		// bot face
+		glm::ivec3 corner = bbox.minCorner();
+		mengerSponge(BoundingBox(corner, corner + dlToCorner0, CORNERS), whatToDoWithPos);
+		corner = bbox.minCorner() + dlToCorner0.x;
+		mengerSponge(BoundingBox(corner, corner + dlToCorner1, CORNERS), whatToDoWithPos);
+		corner = bbox.minCorner() + dlToCorner1.x;
+		mengerSponge(BoundingBox(corner, corner + dlToCorner2, CORNERS), whatToDoWithPos);
+	}
 }
 
 void Tool_MengerSponge::ImGui_Menu() {
