@@ -28,6 +28,7 @@ public:
 
 	inline const glm::ivec3& size() { return m_size; }
 	inline const glm::ivec3& center() { return m_center; }
+	inline const glm::vec3& centerFloat() { return m_centerFloat; }
 
 private:
 	void computeInfos();
@@ -43,4 +44,5 @@ private:
 
 	glm::ivec3 m_size;
 	glm::ivec3 m_center;
+	glm::vec3 m_centerFloat;
 };

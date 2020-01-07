@@ -9,7 +9,7 @@ void Tool_Sphere::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatT
 					 + (m_bbox.size().z != 0 ? 1 : 0);
 	if (nbDimensions == 3) {
 		for (const glm::ivec3& pos : m_bbox) {
-			if (glm::length((glm::vec3)(pos - m_bbox.center()) / (glm::vec3)m_bbox.size()) <= 0.5f)
+			if (glm::length(((glm::vec3)(pos) - m_bbox.centerFloat()) / (glm::vec3)(m_radiuses*2)) <= 0.5f)
 				whatToDoWithPos(pos);
 		}
 	}

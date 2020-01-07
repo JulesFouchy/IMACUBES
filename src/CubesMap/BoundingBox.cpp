@@ -52,6 +52,7 @@ BoundingBox::BoundingBox(const glm::ivec3& v0, const glm::ivec3& v1, BboxGenerat
 void BoundingBox::computeInfos() {
 	m_size = m_maxCorner - m_minCorner;
 	m_center = (m_minCorner + m_maxCorner) / 2;
+	m_centerFloat = (glm::vec3) (m_minCorner + m_maxCorner) * 0.5f;
 }
 
 BoundingBoxIterator BoundingBox::begin() {
