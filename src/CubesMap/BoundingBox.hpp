@@ -4,6 +4,7 @@
 
 enum BboxGenerationMode {
 	CENTER,
+	CENTER_EVENSIZE,
 	CORNERS
 };
 

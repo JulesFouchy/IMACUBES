@@ -28,3 +28,10 @@ void Tool_Sphere::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatT
 			whatToDoWithPos(pos);
 	}
 }
+
+void Tool_Sphere::computeBoundingBox() {
+	glm::ivec3 r = m_radiuses;
+	if (m_direction.x + m_direction.y + m_direction.z < 0)
+		r += m_direction;
+	m_bbox = BoundingBox(m_center + m_direction * r, m_radiuses, CENTER_EVENSIZE);
+}

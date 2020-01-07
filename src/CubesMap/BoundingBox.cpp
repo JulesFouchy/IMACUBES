@@ -25,6 +25,12 @@ BoundingBox::BoundingBox(const glm::ivec3& v0, const glm::ivec3& v1, BboxGenerat
 		m_minCorner = clamp(v0 - v1);
 		m_maxCorner = clamp(v0 + v1);
 		break;
+	case CENTER_EVENSIZE:
+		// v0 = center
+		// v1 = radiuses
+		m_minCorner = clamp(v0 - v1);
+		m_maxCorner = clamp(v0 + v1 - glm::ivec3(1));
+		break;
 	case CORNERS:
 		// v0 = corner0
 		// v1 = corner1
