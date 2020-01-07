@@ -14,7 +14,7 @@ public:
 	void ImGui_Menu() override;
 
 protected:
-	virtual void computeBoundingBox();
+	void computeBoundingBox();
 
 protected:
 	glm::ivec3 m_center;
