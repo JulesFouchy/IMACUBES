@@ -3,8 +3,8 @@
 #include "BoundingBoxIterator.hpp"
 
 enum BboxGenerationMode {
-	CENTER,
-	CENTER_EVENSIZE,
+	CENTER_SIZE,
+	CENTER_RADIUS_EVENSIZE,
 	CORNERS
 };
 

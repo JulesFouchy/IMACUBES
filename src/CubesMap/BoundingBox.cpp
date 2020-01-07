@@ -19,13 +19,13 @@ BoundingBox::BoundingBox()
 BoundingBox::BoundingBox(const glm::ivec3& v0, const glm::ivec3& v1, BboxGenerationMode mode) {
 	switch (mode)
 	{
-	case CENTER:
+	case CENTER_SIZE:
 		// v0 = center
-		// v1 = radiuses
-		m_minCorner = clamp(v0 - v1);
-		m_maxCorner = clamp(v0 + v1);
+		// v1 = sizes
+		m_minCorner = clamp(v0 - v1/2);
+		m_maxCorner = clamp(v0 + v1/2 - (1-v1%2));
 		break;
-	case CENTER_EVENSIZE:
+	case CENTER_RADIUS_EVENSIZE:
 		// v0 = center
 		// v1 = radiuses
 		m_minCorner = clamp(v0 - v1);
@@ -50,7 +50,7 @@ BoundingBox::BoundingBox(const glm::ivec3& v0, const glm::ivec3& v1, BboxGenerat
 }
 
 void BoundingBox::computeInfos() {
-	m_size = m_maxCorner - m_minCorner;
+	m_size = m_maxCorner - m_minCorner + glm::ivec3(1);
 	m_center = (m_minCorner + m_maxCorner) / 2;
 	m_centerFloat = (glm::vec3) (m_minCorner + m_maxCorner) * 0.5f;
 }

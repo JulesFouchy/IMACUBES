@@ -10,5 +10,5 @@ public:
 private:
 	void applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) override;
 
-	void computeBoundingBox() override;
+	//void computeBoundingBox() override;
 };
