@@ -78,7 +78,6 @@ void App::onLoopIteration() {
 	m_toolsManager.tool().showPreview();
 	m_shaderLibrary[m_cursorShaderLID].bind();
 	m_cursor.draw();
-	m_toolrbf.showGUI();
 	m_saveViewWindow.Show_IfOpen();
 }
 

@@ -1,11 +1,9 @@
 #include <imgui/imgui.h>
 #include "GUI/PopupWindow/_PopupWindow.hpp"
 #include "Tool_RBF_Window.hpp"
-#include "RBF/Rbf.hpp"
 #include "Tools/Tool_RBF.hpp"
 #include "Locator/Locate.hpp"
 
-#include "CubesMap/BoundingBox.hpp"
 
 
 PopupWindow_RBF::PopupWindow_RBF(Tool_RBF* parent)
@@ -19,7 +17,10 @@ void PopupWindow_RBF::Open() {
 
 
 
+
 void PopupWindow_RBF::Show() {
+	ImGui::SetNextWindowPos(ImVec2(0, 100), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(1000, 680), ImGuiCond_FirstUseEver);
 	BeginWindow();
 	//
 	ImGui::Separator();
@@ -28,17 +29,17 @@ void PopupWindow_RBF::Show() {
 	//
 	ImGui::Separator();
 
+	//ImGui::SliderFloat("Vitesse de décroissance", &m_parent->vitesse_decroissance, 0.0, 1.0);
+
 	//Selection de la fonction RBF
-	static int item_current = 1;
-	ImGui::Combo("phi",&item_current, " Gaussienne\0 quadratique\0 Multi-quadratique\0 inverse Multi-quadratique\0\0");
+	ImGui::Combo("phi",&m_parent->m_selectedPhi, " Gaussienne\0 Multi-quadratique\0inverse Multi-quadratique\0\0");
+	
 	ConfirmationButton();
 	EndWindow();
 }
 
+
 void PopupWindow_RBF::OnConfirmation() {
-	//RBF rbf(m_parent->m_anchorPts, m_parent->m_valuesAtAnchorPts);
-	BoundingBox worldBB;
-	for (const glm::ivec3& pos : worldBB) {
-		//spdlog::info("{} {} {}", pos.x, pos.y, pos.z);
-	}
+	m_parent->addCubes();
 }
+

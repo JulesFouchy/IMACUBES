@@ -10,13 +10,11 @@ public:
 	~PopupWindow_RBF() = default;
 
 	void Open() override;
-	void SelectRBF();
 
 
 
 private:
 	void Show() override;
 	void OnConfirmation() override;
-
 	Tool_RBF* m_parent;
 };

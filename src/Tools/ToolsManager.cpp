@@ -5,6 +5,7 @@
 #include "Tool_BoxTwoCorners.hpp"
 #include "Tool_Sphere.hpp"
 #include "Tool_OvoidTwoCorners.hpp"
+#include "Tool_RBF.hpp"
 #include "Tool_MengerSponge.hpp"
 
 #include <imgui/imgui.h>
