@@ -1,6 +1,6 @@
 #pragma once
-#include "GUI/PopupWindow/_PopupWindow.hpp"
 
+#include "GUI/PopupWindow/_PopupWindow.hpp"
 
 class Tool_RBF;
 
@@ -9,12 +9,10 @@ public:
 	PopupWindow_RBF(Tool_RBF* parent);
 	~PopupWindow_RBF() = default;
 
-	void Open() override;
-
-
-
 private:
 	void Show() override;
 	void OnConfirmation() override;
+
+private:
 	Tool_RBF* m_parent;
 };
