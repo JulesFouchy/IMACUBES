@@ -14,7 +14,6 @@
 #include "Locator/Locate.hpp"
 #include "Material/MaterialsManager.hpp"
 
-
 #include <algorithm>
 
 
