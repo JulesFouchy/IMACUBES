@@ -9,7 +9,7 @@
 #include <imgui/imgui.h>
 
 Tool_RBF::Tool_RBF() 
-	: m_bInvertSelection(false), m_selectedPhiID(0)
+	: m_bInvertSelection(false), m_threshhold(0.1f), m_selectedPhiID(0)
 {}
 
 void Tool_RBF::onLeftClicDown(const Cursor& cursor) {
@@ -28,7 +28,7 @@ void Tool_RBF::addCubeToSelection(const glm::vec3& positionPt, double valueAtAnc
 }
 
 bool Tool_RBF::condition(float d) {
-	return d < 0.1f;
+	return d < m_threshhold;
 }
 
 void Tool_RBF::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
@@ -68,8 +68,14 @@ void Tool_RBF::reset() {
 void Tool_RBF::ImGui_Window() {
 	ImGui::Begin("RBF distance field");
 	bool bComputePreview = false;
-	//
+
 	bComputePreview |= ImGui::Combo("Moduling function", &m_selectedPhiID, "Gaussian\0Multi-Quadratic\0Inverse Multi-Quadratic\0\0");
+	ImGui::Separator();
+	bComputePreview |= ImGui::SliderFloat("Threshhold", &m_threshhold, 0.0f, 1.0f);
+	bComputePreview |= ImGui::SliderFloat("Growth speed", &vitesse_decroissance, 0.0, 1.0);
+
+	bComputePreview |= ImGui::Checkbox("Invert Selection", &m_bInvertSelection);
+
 	ImGui::Separator();
 	for (size_t k = 0; k < m_anchorPts.size(); ++k) {
 		glm::vec3& anchorPt = m_anchorPts[k];
@@ -81,9 +87,6 @@ void Tool_RBF::ImGui_Window() {
 		ImGui::Separator();
 	}
 
-	bComputePreview |= ImGui::SliderFloat("Growth speed", &vitesse_decroissance, 0.0, 1.0);
-
-	bComputePreview |= ImGui::Checkbox("Invert Selection", &m_bInvertSelection);
 	if (ImGui::Button("Add")) {
 		addCubes();
 	}

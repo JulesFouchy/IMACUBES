@@ -30,6 +30,7 @@ private:
 	Eigen::VectorXf m_valuesAtAnchorPts;
 
 	bool m_bInvertSelection;
+	float m_threshhold;
 
 	int m_selectedPhiID;
 	float vitesse_decroissance;
