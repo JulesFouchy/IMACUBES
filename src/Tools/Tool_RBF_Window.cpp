@@ -19,6 +19,8 @@ void PopupWindow_RBF::Open() {
 
 
 void PopupWindow_RBF::Show() {
+	ImGui::SetNextWindowPos(ImVec2(0, 100), ImGuiCond_FirstUseEver);
+	ImGui::SetNextWindowSize(ImVec2(1000, 680), ImGuiCond_FirstUseEver);
 	BeginWindow();
 	//
 	ImGui::Separator();
