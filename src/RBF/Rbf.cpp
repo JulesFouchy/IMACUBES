@@ -1,16 +1,10 @@
-#include "Rbf.hpp"
-#include <math.h>
-#include <imgui.h>
+#include "RBF.hpp"
 
 
-RBF::RBF(std::vector<glm::vec3> anchorPts, Eigen::VectorXf valuesAtAnchorPts, std::function<double(double)> phi)
+RBF::RBF(const std::vector<glm::vec3>& anchorPts, const Eigen::VectorXf& valuesAtAnchorPts, const std::function<float(float)>& phi)
 	: m_anchorPts(anchorPts), m_phi(phi)
 {
-	calculOmega(valuesAtAnchorPts);
-}
-
-float distance(glm::vec3 a, glm::vec3 b) {
-	return glm::distance(a, b);
+	computeOmegas(valuesAtAnchorPts);
 }
 
 float multiQuadra(float x){
@@ -25,8 +19,7 @@ float gaussian(float x, float growthSpeed){
 	return exp(-pow(x * growthSpeed,2));
 }
 
-
-void RBF::calculOmega(Eigen::VectorXf valuesAtAnchorPts) {
+void RBF::computeOmegas(const Eigen::VectorXf& valuesAtAnchorPts) {
 	if (m_anchorPts.size() > 0) {
 		Eigen::MatrixXf anchorMatrix(m_anchorPts.size(), m_anchorPts.size());
 
@@ -36,16 +29,14 @@ void RBF::calculOmega(Eigen::VectorXf valuesAtAnchorPts) {
 			}
 		}
 
-		m_omega = anchorMatrix.inverse() * valuesAtAnchorPts;
+		m_omegas = anchorMatrix.householderQr().solve(valuesAtAnchorPts);
 	}
 }
 
 float RBF::eval(const glm::vec3& pos){
-	float somme = 0.0;
+	float sum = 0.0;
 	for (int i = 0; i < m_anchorPts.size(); ++i) {
-		somme = somme + m_omega[i]* m_phi(glm::distance(m_anchorPts[i], pos));
+		sum += m_omegas[i] * m_phi(glm::distance(m_anchorPts[i], pos));
 	}
-
-	return somme;
-
+	return sum;
 }

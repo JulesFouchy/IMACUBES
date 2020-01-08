@@ -2,27 +2,27 @@
 
 #include <glm/glm.hpp>
 #include <Eigen/Dense>
+
 #include <functional>
-#include "Debugging/Log.hpp"
 #include <vector>
 
-float distance(glm::vec3 a, glm::vec3 b);
+#include "Debugging/Log.hpp"
+
 float multiQuadra(float x);
 float invMultiQuadra(float x);
 float gaussian(float x, float growthSpeed);
 
-
-
 class RBF{
 public:
-	RBF(std::vector<glm::vec3> anchorPts, Eigen::VectorXf valuesAtAnchorPts, std::function<double(double)> phi);
+	RBF(const std::vector<glm::vec3>& anchorPts, const Eigen::VectorXf& valuesAtAnchorPts, const std::function<float(float)>& phi);
 
 	float eval(const glm::vec3& pos);
 
+private:
+	void computeOmegas(const Eigen::VectorXf& valuesAtAnchorPts);
 
 private:
-	void calculOmega(Eigen::VectorXf valuesAtAnchorPts);
-	std::vector <glm::vec3> m_anchorPts;
-	Eigen::VectorXf m_omega;
-	std::function<double(double)> m_phi;
+	std::vector<glm::vec3> m_anchorPts;
+	Eigen::VectorXf m_omegas;
+	std::function<float(float)> m_phi;
 };

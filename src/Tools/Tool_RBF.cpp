@@ -2,9 +2,7 @@
 
 #include "Debugging/Log.hpp"
 
-#include "RBF/Rbf.hpp"
-
-#include "CubesMap/BoundingBox.hpp"
+#include "RBF/RBF.hpp"
 
 #include <imgui/imgui.h>
 
