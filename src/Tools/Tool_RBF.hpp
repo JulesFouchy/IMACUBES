@@ -1,16 +1,13 @@
 #pragma once
 
-#include "Tool_RBF_Window.hpp"
+#include "Tool_Shape.hpp"
 
 #include <glm/glm.hpp>
 #include <Eigen/Dense>
 
 #include <vector>
 
-#include "Tool_Shape.hpp"
-
-class Tool_RBF : public Tool_Shape{
-friend class PopupWindow_RBF;
+class Tool_RBF : public Tool_Shape {
 public:
 	Tool_RBF();
 	~Tool_RBF() = default;
@@ -23,13 +20,15 @@ private:
 
 	void addCubeToSelection(const glm::vec3& pos, double value);
 
+	void reset();
+
+	void ImGui_Window();
+
 private:
 	std::vector<glm::vec3> m_anchorPts;
 	Eigen::VectorXf m_valuesAtAnchorPts;
 
 	int m_selectedPhiID;
 	float vitesse_decroissance;
-
-	PopupWindow_RBF m_window;
 };
 
