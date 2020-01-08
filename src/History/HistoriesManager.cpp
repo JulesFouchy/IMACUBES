@@ -8,6 +8,7 @@ HistoriesManager::HistoriesManager()
 	m_histories.emplace_back("Materials");
 	m_histories.emplace_back("Cubes");
 	m_histories.emplace_back("Lights");
+	m_histories.emplace_back("Tools");
 }
 
 void HistoriesManager::_ImGui_ActiveHistory() {

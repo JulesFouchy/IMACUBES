@@ -1,9 +1,10 @@
 #pragma once
 
+#include "Function.hpp"
+
 #include <glm/glm.hpp>
 #include <Eigen/Dense>
 
-#include <functional>
 #include <vector>
 
 #include "Debugging/Log.hpp"
@@ -14,7 +15,7 @@ float gaussian(float x, float growthSpeed);
 
 class RBF{
 public:
-	RBF(const std::vector<glm::vec3>& anchorPts, const Eigen::VectorXf& valuesAtAnchorPts, const std::function<float(float)>& phi);
+	RBF(const std::vector<glm::vec3>& anchorPts, const Eigen::VectorXf& valuesAtAnchorPts, const Function& modulingFunction);
 
 	float eval(const glm::vec3& pos);
 
@@ -24,5 +25,5 @@ private:
 private:
 	std::vector<glm::vec3> m_anchorPts;
 	Eigen::VectorXf m_omegas;
-	std::function<float(float)> m_phi;
+	const Function& m_modulingFunction;
 };

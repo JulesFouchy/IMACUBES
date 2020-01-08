@@ -6,8 +6,11 @@
 
 #include <imgui/imgui.h>
 
+Function* Tool_RBF::m_modulingFunction(&Tool_RBF::m_gaussian);
+Function_Gaussian Tool_RBF::m_gaussian;
+
 Tool_RBF::Tool_RBF() 
-	: m_bInvertSelection(false), m_threshhold(0.1f), m_selectedPhiID(0)
+	: m_bInvertSelection(false), m_threshhold(0.1f)
 {}
 
 void Tool_RBF::onLeftClicDown(const Cursor& cursor) {
@@ -30,23 +33,8 @@ bool Tool_RBF::condition(float d) {
 }
 
 void Tool_RBF::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
-	std::function<double(double)> phi;
-	switch (m_selectedPhiID) {
-	case 0:
-		phi = [this](float x) { return gaussian(x, this->vitesse_decroissance); };
-		break;
-	case 1:
-		phi = &multiQuadra;
-		break;
-	case 2:
-		phi = &invMultiQuadra;
-		break;
-	default:
-		spdlog::error("[PopupWindow_RBF::OnConfirmation] Unknown phi");
-		break;
-	}
 
-	RBF rbf(m_anchorPts, m_valuesAtAnchorPts, phi);
+	RBF rbf(m_anchorPts, m_valuesAtAnchorPts, *m_modulingFunction);
 
 	BoundingBox worldBB;
 	for (const glm::ivec3& pos : worldBB) {
@@ -70,8 +58,7 @@ void Tool_RBF::ImGui_Window() {
 	bComputePreview |= ImGui::Combo("Moduling function", &m_selectedPhiID, "Gaussian\0Multi-Quadratic\0Inverse Multi-Quadratic\0\0");
 	ImGui::Separator();
 	bComputePreview |= ImGui::SliderFloat("Threshhold", &m_threshhold, 0.0f, 1.0f);
-	bComputePreview |= ImGui::SliderFloat("Growth speed", &vitesse_decroissance, 0.0, 1.0);
-
+	bComputePreview |= m_modulingFunction->ImGui_Parameters();
 	bComputePreview |= ImGui::Checkbox("Invert Selection", &m_bInvertSelection);
 
 	ImGui::Separator();

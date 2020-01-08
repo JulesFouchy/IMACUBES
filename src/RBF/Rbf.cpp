@@ -1,8 +1,8 @@
 #include "RBF.hpp"
 
 
-RBF::RBF(const std::vector<glm::vec3>& anchorPts, const Eigen::VectorXf& valuesAtAnchorPts, const std::function<float(float)>& phi)
-	: m_anchorPts(anchorPts), m_phi(phi)
+RBF::RBF(const std::vector<glm::vec3>& anchorPts, const Eigen::VectorXf& valuesAtAnchorPts, const Function& modulingFunction)
+	: m_anchorPts(anchorPts), m_modulingFunction(modulingFunction)
 {
 	computeOmegas(valuesAtAnchorPts);
 }
@@ -25,7 +25,7 @@ void RBF::computeOmegas(const Eigen::VectorXf& valuesAtAnchorPts) {
 
 		for (int i = 0; i < m_anchorPts.size(); ++i) {
 			for (int j = 0; j < m_anchorPts.size(); ++j) {
-				anchorMatrix(i, j) = m_phi(glm::distance(m_anchorPts[i], m_anchorPts[j]));
+				anchorMatrix(i, j) = m_modulingFunction.eval(glm::distance(m_anchorPts[i], m_anchorPts[j]));
 			}
 		}
 
@@ -36,7 +36,7 @@ void RBF::computeOmegas(const Eigen::VectorXf& valuesAtAnchorPts) {
 float RBF::eval(const glm::vec3& pos){
 	float sum = 0.0;
 	for (int i = 0; i < m_anchorPts.size(); ++i) {
-		sum += m_omegas[i] * m_phi(glm::distance(m_anchorPts[i], pos));
+		sum += m_omegas[i] * m_modulingFunction.eval(glm::distance(m_anchorPts[i], pos));
 	}
 	return sum;
 }

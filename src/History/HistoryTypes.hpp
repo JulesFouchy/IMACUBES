@@ -3,5 +3,6 @@
 enum class HistoryType {
 	Materials,
 	Cubes,
-	Lights
+	Lights,
+	Tools
 };

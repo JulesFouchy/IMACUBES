@@ -2,6 +2,9 @@
 
 #include "Tool_Shape.hpp"
 
+#include "RBF/Function.hpp"
+#include "RBF/Function_Gaussian.hpp"
+
 #include <glm/glm.hpp>
 #include <Eigen/Dense>
 
@@ -33,6 +36,8 @@ private:
 	float m_threshhold;
 
 	int m_selectedPhiID;
-	float vitesse_decroissance;
+
+	static Function* m_modulingFunction;
+	static Function_Gaussian m_gaussian;
 };
 
