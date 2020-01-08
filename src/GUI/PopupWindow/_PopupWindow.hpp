@@ -7,8 +7,8 @@ friend class PopupWindow_AreYouSure;
 	// Functions to override
 public:
 	virtual void Open();
-protected:
 	virtual void Show() = 0;
+protected:
 	virtual void OnConfirmation() = 0;
 
 	// Base functions

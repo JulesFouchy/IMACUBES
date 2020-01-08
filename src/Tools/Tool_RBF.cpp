@@ -8,9 +8,7 @@
 
 Tool_RBF::Tool_RBF() 
 	: m_window(this), m_selectedPhi(0)
-{
-	m_window.Open();
-}
+{}
 
 void Tool_RBF::onLeftClicDown(const Cursor& cursor) {
 	static double val = -2;
@@ -21,7 +19,7 @@ void Tool_RBF::onLeftClicDown(const Cursor& cursor) {
 }
 
 void Tool_RBF::update(const Cursor& cursor) {
-	m_window.Show_IfOpen();
+	m_window.Show();
 }
 
 void Tool_RBF::addCubeToSelection(const glm::vec3& positionPt, double valueAtAnchorPoint) {
@@ -56,7 +54,7 @@ void Tool_RBF::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDo
 	BoundingBox worldBB;
 	for (const glm::ivec3& pos : worldBB) {
 		float d = rbf.eval(pos);
-		if (abs(d) < 0.1) {
+		if (d < 0.1) {
 			whatToDoWithPos(pos);
 		}
 	}

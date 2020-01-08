@@ -19,8 +19,13 @@ void PopupWindow_RBF::Show() {
 	for (size_t k = 0; k < m_parent->m_anchorPts.size(); ++k) {
 		glm::vec3& anchorPt = m_parent->m_anchorPts[k];
 		float& value = m_parent->m_valuesAtAnchorPts[k];
-		ImGui::DragFloat3("Pos", &anchorPt.x); ImGui::SameLine();
-		ImGui::DragFloat("Val", &value);
+		ImGui::PushID(k);
+		bool b = ImGui::DragFloat3("Pos", &anchorPt.x);
+		b |= ImGui::DragFloat("Val", &value);
+		if (b)
+			m_parent->computePreview();
+		ImGui::PopID();
+		ImGui::Separator();
 	}
 
 	//ImGui::SliderFloat("Vitesse de décroissance", &m_parent->vitesse_decroissance, 0.0, 1.0);
@@ -29,14 +34,14 @@ void PopupWindow_RBF::Show() {
 	
 	ConfirmationButton();
 
-	ImGui::SetNextWindowPos(ImVec2(0, 100), ImGuiCond_FirstUseEver);
-	ImGui::SetNextWindowSize(ImVec2(1000, 680), ImGuiCond_FirstUseEver);
-
 	EndWindow();
 }
 
 
 void PopupWindow_RBF::OnConfirmation() {
 	m_parent->addCubes();
+	m_parent->m_anchorPts.clear();
+	m_parent->m_valuesAtAnchorPts.resize(0);
+	m_parent->m_previewGroup.removeAllCubes();
 }
 

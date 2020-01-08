@@ -9,8 +9,8 @@ public:
 	PopupWindow_RBF(Tool_RBF* parent);
 	~PopupWindow_RBF() = default;
 
-private:
 	void Show() override;
+private:
 	void OnConfirmation() override;
 
 private:
