@@ -9,7 +9,7 @@
 #include <imgui/imgui.h>
 
 Tool_RBF::Tool_RBF() 
-	: m_selectedPhiID(0)
+	: m_bInvertSelection(false), m_selectedPhiID(0)
 {}
 
 void Tool_RBF::onLeftClicDown(const Cursor& cursor) {
@@ -25,6 +25,10 @@ void Tool_RBF::addCubeToSelection(const glm::vec3& positionPt, double valueAtAnc
 	m_anchorPts.push_back(positionPt);
 	m_valuesAtAnchorPts.conservativeResize(m_valuesAtAnchorPts.size() + 1);
 	m_valuesAtAnchorPts(m_valuesAtAnchorPts.size() - 1) = valueAtAnchorPoint;
+}
+
+bool Tool_RBF::condition(float d) {
+	return d < 0.1f;
 }
 
 void Tool_RBF::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
@@ -49,7 +53,7 @@ void Tool_RBF::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDo
 	BoundingBox worldBB;
 	for (const glm::ivec3& pos : worldBB) {
 		float d = rbf.eval(pos);
-		if (d < 0.1) {
+		if ((!m_bInvertSelection && condition(d)) || (m_bInvertSelection && !condition(d))) {
 			whatToDoWithPos(pos);
 		}
 	}
@@ -66,7 +70,7 @@ void Tool_RBF::ImGui_Window() {
 	bool bComputePreview = false;
 	//
 	bComputePreview |= ImGui::Combo("Moduling function", &m_selectedPhiID, "Gaussian\0Multi-Quadratic\0Inverse Multi-Quadratic\0\0");
-
+	ImGui::Separator();
 	for (size_t k = 0; k < m_anchorPts.size(); ++k) {
 		glm::vec3& anchorPt = m_anchorPts[k];
 		float& value = m_valuesAtAnchorPts[k];
@@ -77,12 +81,9 @@ void Tool_RBF::ImGui_Window() {
 		ImGui::Separator();
 	}
 
-	ImGui::SliderFloat("Growth speed", &vitesse_decroissance, 0.0, 1.0);
+	bComputePreview |= ImGui::SliderFloat("Growth speed", &vitesse_decroissance, 0.0, 1.0);
 
-	if (bComputePreview)
-		computePreview();
-	static bool inv = false;
-	ImGui::Checkbox("Invert Selection", &inv);
+	bComputePreview |= ImGui::Checkbox("Invert Selection", &m_bInvertSelection);
 	if (ImGui::Button("Add")) {
 		addCubes();
 	}
@@ -97,6 +98,10 @@ void Tool_RBF::ImGui_Window() {
 	if (ImGui::Button("Reset")) {
 		reset();
 	}
+
+
+	if (bComputePreview)
+		computePreview();
 
 	ImGui::End();
 }

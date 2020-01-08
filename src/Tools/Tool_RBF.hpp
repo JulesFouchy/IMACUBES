@@ -17,6 +17,7 @@ public:
 
 private:
 	void applyOnShape(std::function<void(const glm::ivec3& pos)> whatToDoWithPos) override;
+	bool condition(float d);
 
 	void addCubeToSelection(const glm::vec3& pos, double value);
 
@@ -27,6 +28,8 @@ private:
 private:
 	std::vector<glm::vec3> m_anchorPts;
 	Eigen::VectorXf m_valuesAtAnchorPts;
+
+	bool m_bInvertSelection;
 
 	int m_selectedPhiID;
 	float vitesse_decroissance;
