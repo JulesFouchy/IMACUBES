@@ -1,7 +1,5 @@
 #include "Function_Gaussian.hpp"
 
-#include "Helper/Maths.hpp"
-
 Function_Gaussian::Function_Gaussian()
 	: m_power("Power", HistoryType::Tools, 2.0f, 0.0f, 6.0f)
 {}

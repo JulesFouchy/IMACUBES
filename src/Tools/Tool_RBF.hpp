@@ -4,6 +4,9 @@
 
 #include "RBF/Function.hpp"
 #include "RBF/Function_Gaussian.hpp"
+#include "RBF/Function_Inverse.hpp"
+#include "RBF/Function_QuasiIdentityMinOne.hpp"
+#include "RBF/Function_Identity.hpp"
 
 #include <glm/glm.hpp>
 #include <Eigen/Dense>
@@ -33,11 +36,15 @@ private:
 	Eigen::VectorXf m_valuesAtAnchorPts;
 
 	bool m_bInvertSelection;
-	float m_threshhold;
 
-	int m_selectedPhiID;
+	float m_threshhold;
+	bool m_bSurfaceMode;
+	int m_modulingFunctionID;
 
 	static Function* m_modulingFunction;
 	static Function_Gaussian m_gaussian;
+	static Function_Inverse m_inverse;
+	static Function_QuasiIdentityMinOne m_quasiIdentity;
+	static Function_Identity m_identity;
 };
 

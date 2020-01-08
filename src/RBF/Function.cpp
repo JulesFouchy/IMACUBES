@@ -3,7 +3,7 @@
 #include <imgui/imgui.h>
 
 Function::Function()
-	: m_growthSpeed("Growth speed", HistoryType::Tools, 1.0f, 0.0f, 10.0f)
+	: m_growthSpeed("Growth speed", HistoryType::Tools, 0.5f, 0.0f, 1.0f)
 {}
 
 bool Function::ImGui_Parameters() {
