@@ -8,30 +8,29 @@
 
 PopupWindow_RBF::PopupWindow_RBF(Tool_RBF* parent)
 	: PopupWindow("RBF distance field"), m_parent(parent)
-{
-}
+{}
 
 void PopupWindow_RBF::Show() {
 	BeginWindow();
+	bool bComputePreview = false;
 	//
-	ImGui::Text("Choose RBF: "); ImGui::SameLine();
-	ImGui::Combo("phi", &m_parent->m_selectedPhi, " Gaussienne\0 Multi-quadratique\0inverse Multi-quadratique\0\0");
+	bComputePreview |= ImGui::Combo("Moduling function", &m_parent->m_selectedPhiID, "Gaussian\0Multi-Quadratic\0Inverse Multi-Quadratic\0\0");
+
 	for (size_t k = 0; k < m_parent->m_anchorPts.size(); ++k) {
 		glm::vec3& anchorPt = m_parent->m_anchorPts[k];
 		float& value = m_parent->m_valuesAtAnchorPts[k];
 		ImGui::PushID(k);
-		bool b = ImGui::DragFloat3("Pos", &anchorPt.x);
-		b |= ImGui::DragFloat("Val", &value);
-		if (b)
-			m_parent->computePreview();
+		bComputePreview |= ImGui::DragFloat3("Pos", &anchorPt.x);
+		bComputePreview |= ImGui::DragFloat("Val", &value);
 		ImGui::PopID();
 		ImGui::Separator();
 	}
 
-	//ImGui::SliderFloat("Vitesse de décroissance", &m_parent->vitesse_decroissance, 0.0, 1.0);
+	ImGui::SliderFloat("Growth speed", &m_parent->vitesse_decroissance, 0.0, 1.0);
 
-	//Selection de la fonction RBF
-	
+	if (bComputePreview)
+		m_parent->computePreview();
+
 	ConfirmationButton();
 
 	EndWindow();

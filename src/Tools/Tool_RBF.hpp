@@ -27,7 +27,7 @@ private:
 	std::vector<glm::vec3> m_anchorPts;
 	Eigen::VectorXf m_valuesAtAnchorPts;
 
-	int m_selectedPhi;
+	int m_selectedPhiID;
 	float vitesse_decroissance;
 
 	PopupWindow_RBF m_window;

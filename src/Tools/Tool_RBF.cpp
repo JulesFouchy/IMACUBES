@@ -7,7 +7,7 @@
 #include "CubesMap/BoundingBox.hpp"
 
 Tool_RBF::Tool_RBF() 
-	: m_window(this), m_selectedPhi(0)
+	: m_window(this), m_selectedPhiID(0)
 {}
 
 void Tool_RBF::onLeftClicDown(const Cursor& cursor) {
@@ -31,22 +31,19 @@ void Tool_RBF::addCubeToSelection(const glm::vec3& positionPt, double valueAtAnc
 
 void Tool_RBF::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
 	std::function<double(double)> phi;
-
-	switch (m_selectedPhi) {
-
+	switch (m_selectedPhiID) {
 	case 0:
-		phi = &multiQuadra;// [this](double x) { return gaussian(x, this->vitesse_decroissance); };
+		phi = [this](float x) { return gaussian(x, this->vitesse_decroissance); };
 		break;
-
 	case 1:
 		phi = &multiQuadra;
 		break;
-
 	case 2:
 		phi = &invMultiQuadra;
-
+		break;
 	default:
 		spdlog::error("[PopupWindow_RBF::OnConfirmation] Unknown phi");
+		break;
 	}
 
 	RBF rbf(m_anchorPts, m_valuesAtAnchorPts, phi);

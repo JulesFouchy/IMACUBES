@@ -9,7 +9,7 @@
 float distance(glm::vec3 a, glm::vec3 b);
 float multiQuadra(float x);
 float invMultiQuadra(float x);
-float gaussian(float x);
+float gaussian(float x, float growthSpeed);
 
 
 

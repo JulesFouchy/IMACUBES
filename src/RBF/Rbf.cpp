@@ -21,10 +21,8 @@ float invMultiQuadra(float x){
 	return  1 / pow(x,2) ;
 }
 
-float gaussian(float x){
-	float vitesse_decroissance = 1.0;
-	return exp(-pow(x/vitesse_decroissance,2));
-
+float gaussian(float x, float growthSpeed){
+	return exp(-pow(x * growthSpeed,2));
 }
 
 
