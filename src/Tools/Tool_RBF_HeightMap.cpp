@@ -3,7 +3,11 @@
 #include "RBF/RBF.hpp"
 
 Tool_RBF_HeightMap::Tool_RBF_HeightMap()
-{}
+{
+	m_bSurfaceMode = false;
+	m_modulingFunction = &m_inverse;
+	m_modulingFunctionID = 1;
+}
 
 void Tool_RBF_HeightMap::addCubeToSelection(const glm::vec3& pos) {
 	m_anchorPts.push_back(glm::vec2(pos.x, pos.z));
@@ -15,7 +19,7 @@ void Tool_RBF_HeightMap::evaluateRBFOnWorld(std::function<void(const glm::ivec3 
 	RBF<glm::vec2> rbf = RBF<glm::vec2>(m_anchorPts, m_valuesAtAnchorPts, *m_modulingFunction);
 	BoundingBox worldBB;
 	for (const glm::ivec3& pos : worldBB) {
-		float d = rbf.eval(pos);
+		float d = rbf.eval(glm::vec2(pos.x, pos.z));
 		if ((!m_bInvertSelection && condition(d, pos)) || (m_bInvertSelection && !condition(d, pos))) {
 			whatToDoWithPos(pos);
 		}
