@@ -9,7 +9,7 @@ Tool_RBF_HeightMap::Tool_RBF_HeightMap()
 	m_modulingFunctionID = 1;
 }
 
-void Tool_RBF_HeightMap::addCubeToSelection(const glm::vec3& pos) {
+void Tool_RBF_HeightMap::addAnchorPoint(const glm::vec3& pos) {
 	m_anchorPts.push_back(glm::vec2(pos.x, pos.z));
 	m_valuesAtAnchorPts.conservativeResize(m_valuesAtAnchorPts.size() + 1);
 	m_valuesAtAnchorPts(m_valuesAtAnchorPts.size() - 1) = pos.y;

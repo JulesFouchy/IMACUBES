@@ -5,7 +5,7 @@
 Tool_RBF_DistanceField::Tool_RBF_DistanceField() 
 {}
 
-void Tool_RBF_DistanceField::addCubeToSelection(const glm::vec3& pos) {
+void Tool_RBF_DistanceField::addAnchorPoint(const glm::vec3& pos) {
 	m_anchorPts.push_back(pos);
 	m_valuesAtAnchorPts.conservativeResize(m_valuesAtAnchorPts.size() + 1);
 	m_valuesAtAnchorPts(m_valuesAtAnchorPts.size() - 1) = 0.5f;

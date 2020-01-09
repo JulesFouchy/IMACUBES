@@ -26,7 +26,7 @@ protected:
 
 	virtual void reset();
 
-	virtual void addCubeToSelection(const glm::vec3& pos) = 0;
+	virtual void addAnchorPoint(const glm::vec3& pos) = 0;
 	virtual void evaluateRBFOnWorld(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) = 0;
 	virtual void ImGui_Window() = 0;
 

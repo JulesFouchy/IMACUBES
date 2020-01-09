@@ -17,7 +17,7 @@ Tool_RBF::Tool_RBF()
 {}
 
 void Tool_RBF::onLeftClicDown(const Cursor& cursor) {
-	addCubeToSelection(cursor.getCubeJustBeforePosition());
+	addAnchorPoint(cursor.getCubeJustBeforePosition());
 	computePreview();
 }
 

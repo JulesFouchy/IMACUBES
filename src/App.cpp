@@ -19,7 +19,7 @@
 
 App::App(SDL_Window* window)
 	: m_renderer(window),
-	  m_cubesMap(21, 21, 21), m_camera(glm::vec3(0.0f)),
+	  m_cubesMap(61, 61, 61), m_camera(glm::vec3(0.0f)),
 	  m_lightsManager(),
 	  m_bShowImGUIDemoWindow(false),
 	  m_bAddTheSelectedSomething(false),
