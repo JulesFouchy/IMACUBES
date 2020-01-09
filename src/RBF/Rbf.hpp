@@ -16,14 +16,22 @@ public:
 		: m_anchorPts(anchorPts), m_modulingFunction(modulingFunction)
 	{
 		computeOmegas(valuesAtAnchorPts);
+		initVectors();
 	}
 
 	float eval(const T& pos) {
-		float sum = 0.0;
-		for (int i = 0; i < m_anchorPts.size(); ++i) {
-			sum += m_omegas[i] * m_modulingFunction.eval(MyMaths::Distance(m_anchorPts[i], pos));
+		if (m_bWasValueComputed[id(pos)]) {
+			return m_values[id(pos)];
 		}
-		return sum;
+		else {
+			float sum = 0.0;
+			for (int i = 0; i < m_anchorPts.size(); ++i) {
+				sum += m_omegas[i] * m_modulingFunction.eval(MyMaths::Distance(m_anchorPts[i], pos));
+			}
+			m_values[id(pos)] = sum;
+			m_bWasValueComputed[id(pos)] = true;
+			return sum;
+		}
 	}
 
 private:
@@ -41,8 +49,15 @@ private:
 		}
 	}
 
+	void initVectors();
+
+	size_t id(const T& pos);
+
 private:
 	std::vector<T> m_anchorPts;
 	Eigen::VectorXf m_omegas;
 	const Function& m_modulingFunction;
+
+	std::vector<float> m_values;
+	std::vector<bool> m_bWasValueComputed;
 };
