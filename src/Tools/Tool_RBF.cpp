@@ -62,7 +62,7 @@ bool Tool_RBF::ImGui_ModulingFunction() {
 bool Tool_RBF::ImGui_Condition() {
 	bool b = false;
 	ImGui::Text("Condition");
-	b |= ImGui::SliderFloat("Threshhold", &m_threshhold, 0.0f, 1.0f);
+	b |= ImGui::SliderFloat("Threshhold", &m_threshhold, 0.0f, 10.0f);
 	b |= ImGui::Checkbox("Surface only", &m_bSurfaceMode);
 	return b;
 }
