@@ -54,3 +54,23 @@ float MyMaths::NormalizedDistance2D(const glm::ivec3& v0, const glm::ivec3& v1, 
 	glm::vec2 size2D = glm::vec2(size[c0], size[c1]);
 	return glm::length((a0 - a1) / size2D);
 }
+
+template <>
+float MyMaths::Distance(const glm::vec3& v1, const glm::vec3& v2) {
+	return glm::distance(v1, v2);
+}
+
+template <>
+float MyMaths::Distance(const glm::vec2& v1, const glm::vec2& v2) {
+	return glm::distance(v1, v2);
+}
+
+template <>
+float MyMaths::Distance(const glm::ivec3& v1, const glm::ivec3& v2) {
+	return Distance((glm::vec3) v1, (glm::vec3) v2);
+}
+
+template <>
+float MyMaths::Distance(const glm::ivec2& v1, const glm::ivec2& v2) {
+	return Distance((glm::vec2) v1, (glm::vec2) v2);
+}

@@ -9,14 +9,14 @@ Tool_RBF_HeightMap::Tool_RBF_HeightMap()
 	m_modulingFunctionID = 1;
 }
 
-void Tool_RBF_HeightMap::addAnchorPoint(const glm::vec3& pos) {
-	m_anchorPts.push_back(glm::vec2(pos.x, pos.z));
+void Tool_RBF_HeightMap::addAnchorPoint(const glm::ivec3& pos) {
+	m_anchorPts.push_back(glm::ivec2(pos.x, pos.z));
 	m_valuesAtAnchorPts.conservativeResize(m_valuesAtAnchorPts.size() + 1);
 	m_valuesAtAnchorPts(m_valuesAtAnchorPts.size() - 1) = pos.y;
 }
 
 void Tool_RBF_HeightMap::evaluateRBFOnWorld(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
-	RBF<glm::vec2> rbf = RBF<glm::vec2>(m_anchorPts, m_valuesAtAnchorPts, *m_modulingFunction);
+	RBF<glm::ivec2> rbf = RBF<glm::ivec2>(m_anchorPts, m_valuesAtAnchorPts, *m_modulingFunction);
 	BoundingBox worldBB;
 	for (const glm::ivec3& pos : worldBB) {
 		float d = rbf.eval(glm::vec2(pos.x, pos.z));
@@ -26,7 +26,7 @@ void Tool_RBF_HeightMap::evaluateRBFOnWorld(std::function<void(const glm::ivec3 
 	}
 }
 
-bool Tool_RBF_HeightMap::condition(float h, const glm::vec3& pos) {
+bool Tool_RBF_HeightMap::condition(float h, const glm::ivec3& pos) {
 	if (m_bSurfaceMode)
 		return abs(h - pos.y) < m_threshhold;
 	else
@@ -50,10 +50,10 @@ void Tool_RBF_HeightMap::ImGui_Window() {
 
 	ImGui::Text("Anchor points");
 	for (size_t k = 0; k < m_anchorPts.size(); ++k) {
-		glm::vec2& anchorPt = m_anchorPts[k];
+		glm::ivec2& anchorPt = m_anchorPts[k];
 		float& value = m_valuesAtAnchorPts[k];
 		ImGui::PushID(k);
-		bComputePreview |= ImGui::DragFloat2("Pos", &anchorPt.x);
+		bComputePreview |= ImGui::DragInt2("Pos", &anchorPt.x);
 		bComputePreview |= ImGui::DragFloat("Val", &value);
 		ImGui::PopID();
 		ImGui::Separator();

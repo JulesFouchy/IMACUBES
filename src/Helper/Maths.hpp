@@ -19,4 +19,7 @@ namespace MyMaths {
 	float Lerp(float a, float b, float t);
 
 	float NormalizedDistance2D(const glm::ivec3& v0, const glm::ivec3& v1, const glm::ivec3& size, int c0, int c1);
+
+	template <typename T>
+	float Distance(const T& v1, const T& v2);
 }

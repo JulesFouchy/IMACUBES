@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include <Eigen/Dense>
 
+#include "Helper/Maths.hpp"
+
 #include <vector>
 
 template <typename T> // vector of any dimension (mainly 2 or 3)
@@ -19,7 +21,7 @@ public:
 	float eval(const T& pos) {
 		float sum = 0.0;
 		for (int i = 0; i < m_anchorPts.size(); ++i) {
-			sum += m_omegas[i] * m_modulingFunction.eval(glm::distance(m_anchorPts[i], pos));
+			sum += m_omegas[i] * m_modulingFunction.eval(MyMaths::Distance(m_anchorPts[i], pos));
 		}
 		return sum;
 	}
@@ -31,7 +33,7 @@ private:
 
 			for (int i = 0; i < m_anchorPts.size(); ++i) {
 				for (int j = 0; j < m_anchorPts.size(); ++j) {
-					anchorMatrix(i, j) = m_modulingFunction.eval(glm::distance(m_anchorPts[i], m_anchorPts[j]));
+					anchorMatrix(i, j) = m_modulingFunction.eval(MyMaths::Distance(m_anchorPts[i], m_anchorPts[j]));
 				}
 			}
 
