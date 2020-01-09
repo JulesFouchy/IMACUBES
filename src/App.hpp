@@ -39,6 +39,9 @@ public:
 	// --------------------------------------
 
 private:
+	glm::ivec3 getFirstEmptyCubeOnTop(glm::ivec3 pos);
+
+private:
 	Renderer m_renderer;
 	CubesMap m_cubesMap;
 	Cursor m_cursor;

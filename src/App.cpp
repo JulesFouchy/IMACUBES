@@ -198,6 +198,15 @@ void App::onEvent(const SDL_Event& e) {
 				else if (e.key.keysym.sym == '+' || e.key.keysym.sym == '=') {
 					m_bAddTheSelectedSomething = true;
 				}
+				else if (e.key.keysym.sym == 'l') {
+					m_cubesMap.addCube(getFirstEmptyCubeOnTop(m_cursor.getPosition()));
+				}
+				else if (e.key.keysym.sym == 'm') {
+					glm::ivec3 pos = getFirstEmptyCubeOnTop(m_cursor.getPosition());
+					if (pos.y != m_cubesMap.minValidY())
+						pos.y -= 1;
+					m_cubesMap.removeCube(pos);
+				}
 			}
 		}
 		break;
@@ -227,6 +236,21 @@ void App::onEvent(const SDL_Event& e) {
 	default:
 		break;
 	}
+}
+
+glm::ivec3 App::getFirstEmptyCubeOnTop(glm::ivec3 pos) {
+	if (m_cubesMap.cubeExists(pos)) {
+		while (pos.y <= m_cubesMap.maxValidY() && m_cubesMap.cubeExists(pos))
+			pos.y++;
+		if (pos.y == m_cubesMap.maxValidY() + 1)
+			pos.y--;
+	}
+	else {
+		while (pos.y >= m_cubesMap.minValidY() && !m_cubesMap.cubeExists(pos))
+			pos.y--;
+		pos.y++;
+	}
+	return pos;
 }
 
 /////////////////////////////////////////////////////////////////////////////
