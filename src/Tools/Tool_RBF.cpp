@@ -17,25 +17,12 @@ Tool_RBF::Tool_RBF()
 {}
 
 void Tool_RBF::onLeftClicDown(const Cursor& cursor) {
-	addCubeToSelection(cursor.getCubeJustBeforePosition(), 0.0f);
+	addCubeToSelection(cursor.getCubeJustBeforePosition());
 	computePreview();
 }
 
 void Tool_RBF::update(const Cursor& cursor) {
 	ImGui_Window();
-}
-
-void Tool_RBF::addCubeToSelection(const glm::vec3& positionPt, double valueAtAnchorPoint) {
-	m_anchorPts.push_back(positionPt);
-	m_valuesAtAnchorPts.conservativeResize(m_valuesAtAnchorPts.size() + 1);
-	m_valuesAtAnchorPts(m_valuesAtAnchorPts.size() - 1) = valueAtAnchorPoint;
-}
-
-bool Tool_RBF::condition(float d) {
-	if (m_bSurfaceMode)
-		return abs(d) < m_threshhold;
-	else
-		return d < m_threshhold;
 }
 
 void Tool_RBF::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) {
@@ -56,49 +43,31 @@ void Tool_RBF::applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDo
 		spdlog::error("[Tool_RBF::applyOnShape] unknown phi id");
 		break;
 	}
-
-	RBF rbf(m_anchorPts, m_valuesAtAnchorPts, *m_modulingFunction);
-
-	BoundingBox worldBB;
-	for (const glm::ivec3& pos : worldBB) {
-		float d = rbf.eval(pos);
-		if ((!m_bInvertSelection && condition(d)) || (m_bInvertSelection && !condition(d))) {
-			whatToDoWithPos(pos);
-		}
-	}
+	evaluateRBFOnWorld(whatToDoWithPos);
 }
 
 void Tool_RBF::reset() {
-	m_anchorPts.clear();
 	m_valuesAtAnchorPts.resize(0);
 	m_previewGroup.removeAllCubes();
 }
 
-void Tool_RBF::ImGui_Window() {
-	ImGui::Begin("RBF distance field");
-	bool bComputePreview = false;
-
+bool Tool_RBF::ImGui_ModulingFunction() {
+	bool b = false;
 	ImGui::Text("Moduling function");
-	bComputePreview |= ImGui::Combo("Moduling function", &m_modulingFunctionID, "Gaussian\0Inverse\0Quasi Identity\0Identity\0\0");
-	bComputePreview |= m_modulingFunction->ImGui_Parameters();
+	b |= ImGui::Combo("Moduling function", &m_modulingFunctionID, "Gaussian\0Inverse\0Quasi Identity\0Identity\0\0");
+	b |= m_modulingFunction->ImGui_Parameters();
+	return b;
+}
 
-	ImGui::Separator();
+bool Tool_RBF::ImGui_Condition() {
+	bool b = false;
 	ImGui::Text("Condition");
-	bComputePreview |= ImGui::SliderFloat("Threshhold", &m_threshhold, 0.0f, 1.0f);
-	bComputePreview |= ImGui::Checkbox("Surface only", &m_bSurfaceMode);
+	b |= ImGui::SliderFloat("Threshhold", &m_threshhold, 0.0f, 1.0f);
+	b |= ImGui::Checkbox("Surface only", &m_bSurfaceMode);
+	return b;
+}
 
-	ImGui::Separator();
-	ImGui::Text("Anchor points");
-	for (size_t k = 0; k < m_anchorPts.size(); ++k) {
-		glm::vec3& anchorPt = m_anchorPts[k];
-		float& value = m_valuesAtAnchorPts[k];
-		ImGui::PushID(k);
-		bComputePreview |= ImGui::DragFloat3("Pos", &anchorPt.x);
-		bComputePreview |= ImGui::DragFloat("Val", &value);
-		ImGui::PopID();
-		ImGui::Separator();
-	}
-
+void Tool_RBF::ImGui_Finalize(bool bComputePreview){
 	bComputePreview |= ImGui::Checkbox("Invert Selection", &m_bInvertSelection);
 	if (ImGui::Button("Add")) {
 		addCubes();
@@ -115,9 +84,6 @@ void Tool_RBF::ImGui_Window() {
 		reset();
 	}
 
-
 	if (bComputePreview)
 		computePreview();
-
-	ImGui::End();
 }

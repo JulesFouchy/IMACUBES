@@ -6,7 +6,7 @@
 #include "Tool_Sphere.hpp"
 #include "Tool_OvoidTwoCorners.hpp"
 #include "Tool_MengerSponge.hpp"
-#include "Tool_RBF.hpp"
+#include "Tool_RBF_DistanceField.hpp"
 
 #include <imgui/imgui.h>
 
@@ -42,7 +42,7 @@ void ToolsManager::ImGui_SelectTool() {
 			setTool<Tool_MengerSponge>();
 			break;
 		case 6:
-			setTool<Tool_RBF>();
+			setTool<Tool_RBF_DistanceField>();
 			break;
 		default:
 			break;

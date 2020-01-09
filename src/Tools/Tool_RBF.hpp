@@ -21,18 +21,20 @@ public:
 	void onLeftClicDown(const Cursor& cursor) override;
 	void update(const Cursor& cursor) override;
 
-private:
+protected:
 	void applyOnShape(std::function<void(const glm::ivec3& pos)> whatToDoWithPos) override;
-	bool condition(float d);
 
-	void addCubeToSelection(const glm::vec3& pos, double value);
+	virtual void reset();
 
-	void reset();
+	virtual void addCubeToSelection(const glm::vec3& pos) = 0;
+	virtual void evaluateRBFOnWorld(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) = 0;
+	virtual void ImGui_Window() = 0;
 
-	void ImGui_Window();
+	bool ImGui_ModulingFunction();
+	bool ImGui_Condition();
+	void ImGui_Finalize(bool bComputePreview);
 
-private:
-	std::vector<glm::vec3> m_anchorPts;
+protected:
 	Eigen::VectorXf m_valuesAtAnchorPts;
 
 	bool m_bInvertSelection;
