@@ -12,7 +12,7 @@ void Tool_RBF_DistanceField::addCubeToSelection(const glm::vec3& pos) {
 }
 
 void Tool_RBF_DistanceField::evaluateRBFOnWorld(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos){
-	RBF rbf = RBF(m_anchorPts, m_valuesAtAnchorPts, *m_modulingFunction);
+	RBF<glm::vec3> rbf = RBF<glm::vec3>(m_anchorPts, m_valuesAtAnchorPts, *m_modulingFunction);
 	BoundingBox worldBB;
 	for (const glm::ivec3& pos : worldBB) {
 		float d = rbf.eval(pos);

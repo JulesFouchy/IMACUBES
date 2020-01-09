@@ -7,6 +7,7 @@
 #include "Tool_OvoidTwoCorners.hpp"
 #include "Tool_MengerSponge.hpp"
 #include "Tool_RBF_DistanceField.hpp"
+#include "Tool_RBF_HeightMap.hpp"
 
 #include <imgui/imgui.h>
 
@@ -17,7 +18,7 @@ ToolsManager::ToolsManager() {
 }
 
 void ToolsManager::ImGui_SelectTool() {
-	const char* listbox_items[] = { "Minecraft", "Cube", "Box two corners", "Sphere", "Ovoid two corners", "Menger sponge", "RBF distance field" };
+	const char* listbox_items[] = { "Minecraft", "Cube", "Box two corners", "Sphere", "Ovoid two corners", "Menger sponge", "RBF distance field", "RBF height map" };
 	static int listbox_item_current = 0;
 	ImGui::PushID((int)&m_activeTool);
 	if (ImGui::ListBox("", &listbox_item_current, listbox_items, IM_ARRAYSIZE(listbox_items))) {
@@ -43,6 +44,9 @@ void ToolsManager::ImGui_SelectTool() {
 			break;
 		case 6:
 			setTool<Tool_RBF_DistanceField>();
+			break;
+		case 7:
+			setTool<Tool_RBF_HeightMap>();
 			break;
 		default:
 			break;
