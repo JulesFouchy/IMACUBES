@@ -26,6 +26,7 @@
 + **Move cursor** cube by cube with "z", "q", "s", "d", "w" and "x"
 + **Extrude** with "l"
 + **Dig** with "m"
++ **Reload shader** with F5
 + **Export image** with CTRL + "s"
 
 #### Histories
