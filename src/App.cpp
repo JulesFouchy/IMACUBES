@@ -19,7 +19,7 @@
 
 App::App(SDL_Window* window)
 	: m_renderer(window),
-	  m_cubesMap(61, 61, 61), m_camera(glm::vec3(0.0f)),
+	  m_cubesMap(71, 71, 71), m_camera(glm::vec3(0.0f)),
 	  m_lightsManager(),
 	  m_bShowImGUIDemoWindow(false),
 	  m_bAddTheSelectedSomething(false),
@@ -61,9 +61,11 @@ void App::onInit() {
 
 void App::onLoopIteration() {
 	// ImGui windows
+#ifndef NDEBUG 
 	ImGui_DebugWindow();
 	if (m_bShowImGUIDemoWindow) // Show the big demo window (Most of the sample code is in ImGui::ShowDemoWindow()! You can browse its code to learn more about Dear ImGui!).
 		ImGui::ShowDemoWindow(&m_bShowImGUIDemoWindow);
+#endif
 	ImGui_MainMenuBar();
 	ImGui_RightSideWindow();
 

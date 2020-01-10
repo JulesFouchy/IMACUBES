@@ -9,11 +9,10 @@ struct MaterialParameters{
 	float starIntensity; // default 1.408 min 0 max 2
 	float starIntensityPow; // default 1.788 min 0 max 40
 	float noiseScale; // default 0 min 0 max 2
-	float distortInScale; // default 10.391 min 0 max 60
-	float distortOutScale; // default 2.346 min 0 max 60
+	float distortInScale; // default 0.5 min 0 max 3
+	float distortOutScale; // default 2.346 min 0 max 6
 	vec3 SkyColor; // default 0 0 0
 	vec3 StarColor; // default 0.355f, 0.670f, 1.000f
-	float test; // default 1. min 0 max 2
 };
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
