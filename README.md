@@ -1,7 +1,40 @@
 # IMACUBES
 
+## Controls and Shortcuts
 
-### How to build
+#### Camera
+
++ **Zoom** with wheel
++ **Rotate** by pressing wheel
++ **Translate** by pressing SHIFT  + wheel
++ **Center** on hovered cube with "c"
+
+#### Tools
+
++ **Add cubes** with left clic
++ **Remove cubes** with right clic
++ **Paint on cubes** by holding SPACE
++ **Change brush size** with SHIFT + scroll  (you can specify an axis by holding "x", "c" or "v")
+
+#### Miscelanous
++ **Pick material** of hovered cube with "b"
++ **Place selected point light** at hovered cube with "p"
++ **Add a light** of selected type with "="
++ **Switch cursor mode** with TAB. You can :
+	+ Place on hovered cube (default)
+	+ Place at a fixed distance from camera (you can change distance with CTRL + scroll)
++ **Move cursor** cube by cube with "z", "q", "s", "d", "w" and "x"
++ **Extrude** with "l"
++ **Dig** with "m"
++ **Export image** with CTRL + "s"
+
+#### Histories
++ **Move backward** with CTRL + "z"
++ **Move forward** with CTRL + "y"
+(Note that we have several histories in parallel ; if you want to change the active history, go to the "Histories" tab in the main menu bar)
+
+
+## How to build
 
 To learn more about how to use CMake, vector-of-bools has a great series of videos https://www.youtube.com/watch?v=6aiV7Z9NRhk&list=PLK6MXr8gasrGmIiSuVQXpfFuE1uPT615s&index=5
 Since I'm a nice guy (but only towards those who use Windows and Visual Studio) here are a few more explanations :
