@@ -105,6 +105,7 @@ void App::ImGui_MainMenuBar() {
 }
 
 void App::ImGui_RightSideWindow() {
+	ImGui::SetNextWindowSize(ImVec2(200, 0), ImGuiCond_FirstUseEver);
 	ImGuiWindowFlags flags =
 		ImGuiWindowFlags_NoMove |
 		ImGuiWindowFlags_NoCollapse |
