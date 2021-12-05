@@ -1,5 +1,7 @@
 # IMACUBES
 
+A voxel editor offering a few tools and procedural terrain generation, supporting custom shaders, shadows and ambient occlusion.
+
 ## Controls and Shortcuts
 
 #### Camera
