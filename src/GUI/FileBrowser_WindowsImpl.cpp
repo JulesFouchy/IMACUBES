@@ -2,8 +2,9 @@
 
 // Big thanks to https://www.daniweb.com/programming/software-development/threads/159753/opening-a-filedialog
 
+#include <windows.h> // Must be before <Commdlg.h>
+//
 #include <Commdlg.h>
-#include <windows.h>
 #include <iostream>
 #include "Debugging/Log.hpp"
 #include "FileBrowser.hpp"
