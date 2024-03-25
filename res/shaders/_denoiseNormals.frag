@@ -1,13 +1,14 @@
 #version 440 core
 
-in vec2 vTexCoords;
+in vec2  vTexCoords;
+out vec4 fColor;
 
 uniform sampler2D u_TextureSlot;
 
 void main()
 {
-    const vec2 texelSize  = 1.0 / textureSize(u_TextureSlot, 0);
-    vec2       offsets[9] = vec2[](
+    vec2 texelSize  = 1.0 / textureSize(u_TextureSlot, 0);
+    vec2 offsets[9] = vec2[](
         texelSize * vec2(-1, 1),  // top-left
         texelSize * vec2(0, 1),   // top-center
         texelSize * vec2(1, 1),   // top-right
@@ -48,6 +49,6 @@ void main()
         }
     }
 
-    vec3 color   = possibleNormals[predominantNormalIndex];
-    gl_FragColor = vec4(color, texture(u_TextureSlot, vTexCoords).a);
+    vec3 color = possibleNormals[predominantNormalIndex];
+    fColor     = vec4(color, texture(u_TextureSlot, vTexCoords).a);
 }

@@ -1,6 +1,7 @@
 #version 330 core
 
-in vec3 vPosInObject;
+in vec3  vPosInObject;
+out vec4 fColor;
 
 void main()
 {
@@ -12,5 +13,5 @@ void main()
         color = vec3(0.2);
     else
         color = vec3(0.8);
-    gl_FragColor = vec4(color, 1.0);
+    fColor = vec4(color, 1.0);
 }

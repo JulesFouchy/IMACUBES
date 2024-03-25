@@ -39,7 +39,8 @@ uniform sampler2D u_ShadowMaps[DEFINE_ME_nbDirectionalLights];
 uniform float     u_ShadowMinBias;
 uniform float     u_ShadowMaxBias;
 
-in vec2 vTexCoords;
+in vec2  vTexCoords;
+out vec4 fColor;
 
 float shadow(int dirLightIndex)
 {
@@ -116,5 +117,5 @@ void main()
     }
     //
     vec3 lightColor = min(lightColorDiffuse, 1.0) + lightColorSpecular;
-    gl_FragColor    = vec4(albedo * lightColor, 1.0);
+    fColor          = vec4(albedo * lightColor, 1.0);
 }
