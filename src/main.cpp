@@ -58,6 +58,7 @@ int main(int argc, char* argv[])
         debug_break();
     }
 
+    SDL_MaximizeWindow(window);
     glContext = SDL_GL_CreateContext(window);
     if (glContext == nullptr)
     {
