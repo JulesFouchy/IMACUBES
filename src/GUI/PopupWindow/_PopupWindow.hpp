@@ -3,29 +3,36 @@
 #include <string>
 
 class PopupWindow {
-friend class PopupWindow_AreYouSure;
-	// Functions to override
+    friend class PopupWindow_AreYouSure;
+    // Functions to override
 public:
-	virtual void Open();
-	virtual void Show() = 0;
-protected:
-	virtual void OnConfirmation() = 0;
+    virtual void Open();
+    virtual void Show() = 0;
 
-	// Base functions
+protected:
+    virtual void OnConfirmation() = 0;
+
+    // Base functions
 public:
-	virtual void Show_IfOpen();
-protected:
-	PopupWindow(const std::string& windowName);
-	~PopupWindow() = default;
-
-	void BeginWindow();
-	void ConfirmationButton();
-	void EndWindow();
-
-	virtual void Confirm(bool iAmSure = false) { OnConfirmation(); m_bMustShow = false; }; // indirection required by PopupWindow_WithConfirmationWarning to add checks
+    virtual void Show_IfOpen();
 
 protected:
-	bool m_bMustShow;
+    PopupWindow(const std::string& windowName);
+    ~PopupWindow() = default;
+
+    void BeginWindow();
+    void ConfirmationButton();
+    void EndWindow();
+
+    virtual void Confirm(bool iAmSure = false)
+    {
+        OnConfirmation();
+        m_bMustShow = false;
+    }; // indirection required by PopupWindow_WithConfirmationWarning to add checks
+
+protected:
+    bool m_bMustShow;
+
 private:
-	std::string m_name;
+    std::string m_name;
 };

@@ -1,7 +1,7 @@
 #pragma once
 
 enum class LightType {
-	Ambiant,
-	Point,
-	Directional
+    Ambiant,
+    Point,
+    Directional
 };

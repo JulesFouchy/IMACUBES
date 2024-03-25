@@ -4,8 +4,8 @@
 //----------- All user-defined shaders must give their list of parameters here -----------
 //----------------------------------------------------------------------------------------
 
-struct MaterialParameters{
-	vec3 color; // default  1 1 1
+struct MaterialParameters {
+    vec3 color; // default  1 1 1
 };
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
@@ -18,9 +18,10 @@ struct MaterialParameters{
 //----------- All user-defined shaders must fill in the 'albedo' function ----------------
 //----------------------------------------------------------------------------------------
 
-vec3 albedo(){
-	MaterialParameters u_ = params[vMaterialIndex];
-	return u_.color;
+vec3 albedo()
+{
+    MaterialParameters u_ = params[vMaterialIndex];
+    return u_.color;
 }
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------

@@ -4,5 +4,5 @@
 #include <string>
 
 namespace ImGuiLog {
-	void Log(const std::string& name, glm::mat4 mat);
+void Log(const std::string& name, glm::mat4 mat);
 }

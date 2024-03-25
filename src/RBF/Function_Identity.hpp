@@ -4,9 +4,9 @@
 
 class Function_Identity : public Function {
 public:
-	Function_Identity() = default;
-	~Function_Identity() = default;
+    Function_Identity()  = default;
+    ~Function_Identity() = default;
 
-	float eval(float x) const override;
-	bool ImGui_Parameters() override;
+    float eval(float x) const override;
+    bool  ImGui_Parameters() override;
 };

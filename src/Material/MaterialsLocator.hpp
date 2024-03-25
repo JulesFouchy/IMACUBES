@@ -3,5 +3,5 @@
 class Shader;
 
 namespace MaterialsLocator {
-	Shader& GetShader(int shaderIndex);
+Shader& GetShader(int shaderIndex);
 }

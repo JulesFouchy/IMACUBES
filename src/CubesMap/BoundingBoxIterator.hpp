@@ -5,16 +5,17 @@
 class BoundingBox;
 
 class BoundingBoxIterator {
-friend class BoundingBox;
-public:
-	BoundingBoxIterator(const BoundingBox& boundingBox);
-	~BoundingBoxIterator() = default;
+    friend class BoundingBox;
 
-	const glm::ivec3& operator*();
-	void operator++();
-	bool operator!=(BoundingBoxIterator& it);
+public:
+    BoundingBoxIterator(const BoundingBox& boundingBox);
+    ~BoundingBoxIterator() = default;
+
+    const glm::ivec3& operator*();
+    void              operator++();
+    bool              operator!=(BoundingBoxIterator& it);
 
 private:
-	glm::ivec3 m_pos;
-	const BoundingBox& m_boundingBox;
+    glm::ivec3         m_pos;
+    const BoundingBox& m_boundingBox;
 };

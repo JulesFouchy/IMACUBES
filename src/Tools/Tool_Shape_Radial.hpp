@@ -4,23 +4,23 @@
 
 class Tool_Shape_Radial : public Tool_Shape {
 public:
-	Tool_Shape_Radial();
-	~Tool_Shape_Radial() = default;
+    Tool_Shape_Radial();
+    ~Tool_Shape_Radial() = default;
 
-	void update(const Cursor & cursor) override;
+    void update(const Cursor& cursor) override;
 
-	void onWheelScroll(int dl) override;
+    void onWheelScroll(int dl) override;
 
-	void ImGui_Menu() override;
-
-protected:
-	void computeBoundingBox();
+    void ImGui_Menu() override;
 
 protected:
-	glm::ivec3 m_center;
-	glm::ivec3 m_sizes;
-	glm::ivec3 m_direction;
+    void computeBoundingBox();
+
+protected:
+    glm::ivec3 m_center;
+    glm::ivec3 m_sizes;
+    glm::ivec3 m_direction;
 
 private:
-	static int m_bCenterOnHoveredCube;
+    static int m_bCenterOnHoveredCube;
 };

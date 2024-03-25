@@ -1,45 +1,43 @@
 #pragma once
 
 #include <glad/glad.h>
-#include "glm/glm.hpp"
-#include <vector>
 #include <unordered_map>
+#include <vector>
+#include "glm/glm.hpp"
 
 class CubesGroup_WithoutMaterialIndices {
 public:
-	static void Initialize();
-	static void ShutDown();
-	CubesGroup_WithoutMaterialIndices();
-	CubesGroup_WithoutMaterialIndices(const CubesGroup_WithoutMaterialIndices& other);
-	CubesGroup_WithoutMaterialIndices(CubesGroup_WithoutMaterialIndices&& other) noexcept;
-	virtual ~CubesGroup_WithoutMaterialIndices();
+    static void Initialize();
+    static void ShutDown();
+    CubesGroup_WithoutMaterialIndices();
+    CubesGroup_WithoutMaterialIndices(const CubesGroup_WithoutMaterialIndices& other);
+    CubesGroup_WithoutMaterialIndices(CubesGroup_WithoutMaterialIndices&& other) noexcept;
+    virtual ~CubesGroup_WithoutMaterialIndices();
 
-
-	void addCube(const glm::ivec3& position);
-	void addCube_NoExistenceCheck(const glm::ivec3& position);
-	virtual int removeCube(const glm::ivec3& position);
-	virtual void removeAllCubes();
-	void draw();
-	void drawWireframe();
-
-protected:
-	virtual void createOpenGLStuffs();
-	virtual void updateGPU();
-	int findCubeAt(const glm::ivec3& position);
+    void         addCube(const glm::ivec3& position);
+    void         addCube_NoExistenceCheck(const glm::ivec3& position);
+    virtual int  removeCube(const glm::ivec3& position);
+    virtual void removeAllCubes();
+    void         draw();
+    void         drawWireframe();
 
 protected:
-	bool bMustUpdateGPU;
+    virtual void createOpenGLStuffs();
+    virtual void updateGPU();
+    int          findCubeAt(const glm::ivec3& position);
 
-	GLuint m_vaoID;
-	GLuint m_cubesPositionsVBO_ID;
-	std::vector<glm::vec3> m_positions;
-	std::unordered_map<int, int> m_indicesMap;
+protected:
+    bool bMustUpdateGPU;
 
-	static GLuint m_cubeMeshPositionsVBO_ID;
-	static GLuint m_cubeMeshNormalsVBO_ID;
-	static GLuint m_cubeMeshTexCoordsVBO_ID;
-	static GLuint m_cubeMeshFaceIdVBO_ID;
-	static GLuint m_cubeMeshIBO_ID;
-	static GLuint m_cubeWireframeIBO_ID;
+    GLuint                       m_vaoID;
+    GLuint                       m_cubesPositionsVBO_ID;
+    std::vector<glm::vec3>       m_positions;
+    std::unordered_map<int, int> m_indicesMap;
+
+    static GLuint m_cubeMeshPositionsVBO_ID;
+    static GLuint m_cubeMeshNormalsVBO_ID;
+    static GLuint m_cubeMeshTexCoordsVBO_ID;
+    static GLuint m_cubeMeshFaceIdVBO_ID;
+    static GLuint m_cubeMeshIBO_ID;
+    static GLuint m_cubeWireframeIBO_ID;
 };
-

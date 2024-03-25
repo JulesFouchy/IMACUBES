@@ -4,13 +4,13 @@
 
 class Tool_MengerSponge : public Tool_Shape_Radial {
 public:
-	Tool_MengerSponge();
-	~Tool_MengerSponge() = default;
+    Tool_MengerSponge();
+    ~Tool_MengerSponge() = default;
 
-	void applyOnShape(std::function<void(const glm::ivec3 & pos)> whatToDoWithPos) override;
+    void applyOnShape(std::function<void(const glm::ivec3& pos)> whatToDoWithPos) override;
 
 private:
-	bool menger(const glm::ivec3& pos);
+    bool menger(const glm::ivec3& pos);
 
-	void ImGui_Menu() override;
+    void ImGui_Menu() override;
 };

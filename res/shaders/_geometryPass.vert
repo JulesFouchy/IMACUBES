@@ -7,22 +7,23 @@ layout(location = 3) in vec3 normal;
 layout(location = 4) in vec2 texCoord;
 layout(location = 5) in int faceID;
 
-out vec3 vPosInObject;
-out vec3 vPosInWorld;
+out vec3      vPosInObject;
+out vec3      vPosInWorld;
 flat out vec3 vNormal;
-out vec2 vTexCoord;
-flat out int vFaceID;
-flat out int vMaterialIndex;
+out vec2      vTexCoord;
+flat out int  vFaceID;
+flat out int  vMaterialIndex;
 
 uniform mat4 u_ProjMat;
 uniform mat4 u_ViewMat;
 
-void main() {
-	vPosInObject = vertexPosition;
-	vPosInWorld = vertexPosition + cubePosition ; 
-	vNormal = normal;
-	vTexCoord = texCoord;
-	vFaceID = faceID;
-	vMaterialIndex = materialIndex;
-	gl_Position = u_ProjMat * u_ViewMat * vec4(vPosInWorld, 1.0);
+void main()
+{
+    vPosInObject   = vertexPosition;
+    vPosInWorld    = vertexPosition + cubePosition;
+    vNormal        = normal;
+    vTexCoord      = texCoord;
+    vFaceID        = faceID;
+    vMaterialIndex = materialIndex;
+    gl_Position    = u_ProjMat * u_ViewMat * vec4(vPosInWorld, 1.0);
 }

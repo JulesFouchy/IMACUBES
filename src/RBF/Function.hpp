@@ -4,12 +4,12 @@
 
 class Function {
 public:
-	Function();
-	~Function() = default;
+    Function();
+    ~Function() = default;
 
-	virtual float eval(float d) const = 0;
-	virtual bool ImGui_Parameters();
+    virtual float eval(float d) const = 0;
+    virtual bool  ImGui_Parameters();
 
 protected:
-	Uniform<float> m_growthSpeed;
+    Uniform<float> m_growthSpeed;
 };

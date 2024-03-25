@@ -4,13 +4,13 @@
 
 class CursorPositioner_AtAFixedDistance : public CursorPositioner {
 public:
-	CursorPositioner_AtAFixedDistance(Cursor* cursor);
-	~CursorPositioner_AtAFixedDistance() = default;
+    CursorPositioner_AtAFixedDistance(Cursor* cursor);
+    ~CursorPositioner_AtAFixedDistance() = default;
 
-	void computePosition() override;
+    void computePosition() override;
 
-	void onWheelScroll(float dl) override;
+    void onWheelScroll(float dl) override;
 
 private:
-	float m_distance;
+    float m_distance;
 };

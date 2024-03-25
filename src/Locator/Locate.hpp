@@ -11,11 +11,11 @@ class Camera;
 
 class Locate {
 public:
-	static MaterialsManager& materialsManager();
-	static History& history(HistoryType type);
-	static CubesMap& cubesMap();
-	static ShaderLibrary& shaderLibrary();
-	static Renderer& renderer();
-	static LightsManager& lightsManager();
-	static Camera& camera();
+    static MaterialsManager& materialsManager();
+    static History&          history(HistoryType type);
+    static CubesMap&         cubesMap();
+    static ShaderLibrary&    shaderLibrary();
+    static Renderer&         renderer();
+    static LightsManager&    lightsManager();
+    static Camera&           camera();
 };

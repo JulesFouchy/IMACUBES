@@ -4,8 +4,8 @@
 
 class CursorPositioner_OnHoveredCube : public CursorPositioner {
 public:
-	CursorPositioner_OnHoveredCube(Cursor* cursor);
-	~CursorPositioner_OnHoveredCube() = default;
+    CursorPositioner_OnHoveredCube(Cursor* cursor);
+    ~CursorPositioner_OnHoveredCube() = default;
 
-	void computePosition() override;
+    void computePosition() override;
 };
